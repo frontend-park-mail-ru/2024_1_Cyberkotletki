@@ -2,19 +2,21 @@
 
 Frontend проекта "Кинопоиск" команды Cyberkotletki.
 
-# Авторы
+## Авторы
 
-- <a href="https://github.com/EGRoBBeRTiT">Егор Титов</a>
-- <a href="https://github.com/KristinaBu">Кристина Буйдина</a>
-- <a href="https://github.com/blackHATred">Батовкин Александр</a>
+- [Егор Титов](https://github.com/EGRoBBeRTiT)
+- [Кристина Буйдина](https://github.com/KristinaBu)
+- [Батовкин Александр](https://github.com/blackHATred)
 
-# Менторы
-- <a href="https://github.com/VladislavKirpichov">Кирпичов Владислав</a>
-- <a href="https://github.com/WhoIsYgim">Ларкин Егор</a>
+## Менторы
 
-# Backend
+- [Кирпичов Владислав](https://github.com/VladislavKirpichov)
+- [Ларкин Егор](https://github.com/WhoIsYgim)
+
+## Backend
+
+[Репозиторий бэкенда](https://github.com/go-park-mail-ru/2024_1_Cyberkotletki)
+
+## Ссылки
+
 to be continued...
-
-# Ссылки
-to be continued...
-
