@@ -1,0 +1,7 @@
+/dist
+/build
+package-lock.json
+yarn.lock
+/.vscode
+/node_modules
+package.json
