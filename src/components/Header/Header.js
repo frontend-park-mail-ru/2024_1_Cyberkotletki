@@ -1,39 +1,66 @@
-import { createElement } from '../../core/createElement.js';
+import { Core } from '../../core/Core.js';
+import { Component } from '../../core/src/Component.js';
 import { Link } from '../Link/Link.js';
 
-export const Header = ({ props: { title } }) => {
-    // const header = document.createElement('header');
-    // const nav = document.createElement('nav');
-    // const ul = document.createElement('ul');
-    // const homeLi = document.createElement('li');
-    // const loginLi = document.createElement('li');
-    // const homeLink = Link({ href: '/' }, 'Home');
-    // homeLi.append(homeLink);
-    // const loginLink = Link({ href: '/login' }, 'Login');
-    // loginLi.append(loginLink);
+class Button extends Component {
+    state = { buttonText: 0 };
 
-    // ul.append(homeLi, loginLi);
-    // nav.append(ul);
+    render(props, state) {
+        return Core.createElement(
+            'button',
+            {
+                'data-header-button': true,
+                onClick: () => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        buttonText: prev.buttonText + 1,
+                    }));
+                },
+            },
+            state.buttonText,
+        );
+    }
+}
 
-    const head = document.createElement('h1');
-    head.innerText = title;
+class HeaderInner extends Component {
+    state = { buttonText: 0, response: null };
 
-    // header.append(head);
-    // header.append(nav);
+    componentDidMount() {
+        fetch('https://api.github.com/orgs/nodejs')
+            .then((response) => response.json())
+            .then((data) => {
+                this.setState((prev) => ({ ...prev, response: data }));
+            });
+    }
 
-    return createElement(
-        'header',
-        {},
-        head,
-        createElement(
-            'nav',
-            {},
-            createElement(
-                'ul',
-                {},
-                createElement('li', {}, Link({ href: '/' }, 'Home')),
-                createElement('li', {}, Link({ href: '/login' }, 'Login')),
+    render(props, state) {
+        return Core.createElement(
+            'header',
+            Core.createElement('h1', props.title),
+            Core.createElement(
+                'nav',
+                Core.createElement(
+                    'ul',
+                    Core.createElement(
+                        'li',
+                        Link({ href: '/', children: ['Home'] }),
+                    ),
+                    Core.createElement(
+                        'li',
+                        Link({
+                            href: '/login',
+                            children: ['Login'],
+                        }),
+                    ),
+                ),
+                new Button(),
+                Core.createElement(
+                    'pre',
+                    JSON.stringify(state.response, null, 2),
+                ),
             ),
-        ),
-    );
-};
+        );
+    }
+}
+
+export const Header = (props) => new HeaderInner(props);

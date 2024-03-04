@@ -1,7 +1,10 @@
+import { Core } from './core/Core.js';
 import { App } from './App/App.js';
 
 if (document.readyState !== 'loading') {
-    App();
+    Core.createRoot(document.getElementById('root'), App());
 } else {
-    document.addEventListener('DOMContentLoaded', App);
+    document.addEventListener('DOMContentLoaded', () => {
+        Core.createRoot(document.getElementById('root'), App());
+    });
 }

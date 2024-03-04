@@ -1,8 +1,8 @@
 import { Header } from '../../components/Header/Header.js';
-import { createElement } from '../../core/createElement.js';
+import { Core } from '../../core/Core.js';
 
-export const LoginPage = () =>
-    // const div = document.createElement('div');
-    // div.append(Header({ props: { title: 'Login Page' } }));
-
-    createElement('div', {}, Header({ props: { title: 'Login Page' } }));
+export const LoginPage = (props) =>
+    Core.createElement('div', {
+        ...props,
+        children: [Header({ title: 'Login Page' }), ...(props?.children ?? [])],
+    });

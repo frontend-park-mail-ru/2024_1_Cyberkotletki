@@ -1,15 +1,27 @@
+import { Component } from '../core/src/Component.js';
+
 export class AppRoute {
+    /**
+     * @type {string}
+     */
     path = '';
 
-    element = null;
+    /**
+     * @type {Component}
+     */
+    element;
 
+    /**
+     *
+     * @param {AppRoute} route
+     */
     constructor(route) {
         if (route && typeof route === 'object') {
             if ('path' in route && typeof route.path === 'string') {
                 this.path = route.path;
             }
 
-            if ('element' in route && route.element instanceof HTMLElement) {
+            if ('element' in route && route.element instanceof Component) {
                 this.element = route.element;
             }
         }
@@ -17,8 +29,15 @@ export class AppRoute {
 }
 
 export class AppRoutes {
-    routesMap = new Map([['', new AppRoute()]]);
+    /**
+     * @type {Map<string, AppRoute>}
+     */
+    routesMap;
 
+    /**
+     *
+     * @param {AppRoute[]} routes
+     */
     constructor(routes) {
         this.routesMap = new Map();
 

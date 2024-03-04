@@ -3,10 +3,13 @@ import { HistoryProvider } from '../Providers/HistoryProvider.js';
 import { RootPage } from '../pages/RootPage/RootPage.js';
 import { LoginPage } from '../pages/LoginPage/LoginPage.js';
 
-export const App = () =>
+import { routes } from './App.routes.js';
+
+export const App = (props) =>
     HistoryProvider({
         router: new AppRoutes([
-            { path: '/', element: RootPage() },
-            { path: '/login', element: LoginPage() },
+            { path: routes.root(), element: RootPage() },
+            { path: routes.login(), element: LoginPage() },
         ]),
+        ...props,
     });
