@@ -5,11 +5,6 @@ export class Props {
      * @type {Array<Component|Node|string|number>}
      */
     children;
-
-    /**
-     * @type {Array<Component|Node|string|number>}
-     */
-    context;
 }
 
 export class Component {
@@ -137,13 +132,9 @@ export class Component {
         return renderedContent;
     }
 
-    componentWillMount() {
-        return Promise.resolve(undefined);
-    }
+    componentWillMount() {}
 
-    componentDidMount() {
-        return Promise.resolve(undefined);
-    }
+    componentDidMount() {}
 
     componentDidUpdate() {}
 }
