@@ -46,7 +46,10 @@ class HistoryProviderInner extends Component {
         handleChangeRoute(this.owner, this.props.router)(pathname);
 
         window.addEventListener('popstate', (event) => {
-            handleChangeRoute(event.target.location.pathname);
+            handleChangeRoute(
+                this.owner,
+                this.props.router,
+            )(event.target.location.pathname);
         });
     }
 
