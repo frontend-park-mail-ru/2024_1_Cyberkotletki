@@ -1,6 +1,7 @@
 import { Core } from '../../core/Core.js';
 import { Component } from '../../core/src/Component.js';
 import { Link } from '../Link/Link.js';
+import { routes } from '../../App/App.routes.js';
 
 class Button extends Component {
     state = { buttonText: 0 };
@@ -43,12 +44,12 @@ class HeaderInner extends Component {
                     'ul',
                     Core.createElement(
                         'li',
-                        Link({ href: '/', children: ['Home'] }),
+                        Link({ href: routes.root(), children: ['Home'] }),
                     ),
                     Core.createElement(
                         'li',
                         Link({
-                            href: '/login',
+                            href: routes.login(),
                             children: ['Login'],
                         }),
                     ),
