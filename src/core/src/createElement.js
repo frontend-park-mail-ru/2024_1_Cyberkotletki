@@ -9,8 +9,8 @@ export class AppElement extends Component {
         element: null,
     };
 
-    constructor({ children, tagName, ...props } = {}) {
-        super({ children, ...props });
+    constructor({ children, tagName, context, ...props } = {}) {
+        super({ children, context, ...props });
 
         const element = document.createElement(tagName);
 
