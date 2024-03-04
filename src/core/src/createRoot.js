@@ -7,11 +7,21 @@ import { Component } from './Component.js';
  */
 
 export const createRoot = (root, ...children) => {
-    if (root instanceof Node) {
-        children.forEach((child) => {
-            if (child instanceof Component) {
-                child.innerRender(root);
-            }
+    const renderChildren = () => {
+        if (root instanceof Node) {
+            children.forEach((child) => {
+                if (child instanceof Component) {
+                    child.innerRender(root);
+                }
+            });
+        }
+    };
+
+    if (document.readyState !== 'loading') {
+        renderChildren();
+    } else {
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChildren();
         });
     }
 };
