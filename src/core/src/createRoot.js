@@ -1,20 +1,18 @@
 import { Component } from './Component.js';
+import { insertChildIntoNode } from './utils/insertChildIntoNode.js';
 
 /**
  *
- * @param {Node} root
- * @param  {...Component} children
+ * @param {HTMLElement} root Корневой узел
+ * @param  {...Component|HTMLElement|string|number} children Дочерние элементы
  */
-
 export const createRoot = (root, ...children) => {
     const renderChildren = () => {
-        if (root instanceof Node) {
+        requestAnimationFrame(() => {
             children.forEach((child) => {
-                if (child instanceof Component) {
-                    child.innerRender(root);
-                }
+                insertChildIntoNode(root, child);
             });
-        }
+        });
     };
 
     if (document.readyState !== 'loading') {

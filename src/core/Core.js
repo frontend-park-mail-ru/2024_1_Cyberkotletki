@@ -8,9 +8,8 @@ class AppCore {
     createRoot = createRoot;
 
     /**
-     *
-     * @param {Object} defaultValue
-     * @returns {Context}
+     * @param {object} defaultValue Начальное значение
+     * @returns {Context} Объект контекста
      */
     createContext(defaultValue) {
         return new Context(defaultValue);

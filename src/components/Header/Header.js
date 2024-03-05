@@ -4,7 +4,9 @@ import { Link } from '../Link/Link.js';
 import { routes } from '../../App/App.routes.js';
 
 class Button extends Component {
-    state = { buttonText: 0 };
+    state = {
+        buttonText: 0,
+    };
 
     render(props, state) {
         return Core.createElement(

@@ -1,8 +1,8 @@
 /**
  *
- * @param {any} left
- * @param {any} right
- * @returns {boolean}
+ * @param {any} left Первое значение
+ * @param {any} right Второе значение
+ * @returns {boolean} `true`- если равны, `false` - если нет
  */
 export const isEqual = (left, right) => {
     if (

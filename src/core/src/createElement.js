@@ -1,49 +1,47 @@
 import { Component } from './Component.js';
+import { insertChildIntoNode } from './utils/insertChildIntoNode.js';
+import { isChild } from './utils/isChild.js';
 import { setAttributes } from './utils/setAttributes.js';
 
 export class AppElement extends Component {
     state = {
-        /**
-         * @type {Node}
-         */
+        /** @type {HTMLElement}*/
         element: null,
     };
 
-    constructor({ children, tagName, context, ...props } = {}) {
-        super({ children, context, ...props });
+    constructor({ children, tagName, context, ...props }) {
+        super({ children, tagName, context, ...props });
 
         const element = document.createElement(tagName);
 
         if (props) {
             setAttributes(element, props);
+        }
 
-            if (children && Array.isArray(children) && children.length) {
+        if (children?.length) {
+            if (element.hasChildNodes()) {
                 requestAnimationFrame(() => {
-                    children.forEach((child) => {
-                        if (child instanceof Node) {
-                            element.appendChild(child);
-                        }
-
-                        if (
-                            typeof child === 'string' ||
-                            typeof child === 'number'
-                        ) {
-                            element.appendChild(
-                                document.createTextNode(`${child}`),
-                            );
-                        }
-
-                        if (child instanceof Component) {
-                            child.innerRender(element);
-                        }
-                    });
+                    element.replaceChildren('');
                 });
             }
+
+            requestAnimationFrame(() => {
+                children.forEach((child) => {
+                    insertChildIntoNode(element, child);
+                });
+            });
         }
 
         this.state.element = element;
     }
 
+    /**
+     *
+     * @param {object} props Пропсы
+     * @param {object} state Состояние компонента
+     * @param {HTMLElement} state.element Элемент в состоянии
+     * @returns {HTMLElement} Узел в дереве
+     */
     render(props, state) {
         return state.element;
     }
@@ -51,36 +49,24 @@ export class AppElement extends Component {
 
 /**
  *
- * @param {any} value
- * @returns {boolean}
- */
-const isChild = (value) =>
-    value instanceof Node ||
-    value instanceof Component ||
-    typeof value === 'string' ||
-    typeof value === 'number';
-
-/**
- *
- * @param {string} tagName
- * @param {object} props
- * @returns {AppElement}
+ * @param {string} tagName Название тэга `a`, `div`...
+ * @param {object|undefined} props Атрибуты элемента
+ * @param {...any} children Дочерние элементы
+ * @returns {AppElement} Компонент
  */
 export const createElement = (tagName, props, ...children) => {
     if (isChild(props)) {
-        const joinedChildren = [
-            props,
-            ...[...(children ?? [])].filter(isChild),
-        ];
-
-        return new AppElement({ children: joinedChildren, tagName });
+        return new AppElement({
+            children: [props, ...[...(children ?? [])].filter(isChild)],
+            tagName,
+        });
     }
 
-    if (props && typeof props === 'object' && !props.children?.length) {
+    if (props && !props.children?.length && children.length) {
         return new AppElement({
             ...props,
             tagName,
-            children: [...(children ?? [])].filter(isChild),
+            children: [...children].filter(isChild),
         });
     }
 

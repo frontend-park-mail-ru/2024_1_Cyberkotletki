@@ -1,77 +1,70 @@
 import { AppRoutes } from '../AppRouter/AppRouter.js';
 import { Core } from '../core/Core.js';
-import { Component, Props } from '../core/src/Component.js';
+import { Component } from '../core/src/Component.js';
 
-export class HistoryContextValue {
-    changeRoute = (path) => void path;
-}
-
-export const HistoryContext = Core.createContext(new HistoryContextValue());
-
-export class HistoryProviderProps extends Props {
-    router = new AppRoutes();
-}
+export const HistoryContext = Core.createContext({
+    changeRoute: (path) => void path,
+});
 
 /**
  *
- * @param {Node} root
- * @param {AppRoutes} router
- * @returns
+ * @param {HTMLElement} root Родительский компонент
+ * @param {AppRoutes} router Роуты
+ * @param {string} path Путь
+ * @returns {void} Функция
  */
-const handleChangeRoute =
-    (root, router) =>
-    /**
-     *
-     * @param {string} path
-     * @returns
-     */
-    (path) => {
-        if (
-            root instanceof Node &&
-            typeof path === 'string' &&
-            router instanceof AppRoutes &&
-            router.routesMap.has(path)
-        ) {
-            requestAnimationFrame(() => {
-                root.replaceChildren(
-                    router.routesMap.get(path).element.innerRender(root),
-                );
-            });
-        }
-    };
+const handleChangeRoute = (root, router, path) => {
+    if (router.routesMap.has(path)) {
+        requestAnimationFrame(() => {
+            root.replaceChildren(
+                router.routesMap.get(path).renderElement().innerRender(root),
+            );
+        });
+    }
+};
+
 class HistoryProviderInner extends Component {
+    state = {
+        /** @type {Component} */
+        element: null,
+        /** @param {string} path Путь*/
+        handleChangeRoute: (path) => {
+            void path;
+        },
+    };
+
     componentWillMount() {
         const { pathname } = window.location;
 
-        handleChangeRoute(this.owner, this.props.router)(pathname);
+        handleChangeRoute(this.owner, this.props.router, pathname);
 
         window.addEventListener('popstate', (event) => {
             handleChangeRoute(
                 this.owner,
                 this.props.router,
-            )(event.target.location.pathname);
+                event.target.location.pathname,
+            );
         });
     }
 
     /**
      *
-     * @param {HistoryProviderProps|undefined} props
-     * @returns
+     * @param {object} props Пропсы
+     * @param {AppRoutes} props.router Роутер
+     * @returns {Component|null} Возвращает Component или null
      */
     render(props) {
-        return HistoryContext.Provider(
-            {
-                changeRoute: (path) =>
-                    handleChangeRoute(this.owner, props.router)(path),
-            },
-            ...(props?.children ?? []),
-        );
+        return HistoryContext.Provider({
+            changeRoute: (path) =>
+                handleChangeRoute(this.owner, props.router, path),
+        });
     }
 }
 
 /**
  *
- * @param {HistoryProviderProps} props
- * @returns HistoryProviderInner instance
+ * @param {object} props Пропсы
+ * @param {AppRoutes} props.router Роутер
+ * @returns {HistoryProviderInner} HistoryProviderInner
  */
 export const HistoryProvider = (props) => new HistoryProviderInner(props);

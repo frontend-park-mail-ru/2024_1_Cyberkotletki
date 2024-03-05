@@ -3,27 +3,21 @@ import { Component } from './Component.js';
 export class Context {
     value;
 
-    /**
-     *
-     * @param {Object} value
-     */
+    /** @param {object} value Начальное значение контекста*/
     constructor(value) {
-        if (typeof value === 'object') {
-            this.value = value;
-        }
+        this.value = value;
     }
 
     /**
-     *
-     * @param {Object} value
-     * @param {Array<Component|Node|string|number>} children
+     * @param {object} value Значение контекста
+     * @param {Array<Component|HTMLElement|string|number>} children
+     * Дочерние элементы
+     * @returns {Component|null} Возвращает `Component` или `null`
      */
     Provider(value, ...children) {
-        if (typeof value === 'object') {
-            this.value = value;
-        }
+        this.value = value;
 
-        if (children) {
+        if (children.length) {
             return new Component({ children });
         }
 
@@ -32,28 +26,16 @@ export class Context {
 
     /**
      *
-     * @param {(props)=>Component} renderElement
-     * @returns
+     * @param {(props:object)=>Component} renderElement
+     * Функция, возвращающая `Component`
+     * @returns {Component} `Component`
      */
     Connect(renderElement) {
-        return (props) => {
-            if (
-                props &&
-                typeof props === 'object' &&
-                'context' in props &&
-                typeof props.context === 'object'
-            ) {
-                return renderElement({
-                    ...props,
-                    context: { ...props.context, ...this.value },
-                });
-            }
-
-            return renderElement({
+        return (props) =>
+            renderElement({
                 ...props,
-                context: this.value,
+                context: { ...(props?.context ?? {}), ...this.value },
             });
-        };
     }
 
     contextDidChange() {}
