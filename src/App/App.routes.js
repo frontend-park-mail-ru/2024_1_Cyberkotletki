@@ -4,6 +4,9 @@ class Routes {
 
     /** @returns {string} `/login` */
     login = () => '/login';
+
+    /** @returns {string} `/index` */
+    index = () => '/index';
 }
 
 export const routes = new Routes();
