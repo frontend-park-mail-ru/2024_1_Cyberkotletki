@@ -1,31 +1,11 @@
 import { Component } from '../core/src/Component.js';
 
 export class AppRoute {
-    /**
-     * @type {string}
-     */
-    path = '';
+    /**  @type {string} */
+    path;
 
-    /**
-     * @type {Component}
-     */
-    element;
-
-    /**
-     *
-     * @param {AppRoute} route
-     */
-    constructor(route) {
-        if (route && typeof route === 'object') {
-            if ('path' in route && typeof route.path === 'string') {
-                this.path = route.path;
-            }
-
-            if ('element' in route && route.element instanceof Component) {
-                this.element = route.element;
-            }
-        }
-    }
+    /** @type {(props:object)=>Component} */
+    renderElement;
 }
 
 export class AppRoutes {
@@ -35,20 +15,13 @@ export class AppRoutes {
     routesMap;
 
     /**
-     *
-     * @param {AppRoute[]} routes
+     * @param {AppRoute[]} routes Массив с путями
      */
     constructor(routes) {
         this.routesMap = new Map();
 
-        if (Array.isArray(routes)) {
-            routes.forEach((route) => {
-                const appRoute = new AppRoute(route);
-
-                this.routesMap.set(appRoute.path, appRoute);
-
-                return appRoute;
-            });
-        }
+        routes.forEach((route) => {
+            this.routesMap.set(route.path, route);
+        });
     }
 }

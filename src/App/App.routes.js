@@ -1,14 +1,8 @@
 class Routes {
-    /**
-     *
-     * @returns `/`
-     */
+    /** @returns {string} `/` */
     root = () => '/';
 
-    /**
-     *
-     * @returns `/login`
-     */
+    /** @returns {string} `/login` */
     login = () => '/login';
 }
 

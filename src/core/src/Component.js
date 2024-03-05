@@ -2,66 +2,55 @@ import { isEqual } from '../../utils/isEqual.js';
 
 export class Props {
     /**
-     * @type {Array<Component|Node|string|number>}
+     * @type {Array<Component|HTMLElement|string|number>}
      */
     children;
 }
 
 export class Component {
-    /**
-     * @type {Object}
-     */
+    /** @type {object|null}*/
     state = null;
 
-    /**
-     * @type {Props|null}
-     */
+    /** @type {Props|null} */
     props = null;
 
-    /**
-     * @type {Node|null}
-     */
+    /** @type {HTMLElement|Component|null}*/
     owner = null;
 
-    /**
-     * @type {Component|Node|null}
-     */
+    /** @type {Component|HTMLElement|null|undefined} */
     lastRenderedNode = undefined;
 
-    /**
-     *
-     * @param {Props} props
-     */
+    /** @type {boolean} */
+    static rendered = false;
+
+    /** @param {Props} props Пропсы компонента*/
     constructor(props) {
-        if (typeof props === 'object') {
-            this.props = props;
-        }
+        this.rendered = false;
+        this.props = props;
     }
 
     /**
-     *
-     * @param {(prev)=>void|object} state
+     * @param {(prev:object)=>object} newState
+     * Новое состояние компонента или функция, возвращающая новое состояние
      */
-    setState(state) {
-        const newState =
-            typeof state === 'function' ? state(this.state) : state;
+    setState(newState) {
+        const gotState =
+            typeof newState === 'function' ? newState(this.state) : newState;
 
-        if (typeof newState === 'object') {
-            if (this.shouldComponentUpdate(this.props, newState)) {
-                this.state = newState;
+        if (this.shouldComponentUpdate(this.props, gotState)) {
+            this.state = gotState;
 
-                this.innerRender();
-            } else {
-                this.state = newState;
-            }
+            this.innerRender(this.owner);
+        } else {
+            this.state = gotState;
         }
     }
 
     /**
      *
-     * @param {Object} nextProps
-     * @param {Object} nextState
-     * @returns {boolean}
+     * @param {object} nextProps Новые пропсы
+     * @param {object} nextState Новое состояние
+     * @returns {boolean} Флаг, показывающий, нужно ли обновить компонент
      */
     shouldComponentUpdate(nextProps, nextState) {
         if (
@@ -76,9 +65,9 @@ export class Component {
 
     /**
      *
-     * @param {object} props
-     * @param {object} state
-     * @returns {Component|Node|null}
+     * @param {object} props Пропсы компонента
+     * @param {object} state Состояние компонента
+     * @returns {Component|HTMLElement|null} Компонент, узел или null
      */
     render(props, state) {
         void props;
@@ -89,8 +78,8 @@ export class Component {
 
     /**
      *
-     * @param {Node|Component} owner
-     * @returns {HTMLElement}
+     * @param {HTMLElement|Component|null} owner Родительский узел
+     * @returns {HTMLElement|null} Узел или null
      */
     innerRender(owner) {
         if (owner && (owner instanceof Node || owner instanceof Component)) {

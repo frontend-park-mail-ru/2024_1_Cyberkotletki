@@ -8,8 +8,8 @@ import { routes } from './App.routes.js';
 export const App = (props) =>
     HistoryProvider({
         router: new AppRoutes([
-            { path: routes.root(), element: RootPage() },
-            { path: routes.login(), element: LoginPage() },
+            { path: routes.root(), renderElement: RootPage },
+            { path: routes.login(), renderElement: LoginPage },
         ]),
         ...props,
     });

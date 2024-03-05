@@ -1,7 +1,7 @@
 /**
  * Валидация почты
- * @param email {string} почта для проверки
- * @returns {boolean}
+ * @param {string} email почта для проверки
+ * @returns {boolean} `true` если валидная строка, `false` - если нет
  */
 export function validateEmail(email) {
     // регулярное выражение для проверки формата электронной почты:
@@ -16,8 +16,8 @@ export function validateEmail(email) {
 
 /**
  * Валидация пароля - проверка длины и размера в байтах
- * @param password {string} пароль для проверки
- * @returns {boolean}
+ * @param {string} password пароль для проверки
+ * @returns {boolean} `true` если пароль валидный, `false` - если нет
  */
 export function validatePasswordLength(password) {
     // размер строки в байтах
@@ -28,10 +28,9 @@ export function validatePasswordLength(password) {
 
 /**
  * Проверка совпадения паролей
- * @param {string} password1
- * @param {string}  password2
- * @returns {boolean}
+ * @param {string} password1 Первый пароль
+ * @param {string}  password2 Второй Пароль
+ * @returns {boolean} `true` если равны `false` если нет
  */
-export function validatePasswordMatch(password1, password2) {
-    return password1 === password2;
-}
+export const validatePasswordMatch = (password1, password2) =>
+    password1 === password2;
