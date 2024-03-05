@@ -7,7 +7,7 @@
  * По умолчанию куки не сохраняются
  * @returns {Promise<Response>} возвращает фетч
  */
- async function customFetch(url, options = {}, useCookies = false) {
+export async function customFetch(url, options = {}, useCookies = false) {
     const defaultOptions = {
         method: 'GET',
         credentials: useCookies ? 'include' : 'same-origin',
