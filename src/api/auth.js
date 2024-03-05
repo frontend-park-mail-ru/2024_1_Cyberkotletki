@@ -2,7 +2,7 @@ import { AuthContext } from '../Providers/AuthContext.js';
 
 import { customFetch } from './fetch.js';
 
-class Auth {
+export class Auth {
     authStorage;
 
     /**
