@@ -59,6 +59,7 @@ class HeaderInner extends Component {
                 new Button(),
                 Core.createElement(
                     'pre',
+                    {},
                     JSON.stringify(state.response, null, 2),
                 ),
             ),

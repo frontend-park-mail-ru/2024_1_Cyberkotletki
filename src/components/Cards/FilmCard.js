@@ -3,24 +3,30 @@ import { Component } from '../../core/src/Component.js';
 import { Rating } from '../Badges/Rating.js';
 
 class FilmCardInner extends Component {
-    state = {
-        id: 0,
-        posterSrc: '',
-        title: '',
-        originalTitle: '',
-        releaseYear: '',
-        country: '',
-        genre: '',
-        director: '',
-        actors: [],
-        rating: 0.0,
+    fetchFilm = (ID) => {
+        fetch(
+            `http://localhost:8000/content/contentPreview?${new URLSearchParams(
+                {
+                    id: ID,
+                },
+            )}`,
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                this.setState((prev) => ({
+                    ...prev,
+                    ...data,
+                }));
+            });
     };
 
-    render(props, state) {
-        // todo сделать fetch и засунуть полученную инфу в state
+    componentDidMount() {
+        this.fetchFilm(this.props.id);
+    }
 
+    render(props, state) {
         const rating = Rating();
-        rating.setState({ rating: props.rating });
+        rating.setState({ rating: state?.rating });
 
         return Core.createElement(
             'div',
@@ -30,28 +36,28 @@ class FilmCardInner extends Component {
                 { class: 'poster' },
                 rating,
                 Core.createElement('img', {
-                    src: props.posterSrc,
+                    src: `http://localhost:8000/static/${state?.poster ?? ''}`,
                     alt: 'Постер',
                 }),
             ),
             Core.createElement(
                 'div',
                 { class: 'card-info' },
-                Core.createElement('h5', props.title),
+                Core.createElement('h5', state?.title ?? ''),
                 Core.createElement(
                     'span',
                     {},
-                    `${props.originalTitle}, ${props.releaseYear}, ${props.duration} мин.`,
+                    `${state?.original_title === '' ? state?.title ?? '' : state?.original_title}, ${state?.release_year ?? ''}, ${state?.duration ?? ''} мин.`,
                 ),
                 Core.createElement(
                     'span',
                     {},
-                    `${props.country} ▸ ${props.genre} ▸ Режиссёр: ${props.director}`,
+                    `${state?.country ?? ''} ▸ ${state?.genre ?? ''} ▸ Режиссёр: ${state?.director ?? ''}`,
                 ),
                 Core.createElement(
                     'span',
                     {},
-                    `В ролях: ${props.actors.join(', ')}`,
+                    `В ролях: ${state?.actors ? state.actors.join(', ') : ''}`,
                 ),
             ),
         );

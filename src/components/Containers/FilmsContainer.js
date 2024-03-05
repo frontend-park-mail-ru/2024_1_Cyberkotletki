@@ -3,26 +3,50 @@ import { Component } from '../../core/src/Component.js';
 import { OutlineButton } from '../Buttons/OutlineButton.js';
 import { FilmCard } from '../Cards/FilmCard.js';
 
-class FilmsContainerInner extends Component {
-    render(props, state) {
-        // todo: сделать fetch для списка фильмов
-      fetch('http://localhost:8000/collections/compilation/')
-        const filmsIds = [1, 2, 3];
-        const buttonAllGenres = OutlineButton({
-            buttonText: 'Всё',
-            click: () => {},
+/* filmsIds.forEach((Id) => {
+    fetch(
+        `http://localhost:8000/content/contentPreview${new URLSearchParams({
+            id: Id,
+        })}`,
+    )
+        .then((response) => response.json())
+        .then((data) => {
+            films.push(data);
         });
+}); */
+
+class FilmsContainerInner extends Component {
+    state = {
+        filmsIds: [],
+    };
+
+    fetchFilmsIdsByGenre = (genre) => {
+        fetch(`http://localhost:8000/collections/compilation/${genre}`)
+            .then((response) => response.json())
+            .then((data) => {
+                this.setState((prev) => ({
+                    ...prev,
+                    filmsIds: data.ids,
+                }));
+            });
+    };
+
+    componentDidMount() {
+        this.fetchFilmsIdsByGenre('action');
+    }
+
+    render(props, state) {
         const buttonComedian = OutlineButton({
             buttonText: 'Комедия',
-            click: () => {},
+            click: () => this.fetchFilmsIdsByGenre('comedian'),
         });
         const buttonAction = OutlineButton({
             buttonText: 'Боевик',
-            click: () => {},
+            click: () => this.fetchFilmsIdsByGenre('action'),
         });
         const buttonDrama = OutlineButton({
             buttonText: 'Драма',
-            click: () => {},
+            click: () => this.fetchFilmsIdsByGenre('drama'),
         });
 
         return Core.createElement(
@@ -36,7 +60,6 @@ class FilmsContainerInner extends Component {
             Core.createElement(
                 'div',
                 { class: 'categories' },
-                buttonAllGenres,
                 buttonComedian,
                 buttonAction,
                 buttonDrama,
@@ -45,20 +68,9 @@ class FilmsContainerInner extends Component {
                 'div',
                 { class: 'grid-container' },
                 // для каждого айди фильма генерируем карточку фильма
-                ...filmsIds.map(() =>
+                ...this.state.filmsIds.map((ID) =>
                     FilmCard({
-                        id: 0,
-                        posterSrc:
-                            'https://avatars.mds.yandex.net/get-kinopoisk-image/1946459/bf93b465-1189-4155-9dd1-cb9fb5cb1bb5/136x204',
-                        title: 'Название фильма',
-                        originalTitle: 'Original Title',
-                        releaseYear: '2014',
-                        country: 'Россия',
-                        genre: 'Боевик',
-                        director: 'Квентин Тарантино',
-                        actors: ['Том Хэнкс', 'Сергей Бодров'],
-                        duration: 169,
-                        rating: (0.0).toString(10),
+                        id: ID,
                     }),
                 ),
             ),

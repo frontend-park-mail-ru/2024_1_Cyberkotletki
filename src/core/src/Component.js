@@ -30,7 +30,7 @@ export class Component {
     }
 
     /**
-     * @param {(prev:object)=>object} newState
+     * @param {{rating: (number|*)}} newState
      * Новое состояние компонента или функция, возвращающая новое состояние
      */
     setState(newState) {

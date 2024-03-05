@@ -6,13 +6,12 @@ body {
 
 .index-page {
     margin: 0;
-    padding: 0;
     display: flex;
     justify-content: center;
-    height: 100vh;
     background: rgba(38, 32, 57, 1) linear-gradient(180deg, rgba(38, 32, 57, 1) 0%, rgba(15, 17, 21, 1) 100%);
     font-family: "Wix Madefor Display", sans-serif;
     font-weight: 300;
+    padding: 0 0 100px;
 }
 
 .header {
@@ -87,7 +86,7 @@ img.poster {
     position: absolute;
 }
 
-.cardInfo {
+.card-info {
     display: flex;
     flex-direction: column;
     gap: 8px;
