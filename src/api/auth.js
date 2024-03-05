@@ -18,7 +18,7 @@ class Auth {
      * @param {boolean} isLoggedIn если true - то пользователь авторизован,
      * если false - то не авторизован
      */
-    SaveAuthStatus(isLoggedIn) {
+    saveAuthStatus(isLoggedIn) {
         this.authStorage.setItem('isLoggedIn', isLoggedIn);
         AuthContext.Provider({ authStatus: isLoggedIn });
     }
@@ -28,7 +28,7 @@ class Auth {
      * @returns {boolean} если true - то пользователь авторизован,
      * если false - то не авторизован
      */
-    IsAuth() {
+    isAuth() {
         const isLoggedIn = this.authStorage.getItem('isLoggedIn');
 
         if (isLoggedIn === null) {
@@ -46,8 +46,8 @@ class Auth {
     /**
      * Удаляет факт авторизации/ неавторизации пользователя в authStorage
      */
-    DeleteAuth() {
-        if (this.IsAuth()) {
+    deleteAuth() {
+        if (this.isAuth()) {
             this.authStorage.removeItem('isLoggedIn');
             AuthContext.Provider({ authStatus: false });
         }
@@ -60,7 +60,7 @@ class Auth {
      * @returns {Promise<void>} Promise, который решается, когда процесс
      * авторизации завершен
      */
-    async login(username, password) {
+    async Login(username, password) {
         // await - ожидаем ответа от сервера
         const response = await customFetch(
             '/auth/login',
@@ -73,9 +73,9 @@ class Auth {
         );
 
         if (response.ok) {
-            this.SaveAuthStatus(true);
+            this.saveAuthStatus(true);
         } else {
-            this.SaveAuthStatus(false);
+            this.saveAuthStatus(false);
         }
     }
 }
