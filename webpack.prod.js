@@ -8,6 +8,7 @@ module.exports = merge(common, {
     devtool: 'source-map',
     module: {
         rules: [
+            ...common.module.rules,
             {
                 test: /\.(sa|sc|c)ss$/i,
                 use: [

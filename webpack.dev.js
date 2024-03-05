@@ -11,6 +11,7 @@ module.exports = merge(common, {
     },
     module: {
         rules: [
+            ...common.module.rules,
             {
                 test: /\.(sa|sc|c)ss$/i,
                 use: [
