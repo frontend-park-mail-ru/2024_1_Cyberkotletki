@@ -7,6 +7,9 @@ class Routes {
 
     /** @returns {string} `/register` */
     register = () => '/register';
+
+    /** @returns {string} `/index` */
+    index = () => '/index';
 }
 
 export const routes = new Routes();

@@ -5,6 +5,7 @@ const http = require('http');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 
+require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
 const devConfig = require('./webpack.dev.js');
@@ -28,6 +29,6 @@ app.get('/*', (req, res) => {
 });
 
 const httpServer = http.createServer(app);
-httpServer.listen(port, () => {
-    console.log(`\nHTTP Server started at http://localhost:${port}\n\n`);
+httpServer.listen(port, process.env.HOST || 'localhost', () => {
+    console.log(`\nHTTP Server started at http://${process.env.HOST || 'localhost'}:${port}\n\n`);
 });
