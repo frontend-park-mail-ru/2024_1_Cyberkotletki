@@ -15,12 +15,15 @@ export function validateEmail(email) {
 }
 
 /**
- * Валидация пароля - проверка длины
+ * Валидация пароля - проверка длины и размера в байтах
  * @param password {string} пароль для проверки
  * @returns {boolean}
  */
 export function validatePasswordLength(password) {
-    return password.length >= 8 && password.length <= 72;
+    // размер строки в байтах
+    const byteSize = new Blob([password]).size;
+
+    return password.length >= 8 && byteSize <= 72;
 }
 
 /**
@@ -31,22 +34,4 @@ export function validatePasswordLength(password) {
  */
 export function validatePasswordMatch(password1, password2) {
     return password1 === password2;
-}
-
-/**
- * Валидация пароля - проверка символов в пароле
- * @param password {string} пароль для проверки
- * @returns {boolean}
- */
-export function validatePasswordSymbols(password) {
-    // проверка наличия как минимум 1 заглавной буквы
-    const uppercaseCheck = /[A-Z]/.test(password);
-    // проверка наличия как минимум 1 строчной буквы
-    const lowercaseCheck = /[a-z]/.test(password);
-    // проверка наличия как минимум 1 цифры
-    const digitCheck = /\d/.test(password);
-    // проверка наличия как минимум 1 спец символа
-    const specialCharCheck = /[!@#$%^&*]/.test(password);
-
-    return uppercaseCheck && lowercaseCheck && digitCheck && specialCharCheck;
 }
