@@ -3,13 +3,15 @@ module.exports = {
         browser: true,
         es2022: true,
     },
-    plugins: ['import', 'prettier', 'cypress'],
+    plugins: ['import', 'prettier', 'cypress', 'jsdoc'],
     extends: [
         'airbnb-base',
         'eslint:recommended',
         'plugin:import/recommended',
         'plugin:cypress/recommended',
         'prettier',
+        'plugin:jsdoc/recommended',
+        'plugin:jsdoc/recommended-error',
     ],
     overrides: [
         {
