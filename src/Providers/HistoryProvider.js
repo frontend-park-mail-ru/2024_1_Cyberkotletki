@@ -2,6 +2,8 @@ import { AppRoutes } from '../AppRouter/AppRouter.js';
 import { Core } from '../core/Core.js';
 import { Component, Props } from '../core/src/Component.js';
 
+import { AuthContext } from './AuthContext.js';
+
 export class HistoryContextValue {
     changeRoute = (path) => void path;
 }
@@ -64,9 +66,15 @@ class HistoryProviderInner extends Component {
                 changeRoute: (path) =>
                     handleChangeRoute(this.owner, props.router)(path),
             },
-            ...(props?.children ?? []),
+            // то есть AuthContext достапен для всех дочерних элементов
+            // HistoryProvider
+            AuthContext.Provider(
+                { authStatus: false },
+                ...(props?.children ?? []),
+            ),
         );
     }
+
 }
 
 /**
