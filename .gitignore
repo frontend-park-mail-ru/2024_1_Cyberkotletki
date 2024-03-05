@@ -6,4 +6,6 @@
 /dist/main.css.map
 .env
 .env.*
-
+/.idea
+.env
+.env.*

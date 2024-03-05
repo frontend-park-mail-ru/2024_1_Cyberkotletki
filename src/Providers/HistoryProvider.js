@@ -24,19 +24,11 @@ const handleChangeRoute = (root, router, path) => {
 };
 
 class HistoryProviderInner extends Component {
-    state = {
-        /** @type {Component} */
-        element: null,
-        /** @param {string} path Путь*/
-        handleChangeRoute: (path) => {
-            void path;
-        },
-    };
-
     componentWillMount() {
-        const { pathname } = window.location;
+        const changeRoute = (path) =>
+            handleChangeRoute(this.owner, this.props.router, path);
 
-        handleChangeRoute(this.owner, this.props.router, pathname);
+        this.state = { changeRoute };
 
         window.addEventListener('popstate', (event) => {
             handleChangeRoute(

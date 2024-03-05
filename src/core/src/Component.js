@@ -86,34 +86,41 @@ export class Component {
             this.owner = owner;
         }
 
+        if (!this.rendered) {
+            this.componentWillMount();
+        }
+
         let renderedContent = this.render(this.props, this.state);
 
         while (renderedContent instanceof Component) {
-            renderedContent = renderedContent.innerRender(this);
+            renderedContent = renderedContent.innerRender(this.owner);
         }
 
         if (
             this.owner instanceof Node &&
             (renderedContent instanceof Node || renderedContent === null)
         ) {
-            if (this.lastRenderedNode !== undefined) {
+            if (this.rendered) {
                 const { lastRenderedNode } = this;
 
                 requestAnimationFrame(() => {
-                    lastRenderedNode.replaceWith(renderedContent ?? '');
+                    lastRenderedNode?.replaceWith(renderedContent ?? '');
                     this.componentDidUpdate();
                 });
             } else {
-                this.componentWillMount();
-
                 requestAnimationFrame(() => {
                     if (renderedContent) {
                         this.owner.append(renderedContent);
                     }
-
+                    this.rendered = true;
                     this.componentDidMount();
                 });
             }
+        } else if (this.rendered) {
+            this.componentDidUpdate();
+        } else {
+            this.rendered = true;
+            this.componentDidMount();
         }
 
         this.lastRenderedNode = renderedContent;
