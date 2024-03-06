@@ -1,0 +1,50 @@
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+.section {
+    width: 100%;
+    max-width: 400px;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding-block: 12px;
+    padding-inline: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: 400ms fade-in ease;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    h1 {
+        font-weight: 500;
+        font-size: 20px;
+        text-align: center;
+    }
+}
+
+.form {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.user-icon {
+    width: 128px;
+}
+
+.button {
+    margin-block-start: 18px;
+}

@@ -1,0 +1,35 @@
+@keyframes gradient {
+    0% {
+        background-position: 0%;
+    }
+    100% {
+        background-position: 100%;
+    }
+}
+
+.button {
+    padding: 8px;
+    font-family: var(--second-family);
+    font-weight: 700;
+    font-size: 16px;
+    border-radius: 8px;
+    appearance: none;
+    border: none;
+    background: var(--primary-gradient);
+    transition: all 200ms ease-in-out;
+
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+
+    &:hover {
+        animation: gradient 1300ms linear infinite;
+        background-size: 150%;
+        animation-direction: alternate;
+        transform: scale(1.01);
+    }
+
+    &:active {
+        transform: scale(1.005);
+    }
+}

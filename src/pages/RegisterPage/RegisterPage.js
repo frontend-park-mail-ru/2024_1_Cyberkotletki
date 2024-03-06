@@ -1,5 +1,5 @@
 import { LoginForm } from '../../LoginForm/LoginForm.js';
 import { LoginLayout } from '../../layouts/LoginLayout/LoginLayout.js';
 
-export const LoginPage = () =>
-    LoginLayout({ children: [LoginForm({ isLogin: true })] });
+export const RegisterPage = () =>
+    LoginLayout({ children: [LoginForm({ isLogin: false })] });

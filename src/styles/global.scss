@@ -1,0 +1,77 @@
+:root {
+    font-variation-settings: normal;
+    text-size-adjust: 100%;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+    text-rendering: optimizeSpeed;
+    font-family: var(--font-family);
+    color-scheme: dark;
+
+    color: #efefef;
+    font-size: 14px;
+
+    --font-family: 'Wix Madefor Display', arial, helvetica, sans-serif;
+    --small-padding: 8px;
+    --black: #0f1014;
+    --logo-black: #131e20;
+    --white: #fff;
+    --solid-blue: #477bff;
+    --success: #50b773;
+    --background-gray: #f0f1f3;
+    --light-gray: #9ba1a8;
+    --secondary-gray: #65686c;
+    --error-red: #ed0a34;
+    --primary-gradient: linear-gradient(
+        270deg,
+        #6f5aff 0%,
+        #c135ff 50.5%,
+        #ff3797 100%
+    );
+}
+
+html {
+    overflow-y: auto;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+
+    * {
+        box-sizing: border-box;
+    }
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+input {
+    // all: unset;
+    appearance: none;
+}
+
+#root {
+    height: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+}
