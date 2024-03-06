@@ -15,8 +15,10 @@ export const setAttributes = (
         Object.entries(props).forEach(([key, value]) => {
             if (Object.keys(node).includes(key)) {
                 node[key] = value;
-            } else {
+            } else if (value) {
                 node.setAttribute(key, value);
+            } else {
+                node.removeAttribute(key);
             }
         });
     }

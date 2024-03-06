@@ -41,24 +41,54 @@ class AuthService {
 
     /**
      * Асинхронная функция для авторизации пользователя
-     * @param {string} username Имя пользователя
+     * @param {string} email Email пользователя
      * @param {string} password Пароль пользователя
      * @returns {Promise<void>} Promise, который решается, когда процесс
      * авторизации завершен
      */
-    async login(username, password) {
+    async login(email, password) {
         // await - ожидаем ответа от сервера
-        const response = await appFetch(
+        return appFetch(
             authRoutes.login(),
             {
                 method: Method.POST,
-                body: JSON.stringify({ login: username, password }),
+                body: JSON.stringify({ login: email, password }),
                 headers: { 'Content-Type': 'application/json' },
             },
             true,
-        );
+        )
+            .then(() => {
+                this.setIsLoggedIn(true);
+            })
+            .catch((error) => {
+                this.logout();
 
-        this.setIsLoggedIn(response.ok);
+                throw error;
+            });
+    }
+
+    async register(email, password) {
+        // await - ожидаем ответа от сервера
+        return appFetch(
+            authRoutes.register(),
+            {
+                method: Method.POST,
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
+                headers: { 'Content-Type': 'application/json' },
+            },
+            true,
+        )
+            .then(() => {
+                this.setIsLoggedIn(true);
+            })
+            .catch((error) => {
+                this.logout();
+
+                throw error;
+            });
     }
 }
 

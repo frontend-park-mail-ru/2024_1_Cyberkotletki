@@ -32,4 +32,10 @@
     &:active {
         transform: scale(1.005);
     }
+
+    &:disabled {
+        pointer-events: none;
+        user-select: none;
+        filter: opacity(0.8);
+    }
 }
