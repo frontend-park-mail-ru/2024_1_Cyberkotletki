@@ -62,5 +62,29 @@
 .error-hint {
     color: var(--error-red);
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
+    animation: fade-in-error 300ms ease-in-out;
+    contain: content;
+    overflow: visible;
+}
+
+@keyframes fade-in-error {
+    0% {
+        opacity: 0;
+        height: 0;
+
+        transform: translateY(-4px);
+    }
+
+    50% {
+        opacity: 0;
+        height: 15px;
+        transform: translateY(-4px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        height: 15px;
+    }
 }

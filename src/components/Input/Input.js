@@ -7,27 +7,38 @@ import styles from './Input.module.scss';
 const cx = concatClasses.bind(styles);
 
 class InputInner extends Component {
-    render(props = {}) {
-        return Core.createElement('div', {
+    constructor(props) {
+        super(props);
+
+        this.container = Core.createElement('div');
+        this.input = Core.createElement('input');
+        this.label = Core.createElement('label');
+        this.errorHint = Core.createElement('div');
+    }
+
+    render({ label, hasError, errorHint, ...props } = {}) {
+        this.props = { label, hasError, errorHint, ...props };
+
+        return this.container.render({
             class: styles.container,
             children: [
-                props?.label &&
-                    Core.createElement('label', {
+                label &&
+                    this.label.render({
                         class: cx('label'),
                         for: props.id,
-                        children: [props.label],
+                        children: [label],
                     }),
-                Core.createElement('input', {
+                this.input.render({
                     ...props,
-                    class: cx('input', {
-                        'with-error': props.hasError,
+                    class: cx('input', props.class, {
+                        'with-error': hasError,
                     }),
                 }),
-                props.hasError &&
-                    props.errorHint &&
-                    Core.createElement('div', {
+                hasError &&
+                    errorHint &&
+                    this.errorHint.render({
                         class: cx('error-hint'),
-                        children: [props.errorHint],
+                        children: [errorHint],
                     }),
             ],
         });

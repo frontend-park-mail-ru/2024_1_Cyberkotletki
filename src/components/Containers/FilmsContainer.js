@@ -9,7 +9,9 @@ class FilmsContainerInner extends Component {
     };
 
     fetchFilmsIdsByGenre = (genre) => {
-        fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/collections/compilation/${genre}`)
+        fetch(
+            `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/collections/compilation/${genre}`,
+        )
             .then((response) => response.json())
             .then((data) => {
                 this.setState((prev) => ({
@@ -23,18 +25,18 @@ class FilmsContainerInner extends Component {
         this.fetchFilmsIdsByGenre('action');
     }
 
-    render(props, state) {
+    render() {
         const buttonComedian = OutlineButton({
-            buttonText: 'Комедия',
-            click: () => this.fetchFilmsIdsByGenre('comedian'),
+            children: ['Комедия'],
+            onClick: () => this.fetchFilmsIdsByGenre('comedian'),
         });
         const buttonAction = OutlineButton({
-            buttonText: 'Боевик',
-            click: () => this.fetchFilmsIdsByGenre('action'),
+            children: ['Боевик'],
+            onClick: () => this.fetchFilmsIdsByGenre('action'),
         });
         const buttonDrama = OutlineButton({
-            buttonText: 'Драма',
-            click: () => this.fetchFilmsIdsByGenre('drama'),
+            children: ['Драма'],
+            onClick: () => this.fetchFilmsIdsByGenre('drama'),
         });
 
         return Core.createElement(

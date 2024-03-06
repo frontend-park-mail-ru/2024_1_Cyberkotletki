@@ -7,5 +7,6 @@
 .env
 .env.*
 /.idea
+/dist/main.js.LICENSE.txt
 .env
 .env.*

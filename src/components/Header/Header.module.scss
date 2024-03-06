@@ -1,0 +1,22 @@
+.logout-button {
+    cursor: pointer;
+    transition: color 200ms ease-in-out;
+
+    color: var(--light-gray);
+
+    &:hover {
+        color: var(--background-gray);
+    }
+
+    &:active {
+        color: var(--light-gray);
+    }
+}
+
+.avatar {
+    display: flex;
+    // flex-direction:
+    align-items: center;
+    justify-content: center;
+    padding-block: 4px;
+}

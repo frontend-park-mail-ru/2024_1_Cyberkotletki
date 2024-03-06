@@ -5,15 +5,6 @@ import { authRoutes } from './auth.routes.js';
 
 class AuthService {
     /**
-     * Сохраняет факт авторизации пользователя в window.localStorage
-     * @param {boolean} isLoggedIn если true - то пользователь авторизован,
-     * если false - то не авторизован
-     */
-    setIsLoggedIn(isLoggedIn) {
-        window.localStorage.setItem(LocalStorageKey.IS_LOGGED_IN, isLoggedIn);
-    }
-
-    /**
      * Проверяет, авторизован ли пользователь
      * @returns {boolean} если true - то пользователь авторизован,
      * если false - то не авторизован
@@ -31,15 +22,6 @@ class AuthService {
     }
 
     /**
-     * Удаляет факт авторизации/неавторизации пользователя в authStorage
-     */
-    logout() {
-        if (this.getIsLoggedIn()) {
-            window.localStorage.removeItem(LocalStorageKey.IS_LOGGED_IN);
-        }
-    }
-
-    /**
      * Асинхронная функция для авторизации пользователя
      * @param {string} email Email пользователя
      * @param {string} password Пароль пользователя
@@ -52,19 +34,11 @@ class AuthService {
             authRoutes.login(),
             {
                 method: Method.POST,
-                body: JSON.stringify({ login: email, password }),
+                body: JSON.stringify({ login: email.trim(), password }),
                 headers: { 'Content-Type': 'application/json' },
             },
             true,
-        )
-            .then(() => {
-                this.setIsLoggedIn(true);
-            })
-            .catch((error) => {
-                this.logout();
-
-                throw error;
-            });
+        );
     }
 
     async register(email, password) {
@@ -74,21 +48,37 @@ class AuthService {
             {
                 method: Method.POST,
                 body: JSON.stringify({
-                    email,
+                    email: email.trim(),
                     password,
                 }),
                 headers: { 'Content-Type': 'application/json' },
             },
             true,
-        )
-            .then(() => {
-                this.setIsLoggedIn(true);
-            })
-            .catch((error) => {
-                this.logout();
+        );
+    }
 
-                throw error;
-            });
+    async logout() {
+        // await - ожидаем ответа от сервера
+        await appFetch(
+            authRoutes.logout(),
+            {
+                method: Method.POST,
+                headers: { 'Content-Type': 'application/json' },
+            },
+            true,
+        );
+    }
+
+    async isAuth() {
+        // await - ожидаем ответа от сервера
+        await appFetch(
+            authRoutes.isAuth(),
+            {
+                method: Method.GET,
+                headers: { 'Content-Type': 'application/json' },
+            },
+            true,
+        );
     }
 }
 

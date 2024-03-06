@@ -86,10 +86,6 @@ export class Component {
             this.owner = owner;
         }
 
-        if (!this.rendered) {
-            this.componentWillMount();
-        }
-
         let renderedContent = this.render(this.props, this.state);
 
         while (renderedContent instanceof Component) {
@@ -100,7 +96,7 @@ export class Component {
             this.owner instanceof Node &&
             (renderedContent instanceof Node || renderedContent === null)
         ) {
-            if (this.rendered) {
+            if (this.lastRenderedNode !== undefined) {
                 const { lastRenderedNode } = this;
 
                 requestAnimationFrame(() => {
@@ -108,19 +104,16 @@ export class Component {
                     this.componentDidUpdate();
                 });
             } else {
+                this.componentWillMount();
+
                 requestAnimationFrame(() => {
                     if (renderedContent) {
                         this.owner.append(renderedContent);
                     }
-                    this.rendered = true;
+
                     this.componentDidMount();
                 });
             }
-        } else if (this.rendered) {
-            this.componentDidUpdate();
-        } else {
-            this.rendered = true;
-            this.componentDidMount();
         }
 
         this.lastRenderedNode = renderedContent;

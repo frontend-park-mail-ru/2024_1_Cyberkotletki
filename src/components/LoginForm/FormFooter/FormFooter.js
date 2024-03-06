@@ -1,7 +1,7 @@
-import { Component } from '../../core/src/Component.js';
-import { Core } from '../../core/Core.js';
-import { Link } from '../../components/Link/Link.js';
-import { routes } from '../../App/App.routes.js';
+import { Component } from '../../../core/src/Component.js';
+import { Core } from '../../../core/Core.js';
+import { Link } from '../../Link/Link.js';
+import { routes } from '../../../App/App.routes.js';
 
 import styles from './FormFooter.module.scss';
 

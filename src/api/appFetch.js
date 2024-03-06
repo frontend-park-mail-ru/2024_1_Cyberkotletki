@@ -4,9 +4,10 @@ import { Method, Credentials, Config } from '../shared/constants.js';
 /**
  * Кастомный фетч, который нужен для сохранения сессии пользователя
  * с использованием куки
- * @param url ссылка на ресурс
- * @param options набор опций, который надо установить в фетч
- * @param useCookies флаг true/false, который определяет, сохранять ли куки.
+ * @param {string} url ссылка на ресурс
+ * @param {object} options набор опций, который надо установить в фетч
+ * @param {boolean} useCookies флаг true/false,
+ * который определяет, сохранять ли куки.
  * По умолчанию куки не сохраняются
  * @returns {Promise<Response>} возвращает фетч
  */
