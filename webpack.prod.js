@@ -1,5 +1,6 @@
 const { merge } = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { EnvironmentPlugin } = require('webpack');
 
 const common = require('./webpack.config.js');
 
@@ -20,5 +21,9 @@ module.exports = merge(common, {
             },
         ],
     },
-    plugins: [new MiniCssExtractPlugin()],
+    plugins: [
+        new MiniCssExtractPlugin(),
+        new EnvironmentPlugin(['BACKEND_HOST']),
+        new EnvironmentPlugin(['BACKEND_PORT'])
+    ],
 });
