@@ -2,8 +2,6 @@ import { AppRoutes } from '../AppRouter/AppRouter.js';
 import { Core } from '../core/Core.js';
 import { Component } from '../core/src/Component.js';
 
-import { AuthContext } from './AuthContext.js';
-
 export const HistoryContext = Core.createContext({
     changeRoute: (path) => void path,
 });
@@ -26,19 +24,11 @@ const handleChangeRoute = (root, router, path) => {
 };
 
 class HistoryProviderInner extends Component {
-    state = {
-        /** @type {Component} */
-        element: null,
-        /** @param {string} path Путь*/
-        handleChangeRoute: (path) => {
-            void path;
-        },
-    };
-
     componentWillMount() {
-        const { pathname } = window.location;
+        const changeRoute = (path) =>
+            handleChangeRoute(this.owner, this.props.router, path);
 
-        handleChangeRoute(this.owner, this.props.router, pathname);
+        this.state = { changeRoute };
 
         window.addEventListener('popstate', (event) => {
             handleChangeRoute(
@@ -49,25 +39,14 @@ class HistoryProviderInner extends Component {
         });
     }
 
-    /**
-     *
-     * @param {object} props Пропсы
-     * @param {AppRoutes} props.router Роутер
-     * @returns {Component|null} Возвращает Component или null
-     */
-    render(props) {
-        return HistoryContext.Provider(
-            {
-                changeRoute: (path) =>
-                    handleChangeRoute(this.owner, props.router, path),
-            },
-            // то есть AuthContext достапен для всех дочерних элементов
-            // HistoryProvider
-            AuthContext.Provider(
-                { authStatus: false },
-                ...(props?.children ?? []),
-            ),
-        );
+    render(props, state) {
+        const { pathname } = window.location;
+
+        state.changeRoute(pathname);
+
+        return HistoryContext.Provider({
+            changeRoute: state.changeRoute,
+        });
     }
 }
 

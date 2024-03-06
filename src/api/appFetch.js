@@ -1,5 +1,7 @@
+import { Method, Credentials, Config } from '../shared/constants.js';
+
 /**
- * Кастомный фетч, который нуэен для сохранения сессии пользователя
+ * Кастомный фетч, который нужен для сохранения сессии пользователя
  * с использованием куки
  * @param {string} url ссылка на ресурс
  * @param {object} options набор опций, который надо установить в фетч
@@ -8,11 +10,14 @@
  * По умолчанию куки не сохраняются
  * @returns {Promise<Response>} возвращает фетч
  */
-export async function customFetch(url, options = {}, useCookies = false) {
+export const appFetch = async (url, options = {}, useCookies = false) => {
     const defaultOptions = {
-        method: 'GET',
-        credentials: useCookies ? 'include' : 'same-origin',
+        method: Method.GET,
+        credentials: useCookies ? Credentials.INCLUDE : Credentials.SAME_ORIGIN,
     };
 
-    return fetch(url, { ...defaultOptions, ...options });
-}
+    return fetch(`${Config.BACKEND_URL}${url}`, {
+        ...defaultOptions,
+        ...options,
+    });
+};

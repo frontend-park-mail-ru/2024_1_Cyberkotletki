@@ -2,6 +2,7 @@ import { Core } from '../../core/Core.js';
 import { Component } from '../../core/src/Component.js';
 import { Link } from '../Link/Link.js';
 import { routes } from '../../App/App.routes.js';
+import { AuthContext } from '../../Providers/AuthProvider.js';
 
 class Button extends Component {
     state = {
@@ -39,7 +40,11 @@ class HeaderInner extends Component {
     render(props, state) {
         return Core.createElement(
             'header',
-            Core.createElement('h1', props.title),
+            Core.createElement(
+                'h1',
+                props.title,
+                `${props.context.isLoggedIn}`,
+            ),
             Core.createElement(
                 'nav',
                 Core.createElement(
@@ -66,4 +71,4 @@ class HeaderInner extends Component {
     }
 }
 
-export const Header = (props) => new HeaderInner(props);
+export const Header = AuthContext.Connect((props) => new HeaderInner(props));

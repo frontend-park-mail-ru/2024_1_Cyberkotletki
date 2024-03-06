@@ -14,11 +14,11 @@ export class Context {
      * Дочерние элементы
      * @returns {Component|null} Возвращает `Component` или `null`
      */
-    Provider(value, ...children) {
+    Provider(value, children) {
         this.value = value;
 
-        if (children.length) {
-            return new Component({ children });
+        if (children) {
+            return children;
         }
 
         return null;

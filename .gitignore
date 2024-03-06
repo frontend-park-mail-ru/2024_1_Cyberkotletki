@@ -5,3 +5,5 @@
 /dist/main.css
 /dist/main.css.map
 /.idea
+.env
+.env.*
