@@ -28,6 +28,6 @@ app.get('/*', (req, res) => {
 });
 
 const httpServer = http.createServer(app);
-httpServer.listen(port, () => {
-    console.log(`\nHTTP Server started at http://localhost:${port}\n\n`);
+httpServer.listen(port, process.env.HOST || 'localhost', () => {
+    console.log(`\nHTTP Server started at http://${process.env.HOST || 'localhost'}:${port}\n\n`);
 });
