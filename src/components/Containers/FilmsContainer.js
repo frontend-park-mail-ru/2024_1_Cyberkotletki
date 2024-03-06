@@ -3,25 +3,13 @@ import { Component } from '../../core/src/Component.js';
 import { OutlineButton } from '../Buttons/OutlineButton.js';
 import { FilmCard } from '../Cards/FilmCard.js';
 
-/* filmsIds.forEach((Id) => {
-    fetch(
-        `http://localhost:8000/content/contentPreview${new URLSearchParams({
-            id: Id,
-        })}`,
-    )
-        .then((response) => response.json())
-        .then((data) => {
-            films.push(data);
-        });
-}); */
-
 class FilmsContainerInner extends Component {
     state = {
         filmsIds: [],
     };
 
     fetchFilmsIdsByGenre = (genre) => {
-        fetch(`http://localhost:8000/collections/compilation/${genre}`)
+        fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/collections/compilation/${genre}`)
             .then((response) => response.json())
             .then((data) => {
                 this.setState((prev) => ({

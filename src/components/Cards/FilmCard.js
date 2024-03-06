@@ -5,7 +5,7 @@ import { Rating } from '../Badges/Rating.js';
 class FilmCardInner extends Component {
     fetchFilm = (ID) => {
         fetch(
-            `http://localhost:8000/content/contentPreview?${new URLSearchParams(
+            `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/content/contentPreview?${new URLSearchParams(
                 {
                     id: ID,
                 },
@@ -36,7 +36,7 @@ class FilmCardInner extends Component {
                 { class: 'poster' },
                 rating,
                 Core.createElement('img', {
-                    src: `http://localhost:8000/static/${state?.poster ?? ''}`,
+                    src: `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/static/${state?.poster ?? ''}`,
                     alt: 'Постер',
                 }),
             ),
