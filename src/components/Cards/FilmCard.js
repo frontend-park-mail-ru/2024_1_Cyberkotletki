@@ -19,6 +19,7 @@ class FilmCardInner extends Component {
             .then((data) => {
                 this.setState((prev) => ({
                     ...prev,
+                    loaded: true,
                     ...data,
                 }));
             });
