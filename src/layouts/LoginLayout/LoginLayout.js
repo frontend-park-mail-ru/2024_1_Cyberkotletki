@@ -11,7 +11,7 @@ class LoginLayoutInner extends Component {
             class: [styles['login-layout'], props?.class].join(' '),
             children: [
                 Core.createElement('img', {
-                    src: '/src/assets/img-bg-films.webp',
+                    src: '/src/assets/kinoskop_background.jpg',
                     'aria-hidden': 'true',
                     class: styles['img-bg'],
                 }),
