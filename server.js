@@ -16,6 +16,8 @@ const config = process.env.NODE_ENV === 'development' ? devConfig : prodConfig;
 
 const compiler = webpack(config);
 
+const filename = path.join(compiler.outputPath, 'index.html');
+
 app.use(
     webpackDevMiddleware(compiler, {
         publicPath: config.output.publicPath,
@@ -23,10 +25,16 @@ app.use(
 );
 
 app.use('/src', express.static(path.resolve(__dirname, '.', 'src')));
-app.use('/dist', express.static(path.resolve(__dirname, '.', 'dist')));
 
-app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/dist/index.html'));
+app.use('*', (req, res, next) => {
+    compiler.outputFileSystem.readFile(filename, (err, result) => {
+        if (err) {
+            return next(err);
+        }
+        res.set('content-type', 'text/html');
+        res.send(result);
+        res.end();
+    });
 });
 
 const httpServer = http.createServer(app);
