@@ -61,6 +61,8 @@ const rules = {
     'arrow-body-style': ['error', 'as-needed'],
     'no-unused-expressions': 'off',
     'no-void': 'off',
+    'jsdoc/require-param-type': 'off',
+    'jsdoc/require-returns-type': 'off',
 };
 
 module.exports = {
@@ -73,10 +75,10 @@ module.exports = {
         'airbnb-base',
         'eslint:recommended',
         'plugin:import/recommended',
+        'plugin:react/jsx-runtime',
         'plugin:cypress/recommended',
         'prettier',
         'plugin:jsdoc/recommended',
-        'plugin:jsdoc/recommended-error',
     ],
     ignorePatterns: [
         './node_modules/*',
@@ -86,6 +88,9 @@ module.exports = {
     parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
+        ecmaFeatures: {
+            jsx: true,
+        },
     },
     rules: { ...rules },
     overrides: [
@@ -112,10 +117,10 @@ module.exports = {
                 'plugin:import/recommended',
                 'plugin:cypress/recommended',
                 'prettier',
+                'plugin:react/jsx-runtime',
                 'plugin:@typescript-eslint/stylistic',
                 'plugin:@typescript-eslint/recommended-type-checked',
                 'plugin:jsdoc/recommended',
-                'plugin:jsdoc/recommended-error',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {
@@ -123,6 +128,9 @@ module.exports = {
                 sourceType: 'module',
                 project: ['tsconfig.json'],
                 tsconfigRootDir: __dirname,
+                ecmaFeatures: {
+                    jsx: true,
+                },
             },
             rules: {
                 ...rules,
