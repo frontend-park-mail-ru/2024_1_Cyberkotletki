@@ -1,4 +1,4 @@
-import { createElementFromJSX } from '@/appCore/jsx-runtime/createElementFromJSX';
+import { createElementFromJSX } from './src/createElementFromJSX';
 
 export const jsx = createElementFromJSX;
 

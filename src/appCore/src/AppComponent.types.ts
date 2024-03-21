@@ -1,20 +1,25 @@
 import type { AppComponent } from './AppComponent';
 
-import type { AppNode, AppNodeElement } from '@/appCore/shared/AppNode.types';
+import type { AppNode } from '@/appCore/shared/AppNode.types';
 
 export type AppComponentConstructor = new <
-    Props extends object | undefined = undefined,
+    Props extends object | undefined | null = null,
 >(
     props?: Props,
 ) => AppComponent<Props>;
 
 export type SetStateFunction = <State>(prevState: State) => State;
 
-export interface AppComponentType<Props extends object | undefined, State> {
+export interface AppComponentType<
+    Props extends object | null | undefined,
+    State,
+> {
     readonly props: Props | null;
     state: State | null;
     ref: HTMLElement | Text | null;
-    owner: AppNodeElement | null;
+    owner: JSX.Element | null;
+
+    /** Результат выполнения функции `render` */
     instance: AppNode;
 
     /**

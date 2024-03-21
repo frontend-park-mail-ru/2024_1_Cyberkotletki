@@ -4,3 +4,4 @@ export { objectKeys } from './objectKeys';
 export { includes } from './includes';
 export { objectEntries } from './objectEntries';
 export { objectValues } from './objectValues';
+export { spreadToSingleArray } from './spreadToSingleArray';

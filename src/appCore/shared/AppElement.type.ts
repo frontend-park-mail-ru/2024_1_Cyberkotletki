@@ -8,23 +8,26 @@ export interface AppElement<
     K extends keyof HTMLElementTagNameMap | AppComponentConstructor,
     Element extends HTMLElement = HTMLElement,
 > {
+    /** Идентифицирует DOM ноду или компонент*/
     $$typeof: symbol;
-    owner:
-        | HTMLElement
-        | AppElement<keyof HTMLElementTagNameMap, HTMLElement>
-        | AppElement<AppComponentConstructor>
-        | null;
-    type: K | null;
-    key: symbol;
 
-    /** Непосредственно DOM узел, которые в конечном счете рендерит элемент */
+    /** Элемент, который вызвал создание элемента */
+    owner: JSX.Element | null;
+
+    /** Либо название тэга (`div`, `span` и т.д.), либо конструктор класса */
+    type: K;
+
+    /** Непосредственно DOM узел, который в конечном счете рендерит элемент */
     ref: HTMLElement | Text | null;
 
-    props?: AppElementProps<Element>;
-
     /**
-     * Экземпляр компонента,
+     * Экземпляр компонента, который получился в результате выполнения
+     * `new type()`,
      * с помощью которого можно будет вызывать функции жизненного цикла
      */
-    instance: AppComponentType<AppElementProps, Record<string, never>> | null;
+    instance: AppComponentType<AppElementProps, object> | null;
+
+    props?: AppElementProps<Element> | null;
+
+    key: symbol;
 }

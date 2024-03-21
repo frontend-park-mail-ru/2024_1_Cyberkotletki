@@ -1,9 +1,13 @@
-import { setAttributes } from '@/appCore/app-dom/setAttributes';
-import type { AppNode } from '@/appCore/shared/AppNode.types';
+import { setAttributes } from './setAttributes';
 import {
-    APP_ELEMENT_TYPE,
-    DOM_ELEMENT_TYPE,
-} from '@/appCore/shared/AppSymbols';
+    appendChildWithCheck,
+    isAppElement,
+    isDOMElement,
+    isElementDefined,
+    isTextNode,
+} from './utils';
+
+import type { AppNode } from '@/appCore/shared/AppNode.types';
 
 /**
  * Создает из объекта DOM ноду
@@ -13,42 +17,44 @@ import {
  */
 export const createElement = (
     element: AppNode,
-    owner: HTMLElement | JSX.Element,
+    owner: JSX.Element | null,
 ): HTMLElement | Text | null => {
-    if (typeof element === 'string' || typeof element === 'number') {
+    if (isTextNode(element)) {
         return document.createTextNode(`${element}`);
     }
 
-    if (typeof element === 'boolean' || !element) {
+    if (!isElementDefined(element)) {
         return null;
     }
 
     element.owner = owner;
 
-    if (
-        element.$$typeof === DOM_ELEMENT_TYPE &&
-        typeof element.type === 'string'
-    ) {
+    if (isDOMElement(element)) {
         const $element = document.createElement(element.type);
         setAttributes($element, element.props);
 
         element.ref = $element;
 
-        element.props?.children?.forEach((child) => {
-            const node = createElement(child, element);
+        const { ref } = element.props ?? {};
 
-            if (node) {
-                $element.appendChild(node);
-            }
+        if (typeof ref === 'function') {
+            ref($element);
+        } else if (ref) {
+            ref.current = $element;
+        }
+
+        requestAnimationFrame(() => {
+            element.props?.children?.forEach((child) => {
+                const node = createElement(child, element);
+
+                appendChildWithCheck($element, node);
+            });
         });
 
         return $element;
     }
 
-    if (
-        element.$$typeof === APP_ELEMENT_TYPE &&
-        typeof element.type === 'function'
-    ) {
+    if (isAppElement(element)) {
         const GenerateInstance = element.type;
 
         const instance = new GenerateInstance(element.props);

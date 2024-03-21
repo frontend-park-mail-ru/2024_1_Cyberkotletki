@@ -1,12 +1,12 @@
 import type { AppComponentType, SetStateFunction } from './AppComponent.types';
 
-import { updateElement } from '@/appCore/app-dom/updateElement';
-import type { AppNode, AppNodeElement } from '@/appCore/shared/AppNode.types';
+import { updateElement } from '@/appCore/app-dom/src/updateElement';
+import type { AppNode } from '@/appCore/shared/AppNode.types';
 import { isEqual } from '@/utils/isEqual';
 
 export abstract class AppComponent<
-    Props extends object | undefined,
-    State = Record<string, never>,
+    Props extends object | null | undefined,
+    State extends object = object,
 > implements AppComponentType<Props, State>
 {
     readonly props: Props | null = null;
@@ -15,7 +15,7 @@ export abstract class AppComponent<
 
     ref: HTMLElement | Text | null = null;
 
-    owner: AppNodeElement | null = null;
+    owner: JSX.Element | null = null;
 
     instance: AppNode = null;
 
@@ -35,29 +35,11 @@ export abstract class AppComponent<
 
         if (this.componentShouldUpdate(this.props, gotState)) {
             this.state = gotState;
-            let parentNode: HTMLElement | null = null;
-            let currOwner = this.owner;
+            const newInstance = this.render();
 
-            while (!parentNode && currOwner) {
-                if (currOwner instanceof HTMLElement) {
-                    parentNode = currOwner;
-                    break;
-                }
-
-                if (currOwner.ref instanceof HTMLElement) {
-                    parentNode = currOwner.ref;
-                }
-
-                currOwner = currOwner.owner;
-            }
-
-            if (parentNode) {
-                const newInstance = this.render();
-
-                updateElement(parentNode, newInstance, this.instance);
-                this.instance = newInstance;
-                this.componentDidUpdate(prevState, this.props);
-            }
+            updateElement(newInstance, this.instance, this.owner);
+            this.instance = newInstance;
+            this.componentDidUpdate(prevState, this.props);
 
             return;
         }
