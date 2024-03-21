@@ -1,21 +1,45 @@
 import type { AppComponent } from './AppComponent';
 
-import type { AppElement } from '@/appCore/shared/AppElement.type';
-import type { AppElementProps } from '@/appCore/shared/AppElementProps.type';
+import type { AppNode, AppNodeElement } from '@/appCore/shared/AppNode.types';
 
-export type AppComponentConstructor = new (
-    props?: AppElementProps,
-) => AppComponent;
+export type AppComponentConstructor = new <
+    Props extends object | undefined = undefined,
+>(
+    props?: Props,
+) => AppComponent<Props>;
 
-export interface AppComponentType<Props extends AppElementProps | null, State> {
+export type SetStateFunction = <State>(prevState: State) => State;
+
+export interface AppComponentType<Props extends object | undefined, State> {
     readonly props: Props | null;
-    readonly state: State | null;
+    state: State | null;
+    ref: HTMLElement | Text | null;
+    owner: AppNodeElement | null;
+    instance: AppNode;
 
+    /**
+     * Устанавливает новое состояние и вызывает новый рендр
+     * @param newState Либо новое состояние,
+     * либо функция, возвращающая новое состояние
+     */
+    setState(newState: State | SetStateFunction): void;
+
+    componentWillMount(): void;
     componentDidMount(): void;
-    componentDidUpdate(): void;
+    componentDidUpdate(prevState: State | null, prevProps: Props | null): void;
     componentWillUnmount(): void;
-    componentShouldUpdate(): boolean;
+
+    /**
+     * Указывает на основе нового состояние и пропсов,
+     * нужно ли делать новый рендр
+     * @param newProps Новые пропсы
+     * @param newState Новое состояние
+     */
+    componentShouldUpdate(
+        newProps: Props | null,
+        newState: State | null,
+    ): boolean;
 
     unmount(): void;
-    render(): AppElement<AppComponentConstructor>;
+    render(): JSX.Element;
 }

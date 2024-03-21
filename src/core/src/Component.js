@@ -1,4 +1,4 @@
-import { isEqual } from '../../utils/isEqual.js';
+import { isDeepEqual } from '../../utils/isDeepEqual.js';
 
 export class Props {
     /**
@@ -54,8 +54,8 @@ export class Component {
      */
     shouldComponentUpdate(nextProps, nextState) {
         if (
-            !isEqual(this.props, nextProps) ||
-            !isEqual(this.state, nextState)
+            !isDeepEqual(this.props, nextProps) ||
+            !isDeepEqual(this.state, nextState)
         ) {
             return true;
         }

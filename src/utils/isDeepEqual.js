@@ -4,7 +4,7 @@
  * @param {any} right Второе значение
  * @returns {boolean} `true`- если равны, `false` - если нет
  */
-export const isEqual = (left, right) => {
+export const isDeepEqual = (left, right) => {
     if (
         left &&
         typeof left === 'object' &&
@@ -16,7 +16,7 @@ export const isEqual = (left, right) => {
         }
 
         for (const [key, value] of Object.entries(left)) {
-            if (!isEqual(right[key], value)) {
+            if (!isDeepEqual(right[key], value)) {
                 return false;
             }
         }

@@ -63,6 +63,7 @@ const rules = {
     'no-void': 'off',
     'jsdoc/require-param-type': 'off',
     'jsdoc/require-returns-type': 'off',
+    'no-continue': 'off',
 };
 
 module.exports = {
