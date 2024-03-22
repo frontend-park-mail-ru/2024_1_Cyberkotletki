@@ -17,15 +17,20 @@ import { AuthFormError } from './Form.contstants.js';
 
 export const getErrorMessage = (code) => {
     switch (code) {
-        case RESPONSE_ERROR_CODE[404]:
+        case RESPONSE_ERROR_CODE.NOT_FOUND:
             return AuthFormError.INCORRECT_DATA;
-        case RESPONSE_ERROR_CODE[400]:
+        case RESPONSE_ERROR_CODE.SYNTAX_ERROR:
             return AuthFormError.EMAIL_EXISTS;
         default:
             return AuthFormError.UNKNOWN_ERROR;
     }
 };
 
+/**
+ *  Возвращает тест ошибки Email'а
+ * @param {string} email Email
+ * @returns {string} Текст ошибки
+ */
 export const getEmailError = (email) => {
     if (!email) {
         return AuthFormError.EMPTY_VALUE;
@@ -37,7 +42,11 @@ export const getEmailError = (email) => {
 
     return '';
 };
-
+/**
+ *  Возвращает тест ошибки пароля
+ * @param {string} password Пароль
+ * @returns {string} Текст ошибки
+ */
 export const getPasswordError = (password) => {
     if (!password) {
         return AuthFormError.EMPTY_VALUE;
@@ -52,6 +61,12 @@ export const getPasswordError = (password) => {
     return '';
 };
 
+/**
+ *  Возвращает тест ошибки проверки паролей
+ * @param {string} password Пароль
+ * @param {string} passwordRepeat Повтор пароля
+ * @returns {string} Текст ошибки
+ */
 export const getPasswordRepeatError = (password, passwordRepeat) => {
     if (!passwordRepeat) {
         return AuthFormError.EMPTY_VALUE;
@@ -82,9 +97,9 @@ export const validateForm = (form, isLogin) => {
         passwordRepeatError: '',
     };
 
-    const formData = new FormData(form);
-
-    const { email, password, passwordRepeat } = Object.fromEntries(formData);
+    const { email, password, passwordRepeat } = Object.fromEntries(
+        new FormData(form),
+    );
 
     const emailError = getEmailError(email);
 

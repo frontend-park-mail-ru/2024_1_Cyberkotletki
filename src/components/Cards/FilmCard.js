@@ -1,3 +1,4 @@
+import { filmService } from '../../api/films/films.service.js';
 import { Core } from '../../core/Core.js';
 import { Component } from '../../core/src/Component.js';
 import { Rating } from '../Badges/Rating.js';
@@ -7,22 +8,14 @@ class FilmCardInner extends Component {
         loaded: false,
     };
 
-    fetchFilm = (ID) => {
-        fetch(
-            `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/content/contentPreview?${new URLSearchParams(
-                {
-                    id: ID,
-                },
-            )}`,
-        )
-            .then((response) => response.json())
-            .then((data) => {
-                this.setState((prev) => ({
-                    ...prev,
-                    loaded: true,
-                    ...data,
-                }));
-            });
+    fetchFilm = (id) => {
+        filmService.getFilm(id).then((data) => {
+            this.setState((prev) => ({
+                ...prev,
+                loaded: true,
+                ...data,
+            }));
+        });
     };
 
     componentDidMount() {

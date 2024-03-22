@@ -1,5 +1,5 @@
 import { Core } from '../../core/Core.js';
-import { Header } from '../../components/Header/NewHeader.js';
+import { Header } from '../../components/Header/Header.js';
 import { FilmsContainer } from '../../components/Containers/FilmsContainer.js';
 
 export const IndexPage = (props) =>

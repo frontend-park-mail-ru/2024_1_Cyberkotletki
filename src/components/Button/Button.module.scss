@@ -8,19 +8,19 @@
 }
 
 .button {
-    padding: 8px;
+    padding: var(--item-padding);
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-family: var(--second-family);
-    font-weight: 700;
-    font-size: 16px;
-    border-radius: 8px;
+    height: var(--button-height);
+    border-radius: var(--item-border-radius);
     appearance: none;
     border: none;
     background: var(--primary-gradient);
-    transition: all 200ms ease-in-out;
+    transition: var(--item-transition-all);
+
+    @include text-button;
 
     &:not(:disabled) {
         cursor: pointer;

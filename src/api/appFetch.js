@@ -26,6 +26,6 @@ export const appFetch = async (url, options = {}, useCookies = false) => {
             throw new Error(`${response.status}`);
         }
 
-        return response;
+        return response.json();
     });
 };

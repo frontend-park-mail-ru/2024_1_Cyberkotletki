@@ -1,3 +1,4 @@
+import { filmService } from '../../api/films/films.service.js';
 import { Core } from '../../core/Core.js';
 import { Component } from '../../core/src/Component.js';
 import { OutlineButton } from '../Buttons/OutlineButton.js';
@@ -9,16 +10,12 @@ class FilmsContainerInner extends Component {
     };
 
     fetchFilmsIdsByGenre = (genre) => {
-        fetch(
-            `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/collections/compilation/${genre}`,
-        )
-            .then((response) => response.json())
-            .then((data) => {
-                this.setState((prev) => ({
-                    ...prev,
-                    filmsIds: data.ids,
-                }));
-            });
+        filmService.getFilmsIdsByGenre(genre).then((data) => {
+            this.setState((prev) => ({
+                ...prev,
+                filmsIds: data.ids,
+            }));
+        });
     };
 
     componentDidMount() {

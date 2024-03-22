@@ -21,7 +21,7 @@ export const Config = {
 };
 
 export const RESPONSE_ERROR_CODE = {
-    '404': '404',
-    '400': '400',
-    '500': '500',
+    NOT_FOUND: '404',
+    SYNTAX_ERROR: '400',
+    INTERNAL_SERVER_ERROR: '500',
 };
