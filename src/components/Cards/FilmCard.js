@@ -1,32 +1,25 @@
 import { Core } from '../../core/Core.js';
 import { Component } from '../../core/src/Component.js';
 import { Rating } from '../Badges/Rating.js';
+import { contentService } from '../../api/content/service';
 
 class FilmCardInner extends Component {
     state = {
         loaded: false,
     };
 
-    fetchFilm = (ID) => {
-        fetch(
-            `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/content/contentPreview?${new URLSearchParams(
-                {
-                    id: ID,
-                },
-            )}`,
-        )
-            .then((response) => response.json())
-            .then((data) => {
-                this.setState((prev) => ({
-                    ...prev,
-                    loaded: true,
-                    ...data,
-                }));
-            });
+    getFilm = (id) => {
+        contentService.getPreviewContentCard(id).then((data) => {
+            this.setState((prev) => ({
+                ...prev,
+                ...data,
+                loaded: true,
+            }));
+        });
     };
 
     componentDidMount() {
-        this.fetchFilm(this.props.id);
+        this.getFilm(this.props.id);
     }
 
     render(props, state) {
@@ -42,7 +35,7 @@ class FilmCardInner extends Component {
                     { class: 'poster' },
                     rating,
                     Core.createElement('img', {
-                        src: `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/static/${state?.poster ?? ''}`,
+                        src: `${process.env.BACKEND_HOST}/static/${state?.poster ?? ''}`,
                         alt: 'Постер',
                     }),
                 ),
@@ -50,11 +43,11 @@ class FilmCardInner extends Component {
                 Core.createElement(
                     'div',
                     { class: 'card-info' },
-                    Core.createElement('h5', !!state?.title ?? ''),
+                    Core.createElement('h5', state?.title ?? ''),
                     Core.createElement(
                         'span',
                         {},
-                        `${state?.original_title === '' ? state?.title ?? '' : state?.original_title}, ${state?.release_year ?? ''}, ${state?.duration ?? ''} мин.`,
+                        `${state?.originalTitle === '' ? state?.title ?? '' : state?.originalTitle}, ${state?.releaseYear ?? ''}, ${state?.duration ?? ''} мин.`,
                     ),
                     Core.createElement(
                         'span',

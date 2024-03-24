@@ -6,7 +6,7 @@ import { AuthContext } from '../../Providers/AuthProvider.js';
 import { HistoryContext } from '../../Providers/HistoryProvider.js';
 import { IcUserCircle } from '../../assets/icons/IcUserCircle.js';
 import { LogoButton } from '../LogoButton/LogoButton.js';
-import { authService } from '../../api/auth/auth.service.js';
+import { authService } from '../../api/auth/service.ts';
 
 import styles from './Header.module.scss';
 
@@ -33,8 +33,9 @@ class HeaderInner extends Component {
                               { class: styles.avatar },
                               Core.createElement('div', {
                                   onClick: () => {
-                                      authService.logout();
-                                      props.context.getIsAuth();
+                                      authService.logout().then(() => {
+                                          props.context.getIsAuth();
+                                      });
                                   },
                                   class: styles['logout-button'],
                                   children: ['Выйти'],

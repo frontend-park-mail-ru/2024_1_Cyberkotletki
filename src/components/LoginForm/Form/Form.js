@@ -109,7 +109,7 @@ class FormInner extends Component {
                 !!state.error &&
                     this.ErrorHint.render({
                         class: styles.error,
-                        children: [getErrorMessage(state.error)],
+                        children: [state.error],
                     }),
             ],
         });

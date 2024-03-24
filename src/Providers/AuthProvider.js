@@ -1,4 +1,4 @@
-import { authService } from '../api/auth/auth.service.js';
+import { authService } from '../api/auth/service.ts';
 import { Core } from '../core/Core.js';
 import { Component } from '../core/src/Component.js';
 
@@ -14,8 +14,8 @@ class AuthProviderInner extends Component {
     getIsAuth() {
         authService
             .isAuth()
-            .then(() => {
-                this.setState({ isLoggedIn: true });
+            .then((loggedIn) => {
+                this.setState({ isLoggedIn: loggedIn });
             })
             .catch(() => {
                 this.setState({ isLoggedIn: false });

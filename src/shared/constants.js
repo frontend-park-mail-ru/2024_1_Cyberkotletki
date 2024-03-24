@@ -17,7 +17,7 @@ export const LocalStorageKey = {
 };
 
 export const Config = {
-    BACKEND_URL: `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}`,
+    BACKEND_URL: `${process.env.BACKEND_HOST}`,
 };
 
 export const RESPONSE_ERROR_CODE = {

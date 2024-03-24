@@ -5,7 +5,7 @@
  */
 
 import { routes } from '../../../App/App.routes.js';
-import { authService } from '../../../api/auth/auth.service.js';
+import { authService } from '../../../api/auth/service.ts';
 import { RESPONSE_ERROR_CODE } from '../../../shared/constants.js';
 import {
     validateEmail,
@@ -121,10 +121,10 @@ export const submitLoginForm = async (form, isLogin) => {
     const { email, password } = Object.fromEntries(formData);
 
     if (isLogin) {
-        await authService.login(email, password);
-    } else {
-        await authService.register(email, password);
+        return authService.login(email, password);
     }
+
+    return authService.register(email, password);
 };
 
 /**
@@ -143,22 +143,31 @@ export function submitForm(e) {
         }));
 
         submitLoginForm(e.target, this.props.isLogin)
-            .then(() => {
-                const { changeRoute, getIsAuth } = this.props.context;
+            .then((response) => {
+                if (response.success) {
+                    const { changeRoute, getIsAuth } = this.props.context;
 
-                changeRoute(routes.root());
-                getIsAuth();
+                    changeRoute(routes.root());
+                    getIsAuth();
 
+                    this.setState((prev) => ({
+                        ...prev,
+                        error: '',
+                        isLoading: false,
+                    }));
+
+                    return;
+                }
                 this.setState((prev) => ({
                     ...prev,
-                    error: '',
+                    error: response.message,
                     isLoading: false,
                 }));
             })
-            .catch((error) => {
+            .catch(() => {
                 this.setState((prev) => ({
                     ...prev,
-                    error: error.message,
+                    error: 'Произошла неизвестная ошибка',
                     isLoading: false,
                 }));
             });
