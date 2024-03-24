@@ -12,10 +12,6 @@ export const Credentials = {
     SAME_ORIGIN: 'same-origin',
 };
 
-export const LocalStorageKey = {
-    IS_LOGGED_IN: 'isLoggedIn',
-};
-
 export const Config = {
     BACKEND_URL: `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}`,
 };

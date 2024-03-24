@@ -1,26 +1,12 @@
-import { LocalStorageKey, Method } from '../../shared/constants.js';
+import { Method } from '../../shared/constants.js';
 import { appFetch } from '../appFetch.js';
 
 import { authRoutes } from './auth.routes.js';
 
+/**
+ * Сервис работе с авторизацией
+ */
 class AuthService {
-    /**
-     * Проверяет, авторизован ли пользователь
-     * @returns {boolean} если true - то пользователь авторизован,
-     * если false - то не авторизован
-     */
-    getIsLoggedIn() {
-        const isLoggedIn = window.localStorage.getItem(
-            LocalStorageKey.IS_LOGGED_IN,
-        );
-
-        if (isLoggedIn === null) {
-            return false;
-        }
-
-        return Boolean(isLoggedIn);
-    }
-
     /**
      * Асинхронная функция для авторизации пользователя
      * @param {string} email Email пользователя
@@ -41,6 +27,12 @@ class AuthService {
         );
     }
 
+    /**
+     * Запрос регистрации
+     * @param {string} email Email
+     * @param {string} password Пароль
+     * @returns {Promise<Response>} Ответ от сервера
+     */
     async register(email, password) {
         // await - ожидаем ответа от сервера
         return appFetch(
@@ -57,6 +49,9 @@ class AuthService {
         );
     }
 
+    /**
+     * Запрос разлогирования
+     */
     async logout() {
         // await - ожидаем ответа от сервера
         await appFetch(
@@ -69,6 +64,9 @@ class AuthService {
         );
     }
 
+    /**
+     * Запрос на проверку аутентификации
+     */
     async isAuth() {
         // await - ожидаем ответа от сервера
         await appFetch(
