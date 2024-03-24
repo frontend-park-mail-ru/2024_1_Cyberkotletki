@@ -2,6 +2,7 @@ import type { AppComponentType, SetStateFunction } from './AppComponent.types';
 
 import { updateElement } from '@/appCore/app-dom/src/updateElement';
 import type { AppNode } from '@/appCore/shared/AppNode.types';
+import { isFunction } from '@/utils';
 import { isEqual } from '@/utils/isEqual';
 
 export abstract class AppComponent<
@@ -11,7 +12,7 @@ export abstract class AppComponent<
 {
     readonly props: Props | null = null;
 
-    state: State | null = null;
+    state: State = {} as State;
 
     ref: HTMLElement | Text | null = null;
 
@@ -23,12 +24,12 @@ export abstract class AppComponent<
         this.props = props ?? null;
     }
 
-    setState(newState: State | ((prevState: State) => State)) {
-        const prevState = { ...(this.state ?? {}) } as State;
+    setState(newState: State | SetStateFunction<State>) {
+        const prevState = this.state;
         let gotState: State | null = null;
 
-        if (typeof newState === 'function') {
-            gotState = (newState as SetStateFunction)(this.state);
+        if (isFunction(newState)) {
+            gotState = newState(this.state);
         } else {
             gotState = newState;
         }
@@ -52,6 +53,7 @@ export abstract class AppComponent<
     componentDidMount() {}
 
     componentDidUpdate(prevState: State | null, prevProps: Props | null) {
+        // ? Это нужно, чтобы сделать вид, что переменные используются
         void prevState;
         void prevProps;
     }

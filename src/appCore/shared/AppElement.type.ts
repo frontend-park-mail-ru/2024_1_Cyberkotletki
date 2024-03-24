@@ -4,6 +4,9 @@ import type {
     AppComponentType,
 } from '@/appCore/src/AppComponent.types';
 
+/**
+ * На основе этого типа создается объект из JSX разметки
+ */
 export interface AppElement<
     K extends keyof HTMLElementTagNameMap | AppComponentConstructor,
     Element extends HTMLElement = HTMLElement,
@@ -27,7 +30,7 @@ export interface AppElement<
      */
     instance: AppComponentType<AppElementProps, object> | null;
 
-    props?: AppElementProps<Element> | null;
+    props: AppElementProps<Element> | null;
 
     key: symbol;
 }

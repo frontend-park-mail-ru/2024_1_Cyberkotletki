@@ -53,13 +53,13 @@ export const replaceElements = (
 
         const { ref } = oldNode;
 
+        const $element = createElement(newNode, oldNode.owner);
+
         requestAnimationFrame(() => {
             children?.forEach((child) => {
                 removeElement(child, oldNode);
             });
         });
-
-        const $element = createElement(newNode, oldNode.owner);
 
         requestAnimationFrame(() => {
             replaceChildWithCheck(ref, $element);

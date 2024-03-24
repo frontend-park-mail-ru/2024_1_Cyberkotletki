@@ -36,7 +36,7 @@ export const createDOMElement = <
         $$typeof: DOM_ELEMENT_TYPE,
         type,
         props: { ...props, children, ref },
-        key: isDefined(key) ? Symbol.for(`${key}`) : Symbol('node.element.key'),
+        key: isDefined(key) ? Symbol.for(`${key}`) : Symbol.for(type),
         ref: null,
         owner: null,
         instance: null,

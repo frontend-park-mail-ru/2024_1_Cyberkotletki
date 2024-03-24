@@ -104,6 +104,7 @@ export const APP_NODE_EVENT_MAP = {
     onWheel: 'wheel',
 } as const;
 
+/** Тип для ключей ивентов  */
 export type AppNodeEventType = keyof typeof APP_NODE_EVENT_MAP;
 
 export const APP_NODE_EVENTS = objectKeys(APP_NODE_EVENT_MAP);

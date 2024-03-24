@@ -26,6 +26,8 @@ export const setAttributes = (node: HTMLElement, config?: object | null) => {
         });
     }
 
+    // ? Это нужно, чтобы сделать вид, что переменные используются
+    // Они вытащены из конфигов, чтобы они не пошли в аттрибуты элемента
     void key;
     void children;
     void ref;

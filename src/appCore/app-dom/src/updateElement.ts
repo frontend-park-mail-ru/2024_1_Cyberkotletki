@@ -12,7 +12,6 @@ import { updateAttributes } from './updateAttributes';
 
 import type { AppNode } from '@/appCore/shared/AppNode.types';
 import { isPrimitive } from '@/utils';
-import { isEqual } from '@/utils/isEqual';
 
 /**
  *
@@ -92,26 +91,31 @@ export const updateElement = (
         }
 
         if (isAppElement(newNode)) {
-            const GenerateInstance = newNode.type;
+            if (
+                oldNode.instance?.componentShouldUpdate(
+                    newNode.props,
+                    oldNode.instance.state,
+                )
+            ) {
+                const GenerateInstance = newNode.type;
 
-            const instance = new GenerateInstance(newNode.props);
-            newNode.instance = instance;
+                const instance = new GenerateInstance(newNode.props);
+                newNode.instance = instance;
 
-            instance.state = oldNode.instance?.state ?? null;
+                instance.state = oldNode.instance?.state ?? {};
 
-            const instanceRender = instance.render();
+                const instanceRender = instance.render();
 
-            instance.owner = oldNode.owner;
-            instance.instance = instanceRender;
+                instance.owner = oldNode.owner;
+                instance.instance = instanceRender;
 
-            updateElement(
-                instanceRender,
-                oldNode.instance?.instance,
-                owner,
-                index,
-            );
+                updateElement(
+                    instanceRender,
+                    oldNode.instance?.instance,
+                    owner,
+                    index,
+                );
 
-            if (!isEqual(oldNode.instance?.props, newNode.instance.props)) {
                 instance.componentDidUpdate(
                     instance.state,
                     oldNode.instance?.props ?? null,

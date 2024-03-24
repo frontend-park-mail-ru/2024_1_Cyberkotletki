@@ -987,14 +987,13 @@ declare global {
          * inside your component or have to validate them.
          */
         interface RefObject<T> {
-            readonly current: T | null;
+            current: T | null;
         }
         // Bivariance hack for consistent unsoundness with RefObject
         type RefCallback<T> = {
             bivarianceHack(instance: T | null): void;
         }['bivarianceHack'];
         type Ref<T> = RefCallback<T> | RefObject<T> | null;
-        type LegacyRef<T> = string | Ref<T>;
 
         interface Attributes {
             key?: Key | null | undefined;
@@ -1017,7 +1016,7 @@ declare global {
              * (or call the ref with `null` if you passed a callback ref).
              * @see https://react.dev/learn/referencing-values-with-refs#refs-and-the-dom
              */
-            ref?: LegacyRef<T> | undefined;
+            ref?: Ref<T> | undefined;
         }
 
         type DetailedHTMLProps<
@@ -1814,6 +1813,7 @@ declare global {
     }
 
     namespace JSX {
+        /** Тип, плученный из JSX разметки */
         type Element =
             | AppElement<AppComponentConstructor>
             | AppElement<keyof HTMLElementTagNameMap, HTMLElement>;

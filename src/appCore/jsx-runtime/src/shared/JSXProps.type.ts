@@ -1,5 +1,5 @@
 export interface JSXProps<T extends HTMLElement | null = HTMLElement> {
     key?: string | number;
     children?: JSX.Children;
-    ref?: App.LegacyRef<T>;
+    ref?: App.Ref<T>;
 }

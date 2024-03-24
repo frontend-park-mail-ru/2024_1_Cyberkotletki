@@ -7,6 +7,7 @@ import {
     isTextNode,
 } from './utils';
 
+import { isFunction } from '@/utils';
 import type { AppNode } from '@/appCore/shared/AppNode.types';
 
 /**
@@ -37,7 +38,7 @@ export const createElement = (
 
         const { ref } = element.props ?? {};
 
-        if (typeof ref === 'function') {
+        if (isFunction(ref)) {
             ref($element);
         } else if (ref) {
             ref.current = $element;

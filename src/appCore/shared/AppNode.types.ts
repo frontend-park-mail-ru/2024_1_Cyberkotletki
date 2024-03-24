@@ -1,6 +1,7 @@
 import type { AppElement } from '@/appCore/shared/AppElement.type';
 import type { AppComponentConstructor } from '@/appCore/src/AppComponent.types';
 
+/** Тип, который может использоваться в children JSX разметки */
 export type AppNode =
     | string
     | number
@@ -9,5 +10,3 @@ export type AppNode =
     | null
     | AppElement<AppComponentConstructor>
     | AppElement<keyof HTMLElementTagNameMap, HTMLElement>;
-
-export type AppNodeElement = HTMLElement | JSX.Element;

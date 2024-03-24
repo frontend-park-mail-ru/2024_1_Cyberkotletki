@@ -57,6 +57,8 @@ export const updateAttributes = (
         setAttributeWithCheck(node, key, value);
     });
 
+    // ? Это нужно, чтобы сделать вид, что переменные используются
+    // Они вытащены из конфигов, чтобы они не пошли в аттрибуты элемента
     void pKey;
     void pRef;
     void pChildren;

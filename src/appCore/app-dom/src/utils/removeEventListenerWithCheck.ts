@@ -2,6 +2,7 @@ import {
     APP_NODE_EVENT_MAP,
     type AppNodeEventType,
 } from '@/appCore/shared/AppNodeEvent.type';
+import { isFunction } from '@/utils';
 
 /**
  * Удаляет проуслушиватель события или выводит ошибку,
@@ -16,11 +17,8 @@ export const removeEventListenerWithCheck = (
     key: AppNodeEventType,
     listener?: unknown,
 ) => {
-    if (typeof listener === 'function') {
-        node?.removeEventListener(
-            APP_NODE_EVENT_MAP[key],
-            listener as () => void,
-        );
+    if (isFunction(listener)) {
+        node?.removeEventListener(APP_NODE_EVENT_MAP[key], listener);
     } else {
         throw new TypeError(
             `Невозможно удалить тип "${typeof listener}" обработчика события "${key}"`,
