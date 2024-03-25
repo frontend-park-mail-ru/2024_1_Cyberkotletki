@@ -1,7 +1,8 @@
 import { authRoutes } from './routes.ts';
 
-import appFetch, { ResponseStatus } from '@/api/applicationFetch.ts';
+import { appFetch, ResponseError } from '@/api/appFetch.ts';
 import { AuthError } from '@/api/auth/constants.ts';
+import { ResponseStatus } from '@/shared/constants';
 
 interface RegisterPayload {
     email: string;
@@ -15,116 +16,78 @@ interface LoginPayload {
 
 class AuthService {
     /**
-     * Авторизация пользователя
+     * Авторизация пользователя. Если авторизация не удалась, то выбрасывается
+     * ошибка
      * @param {string} email Email пользователя
      * @param {string} password Пароль пользователя
-     * @returns {Promise<{
-     *     success: boolean;
-     *     message: string;
-     * }>} Статус операции авторизации
+     * @returns {Promise<void>}
      */
-    async login(
-        email: string,
-        password: string,
-    ): Promise<{
-        success: boolean;
-        message: string;
-    }> {
+    async login(email: string, password: string): Promise<void> {
         return appFetch
-            .post<LoginPayload, string>(authRoutes.login(), {
+            .post<LoginPayload, void>(authRoutes.login(), {
                 login: email.trim(),
                 password,
             })
-            .then((response) => {
-                switch (response.status) {
-                    case ResponseStatus.OK:
-                        return {
-                            success: true,
-                            message: '',
-                        };
-                    case ResponseStatus.BAD_REQUEST:
-                        return {
-                            success: false,
-                            message: AuthError.BAD_REQUEST,
-                        };
-                    case ResponseStatus.NOT_FOUND:
-                        return {
-                            success: false,
-                            message: AuthError.USER_NOT_FOUND,
-                        };
-                    case ResponseStatus.FORBIDDEN:
-                        return {
-                            success: false,
-                            message: AuthError.PASSWORD_INCORRECT,
-                        };
-                    default:
-                        return {
-                            success: false,
-                            message: AuthError.UNKNOWN_ERROR,
-                        };
+            .catch((error: Error) => {
+                if (error instanceof ResponseError) {
+                    switch (error.message) {
+                        case ResponseStatus.BAD_REQUEST:
+                            throw new Error(AuthError.BAD_REQUEST);
+                        case ResponseStatus.NOT_FOUND:
+                            throw new Error(AuthError.USER_NOT_FOUND);
+                        case ResponseStatus.FORBIDDEN:
+                            throw new Error(AuthError.PASSWORD_INCORRECT);
+                        default:
+                            throw new Error(AuthError.UNKNOWN_ERROR);
+                    }
                 }
+                throw error;
             });
     }
 
     /**
-     * Регистрация пользователя
+     * Регистрация пользователя. Если регистрация не удалась, то выбрасывается
+     * ошибка
      * @param email Email пользователя
      * @param password Пароль пользователя
-     * @returns {Promise<{
-     *         success: boolean;
-     *         message: string;
-     *     }>} Статус операции регистрации
+     * @returns {Promise<void>}
      */
-    async register(
-        email: string,
-        password: string,
-    ): Promise<{
-        success: boolean;
-        message: string;
-    }> {
+    async register(email: string, password: string): Promise<void> {
         return appFetch
-            .post<RegisterPayload, string>(authRoutes.register(), {
+            .post<RegisterPayload, void>(authRoutes.register(), {
                 email: email.trim(),
                 password,
             })
-            .then((response) => {
-                switch (response.status) {
-                    case ResponseStatus.OK:
-                        return {
-                            success: true,
-                            message: '',
-                        };
-                    case ResponseStatus.BAD_REQUEST:
-                        return {
-                            success: false,
-                            message: AuthError.BAD_REQUEST,
-                        };
-                    case ResponseStatus.CONFLICT:
-                        return {
-                            success: false,
-                            message: AuthError.USER_ALREADY_EXISTS,
-                        };
-                    default:
-                        return {
-                            success: false,
-                            message: AuthError.UNKNOWN_ERROR,
-                        };
+            .catch((error: Error) => {
+                if (error instanceof ResponseError) {
+                    switch (error.message) {
+                        case ResponseStatus.BAD_REQUEST:
+                            throw new Error(AuthError.BAD_REQUEST);
+                        case ResponseStatus.CONFLICT:
+                            throw new Error(AuthError.USER_ALREADY_EXISTS);
+                        default:
+                            throw new Error(AuthError.UNKNOWN_ERROR);
+                    }
                 }
+                throw error;
             });
     }
 
     /**
-     * Функция для выхода пользователя из системы
-     * @returns {Promise<void>} если не удалось выйти из системы,
+     * Функция для выхода пользователя из системы. Если выход не удался,
+     * то выбрасывается ошибка. В противном случае можно считать, что юзер
+     * вышел и cookies удалены
+     * @returns {Promise<void>}
      * то возвращает ошибку
      */
     async logout(): Promise<void> {
         return appFetch
-            .post<object, string>(authRoutes.logout())
-            .then((response) => {
-                if (response.status !== ResponseStatus.OK) {
-                    throw new Error('Не удалось выйти из аккаунта');
+            .post<void, void>(authRoutes.logout())
+            .catch((error: Error) => {
+                if (error instanceof ResponseError) {
+                    throw new Error(AuthError.UNSUCCESSFUL_LOGOUT);
                 }
+                throw error;
             });
     }
 
@@ -133,9 +96,7 @@ class AuthService {
      * @returns {Promise<boolean>} true - пользователь авторизован, false - нет
      */
     async isAuth(): Promise<boolean> {
-        return appFetch
-            .get<string>(authRoutes.isAuth())
-            .then((response) => response.status === ResponseStatus.OK);
+        return appFetch.get(authRoutes.isAuth());
     }
 }
 

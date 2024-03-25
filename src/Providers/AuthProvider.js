@@ -14,8 +14,8 @@ class AuthProviderInner extends Component {
     getIsAuth() {
         authService
             .isAuth()
-            .then((loggedIn) => {
-                this.setState({ isLoggedIn: loggedIn });
+            .then(() => {
+                this.setState({ isLoggedIn: true });
             })
             .catch(() => {
                 this.setState({ isLoggedIn: false });

@@ -131,31 +131,22 @@ export function submitForm(e) {
         }));
 
         submitLoginForm(e.target, this.props.isLogin)
-            .then((response) => {
-                if (response.success) {
-                    const { changeRoute, getIsAuth } = this.props.context;
+            .then(() => {
+                const { changeRoute, getIsAuth } = this.props.context;
 
-                    changeRoute(routes.root());
-                    getIsAuth();
+                changeRoute(routes.root());
+                getIsAuth();
 
-                    this.setState((prev) => ({
-                        ...prev,
-                        error: '',
-                        isLoading: false,
-                    }));
-
-                    return;
-                }
                 this.setState((prev) => ({
                     ...prev,
-                    error: response.message,
+                    error: '',
                     isLoading: false,
                 }));
             })
-            .catch(() => {
+            .catch((error) => {
                 this.setState((prev) => ({
                     ...prev,
-                    error: 'Произошла неизвестная ошибка',
+                    error: error.message,
                     isLoading: false,
                 }));
             });
