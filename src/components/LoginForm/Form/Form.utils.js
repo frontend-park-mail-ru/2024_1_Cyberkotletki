@@ -6,7 +6,6 @@
 
 import { routes } from '../../../App/App.routes.js';
 import { authService } from '../../../api/auth/service.ts';
-import { RESPONSE_ERROR_CODE } from '../../../shared/constants.js';
 import {
     validateEmail,
     validatePassword,
@@ -14,17 +13,6 @@ import {
 } from '../../../validators/validators.js';
 
 import { AuthFormError } from './Form.contstants.js';
-
-export const getErrorMessage = (code) => {
-    switch (code) {
-        case RESPONSE_ERROR_CODE[404]:
-            return AuthFormError.INCORRECT_DATA;
-        case RESPONSE_ERROR_CODE[400]:
-            return AuthFormError.EMAIL_EXISTS;
-        default:
-            return AuthFormError.UNKNOWN_ERROR;
-    }
-};
 
 export const getEmailError = (email) => {
     if (!email) {

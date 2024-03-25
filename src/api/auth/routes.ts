@@ -1,11 +1,11 @@
 class AuthRoutes {
-    login = (): string => '/auth/login';
+    login = (): string => '/auth/login' as const;
 
-    register = (): string => '/auth/register';
+    register = (): string => '/auth/register' as const;
 
-    logout = (): string => '/auth/logout';
+    logout = (): string => '/auth/logout' as const;
 
-    isAuth = (): string => '/auth/isAuth';
+    isAuth = (): string => '/auth/isAuth' as const;
 }
 
 export const authRoutes = new AuthRoutes();

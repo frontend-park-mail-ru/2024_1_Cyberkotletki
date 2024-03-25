@@ -1,11 +1,16 @@
 import { authRoutes } from './routes.ts';
 
-import appFetch from '@/api/applicationFetch.ts';
+import appFetch, { ResponseStatus } from '@/api/applicationFetch.ts';
 import { AuthError } from '@/api/auth/constants.ts';
 
-interface AuthResponse {
-    success: boolean;
-    message: string;
+interface RegisterPayload {
+    email: string;
+    password: string;
+}
+
+interface LoginPayload {
+    login: string;
+    password: string;
 }
 
 class AuthService {
@@ -13,30 +18,41 @@ class AuthService {
      * Авторизация пользователя
      * @param {string} email Email пользователя
      * @param {string} password Пароль пользователя
-     * @returns {Promise<AuthResponse>} Статус операции авторизации
+     * @returns {Promise<{
+     *     success: boolean;
+     *     message: string;
+     * }>} Статус операции авторизации
      */
-    async login(email: string, password: string): Promise<AuthResponse> {
+    async login(
+        email: string,
+        password: string,
+    ): Promise<{
+        success: boolean;
+        message: string;
+    }> {
         return appFetch
-            .post(authRoutes.login(), {
+            .post<LoginPayload, string>(authRoutes.login(), {
                 login: email.trim(),
                 password,
             })
-            .then((r: Response) => {
-                if (r.ok) {
-                    return { success: true, message: '' };
-                }
-                switch (r.status) {
-                    case 400:
+            .then((response) => {
+                switch (response.status) {
+                    case ResponseStatus.OK:
+                        return {
+                            success: true,
+                            message: '',
+                        };
+                    case ResponseStatus.BAD_REQUEST:
                         return {
                             success: false,
                             message: AuthError.BAD_REQUEST,
                         };
-                    case 404:
+                    case ResponseStatus.NOT_FOUND:
                         return {
                             success: false,
                             message: AuthError.USER_NOT_FOUND,
                         };
-                    case 403:
+                    case ResponseStatus.FORBIDDEN:
                         return {
                             success: false,
                             message: AuthError.PASSWORD_INCORRECT,
@@ -54,25 +70,36 @@ class AuthService {
      * Регистрация пользователя
      * @param email Email пользователя
      * @param password Пароль пользователя
-     * @returns {Promise<AuthResponse>} Статус операции регистрации
+     * @returns {Promise<{
+     *         success: boolean;
+     *         message: string;
+     *     }>} Статус операции регистрации
      */
-    async register(email: string, password: string): Promise<AuthResponse> {
+    async register(
+        email: string,
+        password: string,
+    ): Promise<{
+        success: boolean;
+        message: string;
+    }> {
         return appFetch
-            .post(authRoutes.register(), {
+            .post<RegisterPayload, string>(authRoutes.register(), {
                 email: email.trim(),
                 password,
             })
-            .then((r: Response) => {
-                if (r.ok) {
-                    return { success: true, message: '' };
-                }
-                switch (r.status) {
-                    case 400:
+            .then((response) => {
+                switch (response.status) {
+                    case ResponseStatus.OK:
+                        return {
+                            success: true,
+                            message: '',
+                        };
+                    case ResponseStatus.BAD_REQUEST:
                         return {
                             success: false,
                             message: AuthError.BAD_REQUEST,
                         };
-                    case 409:
+                    case ResponseStatus.CONFLICT:
                         return {
                             success: false,
                             message: AuthError.USER_ALREADY_EXISTS,
@@ -92,11 +119,13 @@ class AuthService {
      * то возвращает ошибку
      */
     async logout(): Promise<void> {
-        return appFetch.post(authRoutes.logout()).then((r: Response) => {
-            if (!r.ok) {
-                throw new Error('Не удалось выйти из аккаунта');
-            }
-        });
+        return appFetch
+            .post<object, string>(authRoutes.logout())
+            .then((response) => {
+                if (response.status !== ResponseStatus.OK) {
+                    throw new Error('Не удалось выйти из аккаунта');
+                }
+            });
     }
 
     /**
@@ -104,7 +133,9 @@ class AuthService {
      * @returns {Promise<boolean>} true - пользователь авторизован, false - нет
      */
     async isAuth(): Promise<boolean> {
-        return appFetch.get(authRoutes.isAuth()).then((r: Response) => r.ok);
+        return appFetch
+            .get<string>(authRoutes.isAuth())
+            .then((response) => response.status === ResponseStatus.OK);
     }
 }
 

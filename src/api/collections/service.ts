@@ -1,7 +1,9 @@
-import appFetch from '@/api/applicationFetch.ts';
+import appFetch, { ResponseStatus } from '@/api/applicationFetch.ts';
 import { collectionsRoutes } from '@/api/collections/routes.ts';
 
-type GenresResponse = string[];
+interface GenresResponse {
+    genres: string[];
+}
 
 interface CompilationResponse {
     genre: string;
@@ -14,12 +16,14 @@ class CollectionsService {
      * @returns {Promise<GenresResponse>} Список жанров
      */
     async getGenres(): Promise<GenresResponse> {
-        return appFetch.get(collectionsRoutes.genres()).then((r: Response) => {
-            if (r.ok) {
-                return r.json().then((data: GenresResponse) => data);
-            }
-            throw new Error('Не удалось получить список жанров');
-        });
+        return appFetch
+            .get<GenresResponse>(collectionsRoutes.genres())
+            .then(async (response) => {
+                if (response.status === ResponseStatus.OK) {
+                    return response.data.then((data: GenresResponse) => data);
+                }
+                throw new Error('Не удалось получить список жанров');
+            });
     }
 
     /**
@@ -29,10 +33,14 @@ class CollectionsService {
      */
     async getCompilation(genre: string): Promise<CompilationResponse> {
         return appFetch
-            .get(collectionsRoutes.compilation(), { genre })
-            .then((r: Response) => {
-                if (r.ok) {
-                    return r.json().then((data: CompilationResponse) => data);
+            .get<CompilationResponse>(collectionsRoutes.compilation(), {
+                genre,
+            })
+            .then(async (response) => {
+                if (response.status === ResponseStatus.OK) {
+                    return response.data.then(
+                        (data: CompilationResponse) => data,
+                    );
                 }
                 throw new Error('Не удалось получить подборку по жанру');
             });

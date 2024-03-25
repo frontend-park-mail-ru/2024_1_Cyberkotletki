@@ -13,7 +13,6 @@ import {
     changeEmailInput,
     changePasswordInput,
     changeRepeatPasswordInput,
-    getErrorMessage,
     inputEmailInput,
     inputPasswordInput,
     inputRepeatPasswordInput,

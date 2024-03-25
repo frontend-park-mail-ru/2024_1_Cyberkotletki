@@ -1,4 +1,4 @@
-import appFetch from '@/api/applicationFetch.ts';
+import appFetch, { ResponseStatus } from '@/api/applicationFetch.ts';
 import { contentRoutes } from '@/api/content/routes.ts';
 
 interface PreviewContentCard {
@@ -22,10 +22,14 @@ class ContentService {
      */
     async getPreviewContentCard(id: number): Promise<PreviewContentCard> {
         return appFetch
-            .get(contentRoutes.contentPreview(), { id: id.toString() })
-            .then((r: Response) => {
-                if (r.ok) {
-                    return r.json().then((data: PreviewContentCard) => data);
+            .get<PreviewContentCard>(contentRoutes.contentPreview(), {
+                id: id.toString(),
+            })
+            .then(async (response) => {
+                if (response.status === ResponseStatus.OK) {
+                    return response.data.then(
+                        (data: PreviewContentCard) => data,
+                    );
                 }
                 throw new Error('Не удалось получить информацию о фильме');
             });
