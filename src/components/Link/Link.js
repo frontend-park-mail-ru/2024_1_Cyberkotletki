@@ -8,8 +8,7 @@ export const Link = HistoryContext.Connect((props) =>
         onClick: (e) => {
             e.preventDefault();
 
-            if (window.location.href !== e.target.href) {
-                window.history.pushState(null, '', props.href);
+            if (window.location.pathname !== props.href) {
                 const { changeRoute } = props.context;
 
                 changeRoute(props.href);

@@ -1,4 +1,4 @@
-import { isEqual } from '../../utils/isEqual.js';
+import { isDeepEqual } from '../../utils/isDeepEqual.js';
 
 export class Props {
     /**
@@ -30,7 +30,7 @@ export class Component {
     }
 
     /**
-     * @param {(prev:object)=>object} newState
+     * @param {{rating: (number|*)}} newState
      * Новое состояние компонента или функция, возвращающая новое состояние
      */
     setState(newState) {
@@ -54,8 +54,8 @@ export class Component {
      */
     shouldComponentUpdate(nextProps, nextState) {
         if (
-            !isEqual(this.props, nextProps) ||
-            !isEqual(this.state, nextState)
+            !isDeepEqual(this.props, nextProps) ||
+            !isDeepEqual(this.state, nextState)
         ) {
             return true;
         }
@@ -89,7 +89,7 @@ export class Component {
         let renderedContent = this.render(this.props, this.state);
 
         while (renderedContent instanceof Component) {
-            renderedContent = renderedContent.innerRender(this);
+            renderedContent = renderedContent.innerRender(this.owner);
         }
 
         if (
@@ -100,7 +100,7 @@ export class Component {
                 const { lastRenderedNode } = this;
 
                 requestAnimationFrame(() => {
-                    lastRenderedNode.replaceWith(renderedContent ?? '');
+                    lastRenderedNode?.replaceWith(renderedContent ?? '');
                     this.componentDidUpdate();
                 });
             } else {

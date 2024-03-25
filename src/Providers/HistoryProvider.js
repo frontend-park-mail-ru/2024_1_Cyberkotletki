@@ -14,6 +14,12 @@ export const HistoryContext = Core.createContext({
  * @returns {void} Функция
  */
 const handleChangeRoute = (root, router, path) => {
+    const { pathname } = window.location;
+
+    if (pathname !== path) {
+        window.history.pushState(null, '', path);
+    }
+
     if (router.routesMap.has(path)) {
         requestAnimationFrame(() => {
             root.replaceChildren(
@@ -34,9 +40,9 @@ class HistoryProviderInner extends Component {
     };
 
     componentWillMount() {
-        const { pathname } = window.location;
+        // const { pathname } = window.location;
 
-        handleChangeRoute(this.owner, this.props.router, pathname);
+        // handleChangeRoute(this.owner, this.props.router, pathname);
 
         window.addEventListener('popstate', (event) => {
             handleChangeRoute(
@@ -54,6 +60,10 @@ class HistoryProviderInner extends Component {
      * @returns {Component|null} Возвращает Component или null
      */
     render(props) {
+        const { pathname } = window.location;
+
+        handleChangeRoute(this.owner, props.router, pathname);
+
         return HistoryContext.Provider({
             changeRoute: (path) =>
                 handleChangeRoute(this.owner, props.router, path),

@@ -1,4 +1,6 @@
 import { Component } from './Component.js';
+import { changeAttributes } from './utils/changeAttributes.js';
+import { changeChildren } from './utils/changeChildren.js';
 import { insertChildIntoNode } from './utils/insertChildIntoNode.js';
 import { isChild } from './utils/isChild.js';
 import { setAttributes } from './utils/setAttributes.js';
@@ -19,12 +21,6 @@ export class AppElement extends Component {
         }
 
         if (children?.length) {
-            if (element.hasChildNodes()) {
-                requestAnimationFrame(() => {
-                    element.replaceChildren('');
-                });
-            }
-
             requestAnimationFrame(() => {
                 children.forEach((child) => {
                     insertChildIntoNode(element, child);
@@ -32,18 +28,21 @@ export class AppElement extends Component {
             });
         }
 
-        this.state.element = element;
+        this.element = element;
     }
 
-    /**
-     *
-     * @param {object} props Пропсы
-     * @param {object} state Состояние компонента
-     * @param {HTMLElement} state.element Элемент в состоянии
-     * @returns {HTMLElement} Узел в дереве
-     */
-    render(props, state) {
-        return state.element;
+    render({ children, tagName, context, ...props }) {
+        if (props) {
+            changeAttributes(this.props, props, this.element);
+        }
+
+        if (children?.length) {
+            changeChildren(this.props.children, children, this.element);
+        }
+
+        this.props = { children, tagName, context, ...props };
+
+        return this.element;
     }
 }
 

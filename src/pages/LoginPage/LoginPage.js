@@ -1,14 +1,5 @@
-import { Header } from '../../components/Header/Header.js';
-import { Core } from '../../core/Core.js';
+import { LoginForm } from '../../components/LoginForm/LoginForm.js';
+import { LoginLayout } from '../../layouts/LoginLayout/LoginLayout.js';
 
-import styles from './LoginPage.module.scss';
-
-export const LoginPage = (props) =>
-    Core.createElement('div', {
-        ...props,
-        class: styles['login-page'],
-        children: [
-            Header({ title: 'Login Page', class: 'example' }),
-            ...(props?.children ?? []),
-        ],
-    });
+export const LoginPage = () =>
+    LoginLayout({ children: [LoginForm({ isLogin: true })] });

@@ -1,0 +1,53 @@
+@keyframes gradient {
+    0% {
+        background-position: 0%;
+    }
+    100% {
+        background-position: 100%;
+    }
+}
+
+.button {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: var(--second-family);
+    font-weight: 700;
+    font-size: 16px;
+    border-radius: 8px;
+    appearance: none;
+    border: none;
+    background: var(--primary-gradient);
+    transition: all 200ms ease-in-out;
+
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+
+    &:hover {
+        animation: gradient 600ms linear infinite;
+        background-size: 150%;
+        animation-direction: alternate;
+        transform: scale(1.01);
+    }
+
+    &:active {
+        transform: scale(0.99);
+        filter: opacity(0.8);
+    }
+
+    &:disabled,
+    &.loading {
+        pointer-events: none;
+        user-select: none;
+        filter: opacity(0.8);
+    }
+
+    &.loading {
+        animation: gradient 600ms linear infinite;
+        background-size: 150%;
+        animation-direction: alternate;
+    }
+}
