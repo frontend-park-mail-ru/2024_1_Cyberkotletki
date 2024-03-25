@@ -11,8 +11,22 @@
     color: #efefef;
     font-size: 14px;
 
+    /* Font*/
     --font-family: 'Wix Madefor Display', arial, helvetica, sans-serif;
+
+    /* Variables  */
     --small-padding: 8px;
+    --item-border-radius: 6px;
+    --item-padding: 8px;
+    --button-height: 36px;
+    --input-border-shadow: 0 0 0 1px var(--secondary-gray);
+    --input-border-shadow-active: 0 0 0 2px var(--light-gray);
+    --input-border-shadow-error: 0 0 0 1px var(--error-red);
+
+    /* Transitions */
+    --item-transition-all: all 200ms ease-in-out;
+
+    /* Colors*/
     --black: #0f1014;
     --logo-black: #131e20;
     --white: #fff;

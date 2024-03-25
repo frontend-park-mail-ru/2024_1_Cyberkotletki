@@ -1,3 +1,5 @@
+import { isPrimitiveType } from '../../../utils/isPrimitiveType.js';
+
 /**
  *
  * @param {Array<HTMLElement | string | number>} prev Prev
@@ -6,7 +8,7 @@
  */
 export const changeChildren = (prev, next, node) => {
     let prevCopy = [...(prev ?? [])];
-    const nextCopy = [...(next ?? [])];
+    const nextCopy = next ?? [];
 
     requestAnimationFrame(() => {
         prevCopy.forEach((prevNode, index) => {
@@ -15,10 +17,7 @@ export const changeChildren = (prev, next, node) => {
                     prevNode.remove();
                 }
 
-                if (
-                    (typeof prevNode === 'string' && prevNode) ||
-                    typeof prevNode === 'number'
-                ) {
+                if (isPrimitiveType(prevNode)) {
                     const child = [...(node.childNodes ?? [])].find(
                         (child) => child?.data === `${prevNode}`,
                     );

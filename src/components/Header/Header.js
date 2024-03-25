@@ -1,75 +1,59 @@
 import { Core } from '../../core/Core.js';
 import { Component } from '../../core/src/Component.js';
-import { Link } from '../Link/Link.js';
+import { OutlineButton } from '../Buttons/OutlineButton.js';
 import { routes } from '../../App/App.routes.js';
 import { AuthContext } from '../../Providers/AuthProvider.js';
+import { HistoryContext } from '../../Providers/HistoryProvider.js';
+import { IcUserCircle } from '../../assets/icons/IcUserCircle.js';
+import { LogoButton } from '../LogoButton/LogoButton.js';
+import { authService } from '../../api/auth/auth.service.js';
 
-class Button extends Component {
-    state = {
-        buttonText: 0,
-    };
-
-    render(props, state) {
-        return Core.createElement(
-            'button',
-            {
-                'data-header-button': true,
-                onClick: () => {
-                    this.setState((prev) => ({
-                        ...prev,
-                        buttonText: prev.buttonText + 1,
-                    }));
-                },
-            },
-            state.buttonText,
-        );
-    }
-}
+import styles from './Header.module.scss';
 
 class HeaderInner extends Component {
-    state = { buttonText: 0, response: null };
-
-    componentDidMount() {
-        fetch('https://api.github.com/orgs/nodejs')
-            .then((response) => response.json())
-            .then((data) => {
-                this.setState((prev) => ({ ...prev, response: data }));
-            });
-    }
-
-    render(props, state) {
+    render(props) {
         return Core.createElement(
             'header',
+            { class: 'header' },
             Core.createElement(
-                'h1',
-                props.title,
-                `${props.context.isLoggedIn}`,
-            ),
-            Core.createElement(
-                'nav',
+                'div',
+                { class: 'header-container' },
+                // Header logo
                 Core.createElement(
-                    'ul',
-                    Core.createElement(
-                        'li',
-                        Link({ href: routes.root(), children: ['Home'] }),
-                    ),
-                    Core.createElement(
-                        'li',
-                        Link({
-                            href: routes.login(),
-                            children: ['Login'],
-                        }),
-                    ),
+                    'div',
+                    { class: 'header-logo' },
+                    LogoButton(),
                 ),
-                new Button(),
                 Core.createElement(
-                    'pre',
-                    {},
-                    JSON.stringify(state.response, null, 2),
+                    'div',
+                    { class: 'header-panel' },
+                    props?.context?.isLoggedIn
+                        ? Core.createElement(
+                              'div',
+                              { class: styles.avatar },
+                              Core.createElement('div', {
+                                  onClick: () => {
+                                      authService.logout();
+                                      props.context.getIsAuth();
+                                  },
+                                  class: styles['logout-button'],
+                                  children: ['Выйти'],
+                              }),
+                              IcUserCircle(),
+                          )
+                        : OutlineButton({
+                              onClick: () => {
+                                  const { changeRoute } = props.context;
+                                  changeRoute(routes.login());
+                              },
+                              children: ['Войти'],
+                          }),
                 ),
             ),
         );
     }
 }
 
-export const Header = AuthContext.Connect((props) => new HeaderInner(props));
+export const Header = AuthContext.Connect(
+    HistoryContext.Connect((props) => new HeaderInner(props)),
+);
