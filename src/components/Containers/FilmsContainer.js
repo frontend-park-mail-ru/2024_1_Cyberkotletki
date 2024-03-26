@@ -1,16 +1,16 @@
-import { filmService } from '../../api/films/films.service.js';
 import { Core } from '../../core/Core.js';
 import { Component } from '../../core/src/Component.js';
 import { OutlineButton } from '../Buttons/OutlineButton.js';
 import { FilmCard } from '../Cards/FilmCard.js';
+import { collectionsService } from '../../api/collections/service';
 
 class FilmsContainerInner extends Component {
     state = {
         filmsIds: [],
     };
 
-    fetchFilmsIdsByGenre = (genre) => {
-        filmService.getFilmsIdsByGenre(genre).then((data) => {
+    getFilmsIdsByGenre = (genre) => {
+        collectionsService.getCompilation(genre).then((data) => {
             this.setState((prev) => ({
                 ...prev,
                 filmsIds: data.ids,
@@ -19,21 +19,21 @@ class FilmsContainerInner extends Component {
     };
 
     componentDidMount() {
-        this.fetchFilmsIdsByGenre('action');
+        this.getFilmsIdsByGenre('action');
     }
 
     render() {
         const buttonComedian = OutlineButton({
             children: ['Комедия'],
-            onClick: () => this.fetchFilmsIdsByGenre('comedian'),
+            onClick: () => this.getFilmsIdsByGenre('comedian'),
         });
         const buttonAction = OutlineButton({
             children: ['Боевик'],
-            onClick: () => this.fetchFilmsIdsByGenre('action'),
+            onClick: () => this.getFilmsIdsByGenre('action'),
         });
         const buttonDrama = OutlineButton({
             children: ['Драма'],
-            onClick: () => this.fetchFilmsIdsByGenre('drama'),
+            onClick: () => this.getFilmsIdsByGenre('drama'),
         });
 
         return Core.createElement(
@@ -55,9 +55,9 @@ class FilmsContainerInner extends Component {
                 'div',
                 { class: 'grid-container' },
                 // для каждого айди фильма генерируем карточку фильма
-                ...this.state.filmsIds.map((ID) =>
+                ...this.state.filmsIds.map((id) =>
                     FilmCard({
-                        id: ID,
+                        id,
                     }),
                 ),
             ),

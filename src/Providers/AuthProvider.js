@@ -1,4 +1,4 @@
-import { authService } from '../api/auth/auth.service.js';
+import { authService } from '../api/auth/service.ts';
 import { Core } from '../core/Core.js';
 import { Component } from '../core/src/Component.js';
 

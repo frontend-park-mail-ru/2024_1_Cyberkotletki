@@ -1,14 +1,15 @@
-import { Core } from '../../core/Core.js';
-import { Component } from '../../core/src/Component.js';
 import { OutlineButton } from '../Buttons/OutlineButton.js';
-import { routes } from '../../App/App.routes.js';
-import { AuthContext } from '../../Providers/AuthProvider.js';
-import { HistoryContext } from '../../Providers/HistoryProvider.js';
-import { IcUserCircle } from '../../assets/icons/IcUserCircle.js';
 import { LogoButton } from '../LogoButton/LogoButton.js';
-import { authService } from '../../api/auth/auth.service.js';
 
 import styles from './Header.module.scss';
+
+import { Core } from '@/core/Core';
+import { Component } from '@/core/src/Component';
+import { routes } from '@/App/App.routes';
+import { AuthContext } from '@/Providers/AuthProvider';
+import { HistoryContext } from '@/Providers/HistoryProvider';
+import { IcUserCircle } from '@/assets/icons/IcUserCircle';
+import { authService } from '@/api/auth/service';
 
 class HeaderInner extends Component {
     render(props) {
