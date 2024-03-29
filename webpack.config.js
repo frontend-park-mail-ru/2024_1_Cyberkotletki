@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: './src/index.tsx',
     output: {
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist'),
@@ -16,6 +16,10 @@ module.exports = {
                 test: /\.(js|ts|jsx|tsx)?$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
+            },
+            {
+                test: /\.svg$/i,
+                type: 'asset',
             },
         ],
     },

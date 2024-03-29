@@ -3,15 +3,17 @@ import { isDefined, isPrimitive } from '@/utils';
 /**
  * Устанавливает аттрибут к DOM ноде
  * @param {HTMLElement} node Узел, в который устанавливаются атрибуты
- * @param {string} key Название атрибута
+ * @param {string} keyProp Название атрибута
  * @param {unknown} value Значение атрибута
  */
 export const setAttributeWithCheck = (
     node: HTMLElement | undefined | null,
-    key: string,
+    keyProp: string,
     value: unknown,
 ) => {
     if (isPrimitive(value)) {
+        const key = keyProp === 'className' ? 'class' : keyProp;
+
         if (isDefined(value) && value !== false) {
             node?.setAttribute(key, `${value}`);
         } else {
@@ -19,7 +21,7 @@ export const setAttributeWithCheck = (
         }
     } else {
         throw new TypeError(
-            `Тип "${typeof value}" невозможно назначить в качестве атрибута "${key}"`,
+            `Тип "${typeof value}" невозможно назначить в качестве атрибута "${keyProp}"`,
         );
     }
 };

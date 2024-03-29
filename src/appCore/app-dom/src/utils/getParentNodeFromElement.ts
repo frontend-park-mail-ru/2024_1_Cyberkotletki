@@ -14,11 +14,13 @@ export const getParentNodeFromElement = (element: AppNode | null) => {
     let currOwner: JSX.Element | null = element;
 
     while (currOwner) {
-        if (currOwner.ref) {
-            return currOwner.ref as HTMLElement;
-        }
+        if (!isPrimitive(currOwner)) {
+            if (currOwner.ref) {
+                return currOwner.ref as HTMLElement;
+            }
 
-        currOwner = currOwner.owner;
+            currOwner = currOwner.owner;
+        }
     }
 
     return null;

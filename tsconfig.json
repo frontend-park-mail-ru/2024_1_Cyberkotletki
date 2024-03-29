@@ -36,6 +36,11 @@
         "jsx": "preserve",
         "jsxFactory": "jsx"
     },
-    "include": ["**/*.ts", "**/*.tsx"],
+    "include": [
+        "**/*.ts",
+        "**/*.tsx",
+        "src/types/svg.d.ts",
+        "src/types/css.modules.d.ts"
+    ],
     "exclude": ["node_modules"]
 }

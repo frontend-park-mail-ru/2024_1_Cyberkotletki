@@ -8,6 +8,7 @@ import { IndexPage } from '../pages/IndexPage/IndexPage';
 import { routes } from './App.routes.js';
 
 import '../styles/global.scss';
+import { Core } from '@/core/Core.js';
 
 export const App = (props) =>
     AuthProvider(
@@ -16,6 +17,13 @@ export const App = (props) =>
                 { path: routes.root(), renderElement: IndexPage },
                 { path: routes.login(), renderElement: LoginPage },
                 { path: routes.register(), renderElement: RegisterPage },
+                {
+                    path: '/test',
+                    renderElement: () =>
+                        Core.createElement('div', {
+                            id: 'test-page',
+                        }),
+                },
             ]),
             ...props,
         }),
