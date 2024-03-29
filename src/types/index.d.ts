@@ -1,6 +1,5 @@
-import type { AppElement } from '@/appCore/shared/AppElement.type';
 import type { AppNode } from '@/appCore/shared/AppNode.types';
-import type { AppComponentConstructor } from '@/appCore/src/AppComponent.types';
+import type { AppComponent } from '@/appCore/src/AppComponent';
 
 /* eslint-disable no-use-before-define */
 type NativeAnimationEvent = AnimationEvent;
@@ -909,7 +908,7 @@ declare global {
             // Standard HTML Attributes
             accessKey?: string | undefined;
             autoFocus?: boolean | undefined;
-            class?: string | undefined;
+            className?: string | undefined;
             contentEditable?: Booleanish | 'inherit' | undefined;
             contextMenu?: string | undefined;
             dir?: string | undefined;
@@ -1814,13 +1813,11 @@ declare global {
 
     namespace JSX {
         /** Тип, плученный из JSX разметки */
-        type Element =
-            | AppElement<AppComponentConstructor>
-            | AppElement<keyof HTMLElementTagNameMap, HTMLElement>;
+        type Element = AppNode;
 
         type Children = (AppNode | AppNode[])[] | AppNode;
-        type Element = App.AppElement<unknown, unknown>;
-        interface ElementClass extends App.Component<unknown> {
+        // type Element = App.AppElement<unknown, unknown>;
+        interface ElementClass extends AppComponent<unknown> {
             render(): App.AppNode;
         }
         interface ElementAttributesProperty {

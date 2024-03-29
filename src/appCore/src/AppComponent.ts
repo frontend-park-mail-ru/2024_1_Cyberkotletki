@@ -6,7 +6,7 @@ import { isFunction } from '@/utils';
 import { isEqual } from '@/utils/isEqual';
 
 export abstract class AppComponent<
-    Props extends object | null | undefined,
+    Props extends object | null | undefined = object,
     State extends object = object,
 > implements AppComponentType<Props, State>
 {
