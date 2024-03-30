@@ -12,7 +12,6 @@ import { updateAttributes } from './updateAttributes';
 
 import type { AppNode } from '@/appCore/shared/AppNode.types';
 import { isPrimitive } from '@/utils';
-
 /**
  *
  * @param newNode Новая нода
@@ -21,6 +20,7 @@ import { isPrimitive } from '@/utils';
  * ОБЯЗАТЕЛЬНЫЙ АРГУМЕНТ для изменения ТЕКСТОВОГО УЗЛА
  * @param index позиция oldNode в $parent.
  * ОБЯЗАТЕЛЬНЫЙ АРГУМЕНТ для изменения ТЕКСТОВОГО УЗЛА
+ * @returns {HTMLElement|null} Элемент
  */
 export const updateElement = (
     newNode?: AppNode,
@@ -38,19 +38,30 @@ export const updateElement = (
         requestAnimationFrame(() => {
             appendChildWithCheck(owner, $element);
         });
-    } else if (!isElementDefined(newNode)) {
+
+        return $element;
+    }
+
+    if (!isElementDefined(newNode)) {
         /**
          * ? Случай 2. Нету нового узла.
          * Удаляется старый узел
          */
         removeElement(oldNode, owner);
-    } else if (isChangedElements(newNode, oldNode)) {
+
+        return null;
+    }
+
+    if (isChangedElements(newNode, oldNode)) {
         /**
          * ? Случай 3. Оба узла есть, но отличаются типом.
          * Старый узел заменяется новым
          */
-        replaceElements(newNode, oldNode, owner, index);
-    } else if (!isPrimitive(newNode) && !isPrimitive(oldNode)) {
+
+        return replaceElements(newNode, oldNode, owner, index);
+    }
+
+    if (!isPrimitive(newNode) && !isPrimitive(oldNode)) {
         /**
          * ? Случай 4. Оба узла одинакового типа. Но отличаются параметрами
          * Проверяются и изменяются аттрибуты
@@ -59,12 +70,13 @@ export const updateElement = (
         if (isDOMElement(newNode)) {
             newNode.owner = oldNode.owner;
             newNode.ref = oldNode.ref;
+            newNode.instance = oldNode.instance;
 
             if (oldNode.ref instanceof HTMLElement) {
                 updateAttributes(oldNode.props, newNode.props, oldNode.ref);
 
                 // Дочерние элементы фильтруются.
-                // Убираются boolean, null и undefined значения
+                // Убираются boolean, null, undefined и "" значения
                 const newChildren =
                     newNode.props?.children?.filter(isElementDefined);
                 const oldChildren =
@@ -87,10 +99,12 @@ export const updateElement = (
                 }
             }
 
-            return;
+            return oldNode.ref;
         }
 
         if (isAppElement(newNode)) {
+            newNode.owner = oldNode.owner;
+
             if (
                 oldNode.instance?.componentShouldUpdate(
                     newNode.props,
@@ -99,7 +113,7 @@ export const updateElement = (
             ) {
                 const GenerateInstance = newNode.type;
 
-                const instance = new GenerateInstance(newNode.props);
+                const instance = new GenerateInstance(newNode.props ?? {});
                 newNode.instance = instance;
 
                 instance.state = oldNode.instance?.state ?? {};
@@ -120,7 +134,18 @@ export const updateElement = (
                     instance.state,
                     oldNode.instance?.props ?? null,
                 );
+
+                return null;
             }
+
+            newNode.instance = oldNode.instance;
+            newNode.ref = oldNode.ref;
+
+            return oldNode.ref;
         }
+
+        return owner?.ref?.childNodes[index ?? 0] as HTMLElement;
     }
+
+    return owner?.ref?.childNodes[index ?? 0] as HTMLElement;
 };

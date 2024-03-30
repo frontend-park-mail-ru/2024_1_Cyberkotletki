@@ -21,6 +21,7 @@ import { isDefined } from '@/utils';
  * ОБЯЗАТЕЛЬНЫЙ АРГУМЕНТ для изменения ТЕКСТОВОГО УЗЛА
  * @param index позиция oldNode в $parent.
  * ОБЯЗАТЕЛЬНЫЙ АРГУМЕНТ для изменения ТЕКСТОВОГО УЗЛА
+ * @returns Created Node
  */
 export const replaceElements = (
     newNode?: AppNode,
@@ -41,11 +42,11 @@ export const replaceElements = (
             replaceChildWithCheck(textChild, $element);
         });
 
-        return;
+        return $element;
     }
 
     if (!isElementDefined(oldNode)) {
-        return;
+        return null;
     }
 
     if (isDOMElement(oldNode)) {
@@ -65,7 +66,7 @@ export const replaceElements = (
             replaceChildWithCheck(ref, $element);
         });
 
-        return;
+        return $element;
     }
 
     if (isAppElement(oldNode)) {
@@ -79,5 +80,9 @@ export const replaceElements = (
             removeElement(oldNode.instance?.instance);
             oldNode.instance?.unmount();
         });
+
+        return $element;
     }
+
+    return null;
 };

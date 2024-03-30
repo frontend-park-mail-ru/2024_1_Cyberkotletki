@@ -34,9 +34,7 @@ export const createAppElement = <Props extends JSXProps>(
         $$typeof: APP_ELEMENT_TYPE,
         type,
         props: { ...props, children, ref },
-        key: isDefined(key)
-            ? Symbol.for(`${key}`)
-            : Symbol.for(type.toString()),
+        key: isDefined(key) ? Symbol.for(`${key}`) : Symbol.for(type.name),
         ref: null,
         owner: null,
         instance: null,

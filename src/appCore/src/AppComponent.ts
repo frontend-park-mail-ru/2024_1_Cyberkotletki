@@ -1,5 +1,6 @@
 import type { AppComponentType, SetStateFunction } from './AppComponent.types';
 
+import type { AppElementProps } from '@/appCore/shared/AppElementProps.type';
 import { updateElement } from '@/appCore/app-dom/src/updateElement';
 import type { AppNode } from '@/appCore/shared/AppNode.types';
 import { isFunction } from '@/utils';
@@ -26,6 +27,7 @@ export abstract class AppComponent<
 
     setState(newState: State | SetStateFunction<State>) {
         const prevState = this.state;
+
         let gotState: State | null = null;
 
         if (isFunction(newState)) {
@@ -39,6 +41,7 @@ export abstract class AppComponent<
             const newInstance = this.render();
 
             updateElement(newInstance, this.instance, this.owner);
+
             this.instance = newInstance;
             this.componentDidUpdate(prevState, this.props);
 
@@ -58,8 +61,17 @@ export abstract class AppComponent<
         void prevProps;
     }
 
-    componentShouldUpdate(newProps: Props | null, newState: State | null) {
-        return !isEqual(this.props, newProps) || !isEqual(this.state, newState);
+    componentShouldUpdate(newConfig: Props | null, newState: State | null) {
+        const { children: oldChildren, ...oldProps } = this
+            .props as AppElementProps;
+        const { children: newChildren, ...newProps } =
+            newConfig as AppElementProps;
+
+        return (
+            !isEqual(oldProps, newProps) ||
+            !isEqual(this.state, newState) ||
+            !isEqual(oldChildren, newChildren)
+        );
     }
 
     componentWillUnmount() {}

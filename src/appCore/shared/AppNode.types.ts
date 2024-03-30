@@ -8,5 +8,5 @@ export type AppNode =
     | undefined
     | boolean
     | null
-    | AppElement<AppComponentConstructor>
+    | AppElement<AppComponentConstructor<object>>
     | AppElement<keyof HTMLElementTagNameMap, HTMLElement>;

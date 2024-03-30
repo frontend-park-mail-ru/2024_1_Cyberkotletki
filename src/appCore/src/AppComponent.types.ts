@@ -3,7 +3,7 @@ import type { AppComponent } from './AppComponent';
 import type { AppNode } from '@/appCore/shared/AppNode.types';
 
 export type AppComponentConstructor<
-    Props extends object | undefined | null = null,
+    Props extends object | undefined | null = object,
 > = new (props?: Props) => AppComponent<Props>;
 
 export type SetStateFunction<State> = (prevState: State) => State;

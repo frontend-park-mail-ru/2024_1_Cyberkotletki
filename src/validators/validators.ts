@@ -38,52 +38,52 @@ export function validatePassword(password: string) {
         return {
             isValid: false,
             reasonType: PasswordErrorReasonType.PASSWORD_SHORT,
-        };
+        } as const;
     }
 
     if (password.length > MAX_PASSWORD_LENGTH) {
         return {
             isValid: false,
             reasonType: PasswordErrorReasonType.PASSWORD_LONG,
-        };
+        } as const;
     }
 
     if (!/^[!@#$%^&*\w]+$/.test(password)) {
         return {
             isValid: false,
             reasonType: PasswordErrorReasonType.PASSWORD_INCORRECT,
-        };
+        } as const;
     }
 
     if (!/[A-Z]/.test(password)) {
         return {
             isValid: false,
             reasonType: PasswordErrorReasonType.PASSWORD_UPPERCASE,
-        };
+        } as const;
     }
 
     if (!/[a-z]/.test(password)) {
         return {
             isValid: false,
             reasonType: PasswordErrorReasonType.PASSWORD_LOWERCASE,
-        };
+        } as const;
     }
 
     if (!/\d/.test(password)) {
         return {
             isValid: false,
             reasonType: PasswordErrorReasonType.PASSWORD_DIGIT,
-        };
+        } as const;
     }
 
     if (!/[!@#$%^&*]/.test(password)) {
         return {
             isValid: false,
             reasonType: PasswordErrorReasonType.PASSWORD_SPECIAL_SYMBOLS,
-        };
+        } as const;
     }
 
-    return { isValid: true };
+    return { isValid: true } as const;
 }
 
 /**
@@ -92,6 +92,6 @@ export function validatePassword(password: string) {
  * @param {string}  password2 password2
  * @returns `password2 === password2`
  */
-export function validatePasswordMatch(password1: string, password2: string) {
+export function validatePasswordMatch(password1?: string, password2?: string) {
     return password1 === password2;
 }

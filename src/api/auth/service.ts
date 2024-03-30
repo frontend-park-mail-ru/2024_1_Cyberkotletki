@@ -22,7 +22,7 @@ class AuthService {
      * @param {string} password Пароль пользователя
      * @returns {Promise<void>}
      */
-    async login(email: string, password: string): Promise<void> {
+    async login(email: string, password: string) {
         return appFetch
             .post<LoginPayload, void>(authRoutes.login(), {
                 login: email.trim(),

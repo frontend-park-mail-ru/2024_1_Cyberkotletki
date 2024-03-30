@@ -24,11 +24,12 @@ export const isAppElement = (
  * @returns `true` - можно маунтить, `false` - нельзя
  */
 export const isElementDefined = <T>(
-    value: T | undefined | null | boolean,
+    value: T | undefined | null | boolean | '',
 ): value is T =>
     typeof value !== 'undefined' &&
     typeof value !== 'boolean' &&
-    value !== null;
+    value !== null &&
+    value !== '';
 
 export const isChangedElements = (nodeLeft: AppNode, nodeRight: AppNode) => {
     if (isPrimitive(nodeLeft)) {
@@ -43,7 +44,7 @@ export const isChangedElements = (nodeLeft: AppNode, nodeRight: AppNode) => {
         return true;
     }
 
-    return nodeLeft.key !== nodeRight.key;
+    return nodeLeft.type !== nodeRight.type;
 };
 
 /**
