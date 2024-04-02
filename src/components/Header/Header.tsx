@@ -6,7 +6,7 @@ import { LogoButton } from '@/components/LogoButton';
 import { concatClasses } from '@/utils';
 import type { AppContext } from '@/types/Context.types';
 import { icUserCircleUrl } from '@/assets/icons';
-import { Button } from '@/components/Button/Button';
+import { Button } from '@/components/Button';
 import { HistoryContext } from '@/Providers/HistoryProvider';
 import { routes } from '@/App/App.routes';
 import { authService } from '@/api/auth/service';

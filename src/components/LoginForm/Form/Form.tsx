@@ -17,7 +17,7 @@ import {
 import { AppComponent } from '@/appCore/src/AppComponent';
 import { Input } from '@/components/Input';
 import { concatClasses } from '@/utils';
-import { Button } from '@/components/Button/Button';
+import { Button } from '@/components/Button';
 import type { AppContext } from '@/types/Context.types';
 import { HistoryContext } from '@/Providers/HistoryProvider';
 import { AuthContext } from '@/Providers/AuthProvider';

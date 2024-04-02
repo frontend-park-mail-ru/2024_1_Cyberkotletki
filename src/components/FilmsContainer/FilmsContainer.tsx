@@ -6,7 +6,7 @@ import type {
 } from '@/api/collections/service';
 import { collectionsService } from '@/api/collections/service';
 import { AppComponent } from '@/appCore/src/AppComponent';
-import { Button } from '@/components/Button/Button';
+import { Button } from '@/components/Button';
 import { FilmCard } from '@/components/FilmCard';
 import { concatClasses } from '@/utils';
 
