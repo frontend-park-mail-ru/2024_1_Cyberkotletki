@@ -44,7 +44,7 @@ export const isChangedElements = (nodeLeft: AppNode, nodeRight: AppNode) => {
         return true;
     }
 
-    return nodeLeft.type !== nodeRight.type;
+    return nodeLeft.key !== nodeRight.key;
 };
 
 /**

@@ -44,12 +44,10 @@ export const createElement = (
             ref.current = $element;
         }
 
-        requestAnimationFrame(() => {
-            element.props?.children?.forEach((child) => {
-                const node = createElement(child, element);
+        element.props?.children?.forEach((child) => {
+            const node = createElement(child, element);
 
-                appendChildWithCheck($element, node);
-            });
+            appendChildWithCheck($element, node);
         });
 
         return $element;

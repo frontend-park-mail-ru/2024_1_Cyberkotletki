@@ -30,7 +30,7 @@ export interface AppElement<
      */
     instance: AppComponentType<AppElementProps, object> | null;
 
-    props: AppElementProps<Element> | null;
+    props: AppElementProps<Element>;
 
     key: symbol;
 }

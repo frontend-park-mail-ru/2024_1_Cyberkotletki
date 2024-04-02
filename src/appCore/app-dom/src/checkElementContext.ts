@@ -1,82 +1,30 @@
-import {
-    appendChildWithCheck,
-    isAppElement,
-    isChangedElements,
-    isDOMElement,
-    isElementDefined,
-} from './utils';
-import { createElement } from './createElement';
-import { removeElement } from './removeElement';
-import { replaceElements } from './replaceElements';
-import { updateAttributes } from './updateAttributes';
-import { checkElementContext } from './checkElementContext';
+import { isAppElement, isDOMElement, isElementDefined } from './utils';
+import { updateElement } from './updateElement';
 
 import type { AppNode } from '@/appCore/shared/AppNode.types';
 import { isPrimitive } from '@/utils';
+
 /**
- * Сравнивает старый и новый узел, и,
- * если необходимо, делает изменения
+ * Проходит по всему дереву, чтобы определить компоненты,
+ * подписанные на контекст
  * @param newNode Новая нода
  * @param oldNode Старая нода
  * @param owner (НЕОБЯЗАТЕЛЬНЫЙ АРГУМЕНТ) родительский DOM элемент,
  * ОБЯЗАТЕЛЬНЫЙ АРГУМЕНТ для изменения ТЕКСТОВОГО УЗЛА
  * @param index позиция oldNode в $parent.
- * ОБЯЗАТЕЛЬНЫЙ АРГУМЕНТ для изменения ТЕКСТОВОГО УЗЛА
- * @returns {HTMLElement|null} Элемент
+ * @returns Возвращает узел, если компонент был изменен контекстом, иначе `null`
  */
-export const updateElement = (
+export const checkElementContext = (
     newNode?: AppNode,
     oldNode?: AppNode,
     owner?: JSX.Element | null,
     index?: number,
-) => {
-    if (!isElementDefined(oldNode)) {
-        /**
-         * ? Случай 1. Нету предыдущего узла.
-         * Создается новый элемент и добавляется к родительскому
-         */
-        const $element = createElement(newNode, owner ?? null);
-
-        // requestAnimationFrame(() => {
-        appendChildWithCheck(owner, $element);
-        // });
-
-        return $element;
-    }
-
-    if (!isElementDefined(newNode)) {
-        /**
-         * ? Случай 2. Нету нового узла.
-         * Удаляется старый узел
-         */
-        removeElement(oldNode, owner);
-
-        return null;
-    }
-
-    if (isChangedElements(newNode, oldNode)) {
-        /**
-         * ? Случай 3. Оба узла есть, но отличаются типом.
-         * Старый узел заменяется новым
-         */
-
-        return replaceElements(newNode, oldNode, owner, index);
-    }
-
+): AppNode => {
     if (!isPrimitive(newNode) && !isPrimitive(oldNode)) {
-        /**
-         * ? Случай 4. Оба узла одинакового типа. Но отличаются параметрами
-         * Проверяются и изменяются аттрибуты
-         * и следует проверка дочерних элементов
-         */
+        newNode.owner = owner ?? null;
+
         if (isDOMElement(newNode)) {
-            newNode.owner = oldNode.owner;
-            newNode.ref = oldNode.ref;
-            newNode.instance = oldNode.instance;
-
             if (oldNode.ref instanceof HTMLElement) {
-                updateAttributes(oldNode.props, newNode.props, oldNode.ref);
-
                 // Дочерние элементы фильтруются.
                 // Убираются boolean, null, undefined и "" значения
                 const newChildren =
@@ -94,23 +42,24 @@ export const updateElement = (
                 for (let i = 0; i < maxChildLength; i++) {
                     const newChild = newChildren?.[i];
 
-                    updateElement(newChild, oldChildren?.[i], oldNode, i);
+                    checkElementContext(newChild, oldChildren?.[i], oldNode, i);
                 }
             }
 
-            return oldNode.ref;
+            return null;
         }
 
         if (isAppElement(newNode)) {
-            newNode.owner = oldNode.owner;
-
             const GenerateInstance = newNode.type;
 
             const instance = new GenerateInstance(newNode.props ?? {});
+
             instance.state = oldNode.instance?.state ?? {};
+
             const instanceRender = instance.render();
-            instance.instance = instanceRender;
+
             instance.owner = oldNode.owner;
+            instance.instance = instanceRender;
 
             if (
                 oldNode.instance?.componentShouldUpdate(
@@ -123,7 +72,7 @@ export const updateElement = (
                 updateElement(
                     instanceRender,
                     oldNode.instance?.instance,
-                    owner,
+                    oldNode,
                     index,
                 );
 
@@ -137,15 +86,12 @@ export const updateElement = (
                     oldNode.instance?.props ?? null,
                 );
 
-                return newNode.ref;
+                return newNode;
             }
 
             newNode.instance = oldNode.instance;
             newNode.ref = oldNode.ref;
 
-            // Обход всего дерева для того чтобы изменить компоненты,
-            // подписанные на контекст
-            // в случае, если изменился контекст
             const node = checkElementContext(
                 instanceRender,
                 oldNode.instance?.instance,
@@ -154,19 +100,16 @@ export const updateElement = (
             );
 
             if (node) {
-                newNode.instance = instance;
-
                 instance.ref = isPrimitive(instanceRender)
-                    ? oldNode.ref
+                    ? null
                     : instanceRender.ref;
+                newNode.instance = instance;
                 newNode.ref = instance.ref;
             }
 
-            return oldNode.ref;
+            return node;
         }
-
-        return owner?.ref?.childNodes[index ?? 0] as HTMLElement;
     }
 
-    return owner?.ref?.childNodes[index ?? 0] as HTMLElement;
+    return null;
 };

@@ -2,9 +2,9 @@ import type { AppComponent } from './AppComponent';
 
 import type { AppNode } from '@/appCore/shared/AppNode.types';
 
-export type AppComponentConstructor<
-    Props extends object | undefined | null = object,
-> = new (props?: Props) => AppComponent<Props>;
+export type AppComponentConstructor<Props extends object = object> = new (
+    props: Props,
+) => AppComponent<Props>;
 
 export type SetStateFunction<State> = (prevState: State) => State;
 
@@ -13,7 +13,7 @@ export interface AppComponentType<
     State,
 > {
     /** Пропсы, которые передаются извне */
-    readonly props: Props | null;
+    readonly props: Props;
 
     /** Внутреннее состояние компонента */
     state: State | null;
@@ -71,5 +71,5 @@ export interface AppComponentType<
     /**
      * Возвращает JSX
      */
-    render(): JSX.Element;
+    render(): AppNode;
 }

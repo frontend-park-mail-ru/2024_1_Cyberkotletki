@@ -8,8 +8,8 @@ export interface ContextProviderProps<Value = object> {
 }
 
 class ContextProvider<Value> extends AppComponent<ContextProviderProps<Value>> {
-    render(): JSX.Element {
-        const children = (this.props?.children ?? []) as AppNode[];
+    render() {
+        const children = (this.props?.children ?? []) as JSX.Element[];
 
         return children[0];
     }
@@ -28,11 +28,7 @@ export class Context<Value = object> {
         return new ContextProvider(props);
     }) as unknown as typeof ContextProvider<Value>;
 
-    Connect = <Props extends object | null | undefined>(
-        Component: AppComponentConstructor<Props>,
-    ) => {
-        this.#value;
-
+    Connect<Props extends object>(Component: AppComponentConstructor<Props>) {
         return ((props: Props) => {
             const contextProp =
                 props && 'context' in props && typeof props.context === 'object'
@@ -44,5 +40,5 @@ export class Context<Value = object> {
                 context: { ...contextProp, ...this.#value },
             });
         }) as unknown as typeof Component;
-    };
+    }
 }

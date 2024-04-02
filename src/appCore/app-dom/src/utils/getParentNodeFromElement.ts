@@ -6,7 +6,7 @@ import { isPrimitive } from '@/utils';
  * @param element Элемент, к которого ищется родитель
  * @returns Родительский DOM элемент или `null`
  */
-export const getParentNodeFromElement = (element: AppNode | null) => {
+export const getParentNodeFromElement = (element: AppNode) => {
     if (isPrimitive(element)) {
         return null;
     }

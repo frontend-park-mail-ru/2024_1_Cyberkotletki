@@ -7,11 +7,11 @@ import { isFunction } from '@/utils';
 import { isEqual } from '@/utils/isEqual';
 
 export abstract class AppComponent<
-    Props extends object | null | undefined = object,
+    Props extends object = object,
     State extends object = object,
 > implements AppComponentType<Props, State>
 {
-    readonly props: Props | null = null;
+    readonly props: Props;
 
     state: State = {} as State;
 
@@ -21,8 +21,8 @@ export abstract class AppComponent<
 
     instance: AppNode = null;
 
-    constructor(props?: Props) {
-        this.props = props ?? null;
+    constructor(props: Props) {
+        this.props = props;
     }
 
     setState(newState: State | SetStateFunction<State>) {
@@ -43,6 +43,7 @@ export abstract class AppComponent<
             updateElement(newInstance, this.instance, this.owner);
 
             this.instance = newInstance;
+
             this.componentDidUpdate(prevState, this.props);
 
             return;
@@ -82,5 +83,5 @@ export abstract class AppComponent<
         this.instance = null;
     }
 
-    abstract render(): JSX.Element;
+    abstract render(): AppNode;
 }
