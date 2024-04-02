@@ -12,7 +12,7 @@ export type SpinnerProps = Omit<
 
 export class Spinner extends AppComponent<SpinnerProps> {
     render() {
-        const { className, ...props } = this.props ?? {};
+        const { className, ...props } = this.props;
 
         return (
             <div className={cx('container', className)} {...props}>

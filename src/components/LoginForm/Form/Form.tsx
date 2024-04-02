@@ -19,6 +19,8 @@ import { Input } from '@/components/Input';
 import { concatClasses } from '@/utils';
 import { Button } from '@/components/Button/Button';
 import type { AppContext } from '@/types/Context.types';
+import { HistoryContext } from '@/Providers/HistoryProvider';
+import { AuthContext } from '@/Providers/AuthProvider';
 
 const cx = concatClasses.bind(styles);
 
@@ -55,7 +57,7 @@ export interface FormState {
     ) => void;
 }
 
-export class Form extends AppComponent<FormProps, FormState> {
+export class FormClass extends AppComponent<FormProps, FormState> {
     constructor(props: FormProps) {
         super(props);
 
@@ -80,7 +82,9 @@ export class Form extends AppComponent<FormProps, FormState> {
     }
 
     render() {
-        const { className, isLogin, ...props } = this.props ?? {};
+        // ? context не должен попасть в атрибуты
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { className, isLogin, context, ...props } = this.props;
         const {
             isLoading,
             error,
@@ -98,34 +102,30 @@ export class Form extends AppComponent<FormProps, FormState> {
                 }}
                 action="#"
             >
-                <div>
+                <Input
+                    {...EMAIL_INPUT_PROPS}
+                    hasError={!!emailError}
+                    errorHint={emailError}
+                    onChange={this.state.handleChangeEmailInput}
+                    onInput={this.state.handleInputEmailInput}
+                />
+                <Input
+                    {...PASSWORD_INPUT_PROPS}
+                    hasError={!!passwordError}
+                    errorHint={passwordError}
+                    autoComplete={isLogin ? 'password' : 'new-password'}
+                    onChange={this.state.handleChangePasswordInput}
+                    onInput={this.state.handleInputPasswordInput}
+                />
+                {!isLogin && (
                     <Input
-                        {...EMAIL_INPUT_PROPS}
-                        hasError={!!emailError}
-                        errorHint={emailError}
-                        onChange={this.state.handleChangeEmailInput}
-                        onInput={this.state.handleInputEmailInput}
+                        {...PASSWORD_REPEAT_INPUT_PROPS}
+                        hasError={!!passwordRepeatError}
+                        errorHint={passwordRepeatError}
+                        onChange={this.state.handleChangeRepeatPasswordInput}
+                        onInput={this.state.handleInputRepeatPasswordInput}
                     />
-                    <Input
-                        {...PASSWORD_INPUT_PROPS}
-                        hasError={!!passwordError}
-                        errorHint={passwordError}
-                        autoComplete={isLogin ? 'password' : 'new-password'}
-                        onChange={this.state.handleChangePasswordInput}
-                        onInput={this.state.handleInputPasswordInput}
-                    />
-                    {!isLogin && (
-                        <Input
-                            {...PASSWORD_REPEAT_INPUT_PROPS}
-                            hasError={!!passwordRepeatError}
-                            errorHint={passwordRepeatError}
-                            onChange={
-                                this.state.handleChangeRepeatPasswordInput
-                            }
-                            onInput={this.state.handleInputRepeatPasswordInput}
-                        />
-                    )}
-                </div>
+                )}
                 <Button
                     className={cx('button')}
                     isLoading={isLoading}
@@ -138,3 +138,5 @@ export class Form extends AppComponent<FormProps, FormState> {
         );
     }
 }
+
+export const Form = AuthContext.Connect(HistoryContext.Connect(FormClass));

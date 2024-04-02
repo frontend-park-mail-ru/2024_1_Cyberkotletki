@@ -17,7 +17,7 @@ export const LocalStorageKey = {
 } as const;
 
 export const Config = {
-    BACKEND_URL: `http://${process.env.BACKEND_HOST ?? 'localhost'}:${process.env.BACKEND_PORT || 3000}/api`,
+    BACKEND_URL: `http://${process.env.BACKEND_HOST ?? 'localhost'}:${process.env.BACKEND_PORT || 3000}`,
 } as const;
 
 export const ResponseStatus = {

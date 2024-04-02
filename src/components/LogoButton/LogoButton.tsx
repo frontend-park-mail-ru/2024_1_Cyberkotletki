@@ -9,7 +9,7 @@ export type LogoButtonProps = Omit<LinkProps, 'children' | 'href' | 'ref'>;
 export class LogoButton extends AppComponent<LogoButtonProps> {
     render() {
         return (
-            <Link {...(this.props ?? {})} href={routes.root()}>
+            <Link {...this.props} href={routes.root()}>
                 <img src={icLogoUrl} aria-hidden />
             </Link>
         );

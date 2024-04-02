@@ -1,0 +1,1 @@
+export { FilmsContainer } from './FilmsContainer';

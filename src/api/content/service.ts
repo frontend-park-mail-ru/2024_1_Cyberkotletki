@@ -1,10 +1,10 @@
 import { appFetch } from '@/api/appFetch.ts';
 import { contentRoutes } from '@/api/content/routes.ts';
 
-interface PreviewContentCard {
+export interface PreviewContentCard {
     title: string;
-    originalTitle: string;
-    releaseYear: string;
+    original_title: string;
+    release_year: string;
     country: string;
     genre: string;
     director: string;

@@ -8,7 +8,8 @@
 }
 
 .button {
-    padding: var(--item-padding);
+    padding-block: var(--item-padding);
+    padding-inline: var(--item-inline-padding);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,5 +50,23 @@
         animation: gradient 600ms linear infinite;
         background-size: 150%;
         animation-direction: alternate;
+    }
+
+    &.outlined {
+        color: var(--background-gray);
+        background: transparent;
+        cursor: pointer;
+
+        box-shadow: var(--input-border-shadow);
+
+        &:hover {
+            background-color: rgba(1, 1, 1, 20%);
+            animation: none;
+            transform: none;
+        }
+
+        &:active {
+            background-color: rgba(1, 1, 1, 30%);
+        }
     }
 }

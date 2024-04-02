@@ -23,7 +23,8 @@
     height: var(--button-height);
     max-height: var(--button-height);
     border-radius: var(--item-border-radius);
-    padding: var(--small-padding);
+    padding: var(--item-padding);
+    padding-inline: var(--item-inline-padding);
     font-family: var(--font-family);
     transition: var(--item-transition-all);
     overflow: hidden;

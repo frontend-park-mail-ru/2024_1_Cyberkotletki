@@ -1,6 +1,5 @@
 import styles from './LoginLayout.module.scss';
 
-import type { AppNode } from '@/appCore/shared/AppNode.types';
 import { AppComponent } from '@/appCore/src/AppComponent';
 import { LogoButton } from '@/components/LogoButton';
 import { concatClasses } from '@/utils';
@@ -13,8 +12,8 @@ export type LoginLayoutProps = App.DetailedHTMLProps<
 const cx = concatClasses.bind(styles as Record<string, string | undefined>);
 
 export class LoginLayout extends AppComponent<LoginLayoutProps> {
-    render(): AppNode {
-        const { className, children, ...props } = this.props ?? {};
+    render() {
+        const { className, children, ...props } = this.props;
 
         return (
             <div className={cx('login-layout', className)} {...props}>
@@ -24,7 +23,7 @@ export class LoginLayout extends AppComponent<LoginLayoutProps> {
                     src="/src/assets/kinoskop_background.jpg"
                 />
                 <LogoButton className={cx('logo')} />
-                {children as JSX.Children[]}
+                {children}
             </div>
         );
     }

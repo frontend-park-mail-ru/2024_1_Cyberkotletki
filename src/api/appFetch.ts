@@ -80,6 +80,7 @@ const createInstance = (baseURL: string) => {
                 if (!response.ok) {
                     throw new ResponseError(response.status.toString());
                 }
+
                 const contentType = response.headers.get('content-type');
 
                 if (!contentType) {

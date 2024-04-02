@@ -5,10 +5,11 @@ interface GenresResponse {
     genres: string[];
 }
 
-interface CompilationResponse {
+export interface CompilationResponse {
     genre: string;
     ids: number[];
 }
+export type FilmsGenre = 'action' | 'comedian' | 'drama';
 
 class CollectionsService {
     /**
@@ -24,12 +25,9 @@ class CollectionsService {
      * @param genre Жанр, для которого нужно получить подборку
      * @returns {Promise<CompilationResponse>} Список жанров
      */
-    async getCompilation(genre: string): Promise<CompilationResponse> {
+    async getCompilation(genre: FilmsGenre): Promise<CompilationResponse> {
         return appFetch.get<CompilationResponse>(
-            collectionsRoutes.compilation(),
-            {
-                genre,
-            },
+            `${collectionsRoutes.compilation()}/${genre}`,
         );
     }
 }

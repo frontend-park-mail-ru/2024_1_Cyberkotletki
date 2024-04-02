@@ -1,0 +1,28 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--large-padding);
+    animation: films-fade-in 0.4s ease-out;
+    margin-block-start: var(--main-content-offset);
+}
+
+@keyframes films-fade-in {
+    0% {
+        transform: translateY(64px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.categories {
+    display: flex;
+    gap: var(--main-content-gap);
+    margin-block-start: var(--main-content-offset);
+}
+
+.head {
+    @include text-header-4;
+}

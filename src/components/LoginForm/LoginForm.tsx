@@ -14,10 +14,13 @@ export interface LoginFormProps {
 
 export class LoginForm extends AppComponent<LoginFormProps> {
     render() {
-        const { isLogin } = this.props ?? {};
+        const { isLogin } = this.props;
 
         return (
-            <section className={cx('section')}>
+            <section
+                className={cx('section')}
+                key={isLogin ? 'login-form' : 'register-form'}
+            >
                 <img src={icUserUrl} aria-hidden className={cx('user-icon')} />
                 <h1>{isLogin ? 'Авторизация' : 'Регистрация'}</h1>
                 <Form isLogin={isLogin} />

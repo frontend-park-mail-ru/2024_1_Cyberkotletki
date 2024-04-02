@@ -20,7 +20,7 @@ export interface FormFooterProps
 
 export class FormFooter extends AppComponent<FormFooterProps> {
     render() {
-        const { isLogin, ...props } = this.props ?? {};
+        const { isLogin, ...props } = this.props;
 
         return (
             <div {...props}>

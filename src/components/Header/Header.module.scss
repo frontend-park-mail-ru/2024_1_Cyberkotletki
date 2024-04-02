@@ -1,6 +1,20 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 30%);
+    padding-block: var(--small-padding);
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-height: var(--header-height);
+    z-index: var(--header-z-index);
+}
+
 .logout-button {
     cursor: pointer;
-    transition: color 200ms ease-in-out;
+    transition: var(--item-transition-all);
 
     color: var(--light-gray);
 
@@ -18,4 +32,13 @@
     align-items: center;
     justify-content: center;
     padding-block: 4px;
+}
+
+.header-container {
+    width: 100%;
+    max-width: var(--max-content-width);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: var(--main-content-offset);
 }

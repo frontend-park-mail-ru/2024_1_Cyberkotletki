@@ -1,7 +1,7 @@
 import type { FormFieldsType } from './Form.constants';
 import { AuthFormError } from './Form.constants';
 
-import type { Form } from '@/components/LoginForm/Form/Form';
+import type { FormClass } from '@/components/LoginForm/Form/Form';
 import { authService } from '@/api/auth/service';
 import {
     validateEmail,
@@ -127,10 +127,10 @@ export const submitLoginForm = async (
  * @param {Event} e Form Event
  * @returns {boolean} `false`
  */
-export function submitForm(this: Form, e: App.FormEvent<HTMLFormElement>) {
+export function submitForm(this: FormClass, e: App.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const { isLogin, context } = this.props ?? {};
+    const { isLogin, context } = this.props;
 
     const formValidation = validateForm(e.currentTarget, isLogin);
 
@@ -142,10 +142,10 @@ export function submitForm(this: Form, e: App.FormEvent<HTMLFormElement>) {
 
         submitLoginForm(e.currentTarget, isLogin)
             .then(() => {
-                const { history } = context ?? {};
+                const { history, auth } = context ?? {};
 
+                auth?.getIsAuth?.();
                 history?.changeRoute(routes.root());
-                // getIsAuth();
 
                 this.setState((prev) => ({
                     ...prev,
@@ -176,7 +176,7 @@ export function submitForm(this: Form, e: App.FormEvent<HTMLFormElement>) {
  * @param {Event} e Input Event
  */
 export function changeEmailInput(
-    this: Form,
+    this: FormClass,
     e: App.ChangeEvent<HTMLInputElement>,
 ) {
     this.state.emailValue = e.target.value;
@@ -194,7 +194,7 @@ export function changeEmailInput(
  * @param {Event} e Input Event
  */
 export function inputEmailInput(
-    this: Form,
+    this: FormClass,
     e: App.FormEvent<HTMLInputElement>,
 ) {
     if (this.state.emailError) {
@@ -218,7 +218,7 @@ export function inputEmailInput(
  * @param {Event} e Input Event
  */
 export function changePasswordInput(
-    this: Form,
+    this: FormClass,
     e: App.ChangeEvent<HTMLInputElement>,
 ) {
     this.state.passwordValue = e.target.value;
@@ -236,7 +236,7 @@ export function changePasswordInput(
  * @param {Event} e Input Event
  */
 export function inputPasswordInput(
-    this: Form,
+    this: FormClass,
     e: App.FormEvent<HTMLInputElement>,
 ) {
     if (this.state.passwordError) {
@@ -260,7 +260,7 @@ export function inputPasswordInput(
  * @param {Event} e Input Event
  */
 export function changeRepeatPasswordInput(
-    this: Form,
+    this: FormClass,
     e: App.ChangeEvent<HTMLInputElement>,
 ) {
     this.state.passwordRepeatValue = e.target.value;
@@ -281,7 +281,7 @@ export function changeRepeatPasswordInput(
  * @param {Event} e Input Event
  */
 export function inputRepeatPasswordInput(
-    this: Form,
+    this: FormClass,
     e: App.FormEvent<HTMLInputElement>,
 ) {
     if (this.state.passwordRepeatError) {

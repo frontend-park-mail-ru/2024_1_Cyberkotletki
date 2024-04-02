@@ -20,7 +20,7 @@ export interface HistoryProviderProps {
 }
 
 export interface HistoryProviderState {
-    element?: JSX.Element;
+    element: JSX.Element;
     handleChangeRoute: (path: string) => void;
     routesMap: Map<string, HistoryRoute>;
     listener: (e: PopStateEvent) => void;

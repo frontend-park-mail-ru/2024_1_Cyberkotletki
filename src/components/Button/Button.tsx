@@ -12,16 +12,21 @@ export interface InputProps
         HTMLButtonElement
     > {
     isLoading?: boolean;
+    outlined?: boolean;
 }
 
 export class Button extends AppComponent<InputProps> {
     render() {
-        const { isLoading, className, children, ...props } = this.props ?? {};
+        const { isLoading, className, children, outlined, ...props } =
+            this.props;
 
         return (
             <button
                 {...props}
-                className={cx('button', className, { loading: isLoading })}
+                className={cx('button', className, {
+                    loading: isLoading,
+                    outlined,
+                })}
             >
                 {isLoading ? <Spinner /> : children}
             </button>

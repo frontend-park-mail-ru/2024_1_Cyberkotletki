@@ -28,18 +28,18 @@ export class Input extends AppComponent<InputProps> {
             className,
             containerClassName,
             ...props
-        } = this.props ?? {};
+        } = this.props;
 
         return (
             <div className={cx('container', containerClassName)}>
-                {label && <label className={cx('label')}></label>}
+                {!!label && <label className={cx('label')}>{label}</label>}
                 <input
                     {...props}
                     className={cx('input', className, {
                         'with-error': hasError,
                     })}
                 />
-                {hasError && errorHint && (
+                {hasError && !!errorHint && (
                     <div className={cx('error-hint')}>{errorHint}</div>
                 )}
             </div>
