@@ -1,6 +1,6 @@
 import type { AppComponent } from './AppComponent';
 
-import type { AppNode } from '@/appCore/shared/AppNode.types';
+import type { AppNode } from '@/core/shared/AppNode.types';
 
 export type AppComponentConstructor<Props extends object = object> = new (
     props: Props,

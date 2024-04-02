@@ -1,8 +1,8 @@
-import type { AppElementProps } from '@/appCore/shared/AppElementProps.type';
+import type { AppElementProps } from '@/core/shared/AppElementProps.type';
 import type {
     AppComponentConstructor,
     AppComponentType,
-} from '@/appCore/src/AppComponent.types';
+} from '@/core/src/AppComponent.types';
 
 /**
  * На основе этого типа создается объект из JSX разметки

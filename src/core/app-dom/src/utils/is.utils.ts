@@ -1,10 +1,7 @@
-import type { AppElement } from '@/appCore/shared/AppElement.type';
-import type { AppNode } from '@/appCore/shared/AppNode.types';
-import {
-    APP_ELEMENT_TYPE,
-    DOM_ELEMENT_TYPE,
-} from '@/appCore/shared/AppSymbols';
-import type { AppComponentConstructor } from '@/appCore/src/AppComponent.types';
+import type { AppElement } from '@/core/shared/AppElement.type';
+import type { AppNode } from '@/core/shared/AppNode.types';
+import { APP_ELEMENT_TYPE, DOM_ELEMENT_TYPE } from '@/core/shared/AppSymbols';
+import type { AppComponentConstructor } from '@/core/src/AppComponent.types';
 import { isPrimitive } from '@/utils';
 
 /**

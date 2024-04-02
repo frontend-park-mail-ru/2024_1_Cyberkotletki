@@ -2,7 +2,7 @@ import styles from './FilmCard.module.scss';
 
 import type { PreviewContentCard } from '@/api/content/service';
 import { contentService } from '@/api/content/service';
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 import { RatingBadge } from '@/components/RatingBadge';
 import { Config } from '@/shared/constants';
 import { concatClasses } from '@/utils';

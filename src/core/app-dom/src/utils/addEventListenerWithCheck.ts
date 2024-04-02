@@ -1,7 +1,7 @@
 import {
     APP_NODE_EVENT_MAP,
     type AppNodeEventType,
-} from '@/appCore/shared/AppNodeEvent.type';
+} from '@/core/shared/AppNodeEvent.type';
 import { isFunction } from '@/utils';
 
 /**

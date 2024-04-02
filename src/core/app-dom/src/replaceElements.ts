@@ -10,7 +10,7 @@ import {
 } from './utils';
 import { removeElement } from './removeElement';
 
-import type { AppNode } from '@/appCore/shared/AppNode.types';
+import type { AppNode } from '@/core/shared/AppNode.types';
 import { isDefined } from '@/utils';
 
 /**

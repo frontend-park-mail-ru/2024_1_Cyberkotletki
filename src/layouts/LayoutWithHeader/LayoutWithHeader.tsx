@@ -1,6 +1,6 @@
 import styles from './LayoutWithHeader.module.scss';
 
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 import { Header } from '@/components/Header';
 import { concatClasses } from '@/utils';
 

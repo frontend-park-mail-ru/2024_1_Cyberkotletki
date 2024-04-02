@@ -1,8 +1,8 @@
 import { updateElement } from './updateElement';
 
-import type { AppElement } from '@/appCore/shared/AppElement.type';
-import type { AppNode } from '@/appCore/shared/AppNode.types';
-import { ROOT_ELEMENT_TYPE } from '@/appCore/shared/AppSymbols';
+import type { AppElement } from '@/core/shared/AppElement.type';
+import type { AppNode } from '@/core/shared/AppNode.types';
+import { ROOT_ELEMENT_TYPE } from '@/core/shared/AppSymbols';
 
 /**
  * Создает виртуальный DOM и прикрепляет все DOM элементы к $root
@@ -19,7 +19,7 @@ export const createRoot = ($root?: HTMLElement | null, child?: AppNode) => {
     const rootElement: AppElement<keyof HTMLElementTagNameMap, typeof $root> = {
         $$typeof: ROOT_ELEMENT_TYPE,
         type: $root.tagName.toLowerCase() as keyof HTMLElementTagNameMap,
-        props: null,
+        props: {},
         key: Symbol.for('node.element.key'),
         ref: $root,
         owner: null,

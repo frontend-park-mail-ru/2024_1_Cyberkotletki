@@ -4,7 +4,7 @@ import { FormFooter } from './FormFooter';
 
 import { concatClasses } from '@/utils/concatClasses';
 import { icUserUrl } from '@/assets/icons';
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 
 const cx = concatClasses.bind(styles);
 

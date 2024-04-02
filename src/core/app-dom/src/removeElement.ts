@@ -5,8 +5,8 @@ import {
     isTextNode,
 } from './utils';
 
-import type { AppNode } from '@/appCore/shared/AppNode.types';
-import { DOM_ELEMENT_TYPE } from '@/appCore/shared/AppSymbols';
+import type { AppNode } from '@/core/shared/AppNode.types';
+import { DOM_ELEMENT_TYPE } from '@/core/shared/AppSymbols';
 import { isDefined } from '@/utils';
 
 /**

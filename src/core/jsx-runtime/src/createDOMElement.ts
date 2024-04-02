@@ -2,9 +2,9 @@ import type { JSXProps } from './shared/JSXProps.type';
 import { defineElementTypesAndPreventExtensions } from './defineElementTypesAndPreventExtensions';
 
 import { spreadToSingleArray, isDefined } from '@/utils';
-import type { AppElement } from '@/appCore/shared/AppElement.type';
-import type { AppNode } from '@/appCore/shared/AppNode.types';
-import { DOM_ELEMENT_TYPE } from '@/appCore/shared/AppSymbols';
+import type { AppElement } from '@/core/shared/AppElement.type';
+import type { AppNode } from '@/core/shared/AppNode.types';
+import { DOM_ELEMENT_TYPE } from '@/core/shared/AppSymbols';
 
 /**
  * Создает объект из JSX для DOM элемента

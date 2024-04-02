@@ -1,7 +1,7 @@
 import styles from './Spinner.module.scss';
 
 import { concatClasses } from '@/utils';
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 
 const cx = concatClasses.bind(styles);
 

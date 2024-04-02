@@ -1,5 +1,5 @@
 import { routes } from '@/App/App.routes';
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 import { icLogoUrl } from '@/assets/icons';
 import { Link } from '@/components/Link';
 import type { LinkProps } from '@/components/Link/Link';

@@ -1,11 +1,11 @@
 import type { JSXProps } from './shared/JSXProps.type';
 
 import { spreadToSingleArray, isDefined } from '@/utils';
-import type { AppElement } from '@/appCore/shared/AppElement.type';
-import type { AppNode } from '@/appCore/shared/AppNode.types';
-import { APP_ELEMENT_TYPE } from '@/appCore/shared/AppSymbols';
-import type { AppComponentConstructor } from '@/appCore/src/AppComponent.types';
-import { defineElementTypesAndPreventExtensions } from '@/appCore/jsx-runtime/src/defineElementTypesAndPreventExtensions';
+import type { AppElement } from '@/core/shared/AppElement.type';
+import type { AppNode } from '@/core/shared/AppNode.types';
+import { APP_ELEMENT_TYPE } from '@/core/shared/AppSymbols';
+import { defineElementTypesAndPreventExtensions } from '@/core/jsx-runtime/src/defineElementTypesAndPreventExtensions';
+import type { AppComponentConstructor } from '@/core/src/AppComponent.types';
 
 /**
  * Создает объект из JSX для кастомного компонента

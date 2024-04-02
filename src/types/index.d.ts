@@ -1,6 +1,6 @@
-import type { AppElement } from '@/appCore/shared/AppElement.type';
-import type { AppNode } from '@/appCore/shared/AppNode.types';
-import type { AppComponent } from '@/appCore/src/AppComponent';
+import type { AppElement } from '@/core/shared/AppElement.type';
+import type { AppNode } from '@/core/shared/AppNode.types';
+import type { AppComponent } from '@/core';
 
 /* eslint-disable no-use-before-define */
 type NativeAnimationEvent = AnimationEvent;

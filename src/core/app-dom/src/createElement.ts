@@ -8,7 +8,7 @@ import {
 } from './utils';
 
 import { isFunction } from '@/utils';
-import type { AppNode } from '@/appCore/shared/AppNode.types';
+import type { AppNode } from '@/core/shared/AppNode.types';
 
 /**
  * Создает из объекта DOM ноду

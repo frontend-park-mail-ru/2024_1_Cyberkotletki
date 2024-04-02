@@ -1,7 +1,7 @@
 import styles from './FormFooter.module.scss';
 
 import { routes } from '@/App/App.routes';
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 import { Link } from '@/components/Link';
 import { concatClasses } from '@/utils';
 

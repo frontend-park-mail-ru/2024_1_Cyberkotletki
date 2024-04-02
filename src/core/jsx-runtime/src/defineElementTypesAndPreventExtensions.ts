@@ -1,5 +1,5 @@
-import type { AppElement } from '@/appCore/shared/AppElement.type';
-import type { AppComponentConstructor } from '@/appCore/src/AppComponent.types';
+import type { AppElement } from '@/core/shared/AppElement.type';
+import type { AppComponentConstructor } from '@/core/src/AppComponent.types';
 
 export const defineElementTypesAndPreventExtensions = <
     K extends keyof HTMLElementTagNameMap | AppComponentConstructor,

@@ -1,6 +1,6 @@
 import styles from './LoginLayout.module.scss';
 
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 import { LogoButton } from '@/components/LogoButton';
 import { concatClasses } from '@/utils';
 

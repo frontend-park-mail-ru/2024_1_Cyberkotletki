@@ -5,7 +5,7 @@ import type {
     FilmsGenre,
 } from '@/api/collections/service';
 import { collectionsService } from '@/api/collections/service';
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 import { Button } from '@/components/Button';
 import { FilmCard } from '@/components/FilmCard';
 import { concatClasses } from '@/utils';

@@ -1,6 +1,6 @@
 import styles from './Button.module.scss';
 
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 import { Spinner } from '@/components/Spinner';
 import { concatClasses } from '@/utils';
 

@@ -1,4 +1,4 @@
-import { getParentNodeFromElement } from '@/appCore/app-dom/src/utils/getParentNodeFromElement';
+import { getParentNodeFromElement } from '@/core/app-dom/src/utils/getParentNodeFromElement';
 
 /**
  * Добавляет $element в $parent с проверкой

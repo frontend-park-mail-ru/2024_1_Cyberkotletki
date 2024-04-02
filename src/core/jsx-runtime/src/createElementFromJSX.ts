@@ -1,8 +1,8 @@
 import { createAppElement } from './createAppElement';
 import { createDOMElement } from './createDOMElement';
 
-import type { AppComponentConstructor } from '@/appCore/src/AppComponent.types';
-import type { AppElementProps } from '@/appCore/shared/AppElementProps.type';
+import type { AppComponentConstructor } from '@/core/src/AppComponent.types';
+import type { AppElementProps } from '@/core/shared/AppElementProps.type';
 
 export const createElementFromJSX = <
     T extends keyof HTMLElementTagNameMap,

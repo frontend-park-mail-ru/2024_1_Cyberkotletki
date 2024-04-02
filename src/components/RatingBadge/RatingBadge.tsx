@@ -1,6 +1,6 @@
 import styles from './RatingBadge.module.scss';
 
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 import { concatClasses } from '@/utils';
 
 const cx = concatClasses.bind(styles);

@@ -1,7 +1,7 @@
 import styles from './Header.module.scss';
 
 import { AuthContext } from '@/Providers/AuthProvider';
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 import { LogoButton } from '@/components/LogoButton';
 import { concatClasses } from '@/utils';
 import type { AppContext } from '@/types/Context.types';

@@ -1,4 +1,4 @@
-import type { AppNode } from '@/appCore/shared/AppNode.types';
+import type { AppNode } from '@/core/shared/AppNode.types';
 
 /**
  * Пропсы, которые всегда можно использовать в компонентах,

@@ -1,6 +1,6 @@
 import { LoginLayout } from '@/layouts/LoginLayout';
 import { LoginForm } from '@/components/LoginForm/LoginForm';
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 
 export interface LoginPageProps {
     isRegister?: boolean;

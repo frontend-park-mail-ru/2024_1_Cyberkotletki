@@ -1,6 +1,6 @@
 import { HistoryContext } from '@/Providers/HistoryProvider';
-import type { AppNode } from '@/appCore/shared/AppNode.types';
-import { AppComponent } from '@/appCore/src/AppComponent';
+import type { AppNode } from '@/core/shared/AppNode.types';
+import { AppComponent } from '@/core';
 import type { AppContext } from '@/types/Context.types';
 
 export interface LinkProps

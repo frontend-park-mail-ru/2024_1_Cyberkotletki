@@ -1,6 +1,6 @@
-import type { AppNode } from '@/appCore/shared/AppNode.types';
-import { AppComponent } from '@/appCore/src/AppComponent';
-import type { AppComponentConstructor } from '@/appCore/src/AppComponent.types';
+import type { AppNode } from '@/core/shared/AppNode.types';
+import type { AppComponentConstructor } from '@/core';
+import { AppComponent } from '@/core';
 
 export interface ContextProviderProps<Value = object> {
     value: Value;

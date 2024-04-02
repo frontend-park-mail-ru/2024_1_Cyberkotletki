@@ -1,7 +1,7 @@
 import { routes } from '@/App/App.routes';
 import { AuthProvider } from '@/Providers/AuthProvider';
 import { HistoryProvider } from '@/Providers/HistoryProvider';
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 import { IndexPage } from '@/pages/IndexPage';
 import { LoginPage } from '@/pages/LoginPage';
 

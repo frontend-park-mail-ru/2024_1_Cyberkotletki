@@ -1,6 +1,6 @@
 import { authService } from '@/api/auth/service';
-import { AppComponent } from '@/appCore/src/AppComponent';
-import { Context } from '@/appCore/src/Context';
+import { AppComponent } from '@/core';
+import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
 
 export interface AuthContextProps {

@@ -1,8 +1,8 @@
 import type { AppComponentType, SetStateFunction } from './AppComponent.types';
 
-import type { AppElementProps } from '@/appCore/shared/AppElementProps.type';
-import { updateElement } from '@/appCore/app-dom/src/updateElement';
-import type { AppNode } from '@/appCore/shared/AppNode.types';
+import type { AppElementProps } from '@/core/shared/AppElementProps.type';
+import { updateElement } from '@/core/app-dom/src/updateElement';
+import type { AppNode } from '@/core/shared/AppNode.types';
 import { isFunction } from '@/utils';
 import { isEqual } from '@/utils/isEqual';
 

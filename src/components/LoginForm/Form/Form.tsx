@@ -14,7 +14,7 @@ import {
     submitForm,
 } from './Form.utils';
 
-import { AppComponent } from '@/appCore/src/AppComponent';
+import { AppComponent } from '@/core';
 import { Input } from '@/components/Input';
 import { concatClasses } from '@/utils';
 import { Button } from '@/components/Button';

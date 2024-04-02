@@ -1,6 +1,6 @@
 import { addEventListenerWithCheck, setAttributeWithCheck } from './utils';
 
-import { APP_NODE_EVENTS } from '@/appCore/shared/AppNodeEvent.type';
+import { APP_NODE_EVENTS } from '@/core/shared/AppNodeEvent.type';
 import { includes } from '@/utils';
 
 /**
