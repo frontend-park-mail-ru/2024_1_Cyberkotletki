@@ -1,9 +1,6 @@
 import styles from './FilmsContainer.module.scss';
 
-import type {
-    CompilationResponse,
-    FilmsGenre,
-} from '@/api/collections/service';
+import type { FilmsGenre } from '@/api/collections/service';
 import { collectionsService } from '@/api/collections/service';
 import { AppComponent } from '@/core';
 import { Button } from '@/components/Button';
@@ -39,13 +36,7 @@ export class FilmsContainer extends AppComponent<
             void collectionsService.getCompilation(genre).then((data) => {
                 this.setState((prev) => ({
                     ...prev,
-                    // TODO: Убрать JSON.parse когда придет
-                    // нормальный Content-Type в ответе
-                    filmsIds: (
-                        JSON.parse(
-                            data as unknown as string,
-                        ) as CompilationResponse
-                    ).ids,
+                    filmsIds: data.ids,
                 }));
             });
         };

@@ -34,11 +34,7 @@ export class FilmCard extends AppComponent<FilmCardProps, FilmCardState> {
                 this.setState((prev) => ({
                     ...prev,
                     loaded: true,
-                    // TODO: Убрать JSON.parse когда придет
-                    // нормальный Content-Type в ответе
-                    film: JSON.parse(
-                        data as unknown as string,
-                    ) as PreviewContentCard,
+                    film: data,
                 }));
             });
         };

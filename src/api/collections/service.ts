@@ -27,7 +27,8 @@ class CollectionsService {
      */
     async getCompilation(genre: FilmsGenre): Promise<CompilationResponse> {
         return appFetch.get<CompilationResponse>(
-            `${collectionsRoutes.compilation()}/${genre}`,
+            `${collectionsRoutes.compilation()}`,
+            { genre },
         );
     }
 }
