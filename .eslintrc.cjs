@@ -64,6 +64,7 @@ const rules = {
     'jsdoc/require-param-type': 'off',
     'jsdoc/require-returns-type': 'off',
     'no-continue': 'off',
+    'import/no-cycle': 'error',
 };
 
 module.exports = {
@@ -75,11 +76,11 @@ module.exports = {
     extends: [
         'airbnb-base',
         'eslint:recommended',
-        'plugin:import/recommended',
         'plugin:react/jsx-runtime',
         'plugin:cypress/recommended',
         'prettier',
         'plugin:jsdoc/recommended',
+        'plugin:import/recommended',
     ],
     ignorePatterns: [
         './node_modules/*',
@@ -122,6 +123,7 @@ module.exports = {
                 'plugin:@typescript-eslint/stylistic',
                 'plugin:@typescript-eslint/recommended-type-checked',
                 'plugin:jsdoc/recommended',
+                'plugin:import/typescript',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {

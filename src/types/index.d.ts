@@ -1,6 +1,6 @@
-import type { AppElement } from '@/appCore/shared/AppElement.type';
-import type { AppNode } from '@/appCore/shared/AppNode.types';
-import type { AppComponentConstructor } from '@/appCore/src/AppComponent.types';
+import type { AppElement } from '@/core/shared/AppElement.type';
+import type { AppNode } from '@/core/shared/AppNode.types';
+import type { AppComponent } from '@/core';
 
 /* eslint-disable no-use-before-define */
 type NativeAnimationEvent = AnimationEvent;
@@ -18,9 +18,27 @@ type NativeWheelEvent = WheelEvent;
 type Booleanish = boolean | 'true' | 'false';
 type CrossOrigin = 'anonymous' | 'use-credentials' | '' | undefined;
 
+interface Children {
+    children?: Record<string, never>;
+}
+
+type GlobalJSXElementChildrenAttribute = Children;
+
 declare global {
     namespace App {
         type Key = string | number | bigint;
+
+        interface Iterator<T, TReturn = unknown, TNext = undefined> {
+            // NOTE: 'next' is defined using a tuple to ensure we report
+            // the correct assignability errors in all places.
+            next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
+            return?(value?: TReturn): IteratorResult<T, TReturn>;
+            throw?(e?: unknown): IteratorResult<T, TReturn>;
+        }
+
+        interface Iterable<T> {
+            [Symbol.iterator](): Iterator<T>;
+        }
 
         //
         // Event System
@@ -250,7 +268,7 @@ declare global {
         // -------------------------------------
 
         interface DOMAttributes<T> {
-            children?: JSX.Children | JSX.Children[];
+            children?: JSX.Node | undefined;
             dangerouslySetInnerHTML?:
                 | {
                       // Should be InnerHTML['innerHTML'].
@@ -909,7 +927,7 @@ declare global {
             // Standard HTML Attributes
             accessKey?: string | undefined;
             autoFocus?: boolean | undefined;
-            class?: string | undefined;
+            className?: string | undefined;
             contentEditable?: Booleanish | 'inherit' | undefined;
             contextMenu?: string | undefined;
             dir?: string | undefined;
@@ -1815,19 +1833,26 @@ declare global {
     namespace JSX {
         /** Тип, плученный из JSX разметки */
         type Element =
-            | AppElement<AppComponentConstructor>
+            | AppElement<AppComponentConstructor<object>>
             | AppElement<keyof HTMLElementTagNameMap, HTMLElement>;
 
-        type Children = (AppNode | AppNode[])[] | AppNode;
-        type Element = App.AppElement<unknown, unknown>;
-        interface ElementClass extends App.Component<unknown> {
-            render(): App.AppNode;
+        type Node =
+            | AppElement<AppComponentConstructor<object>>
+            | AppElement<keyof HTMLElementTagNameMap, HTMLElement>
+            | string
+            | number
+            | Iterable<Node>
+            | boolean
+            | null
+            | undefined;
+
+        type Children = AppNode | Iterable<AppNode>;
+        // type Element = App.AppElement<unknown, unknown>;
+        interface ElementClass extends AppComponent<unknown> {
+            render(): Node;
         }
         interface ElementAttributesProperty {
             props: NonNullable<unknown>;
-        }
-        interface ElementChildrenAttribute {
-            children: JSX.Children | JSX.Children[];
         }
 
         type IntrinsicAttributes = App.Attributes;
@@ -2374,18 +2399,12 @@ declare global {
             view: App.SVGProps<SVGViewElement>;
         }
 
-        interface ElementClass {
-            render(): JSX.Element;
-        }
-
         interface ElementAttributesProperty<
             T extends HTMLElement | null = null,
         > {
             props?: AppElementProps<T>;
         }
 
-        interface ElementChildrenAttribute {
-            children?: JSX.Children | JSX.Children[];
-        }
+        type ElementChildrenAttribute = GlobalJSXElementChildrenAttribute;
     }
 }

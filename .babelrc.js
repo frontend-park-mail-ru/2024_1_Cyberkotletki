@@ -10,7 +10,7 @@ module.exports = {
             {
                 throwIfNamespace: false,
                 runtime: 'automatic',
-                importSource: path.resolve(__dirname, './src/appCore'),
+                importSource: path.resolve(__dirname, './src/core'),
             },
         ],
     ],

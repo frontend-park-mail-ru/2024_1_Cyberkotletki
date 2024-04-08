@@ -6,3 +6,4 @@ export { objectEntries } from './objectEntries';
 export { objectValues } from './objectValues';
 export { spreadToSingleArray } from './spreadToSingleArray';
 export { isFunction } from './isFunction';
+export { concatClasses } from './concatClasses';

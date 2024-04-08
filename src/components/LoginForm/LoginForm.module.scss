@@ -15,14 +15,14 @@
     background-color: rgba(0, 0, 0, 0.55);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-radius: 16px;
-    padding-block: 12px;
-    padding-inline: 24px;
+    border-radius: var(--card-border-radius);
+    padding-block: var(--main-padding);
+    padding-inline: var(--large-padding);
     display: flex;
     flex-direction: column;
     align-items: center;
     animation: 400ms fade-in ease;
-    gap: 12px;
+    gap: var(--main-content-gap);
     border: 1px solid rgba(0, 0, 0, 0.15);
     box-shadow:
         rgba(0, 0, 0, 0.25) 0px 54px 55px,
@@ -32,9 +32,9 @@
         rgba(0, 0, 0, 0.09) 0px -3px 5px;
 
     h1 {
-        font-weight: 500;
-        font-size: 20px;
         text-align: center;
+
+        @include text-header-5;
     }
 }
 
