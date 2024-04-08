@@ -1,0 +1,37 @@
+.avatar {
+    --avatar-size: 144px;
+
+    position: relative;
+    width: 100%;
+    max-width: var(--avatar-size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    &::after {
+        z-index: 3;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        content: '';
+        left: 0;
+        right: 0;
+        background-color: transparent;
+        transition: var(--item-transition-all);
+        opacity: 0;
+        z-index: -1;
+    }
+
+    &.loading {
+        &::after {
+            z-index: 3;
+            background-color: var(--secondary-gray);
+            opacity: 0.5;
+        }
+    }
+}

@@ -2,7 +2,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 30%);
     padding-block: var(--small-padding);
     position: sticky;
     top: 0;
@@ -10,6 +9,11 @@
     width: 100%;
     max-height: var(--header-height);
     z-index: var(--header-z-index);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+
+    backdrop-filter: blur(36px);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.4);
 }
 
 .logout-button {
@@ -41,4 +45,10 @@
     align-items: center;
     justify-content: space-between;
     padding-inline: var(--main-content-offset);
+}
+
+.tabs {
+    display: flex;
+    align-items: center;
+    gap: var(--small-padding);
 }

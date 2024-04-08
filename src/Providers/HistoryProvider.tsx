@@ -1,3 +1,4 @@
+import type { RoutesValues } from '@/App/App.routes';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
@@ -11,7 +12,7 @@ export const HistoryContext = new Context<AppContext>({
 });
 
 export interface HistoryRoute {
-    path: string;
+    path: RoutesValues;
     element: JSX.Element;
 }
 

@@ -1,3 +1,6 @@
+import type { RoutesValues } from '@/App/App.routes';
+import { routes } from '@/App/App.routes';
+
 export const Method = {
     GET: 'GET',
     POST: 'POST',
@@ -29,3 +32,14 @@ export const ResponseStatus = {
     CONFLICT: '409',
     INTERNAL_SERVER_ERROR: '500',
 } as const;
+
+export interface HeaderPage {
+    route: RoutesValues;
+    title: string;
+    disabled?: boolean;
+}
+
+export const HEADER_TABS: HeaderPage[] = [
+    { route: routes.root(), title: 'Главная' },
+    { route: routes.collections(), title: 'Подборки' },
+] as const;

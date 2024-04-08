@@ -10,6 +10,8 @@ import { Button } from '@/components/Button';
 import { HistoryContext } from '@/Providers/HistoryProvider';
 import { routes } from '@/App/App.routes';
 import { authService } from '@/api/auth/service';
+import { HEADER_TABS } from '@/shared/constants';
+import { Link } from '@/components/Link';
 
 const cx = concatClasses.bind(styles);
 
@@ -38,7 +40,7 @@ class HeaderClass extends AppComponent<AppComponentProps, AppComponentState> {
 
         this.state.handleLogoutClick = () => {
             void authService.logout().then(() => {
-                context?.auth?.getIsAuth?.();
+                window.location.reload();
             });
         };
     }
@@ -50,6 +52,11 @@ class HeaderClass extends AppComponent<AppComponentProps, AppComponentState> {
             <header className={cx('header', className)} {...props}>
                 <div className={cx('header-container')}>
                     <LogoButton className={cx('header-logo')} />
+                    <div className={cx('tabs')}>
+                        {HEADER_TABS.map((tab) => (
+                            <Link href={tab.route}>{tab.title}</Link>
+                        ))}
+                    </div>
                     {context?.auth?.isLoggedIn ? (
                         <div className={cx('avatar')}>
                             <div
@@ -59,7 +66,9 @@ class HeaderClass extends AppComponent<AppComponentProps, AppComponentState> {
                             >
                                 Выйти
                             </div>
-                            <img src={icUserCircleUrl} aria-hidden />
+                            <Link href={routes.profile()}>
+                                <img src={icUserCircleUrl} aria-hidden />
+                            </Link>
                         </div>
                     ) : (
                         <Button outlined onClick={this.state.handleLoginClick}>
