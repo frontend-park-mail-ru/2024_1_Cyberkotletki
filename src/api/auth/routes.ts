@@ -5,6 +5,8 @@ class AuthRoutes {
 
     logout = () => '/auth/logout' as const;
 
+    logoutAll = () => '/auth/logoutAll' as const;
+
     isAuth = () => '/auth/isAuth' as const;
 }
 

@@ -1,28 +1,28 @@
 .container {
     height: 20px;
-
     animation: fade-in 200ms ease-in-out;
 }
 
 .spinner {
-    height: 100%;
-    aspect-ratio: 1;
-    border-radius: 50%;
     display: inline-block;
-    border-top: 2px solid #fff;
-    border-right: 2px solid transparent;
     box-sizing: border-box;
+    height: 100%;
+    border-top: 2px solid #ffffff;
+    border-right: 2px solid transparent;
+    border-radius: 50%;
     animation: rotation 800ms linear infinite;
+    aspect-ratio: 1;
 }
 
 @keyframes fade-in {
     0% {
-        opacity: 0;
         transform: scale(0.1);
+        opacity: 0;
     }
+
     100% {
-        opacity: 1;
         transform: scale(1);
+        opacity: 1;
     }
 }
 
@@ -30,6 +30,7 @@
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }

@@ -1,12 +1,13 @@
 .container {
-    width: 100%;
     display: flex;
     flex-direction: column;
     gap: var(--small-padding);
+    width: 100%;
 }
 
 .label {
     position: relative;
+    color: var(--background-gray);
     pointer-events: none;
 
     @include text-primary;
@@ -15,33 +16,37 @@
 .input {
     position: relative;
     box-sizing: border-box;
-    background-color: rgba(255, 255, 255, 0);
-    border: none;
-    padding: 0;
-    margin: 0;
     width: 100%;
     height: var(--button-height);
     max-height: var(--button-height);
-    border-radius: var(--item-border-radius);
+    margin: 0;
+    padding: 0;
     padding: var(--item-padding);
-    padding-inline: var(--item-inline-padding);
-    font-family: var(--font-family);
-    transition: var(--item-transition-all);
     overflow: hidden;
+    font-family: var(--font-family);
+    background-color: rgb(255 255 255 / 0%);
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--item-border-radius);
     outline: none;
     box-shadow: var(--input-border-shadow);
+    transition: var(--item-transition-all);
+    padding-inline: var(--item-inline-padding);
+
+    --input-border-color: var(--secondary-gray);
+    --input-shadow-color: transparent;
+    --input-border-shadow: 0 0 0 1px var(--input-shadow-color);
 
     &:hover {
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: rgb(255 255 255 / 5%);
     }
 
     &:active {
-        background-color: rgba(255, 255, 255, 0.03);
+        background-color: rgb(255 255 255 / 3%);
     }
 
     &::placeholder {
-        transition: var(--item-transition-all);
         color: var(--secondary-gray);
+        transition: var(--item-transition-all);
     }
 
     &:focus {
@@ -49,39 +54,40 @@
             color: var(--light-gray);
         }
 
-        box-shadow: var(--input-border-shadow-active);
+        --input-shadow-color: var(--light-gray);
     }
 
     &.with-error {
-        box-shadow: var(--input-border-shadow-error);
+        --input-border-color: var(--error-red);
+        --input-shadow-color: transparent;
     }
 }
 
 .error-hint {
     @include text-secondary;
+
+    overflow: visible;
     color: var(--error-red);
     animation: fade-in-error 300ms ease-in-out;
     contain: content;
-    overflow: visible;
 }
 
 @keyframes fade-in-error {
     0% {
-        opacity: 0;
         height: 0;
-
         transform: translateY(-4px);
+        opacity: 0;
     }
 
     50% {
-        opacity: 0;
         height: 15px;
         transform: translateY(-4px);
+        opacity: 0;
     }
 
     100% {
-        opacity: 1;
-        transform: translateY(0);
         height: 15px;
+        transform: translateY(0);
+        opacity: 1;
     }
 }

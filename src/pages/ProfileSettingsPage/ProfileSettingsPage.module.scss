@@ -1,17 +1,22 @@
 .content {
     display: flex;
-    width: 100%;
     flex-direction: column;
     align-items: center;
-}
-
-.title {
+    width: 100%;
 }
 
 .section {
-    margin-block-start: var(--main-padding);
-
     display: flex;
     flex-direction: column;
     gap: var(--main-padding);
+    margin-top: var(--main-padding-2);
+
+    &.logout {
+        justify-content: center;
+        text-align: center;
+
+        h1 {
+            @include text-header-3;
+        }
+    }
 }

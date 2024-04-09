@@ -1,10 +1,10 @@
 .footer {
-    background-color: var(--black);
     display: flex;
     flex-direction: column;
+    gap: var(--main-padding-2);
     align-items: center;
     justify-content: center;
-    padding: 72px;
     width: 100%;
-    gap: var(--main-padding-2);
+    padding: 72px;
+    background-color: var(--black);
 }

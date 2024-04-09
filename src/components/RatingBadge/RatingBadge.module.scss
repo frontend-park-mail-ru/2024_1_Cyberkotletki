@@ -1,14 +1,14 @@
-div.rating-circle {
+.rating-circle {
     position: absolute;
-    width: fit-content;
-    border-radius: var(--card-border-radius);
-    background-color: var(--success);
-    padding: var(--item-padding);
-    display: flex;
-    justify-content: center;
     top: -12px;
     left: -12px;
     z-index: 1;
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    padding: var(--item-padding);
     color: #ffffff;
     font-weight: 800;
+    background-color: var(--success);
+    border-radius: var(--card-border-radius);
 }

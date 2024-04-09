@@ -1,17 +1,17 @@
+/* stylelint-disable selector-max-id */
 :root {
+    color: #efefef;
+    font-size: 14px;
+    font-family: var(--font-family);
     font-variation-settings: normal;
     text-size-adjust: 100%;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     scroll-behavior: smooth;
-    text-rendering: optimizeSpeed;
-    font-family: var(--font-family);
+    text-rendering: optimizespeed;
     color-scheme: dark;
 
-    color: #efefef;
-    font-size: 14px;
-
-    /* Font*/
+    /* Font */
     --font-family: 'Wix Madefor Display', arial, helvetica, sans-serif;
 
     /* Variables  */
@@ -21,7 +21,7 @@
     --item-inline-padding: 12px;
     --button-height: 36px;
     --input-border-shadow: 0 0 0 1px var(--secondary-gray);
-    --input-border-shadow-active: 0 0 0 2px var(--light-gray);
+    --input-border-shadow-active: 0 0 0 1px var(--light-gray);
     --input-border-shadow-error: 0 0 0 1px var(--error-red);
     --main-content-gap: 12px;
     --main-content-offset: 16px;
@@ -39,10 +39,10 @@
     /* Transitions */
     --item-transition-all: all 200ms ease-in-out;
 
-    /* Colors*/
+    /* Colors */
     --black: #0f1014;
     --logo-black: #131e20;
-    --white: #fff;
+    --white: #ffffff;
     --solid-blue: #477bff;
     --success: #50b773;
     --background-gray: #f0f1f3;
@@ -55,11 +55,11 @@
         #c135ff 50.5%,
         #ff3797 100%
     );
-    --background: rgba(38, 32, 57, 1)
+    --background: rgb(38 32 57 / 100%)
         linear-gradient(
             180deg,
-            rgba(38, 32, 57, 1) 0%,
-            rgba(15, 17, 21, 1) 100%
+            rgb(38 32 57 / 100%) 0%,
+            rgb(15 17 21 / 100%) 100%
         );
 }
 
@@ -69,9 +69,9 @@ html {
 
 html,
 body {
-    padding: 0;
-    margin: 0;
     height: 100%;
+    margin: 0;
+    padding: 0;
     overflow-x: hidden;
 
     * {
@@ -85,7 +85,6 @@ a {
 }
 
 input {
-    // all: unset;
     appearance: none;
 }
 

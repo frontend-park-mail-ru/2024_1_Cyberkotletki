@@ -6,7 +6,6 @@
 .user-info {
     display: flex;
     flex-direction: column;
-
     gap: var(--main-padding);
 }
 
@@ -15,10 +14,10 @@
 }
 
 .info-table {
-    width: fit-content;
     display: flex;
     flex-direction: column;
     gap: var(--item-inline-padding);
+    width: fit-content;
 
     @include text-primary;
 }

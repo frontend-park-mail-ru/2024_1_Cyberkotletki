@@ -29,7 +29,7 @@ export class Context<Value = object> {
     }) as unknown as typeof ContextProvider<Value>;
 
     Connect<Props extends object>(Component: AppComponentConstructor<Props>) {
-        return ((props: Props) => {
+        const Connect = ((props: Props) => {
             const contextProp =
                 props && 'context' in props && typeof props.context === 'object'
                     ? props.context
@@ -40,5 +40,7 @@ export class Context<Value = object> {
                 context: { ...contextProp, ...this.#value },
             });
         }) as unknown as typeof Component;
+
+        return Connect;
     }
 }

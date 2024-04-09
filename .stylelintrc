@@ -1,0 +1,21 @@
+{
+    "extends": [
+        "stylelint-config-standard",
+        "stylelint-config-prettier-scss",
+        "stylelint-config-standard-scss",
+        "stylelint-config-rational-order",
+        "stylelint-config-sass-guidelines"
+    ],
+    "rules": {
+        "selector-pseudo-class-no-unknown": [
+            true,
+            {
+                "ignorePseudoClasses": ["global"]
+            }
+        ],
+        "color-hex-length": "long",
+        "no-duplicate-selectors": true,
+        "max-nesting-depth": 10,
+        "selector-max-compound-selectors": 10
+    }
+}

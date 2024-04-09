@@ -8,3 +8,10 @@ export interface ProfileResponse {
     name: string;
     rating: number;
 }
+
+export type ChangeProfileBody = Pick<ProfileResponse, 'email' | 'name'>;
+
+export interface ChangePasswordBody {
+    newPassword: string;
+    oldPassword: string;
+}

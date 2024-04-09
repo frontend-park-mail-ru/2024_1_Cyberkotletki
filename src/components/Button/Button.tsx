@@ -28,6 +28,7 @@ export class Button extends AppComponent<InputProps> {
             href,
             rel,
             target,
+            type = 'button',
             ...props
         } = this.props;
 
@@ -41,6 +42,7 @@ export class Button extends AppComponent<InputProps> {
             >
                 <button
                     {...props}
+                    type={type}
                     className={cx('button', {
                         loading: isLoading,
                         outlined,
@@ -54,6 +56,7 @@ export class Button extends AppComponent<InputProps> {
         ) : (
             <button
                 {...props}
+                type={type}
                 className={cx('button', className, {
                     loading: isLoading,
                     outlined,

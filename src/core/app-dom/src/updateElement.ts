@@ -107,10 +107,6 @@ export const updateElement = (
             const GenerateInstance = newNode.type;
 
             const instance = new GenerateInstance(newNode.props ?? {});
-            instance.state = oldNode.instance?.state ?? {};
-            const instanceRender = instance.render();
-            instance.instance = instanceRender;
-            instance.owner = oldNode.owner;
 
             if (
                 oldNode.instance?.componentShouldUpdate(
@@ -118,6 +114,11 @@ export const updateElement = (
                     oldNode.instance.state,
                 )
             ) {
+                instance.state = oldNode.instance?.state ?? {};
+                const instanceRender = instance.render();
+                instance.instance = instanceRender;
+                instance.owner = oldNode.owner;
+
                 newNode.instance = instance;
 
                 updateElement(
@@ -140,6 +141,8 @@ export const updateElement = (
                 return newNode.ref;
             }
 
+            const instanceRender = oldNode.instance?.render();
+
             newNode.instance = oldNode.instance;
             newNode.ref = oldNode.ref;
 
@@ -161,6 +164,8 @@ export const updateElement = (
                     ? oldNode.ref
                     : instanceRender.ref;
                 newNode.ref = instance.ref;
+            } else {
+                newNode = oldNode;
             }
 
             return oldNode.ref;
@@ -222,19 +227,19 @@ function checkElementContext(
 
             const instance = new GenerateInstance(newNode.props ?? {});
 
-            instance.state = oldNode.instance?.state ?? {};
-
-            const instanceRender = instance.render();
-
-            instance.owner = oldNode.owner;
-            instance.instance = instanceRender;
-
             if (
                 oldNode.instance?.componentShouldUpdate(
                     instance.props,
                     oldNode.instance.state,
                 )
             ) {
+                instance.state = oldNode.instance?.state ?? {};
+
+                const instanceRender = instance.render();
+
+                instance.owner = oldNode.owner;
+                instance.instance = instanceRender;
+
                 newNode.instance = instance;
 
                 updateElement(
@@ -257,8 +262,7 @@ function checkElementContext(
                 return newNode;
             }
 
-            newNode.instance = oldNode.instance;
-            newNode.ref = oldNode.ref;
+            const instanceRender = oldNode.instance?.render();
 
             const node = checkElementContext(
                 instanceRender,
@@ -273,6 +277,8 @@ function checkElementContext(
                     : instanceRender.ref;
                 newNode.instance = instance;
                 newNode.ref = instance.ref;
+            } else {
+                newNode = oldNode;
             }
 
             return node;

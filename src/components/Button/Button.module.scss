@@ -2,24 +2,26 @@
     0% {
         background-position: 0%;
     }
+
     100% {
         background-position: 100%;
     }
 }
 
 .button {
-    padding-block: var(--item-padding);
-    padding-inline: var(--item-inline-padding);
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
     height: var(--button-height);
-    border-radius: var(--item-border-radius);
-    appearance: none;
-    border: none;
+    text-align: center;
     background: var(--primary-gradient);
+    border-width: 0;
+    border-radius: var(--item-border-radius);
     transition: var(--item-transition-all);
+    appearance: none;
+    padding-block: var(--item-padding);
+    padding-inline: var(--item-inline-padding);
 
     @include text-button;
 
@@ -28,10 +30,10 @@
     }
 
     &:hover {
-        animation: gradient 600ms linear infinite;
         background-size: 150%;
-        animation-direction: alternate;
         transform: scale(1.01);
+        animation: gradient 600ms linear infinite;
+        animation-direction: alternate;
     }
 
     &:active {
@@ -41,32 +43,31 @@
 
     &:disabled,
     &.loading {
-        pointer-events: none;
-        user-select: none;
         filter: opacity(0.8);
+        user-select: none;
+        pointer-events: none;
     }
 
     &.loading {
-        animation: gradient 600ms linear infinite;
         background-size: 150%;
+        animation: gradient 600ms linear infinite;
         animation-direction: alternate;
     }
 
     &.outlined {
         color: var(--background-gray);
         background: transparent;
+        box-shadow: var(--input-border-shadow);
         cursor: pointer;
 
-        box-shadow: var(--input-border-shadow);
-
         &:hover {
-            background-color: rgba(1, 1, 1, 20%);
-            animation: none;
+            background-color: rgb(1 1 1 / 20%);
             transform: none;
+            animation: none;
         }
 
         &:active {
-            background-color: rgba(1, 1, 1, 30%);
+            background-color: rgb(1 1 1 / 30%);
         }
     }
 }

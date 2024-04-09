@@ -2,29 +2,29 @@
     --avatar-size: 144px;
 
     position: relative;
-    width: 100%;
+    min-width: var(--avatar-size);
     max-width: var(--avatar-size);
-    aspect-ratio: 1;
-    border-radius: 50%;
     overflow: hidden;
+    border-radius: 50%;
+    aspect-ratio: 1;
 
     img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
+
     &::after {
-        z-index: 3;
         position: absolute;
+        right: 0;
+        left: 0;
+        z-index: -1;
         width: 100%;
         height: 100%;
-        content: '';
-        left: 0;
-        right: 0;
         background-color: transparent;
-        transition: var(--item-transition-all);
         opacity: 0;
-        z-index: -1;
+        transition: var(--item-transition-all);
+        content: '';
     }
 
     &.loading {

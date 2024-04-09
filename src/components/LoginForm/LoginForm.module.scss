@@ -1,35 +1,35 @@
 @keyframes fade-in {
     from {
-        opacity: 0;
         transform: translateY(20px);
+        opacity: 0;
     }
+
     to {
+        transform: translateY(0);
         opacity: 1;
-        transform: translateY(0px);
     }
 }
 
 .section {
-    width: 100%;
-    max-width: 400px;
-    background-color: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: var(--card-border-radius);
-    padding-block: var(--main-padding);
-    padding-inline: var(--large-padding);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    animation: 400ms fade-in ease;
     gap: var(--main-content-gap);
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    background-color: rgb(0 0 0 / 55%);
+    border: 1px solid rgb(0 0 0 / 15%);
+    border-radius: var(--card-border-radius);
     box-shadow:
-        rgba(0, 0, 0, 0.25) 0px 54px 55px,
-        rgba(0, 0, 0, 0.12) 0px -12px 30px,
-        rgba(0, 0, 0, 0.12) 0px 4px 6px,
-        rgba(0, 0, 0, 0.17) 0px 12px 13px,
-        rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        rgb(0 0 0 / 25%) 0 54px 55px,
+        rgb(0 0 0 / 12%) 0 -12px 30px,
+        rgb(0 0 0 / 12%) 0 4px 6px,
+        rgb(0 0 0 / 17%) 0 12px 13px,
+        rgb(0 0 0 / 9%) 0 -3px 5px;
+    backdrop-filter: blur(12px);
+    animation: 400ms fade-in ease;
+    padding-block: var(--main-padding);
+    padding-inline: var(--large-padding);
 
     h1 {
         text-align: center;
