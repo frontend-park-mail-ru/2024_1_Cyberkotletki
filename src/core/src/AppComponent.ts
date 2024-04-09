@@ -3,7 +3,7 @@ import type { AppComponentType, SetStateFunction } from './AppComponent.types';
 import type { AppElementProps } from '@/core/shared/AppElementProps.type';
 import { updateElement } from '@/core/app-dom/src/updateElement';
 import type { AppNode } from '@/core/shared/AppNode.types';
-import { isFunction } from '@/utils';
+import { isFunction, isPrimitive } from '@/utils';
 import { isEqual } from '@/utils/isEqual';
 
 export abstract class AppComponent<
@@ -36,13 +36,19 @@ export abstract class AppComponent<
             gotState = newState;
         }
 
-        if (this.componentShouldUpdate(this.props, gotState)) {
+        if (this.owner && this.componentShouldUpdate(this.props, gotState)) {
             this.state = gotState;
+
             const newInstance = this.render();
+
+            if (!isPrimitive(newInstance)) {
+                newInstance.owner = this.owner;
+            }
 
             updateElement(newInstance, this.instance, this.owner);
 
             this.instance = newInstance;
+            this.ref = isPrimitive(newInstance) ? null : newInstance.ref;
 
             this.componentDidUpdate(prevState, this.props);
 

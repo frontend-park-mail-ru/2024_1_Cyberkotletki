@@ -5,6 +5,7 @@ import type { ProfileResponse } from '@/api/user/types';
 import { Avatar } from '@/components/Avatar';
 import { Button } from '@/components/Button';
 import { AppComponent } from '@/core';
+import { Config } from '@/shared/constants';
 import { concatClasses, isDefined } from '@/utils';
 
 const cx = concatClasses.bind(styles);
@@ -26,7 +27,9 @@ export class UserInfo extends AppComponent<UserInfoProps> {
 
         return (
             <div className={cx('container', className)} {...props}>
-                <Avatar imageSrc={profile?.avatar} />
+                <Avatar
+                    imageSrc={`${Config.BACKEND_STATIC_URL}/${profile?.avatar ?? ''}`}
+                />
                 <section className={cx('user-info')}>
                     <h1 className={cx('user-name')}>
                         {profile?.name || profile?.email}

@@ -6,7 +6,7 @@ import type {
 } from './types';
 import { userRoutes } from './routes';
 
-import { appFetch } from '@/api/appFetch';
+import { ResponseError, appFetch } from '@/api/appFetch';
 import { ResponseStatus } from '@/shared/constants';
 import { AuthError } from '@/api/auth/constants';
 
@@ -27,8 +27,8 @@ class UserService {
         appFetch
             .put<ChangeProfileBody, unknown>(userRoutes.profile(), data)
             .catch((error) => {
-                if (error instanceof Error) {
-                    if (error.message === ResponseStatus.BAD_REQUEST) {
+                if (error instanceof ResponseError) {
+                    if (error.statusCode === ResponseStatus.BAD_REQUEST) {
                         throw new Error(AuthError.BAD_REQUEST);
                     }
 
@@ -42,8 +42,8 @@ class UserService {
         appFetch
             .put<ChangePasswordBody, unknown>(userRoutes.password(), data)
             .catch((error) => {
-                if (error instanceof Error) {
-                    if (error.message === ResponseStatus.BAD_REQUEST) {
+                if (error instanceof ResponseError) {
+                    if (error.statusCode === ResponseStatus.BAD_REQUEST) {
                         throw new Error('Введен неверный текущий пароль');
                     }
 
@@ -52,6 +52,13 @@ class UserService {
 
                 throw error;
             });
+
+    updateAvatar = (image: File) => {
+        const formData = new FormData();
+        formData.append('avatar', image);
+
+        return appFetch.put<unknown, unknown>(userRoutes.avatar(), formData);
+    };
 }
 
 export const userService = new UserService();

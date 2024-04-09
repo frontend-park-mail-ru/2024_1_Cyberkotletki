@@ -1,7 +1,8 @@
 .check-mark {
     position: absolute;
+    top: 50%;
     right: calc(-1 * var(--small-padding));
-    transform: translateX(100%);
+    transform: translateY(-50%) translateX(100%);
     opacity: 0;
     user-select: none;
     pointer-events: none;

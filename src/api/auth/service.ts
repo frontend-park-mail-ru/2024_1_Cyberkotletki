@@ -30,7 +30,7 @@ class AuthService {
             })
             .catch((error: Error) => {
                 if (error instanceof ResponseError) {
-                    switch (error.message) {
+                    switch (error.statusCode as ResponseStatus) {
                         case ResponseStatus.BAD_REQUEST:
                             throw new Error(AuthError.BAD_REQUEST);
                         case ResponseStatus.NOT_FOUND:
@@ -60,7 +60,7 @@ class AuthService {
             })
             .catch((error: Error) => {
                 if (error instanceof ResponseError) {
-                    switch (error.message) {
+                    switch (error.statusCode as ResponseStatus) {
                         case ResponseStatus.BAD_REQUEST:
                             throw new Error(AuthError.BAD_REQUEST);
                         case ResponseStatus.CONFLICT:

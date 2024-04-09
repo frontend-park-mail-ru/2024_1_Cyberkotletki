@@ -22,9 +22,7 @@ export interface HistoryProviderProps {
 
 export interface HistoryProviderState {
     element: JSX.Element;
-    handleChangeRoute: (path: string) => void;
     routesMap: Map<string, HistoryRoute>;
-    listener: (e: PopStateEvent) => void;
 }
 
 export class HistoryProvider extends AppComponent<
@@ -40,53 +38,49 @@ export class HistoryProvider extends AppComponent<
             this.state.routesMap.set(route.path, route);
         });
 
-        this.state.handleChangeRoute = (path: string) => {
-            const { pathname } = window.location;
-
-            if (pathname !== path) {
-                window.history.pushState(null, '', path);
-            }
-
-            this.setState((prev) => ({
-                ...prev,
-                element: this.state.routesMap.get(path)?.element ?? (
-                    <div>Not found</div>
-                ),
-            }));
-        };
-
         const { pathname } = window.location;
 
         this.state.element = this.state.routesMap.get(pathname)?.element ?? (
             <div>Not found</div>
         );
 
-        this.state.listener = (event) => {
-            event.preventDefault();
-
-            this.state.handleChangeRoute(
-                (
-                    event.currentTarget as unknown as
-                        | { location?: Location }
-                        | undefined
-                )?.location?.pathname ?? '',
-            );
-
-            return false;
-        };
-
-        window.addEventListener('popstate', this.state.listener);
+        window.addEventListener('popstate', this.listener);
     }
 
+    handleChangeRoute = (path: string) => {
+        const { pathname } = window.location;
+
+        if (pathname !== path) {
+            window.history.pushState(null, '', path);
+        }
+
+        this.setState((prev) => ({
+            ...prev,
+            element: this.state.routesMap.get(path)?.element ?? (
+                <div>Not found</div>
+            ),
+        }));
+    };
+
+    listener = (event: PopStateEvent) => {
+        event.preventDefault();
+
+        const { pathname } = window.location;
+
+        this.handleChangeRoute(pathname);
+
+        return false;
+    };
+
     componentWillUnmount() {
-        window.removeEventListener('popstate', this.state.listener);
+        window.removeEventListener('popstate', this.listener);
     }
 
     render() {
         return (
             <HistoryContext.Provider
                 value={{
-                    history: { changeRoute: this.state.handleChangeRoute },
+                    history: { changeRoute: this.handleChangeRoute },
                 }}
             >
                 {this.state.element}

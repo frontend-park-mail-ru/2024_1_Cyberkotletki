@@ -7,6 +7,8 @@ class UserRoutes {
     me = () => '/user/me' as const;
 
     password = () => '/user/password' as const;
+
+    avatar = () => '/user/avatar' as const;
 }
 
 export const userRoutes = new UserRoutes();
