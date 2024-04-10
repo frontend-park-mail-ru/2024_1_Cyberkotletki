@@ -1,7 +1,10 @@
 export interface Person {
-    firstName: string;
     id: number;
+    firstName: string;
     lastName: string;
+    sex: string;
+    photoURL: string;
+    height: number;
 }
 
 export interface Movie {
