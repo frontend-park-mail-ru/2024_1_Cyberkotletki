@@ -8,7 +8,6 @@ import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { concatClasses, isDefined } from '@/utils';
-import { ResponseStatus } from '@/shared/constants';
 import { NotFound } from '@/components/NotFound';
 import { ReviewForm } from '@/components/ReviewForm';
 import { userService } from '@/api/user/service';
@@ -53,10 +52,7 @@ export class FilmPage extends AppComponent<object, FilmPageState> {
                     this.setState((prev) => ({ ...prev, film }));
                 })
                 .catch((error) => {
-                    if (
-                        error instanceof ResponseError &&
-                        error.statusCode === ResponseStatus.NOT_FOUND
-                    ) {
+                    if (error instanceof ResponseError) {
                         this.setState((prev) => ({
                             ...prev,
                             isNotFound: true,

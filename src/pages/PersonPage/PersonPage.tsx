@@ -3,7 +3,6 @@ import { AppComponent } from '@/core';
 import { isDefined } from '@/utils';
 import { contentService } from '@/api/content/service.ts';
 import { ResponseError } from '@/api/appFetch.ts';
-import { ResponseStatus } from '@/shared/constants.ts';
 import type { AppNode } from '@/core/shared/AppNode.types.ts';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { NotFound } from '@/components/NotFound';
@@ -16,9 +15,10 @@ export interface PersonPageState {
 
 export class PersonPage extends AppComponent<object, PersonPageState> {
     componentDidMount(): void {
-        const { params } = window.history.state as {
-            params?: { uid?: string };
-        };
+        const { params } =
+            (window.history.state as {
+                params?: { uid?: string };
+            }) ?? {};
 
         if (isDefined(params?.uid)) {
             void contentService
@@ -27,10 +27,7 @@ export class PersonPage extends AppComponent<object, PersonPageState> {
                     this.setState((prev) => ({ ...prev, person }));
                 })
                 .catch((error) => {
-                    if (
-                        error instanceof ResponseError &&
-                        error.statusCode === ResponseStatus.NOT_FOUND
-                    ) {
+                    if (error instanceof ResponseError) {
                         this.setState((prev) => ({
                             ...prev,
                             isNotFound: true,
@@ -42,7 +39,7 @@ export class PersonPage extends AppComponent<object, PersonPageState> {
 
     render(): AppNode {
         return (
-            <LayoutWithHeader>
+            <LayoutWithHeader key={'person-page'}>
                 {this.state.isNotFound ? (
                     <NotFound description="Персона не найдена" />
                 ) : (

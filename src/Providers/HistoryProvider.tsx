@@ -81,16 +81,12 @@ export class HistoryProvider extends AppComponent<
             const match = isRoutesMatch(key, pathWithoutEdgeSlashes);
 
             if (match.match) {
+                window.history.replaceState({ params: match.params }, '', path);
+
                 this.setState((prev) => ({
                     ...prev,
                     element: this.state.routesMap.get(key)?.element || <div />,
                 }));
-
-                window.history.replaceState(
-                    { params: match.params },
-                    '',
-                    window.location.pathname,
-                );
 
                 return;
             }
