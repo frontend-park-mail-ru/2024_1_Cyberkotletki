@@ -5,6 +5,7 @@ import { NotFound } from '@/components/NotFound';
 import { AppComponent } from '@/core';
 import { CollectionsPage } from '@/pages/CollectionsPage';
 import { FilmPage } from '@/pages/FilmPage';
+import { PersonPage } from '@/pages/PersonPage';
 import { IndexPage } from '@/pages/IndexPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { ProfilePage } from '@/pages/ProfilePage';
@@ -45,6 +46,10 @@ export class App extends AppComponent<object> {
                         {
                             path: routes.film(':uid'),
                             element: <FilmPage />,
+                        },
+                        {
+                            path: routes.person(':uid'),
+                            element: <PersonPage />,
                         },
                         {
                             path: routes.notFound(),
