@@ -3,7 +3,7 @@ import styles from './FilmCard.module.scss';
 import { AppComponent } from '@/core';
 import { RatingBadge } from '@/components/RatingBadge';
 import { Config } from '@/shared/constants';
-import { concatClasses } from '@/utils';
+import { concatClasses, getHumanDate } from '@/utils';
 import type { Film } from '@/api/content/types';
 import { LazyImg } from '@/components/LazyImg';
 import { Link } from '@/components/Link';
@@ -33,6 +33,7 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                     <div className={cx('poster')}>
                         <RatingBadge rating={film?.rating} />
                         <LazyImg
+                            className={cx('i')}
                             src={`${Config.BACKEND_URL}/static/${film?.posterURL ?? ''}`}
                             alt="Постер"
                         />
@@ -47,7 +48,7 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                     <span>
                         {[
                             film?.originalTitle || film?.title,
-                            film?.movie?.release,
+                            getHumanDate(film?.movie?.release),
                             `${film?.movie?.duration ?? '0'} мин.`,
                         ]
                             .filter(Boolean)

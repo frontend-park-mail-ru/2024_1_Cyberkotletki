@@ -46,12 +46,12 @@ export class HistoryProvider extends AppComponent<
 
         const { pathname } = window.location;
 
-        this.handleChangeRoute(pathname);
+        this.handleChangeRoute(pathname, true);
 
         window.addEventListener('popstate', this.listener);
     }
 
-    handleChangeRoute = (path: string) => {
+    handleChangeRoute = (path: string, safeScroll?: boolean) => {
         const { pathname } = window.location;
 
         const pathnameWithoutEdgeSlashes = pathname.replace(
@@ -74,6 +74,15 @@ export class HistoryProvider extends AppComponent<
                 element,
             }));
 
+            if (!safeScroll) {
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: 0,
+                        left: 0,
+                    });
+                });
+            }
+
             return;
         }
 
@@ -87,6 +96,15 @@ export class HistoryProvider extends AppComponent<
                     ...prev,
                     element: this.state.routesMap.get(key)?.element || <div />,
                 }));
+
+                if (!safeScroll) {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: 0,
+                            left: 0,
+                        });
+                    });
+                }
 
                 return;
             }
@@ -105,7 +123,7 @@ export class HistoryProvider extends AppComponent<
 
         const { pathname } = window.location;
 
-        this.handleChangeRoute(pathname);
+        this.handleChangeRoute(pathname, true);
 
         return false;
     };

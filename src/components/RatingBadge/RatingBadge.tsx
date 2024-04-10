@@ -22,7 +22,7 @@ export class RatingBadge extends AppComponent<RatingBadgeProps> {
 
         return (
             <div {...props} className={cx('rating-circle', className)}>
-                {rating}
+                {rating?.toFixed(1)}
             </div>
         );
     }

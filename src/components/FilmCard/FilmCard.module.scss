@@ -16,8 +16,10 @@
 .poster {
     position: relative;
     width: 100%;
+    min-width: 136px;
     max-width: 136px;
-    height: 200px;
+    min-height: 200px;
+    max-height: 200px;
 
     img {
         object-fit: cover;

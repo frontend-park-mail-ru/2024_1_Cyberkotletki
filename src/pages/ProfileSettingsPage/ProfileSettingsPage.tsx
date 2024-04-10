@@ -11,6 +11,9 @@ import { concatClasses } from '@/utils';
 import { Button } from '@/components/Button';
 import { authService } from '@/api/auth/service';
 import { UploadAvatar } from '@/pages/ProfileSettingsPage/AppLoadAvatar';
+import { HistoryContext } from '@/Providers/HistoryProvider';
+import type { AppContext } from '@/types/Context.types';
+import { routes } from '@/App/App.routes';
 
 const cx = concatClasses.bind(styles);
 
@@ -18,8 +21,12 @@ export interface ProfileSettingsPageState {
     profile?: ProfileResponse;
 }
 
-export class ProfileSettingsPage extends AppComponent<
-    object,
+export interface ProfileSettingsPageProps {
+    context?: AppContext;
+}
+
+class ProfileSettingsPageClass extends AppComponent<
+    ProfileSettingsPageProps,
     ProfileSettingsPageState
 > {
     componentDidMount() {
@@ -29,8 +36,12 @@ export class ProfileSettingsPage extends AppComponent<
     }
 
     handleLogoutAllClick = () => {
+        const { history } = this.props.context ?? {};
+
         void Promise.all([authService.logout(), authService.logoutAll()]).then(
             () => {
+                history?.changeRoute(routes.root());
+
                 window.location.reload();
             },
         );
@@ -79,3 +90,7 @@ export class ProfileSettingsPage extends AppComponent<
         );
     }
 }
+
+export const ProfileSettingsPage = HistoryContext.Connect(
+    ProfileSettingsPageClass,
+);

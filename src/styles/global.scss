@@ -64,20 +64,20 @@
 }
 
 html {
-    overflow-y: auto;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden auto;
     scroll-behavior: smooth;
+
+    * {
+        box-sizing: border-box;
+    }
 }
 
 html,
 body {
     height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-
-    * {
-        box-sizing: border-box;
-    }
 }
 
 a {
