@@ -55,7 +55,7 @@ export class RadioRating extends AppComponent<
                     ))}
                 </div>
                 {hasError && !!errorHint && (
-                    <ErrorMessage message={errorHint} />
+                    <ErrorMessage message={errorHint} hint />
                 )}
             </div>
         );

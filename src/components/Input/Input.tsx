@@ -73,7 +73,7 @@ export class Input extends AppComponent<InputProps> {
                 )}
 
                 {hasError && !!errorHint && (
-                    <ErrorMessage message={errorHint} />
+                    <ErrorMessage message={errorHint} hint />
                 )}
             </div>
         );
