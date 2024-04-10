@@ -1,3 +1,5 @@
+import type { Film } from './types';
+
 import { appFetch } from '@/api/appFetch.ts';
 import { contentRoutes } from '@/api/content/routes.ts';
 
@@ -27,6 +29,15 @@ class ContentService {
                 id: id.toString(),
             },
         );
+    }
+
+    /**
+     * Получить информацию о фильме в режиме предпросмотра
+     * @param id Идентификатор фильма или сериала
+     * @returns {Promise<Film | undefined>} Информация о фильме
+     */
+    async getFilmById(id: number) {
+        return appFetch.get<Film | undefined>(contentRoutes.content(id));
     }
 }
 

@@ -1,0 +1,1 @@
+export { LazyImg } from './LazyImg';

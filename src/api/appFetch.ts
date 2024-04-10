@@ -15,7 +15,7 @@ interface RequestParams {
 }
 
 const defaultOptions = {
-    timeout: 5000,
+    timeout: 60000,
     useCookies: true,
 };
 

@@ -1,0 +1,12 @@
+.link {
+    color: var(--light-gray);
+    transition: var(--item-transition-all);
+
+    &:hover {
+        color: var(--background-gray);
+    }
+
+    &:active {
+        color: var(--light-gray);
+    }
+}

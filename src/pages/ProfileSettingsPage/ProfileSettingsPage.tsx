@@ -11,7 +11,6 @@ import { concatClasses } from '@/utils';
 import { Button } from '@/components/Button';
 import { authService } from '@/api/auth/service';
 import { UploadAvatar } from '@/pages/ProfileSettingsPage/AppLoadAvatar';
-import { Config } from '@/shared/constants';
 
 const cx = concatClasses.bind(styles);
 
@@ -43,9 +42,7 @@ export class ProfileSettingsPage extends AppComponent<
         return (
             <LayoutWithHeader>
                 <div className={cx('content')}>
-                    <UploadAvatar
-                        imageSrc={`${Config.BACKEND_STATIC_URL}/${profile?.avatar ?? ''}`}
-                    />
+                    <UploadAvatar imageSrc={profile?.avatar} />
                     <section className={cx('section')}>
                         <h1 className={cx('title')} style="text-align:center">
                             Редактирование профиля

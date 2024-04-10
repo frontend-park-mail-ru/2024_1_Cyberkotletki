@@ -8,7 +8,7 @@ module.exports = {
     output: {
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist'),
-        publicPath: 'auto',
+        publicPath: '/',
     },
     module: {
         rules: [
@@ -33,8 +33,8 @@ module.exports = {
     plugins: [
         new Dotenv(),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, '/src/index.html'),
-            filename: path.join(__dirname, '/dist/index.html'),
+            template: path.resolve(__dirname, './src/index.html'),
+            filename: path.join(__dirname, './dist/index.html'),
         }),
     ],
 };

@@ -1,8 +1,10 @@
 import { routes } from '@/App/App.routes';
 import { AuthProvider } from '@/Providers/AuthProvider';
 import { HistoryProvider } from '@/Providers/HistoryProvider';
+import { NotFound } from '@/components/NotFound';
 import { AppComponent } from '@/core';
 import { CollectionsPage } from '@/pages/CollectionsPage';
+import { FilmPage } from '@/pages/FilmPage';
 import { IndexPage } from '@/pages/IndexPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { ProfilePage } from '@/pages/ProfilePage';
@@ -39,6 +41,14 @@ export class App extends AppComponent<object> {
                         {
                             path: routes.profileSettings(),
                             element: <ProfileSettingsPage />,
+                        },
+                        {
+                            path: routes.film(':uid'),
+                            element: <FilmPage />,
+                        },
+                        {
+                            path: routes.notFound(),
+                            element: <NotFound withButton />,
                         },
                     ]}
                 />

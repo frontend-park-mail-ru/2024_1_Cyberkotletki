@@ -1,0 +1,18 @@
+.label {
+    color: var(--light-gray);
+}
+
+.table {
+    td {
+        padding-block: calc(var(--main-content-gap) / 2);
+
+        &:first-child {
+            padding-inline-end: var(--main-padding-2);
+        }
+    }
+}
+
+.not-found {
+    color: var(--secondary-gray);
+    user-select: none;
+}
