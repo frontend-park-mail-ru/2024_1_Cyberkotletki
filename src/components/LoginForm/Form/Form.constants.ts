@@ -1,4 +1,4 @@
-import type { InputProps } from '@/components/Input/Input';
+import type { InputTypeProps } from '@/components/Input/Input';
 import { PasswordErrorReasonType } from '@/validators/validators';
 
 export enum FormFields {
@@ -9,7 +9,7 @@ export enum FormFields {
 
 export type FormFieldsType = Record<FormFields, string | undefined>;
 
-export const EMAIL_INPUT_PROPS: InputProps = {
+export const EMAIL_INPUT_PROPS: InputTypeProps = {
     label: 'Email',
     id: 'email',
     name: FormFields.EMAIL,
@@ -20,7 +20,7 @@ export const EMAIL_INPUT_PROPS: InputProps = {
     required: true,
 };
 
-export const PASSWORD_INPUT_PROPS: InputProps = {
+export const PASSWORD_INPUT_PROPS: InputTypeProps = {
     label: 'Пароль',
     id: 'password',
     name: FormFields.PASSWORD,
@@ -30,7 +30,7 @@ export const PASSWORD_INPUT_PROPS: InputProps = {
     required: true,
 };
 
-export const PASSWORD_REPEAT_INPUT_PROPS: InputProps = {
+export const PASSWORD_REPEAT_INPUT_PROPS: InputTypeProps = {
     label: 'Пароль повторно',
     id: 'password-repeat',
     name: FormFields.PASSWORD_REPEAT,

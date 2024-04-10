@@ -1,0 +1,70 @@
+.top {
+    display: flex;
+    gap: var(--main-content-gap);
+}
+
+.avatar {
+    --avatar-size: 64px;
+}
+
+.username {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    > *:first-child {
+        color: var(--light-gray);
+    }
+
+    > *:last-child {
+        color: var(--secondary-gray);
+    }
+}
+
+.table {
+    margin-block-start: calc(var(--main-content-gap) / 2);
+
+    td {
+        vertical-align: top;
+        padding-block: calc(var(--main-content-gap) / 2);
+
+        &:first-child {
+            color: var(--light-gray);
+            padding-inline-end: var(--small-padding);
+
+            @include text-primary;
+        }
+    }
+}
+
+.title-cell {
+    @include text-primary;
+
+    font-weight: bold;
+}
+
+.rating-badge {
+    @include text-secondary-small;
+
+    width: fit-content;
+    color: var(--white);
+    font-weight: 800;
+    background-color: var(--badge-background-color);
+    border-radius: 4px;
+    padding-inline: var(--small-padding);
+    padding-block: 4px;
+
+    --badge-background-color: transparent;
+
+    &.bad {
+        --badge-background-color: var(--error-red);
+    }
+
+    &.medium {
+        --badge-background-color: var(--yellow);
+    }
+
+    &.good {
+        --badge-background-color: var(--success);
+    }
+}

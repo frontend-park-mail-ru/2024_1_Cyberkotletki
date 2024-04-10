@@ -7,7 +7,6 @@
     text-size-adjust: 100%;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    scroll-behavior: smooth;
     text-rendering: optimizespeed;
     color-scheme: dark;
 
@@ -66,6 +65,7 @@
 
 html {
     overflow-y: auto;
+    scroll-behavior: smooth;
 }
 
 html,

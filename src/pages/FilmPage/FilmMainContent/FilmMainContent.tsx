@@ -38,7 +38,9 @@ export class FilmMainContent extends AppComponent<FilmMainContentProps> {
                                 rating={film?.rating}
                                 imdbRating={film?.imdbRating}
                             />
-                            <Button outlined>Оценить</Button>
+                            <a href="#write-review">
+                                <Button outlined>Оценить</Button>
+                            </a>
                         </section>
                     </div>
                     <section className={cx('description-section')}>
