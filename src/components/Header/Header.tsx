@@ -22,27 +22,22 @@ export interface AppComponentProps
     context?: AppContext;
 }
 
-export interface AppComponentState {
-    handleLoginClick: () => void;
-    handleLogoutClick: () => void;
-}
-
-class HeaderClass extends AppComponent<AppComponentProps, AppComponentState> {
-    constructor(props: AppComponentProps) {
-        super(props);
-
+class HeaderClass extends AppComponent<AppComponentProps> {
+    handleLoginClick = () => {
         const { context } = this.props;
 
-        this.state.handleLoginClick = () => {
-            context?.history?.changeRoute(routes.login());
-        };
+        context?.history?.changeRoute(routes.login());
+    };
 
-        this.state.handleLogoutClick = () => {
-            void authService.logout().then(() => {
-                window.location.reload();
-            });
-        };
-    }
+    handleLogoutClick = () => {
+        const { context } = this.props;
+
+        void authService.logout().then(() => {
+            context?.history?.changeRoute(routes.root());
+
+            window.location.reload();
+        });
+    };
 
     render() {
         const { context, className, ...props } = this.props;
@@ -61,7 +56,7 @@ class HeaderClass extends AppComponent<AppComponentProps, AppComponentState> {
                         <div className={cx('avatar')}>
                             <div
                                 className={cx('logout-button')}
-                                onClick={this.state.handleLogoutClick}
+                                onClick={this.handleLogoutClick}
                                 role="button"
                             >
                                 Выйти
@@ -71,7 +66,7 @@ class HeaderClass extends AppComponent<AppComponentProps, AppComponentState> {
                             </Link>
                         </div>
                     ) : (
-                        <Button outlined onClick={this.state.handleLoginClick}>
+                        <Button outlined onClick={this.handleLoginClick}>
                             Войти
                         </Button>
                     )}

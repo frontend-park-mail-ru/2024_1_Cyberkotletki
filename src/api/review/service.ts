@@ -1,16 +1,42 @@
 import type { Review, ReviewDetails } from './types';
 import { reviewRoutes } from './routes';
 
-import { appFetch } from '@/api/appFetch.ts';
+import { ResponseError, appFetch } from '@/api/appFetch.ts';
+import { ResponseStatus } from '@/shared/constants';
 
 class ReviewService {
     /**
      * Создание отзыва
-     * @param body {Review} Тело отзыва
+     * @param {Review} Тело отзыва
      * @returns {Promise<unknown>} unknown
      */
-    async createReview(body: Review) {
-        return appFetch.post<Review, unknown>(reviewRoutes.review(), body);
+    async createReview({ rating, title, text, contentID }: Review) {
+        try {
+            await appFetch.post<Review, unknown>(reviewRoutes.review(), {
+                rating,
+                contentID,
+                title: title.trim(),
+                text: text.trim(),
+            });
+        } catch (error) {
+            if (error instanceof ResponseError) {
+                if (error.statusCode === ResponseStatus.UNAUTHORIZED) {
+                    throw new ResponseError(
+                        'Чтобы оставить отзыв, нужно авторизоваться',
+                        error.statusCode,
+                    );
+                }
+
+                if (error.statusCode === ResponseStatus.CONFLICT) {
+                    throw new ResponseError(
+                        'Вы не можете оставить отзыв второй раз',
+                        error.statusCode,
+                    );
+                }
+            }
+
+            throw error;
+        }
     }
 
     async getContentReviews(id: number, page = 1) {

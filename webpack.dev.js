@@ -17,7 +17,21 @@ module.exports = merge(common, {
                 use: [
                     'style-loader',
                     'css-loader',
-                    'postcss-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    [
+                                        'postcss-preset-env',
+                                        {
+                                            // Options
+                                        },
+                                    ],
+                                ],
+                            },
+                        },
+                    },
                     'sass-loader',
                     {
                         loader: 'sass-resources-loader',
@@ -29,4 +43,5 @@ module.exports = merge(common, {
             },
         ],
     },
+    plugins: [...common.plugins],
 });

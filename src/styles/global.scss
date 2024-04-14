@@ -65,8 +65,6 @@
 
 html {
     height: 100%;
-    margin: 0;
-    padding: 0;
     overflow: hidden auto;
     scroll-behavior: smooth;
 
@@ -78,6 +76,8 @@ html {
 html,
 body {
     height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 a {

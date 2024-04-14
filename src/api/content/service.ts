@@ -1,4 +1,4 @@
-import type { Film, Person } from './types';
+import type { Film, PersonActor } from './types';
 
 import { appFetch } from '@/api/appFetch.ts';
 import { contentRoutes } from '@/api/content/routes.ts';
@@ -55,10 +55,10 @@ class ContentService {
     /**
      * Получить информацию о персоне
      * @param id Идентификатор персоны
-     * @returns {Promise<Person | undefined>} Информация о персоне
+     * @returns {Promise<PersonActor | undefined>} Информация о персоне
      */
     async getPersonById(id: number) {
-        return appFetch.get<Person | undefined>(
+        return appFetch.get<PersonActor | undefined>(
             contentRoutes.contentPerson(id),
         );
     }
