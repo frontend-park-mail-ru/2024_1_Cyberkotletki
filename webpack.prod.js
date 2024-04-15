@@ -14,7 +14,21 @@ module.exports = merge(common, {
                 use: [
                     MiniCssExtractPlugin.loader,
                     'css-loader',
-                    'postcss-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    [
+                                        'postcss-preset-env',
+                                        {
+                                            // Options
+                                        },
+                                    ],
+                                ],
+                            },
+                        },
+                    },
                     'sass-loader',
                     {
                         loader: 'sass-resources-loader',
@@ -26,5 +40,5 @@ module.exports = merge(common, {
             },
         ],
     },
-    plugins: [new MiniCssExtractPlugin()],
+    plugins: [...common.plugins, new MiniCssExtractPlugin()],
 });

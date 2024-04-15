@@ -1,51 +1,75 @@
 import styles from './Header.module.scss';
 
-import { AuthContext } from '@/Providers/AuthProvider';
 import { AppComponent } from '@/core';
 import { LogoButton } from '@/components/LogoButton';
 import { concatClasses } from '@/utils';
 import type { AppContext } from '@/types/Context.types';
-import { icUserCircleUrl } from '@/assets/icons';
 import { Button } from '@/components/Button';
 import { HistoryContext } from '@/Providers/HistoryProvider';
 import { routes } from '@/App/App.routes';
 import { authService } from '@/api/auth/service';
 import { Link } from '@/components/Link';
+import { AuthContext } from '@/Providers/AuthProvider';
+import { ProfileContext } from '@/Providers/ProfileProvider';
+import { Avatar } from '@/components/Avatar';
+import type { ProfileResponse } from '@/api/user/types';
 
 const cx = concatClasses.bind(styles);
 
-export interface AppComponentProps
+export interface HeaderProps
     extends Omit<
         App.DetailedHTMLProps<App.HTMLAttributes<HTMLElement>, HTMLElement>,
         'ref' | 'children'
     > {
     context?: AppContext;
+    isLoggedIn?: boolean;
 }
 
-export interface AppComponentState {
-    handleLoginClick: () => void;
-    handleLogoutClick: () => void;
+export interface HeaderState {
+    isLoggedIn?: boolean;
+    profile?: ProfileResponse;
 }
 
-class HeaderClass extends AppComponent<AppComponentProps, AppComponentState> {
-    constructor(props: AppComponentProps) {
-        super(props);
-
+class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
+    handleLoginClick = () => {
         const { context } = this.props;
 
-        this.state.handleLoginClick = () => {
-            context?.history?.changeRoute(routes.login());
-        };
+        context?.history?.changeRoute(routes.login());
+    };
 
-        this.state.handleLogoutClick = () => {
-            void authService.logout().then(() => {
-                window.location.reload();
+    handleLogoutClick = () => {
+        const { context } = this.props;
+
+        void authService.logout().then(() => {
+            context?.history?.changeRoute(routes.root());
+
+            window.location.reload();
+        });
+    };
+
+    componentDidMount(): void {
+        const { context } = this.props;
+
+        if (!context?.profile?.profile) {
+            void context?.profile?.getProfile().then((profile) => {
+                this.setState((prev) => ({ ...prev, profile }));
             });
-        };
+        }
+
+        if (!context?.auth?.isLoggedIn) {
+            void context?.auth?.getIsAuth().then((isLoggedIn) => {
+                this.setState((prev) => ({ ...prev, isLoggedIn }));
+            });
+        }
     }
 
     render() {
-        const { context, className, ...props } = this.props;
+        const { className, context, ...props } = this.props;
+        const { profile: stateProfile, isLoggedIn: stateIsLoggedIn } =
+            this.state;
+
+        const profile = context?.profile?.profile || stateProfile;
+        const isLoggedIn = context?.auth?.isLoggedIn || stateIsLoggedIn;
 
         return (
             <header className={cx('header', className)} {...props}>
@@ -57,21 +81,24 @@ class HeaderClass extends AppComponent<AppComponentProps, AppComponentState> {
                             <Link href={tab.route}>{tab.title}</Link>
                         ))}
                     </div> */}
-                    {context?.auth?.isLoggedIn ? (
-                        <div className={cx('avatar')}>
+                    {isLoggedIn ? (
+                        <div className={cx('avatar-container')}>
                             <div
                                 className={cx('logout-button')}
-                                onClick={this.state.handleLogoutClick}
+                                onClick={this.handleLogoutClick}
                                 role="button"
                             >
                                 Выйти
                             </div>
                             <Link href={routes.profile()}>
-                                <img src={icUserCircleUrl} aria-hidden />
+                                <Avatar
+                                    className={cx('avatar')}
+                                    imageSrc={profile?.avatar}
+                                />
                             </Link>
                         </div>
                     ) : (
-                        <Button outlined onClick={this.state.handleLoginClick}>
+                        <Button outlined onClick={this.handleLoginClick}>
                             Войти
                         </Button>
                     )}
@@ -81,4 +108,6 @@ class HeaderClass extends AppComponent<AppComponentProps, AppComponentState> {
     }
 }
 
-export const Header = HistoryContext.Connect(AuthContext.Connect(HeaderClass));
+export const Header = ProfileContext.Connect(
+    AuthContext.Connect(HistoryContext.Connect(HeaderClass)),
+);

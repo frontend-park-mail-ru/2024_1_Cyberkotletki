@@ -73,3 +73,13 @@
     font-size: 36px;
     font-family: var(--font-family);
 }
+
+@mixin cut-for-n-rows($n: 2) {
+    /* stylelint-disable-next-line value-no-vendor-prefix */
+    display: -webkit-box;
+    overflow: hidden;
+    white-space: pre-line;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: $n;
+    -webkit-box-orient: vertical;
+}

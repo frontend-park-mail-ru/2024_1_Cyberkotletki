@@ -21,7 +21,14 @@ export class RatingBadge extends AppComponent<RatingBadgeProps> {
         const { rating, className, ...props } = this.props;
 
         return (
-            <div {...props} className={cx('rating-circle', className)}>
+            <div
+                {...props}
+                className={cx('rating-circle', className, {
+                    bad: true,
+                    medium: (rating ?? 0) >= 4,
+                    good: (rating ?? 0) >= 7,
+                })}
+            >
                 {rating?.toFixed(1)}
             </div>
         );

@@ -68,6 +68,21 @@ const getContentType = <T>(body: T) => {
 };
 
 const createInstance = (baseURL: string) => {
+    let CSRFToken: string = localStorage.getItem('_csrf') as string;
+
+    const getCookie = (name: string) => {
+        const matches = document.cookie.match(
+            new RegExp(
+                `(?:^|; )${name.replace(
+                    /([.$?*|{}()[\]\\/+^])/g,
+                    '\\$1',
+                )}=([^;]*)`,
+            ),
+        );
+
+        return matches ? decodeURIComponent(matches[1]) : '';
+    };
+
     const request = async <Body, T>(
         url: string,
         body?: Body,
@@ -90,6 +105,7 @@ const createInstance = (baseURL: string) => {
             headers: {
                 ...(options?.headers ?? {}),
                 ...contentType,
+                'X-Csrf': CSRFToken,
             },
             body: bodyInit,
             credentials:
@@ -107,6 +123,8 @@ const createInstance = (baseURL: string) => {
             })
             .then(async (response) => {
                 if (!response.ok) {
+                    CSRFToken = getCookie('_csrf');
+                    localStorage.setItem('_csrf', CSRFToken);
                     await response.json().then((body) => {
                         if (hasField(body, 'message', 'string')) {
                             throw new ResponseError(
@@ -196,5 +214,7 @@ const createInstance = (baseURL: string) => {
     };
 };
 
-const appFetch = createInstance(`${Config.BACKEND_URL}/api`);
+const appFetch = createInstance(
+    `${Config.BACKEND_URL}${Config.BACKEND_URL_API_PREFiX}`,
+);
 export { appFetch };

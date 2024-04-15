@@ -46,6 +46,7 @@
         "lint-staged": "^15.2.2",
         "mini-css-extract-plugin": "^2.8.1",
         "postcss-loader": "^8.1.1",
+        "postcss-preset-env": "^9.5.5",
         "prettier": "^3.2.5",
         "sass": "^1.71.1",
         "sass-loader": "^14.1.1",

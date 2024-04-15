@@ -48,6 +48,7 @@ export abstract class AppComponent<
             updateElement(newInstance, this.instance, this.owner);
 
             this.instance = newInstance;
+
             this.ref = isPrimitive(newInstance) ? null : newInstance.ref;
 
             this.componentDidUpdate(prevState, this.props);
@@ -87,6 +88,24 @@ export abstract class AppComponent<
         this.ref = null;
         this.owner = null;
         this.instance = null;
+    }
+
+    forceUpdate() {
+        const newInstance = this.render();
+
+        if (!isPrimitive(newInstance)) {
+            newInstance.owner = this.owner;
+        }
+
+        if (this.owner) {
+            updateElement(newInstance, this.instance, this.owner, 0, true);
+
+            this.instance = newInstance;
+
+            this.ref = isPrimitive(newInstance) ? null : newInstance.ref;
+        }
+
+        // this.componentDidUpdate(this.state, this.props);
     }
 
     abstract render(): AppNode;

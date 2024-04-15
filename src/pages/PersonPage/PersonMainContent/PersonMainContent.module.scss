@@ -1,5 +1,6 @@
 .content {
     display: flex;
+    flex-direction: column;
     margin-block-start: 88px;
     gap: var(--main-padding-2);
 }
@@ -11,41 +12,26 @@
     max-height: 330px;
 }
 
-.section {
-    display: flex;
-    flex-direction: column;
-
-    // margin-block-start: calc(var(--main-content-gap) / 2);
-
-    section {
-        // margin-block-start: var(--main-padding-2);
-
-        // h1 {
-        // @include text-header-4;
-        // }
-    }
-}
-
 .top-info {
     display: flex;
     gap: var(--main-padding-2);
-}
-
-.description-section {
-    margin-block-start: var(--main-padding-2);
-
-    p {
-        margin-block-start: var(--main-content-gap);
-    }
 }
 
 .title {
     @include text-header-2;
 }
 
-.rating-section {
-    display: flex;
+.roles-section {
+    margin-block-start: var(--main-padding-2);
+
+    h1 {
+        @include text-header-4;
+    }
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
     gap: var(--large-padding);
-    align-items: flex-end;
-    height: fit-content;
+    margin-block-start: var(--main-content-offset);
 }

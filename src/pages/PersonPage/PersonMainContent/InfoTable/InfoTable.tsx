@@ -1,15 +1,18 @@
 import styles from './InfoTable.module.scss';
 
-import type { Person } from '@/api/content/types';
+import type { PersonActor } from '@/api/content/types';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
-import { concatClasses } from '@/utils';
+import { concatClasses, getHumanDate } from '@/utils';
 
 const cx = concatClasses.bind(styles);
 
 export interface InfoTableProps {
-    person?: Person;
+    person?: PersonActor;
 }
+
+const isDateDefined = (date?: string): date is string =>
+    date ? new Date(date).getFullYear() > 1 : false;
 
 export class InfoTable extends AppComponent<InfoTableProps> {
     render(): AppNode {
@@ -18,6 +21,18 @@ export class InfoTable extends AppComponent<InfoTableProps> {
         return (
             <table className={cx('table')}>
                 <tbody>
+                    {isDateDefined(person?.birthDate) && (
+                        <tr>
+                            <td className={cx('label')}>Дата рождения:</td>
+                            <td>{getHumanDate(person.birthDate)}</td>
+                        </tr>
+                    )}
+                    {isDateDefined(person?.deathDate) && (
+                        <tr>
+                            <td className={cx('label')}>Дата смерти:</td>
+                            <td>{getHumanDate(person.deathDate)}</td>
+                        </tr>
+                    )}
                     {person?.sex && (
                         <tr>
                             <td className={cx('label')}>Пол:</td>
@@ -26,10 +41,22 @@ export class InfoTable extends AppComponent<InfoTableProps> {
                             </td>
                         </tr>
                     )}
+                    {isDateDefined(person?.startCareer) && (
+                        <tr>
+                            <td className={cx('label')}>Начало карьеры:</td>
+                            <td>{getHumanDate(person.startCareer)}</td>
+                        </tr>
+                    )}
+                    {isDateDefined(person?.endCareer) && (
+                        <tr>
+                            <td className={cx('label')}>Конец карьеры:</td>
+                            <td>{getHumanDate(person.endCareer)}</td>
+                        </tr>
+                    )}
                     {person?.height && (
                         <tr>
                             <td className={cx('label')}>Рост:</td>
-                            <td>{person.height}</td>
+                            <td>{`${person.height} см`}</td>
                         </tr>
                     )}
                 </tbody>
