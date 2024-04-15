@@ -17,3 +17,9 @@
         margin-block-end: var(--main-content-offset);
     }
 }
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--main-padding-2);
+}
