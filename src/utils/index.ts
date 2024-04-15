@@ -9,3 +9,5 @@ export { isFunction } from './isFunction';
 export { concatClasses } from './concatClasses';
 export { createQueryParams } from './createQueryParams';
 export { hasField } from './hasField';
+export { getHumanDate } from './getHumanDate';
+export { getDateString } from './getDateString';

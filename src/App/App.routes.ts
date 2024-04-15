@@ -9,7 +9,13 @@ class Routes {
 
     profile = () => '/profile' as const;
 
-    profileSettings = () => '/profile-settings' as const;
+    profileSettings = () => '/profile/settings' as const;
+
+    film = (id: string) => `/film/${id}` as const;
+
+    notFound = () => `/not-found` as const;
+
+    person = (id: string) => `/person/${id}` as const;
 }
 
 export const routes = new Routes();

@@ -3,6 +3,16 @@
     color: var(--error-red);
     text-align: center;
     animation: fade-in-error 300ms ease-in-out;
+
+    &.hint {
+        @include text-secondary;
+
+        overflow: visible;
+        color: var(--error-red);
+        text-align: start;
+        animation: fade-in-hint 300ms ease-in-out;
+        contain: content;
+    }
 }
 
 @keyframes fade-in-error {
@@ -20,6 +30,26 @@
 
     100% {
         height: 18px;
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fade-in-hint {
+    0% {
+        height: 0;
+        transform: translateY(-4px);
+        opacity: 0;
+    }
+
+    50% {
+        height: 15px;
+        transform: translateY(-4px);
+        opacity: 0;
+    }
+
+    100% {
+        height: 15px;
         transform: translateY(0);
         opacity: 1;
     }

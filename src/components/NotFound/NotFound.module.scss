@@ -1,0 +1,25 @@
+.section {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    padding: var(--main-padding);
+
+    h1 {
+        @include text-header-1;
+    }
+
+    p {
+        @include text-primary-light;
+
+        color: var(--secondary-gray);
+    }
+}
+
+.button {
+    margin-block-start: var(--main-content-gap);
+}

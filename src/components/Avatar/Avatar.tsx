@@ -1,39 +1,38 @@
 import styles from './Avatar.module.scss';
 
+import { LazyImg } from '@/components/LazyImg';
 import { icUserCircleUrl } from '@/assets/icons';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
+import { Config } from '@/shared/constants';
 import { concatClasses } from '@/utils';
+import type { LazyImgProps } from '@/components/LazyImg/LazyImg';
 
 const cx = concatClasses.bind(styles);
 
-export interface AppComponentProps {
+export interface AvatarPropsProps extends LazyImgProps {
     imageSrc?: string;
+    prefix?: string;
 }
 
-export interface AppComponentState {
-    imgLoading?: boolean;
-}
-
-export class Avatar extends AppComponent<AppComponentProps, AppComponentState> {
-    state = { imgLoading: true };
-
+export class Avatar extends AppComponent<AvatarPropsProps> {
     render(): AppNode {
+        const {
+            prefix = `${Config.BACKEND_STATIC_URL}/`,
+            imageSrc,
+            className,
+            ...props
+        } = this.props;
+
         return (
-            <div className={cx('avatar', { loading: this.state.imgLoading })}>
-                <img
-                    loading="lazy"
-                    decoding="async"
-                    src={this.props.imageSrc || icUserCircleUrl}
-                    alt="user avatar"
-                    onLoad={() => {
-                        this.setState((prev) => ({
-                            ...prev,
-                            imgLoading: false,
-                        }));
-                    }}
-                />
-            </div>
+            <LazyImg
+                width="144px"
+                height="144px"
+                {...props}
+                className={cx('avatar', className)}
+                src={imageSrc ? `${prefix}${imageSrc}` : icUserCircleUrl}
+                alt="user avatar"
+            />
         );
     }
 }

@@ -1,0 +1,21 @@
+.native-rating {
+    @include text-header-1;
+
+    color: var(--yellow);
+}
+
+.imdb-rating {
+    padding: 4px var(--small-padding);
+    font-weight: 800;
+    font-size: 10px;
+    font-family: var(--font-family);
+    white-space: nowrap;
+    border: 1px solid var(--solid-blue);
+}
+
+.rating {
+    display: flex;
+    flex-direction: column;
+    gap: var(--main-content-gap);
+    align-items: flex-start;
+}

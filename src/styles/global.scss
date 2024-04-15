@@ -7,7 +7,6 @@
     text-size-adjust: 100%;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    scroll-behavior: smooth;
     text-rendering: optimizespeed;
     color-scheme: dark;
 
@@ -49,6 +48,7 @@
     --light-gray: #9ba1a8;
     --secondary-gray: #65686c;
     --error-red: #ed0a34;
+    --yellow: #f5c518;
     --primary-gradient: linear-gradient(
         270deg,
         #6f5aff 0%,
@@ -64,19 +64,20 @@
 }
 
 html {
-    overflow-y: auto;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden auto;
+    scroll-behavior: smooth;
+
+    * {
+        box-sizing: border-box;
+    }
 }
 
 html,
 body {
     height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-
-    * {
-        box-sizing: border-box;
-    }
 }
 
 a {

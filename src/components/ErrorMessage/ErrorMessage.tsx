@@ -15,14 +15,15 @@ export interface ErrorMessageProps
         'ref' | 'children'
     > {
     message: string;
+    hint?: boolean;
 }
 
 export class ErrorMessage extends AppComponent<ErrorMessageProps> {
     render(): AppNode {
-        const { message, className, ...props } = this.props;
+        const { message, className, hint, ...props } = this.props;
 
         return (
-            <div className={cx('error', className)} {...props}>
+            <div className={cx('error', className, { hint })} {...props}>
                 {message}
             </div>
         );

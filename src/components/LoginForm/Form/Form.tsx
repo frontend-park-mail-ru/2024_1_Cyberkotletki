@@ -105,6 +105,7 @@ export class FormClass extends AppComponent<FormProps, FormState> {
             >
                 <Input
                     {...EMAIL_INPUT_PROPS}
+                    inputType="input"
                     hasError={!!emailError}
                     errorHint={emailError}
                     onChange={this.state.handleChangeEmailInput}

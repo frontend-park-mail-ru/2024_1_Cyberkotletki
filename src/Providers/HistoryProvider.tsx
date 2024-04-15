@@ -1,4 +1,5 @@
-import type { RoutesValues } from '@/App/App.routes';
+import { routes, type RoutesValues } from '@/App/App.routes';
+import { isRoutesMatch } from '@/Providers/isRoutesMatch';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
@@ -25,6 +26,8 @@ export interface HistoryProviderState {
     routesMap: Map<string, HistoryRoute>;
 }
 
+const EDGE_SLASHES_REGEXP = /^\/|\/$/g;
+
 export class HistoryProvider extends AppComponent<
     HistoryProviderProps,
     HistoryProviderState
@@ -35,30 +38,83 @@ export class HistoryProvider extends AppComponent<
         this.state.routesMap = new Map();
 
         props.router.forEach((route) => {
-            this.state.routesMap.set(route.path, route);
+            this.state.routesMap.set(
+                route.path.replace(EDGE_SLASHES_REGEXP, ''),
+                route,
+            );
         });
 
         const { pathname } = window.location;
 
-        this.state.element = this.state.routesMap.get(pathname)?.element ?? (
-            <div>Not found</div>
-        );
+        this.handleChangeRoute(pathname, true);
 
         window.addEventListener('popstate', this.listener);
     }
 
-    handleChangeRoute = (path: string) => {
+    handleChangeRoute = (path: string, safeScroll?: boolean) => {
         const { pathname } = window.location;
 
-        if (pathname !== path) {
+        const pathnameWithoutEdgeSlashes = pathname.replace(
+            EDGE_SLASHES_REGEXP,
+            '',
+        );
+        const pathWithoutEdgeSlashes = path.replace(EDGE_SLASHES_REGEXP, '');
+
+        if (pathnameWithoutEdgeSlashes !== pathWithoutEdgeSlashes) {
             window.history.pushState(null, '', path);
+        }
+
+        const element = this.state.routesMap.get(
+            pathWithoutEdgeSlashes,
+        )?.element;
+
+        if (element) {
+            this.setState((prev) => ({
+                ...prev,
+                element,
+            }));
+
+            if (!safeScroll) {
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: 0,
+                        left: 0,
+                    });
+                });
+            }
+
+            return;
+        }
+
+        for (const key of this.state.routesMap.keys()) {
+            const match = isRoutesMatch(key, pathWithoutEdgeSlashes);
+
+            if (match.match) {
+                window.history.replaceState({ params: match.params }, '', path);
+
+                this.setState((prev) => ({
+                    ...prev,
+                    element: this.state.routesMap.get(key)?.element || <div />,
+                }));
+
+                if (!safeScroll) {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: 0,
+                            left: 0,
+                        });
+                    });
+                }
+
+                return;
+            }
         }
 
         this.setState((prev) => ({
             ...prev,
-            element: this.state.routesMap.get(path)?.element ?? (
-                <div>Not found</div>
-            ),
+            element: this.state.routesMap.get(
+                routes.notFound().replace(EDGE_SLASHES_REGEXP, ''),
+            )?.element ?? <div />,
         }));
     };
 
@@ -67,7 +123,7 @@ export class HistoryProvider extends AppComponent<
 
         const { pathname } = window.location;
 
-        this.handleChangeRoute(pathname);
+        this.handleChangeRoute(pathname, true);
 
         return false;
     };

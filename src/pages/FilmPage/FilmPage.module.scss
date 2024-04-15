@@ -1,0 +1,19 @@
+.content {
+    margin: 0;
+}
+
+.reviews-block {
+    margin-block-start: calc(var(--large-padding) * 10);
+
+    h1 {
+        margin-block-end: var(--main-content-offset);
+    }
+}
+
+.write-review-block {
+    margin-block-start: calc(var(--main-padding-2) * 2);
+
+    h1 {
+        margin-block-end: var(--main-content-offset);
+    }
+}

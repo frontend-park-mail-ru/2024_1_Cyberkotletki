@@ -1,11 +1,11 @@
 import styles from './FilmsContainer.module.scss';
 
 import type { FilmsGenre } from '@/api/collections/service';
-import { collectionsService } from '@/api/collections/service';
 import { AppComponent } from '@/core';
-import { Button } from '@/components/Button';
 import { FilmCard } from '@/components/FilmCard';
 import { concatClasses } from '@/utils';
+import { contentService } from '@/api/content/service';
+import type { Film } from '@/api/content/types';
 
 const cx = concatClasses.bind(styles);
 
@@ -23,56 +23,31 @@ export interface FilmsContainerState {
     handleComedian: () => void;
     handleAction: () => void;
     handleDrama: () => void;
+    films: Film[];
 }
 
 export class FilmsContainer extends AppComponent<
     FilmsContainerProps,
     FilmsContainerState
 > {
-    constructor(props: FilmsContainerProps) {
-        super(props);
-
-        const getFilmsIdsByGenre = (genre: FilmsGenre) => {
-            void collectionsService.getCompilation(genre).then((data) => {
-                this.setState((prev) => ({
-                    ...prev,
-                    filmsIds: data.ids,
-                }));
-            });
-        };
-
-        this.state.getFilmsIdsByGenre = getFilmsIdsByGenre;
-
-        this.state.handleAction = () => getFilmsIdsByGenre('action');
-        this.state.handleComedian = () => getFilmsIdsByGenre('comedian');
-        this.state.handleDrama = () => getFilmsIdsByGenre('drama');
-    }
-
-    componentWillMount() {
-        this.state.handleAction();
+    componentDidMount(): void {
+        void contentService.getAllFilms().then((films) => {
+            this.setState((prev) => ({
+                ...prev,
+                films: films.filter(Boolean) as Film[],
+            }));
+        });
     }
 
     render() {
         const { className, ...props } = this.props;
-        const { filmsIds, handleAction, handleComedian, handleDrama } =
-            this.state;
+        const { films } = this.state;
 
         return (
             <section {...props} className={cx('container', className)}>
-                <h1 className={cx('head')}>Специально для вас</h1>
-                <div className={cx('categories')}>
-                    <Button outlined onClick={handleAction}>
-                        Комедия
-                    </Button>
-                    <Button outlined onClick={handleComedian}>
-                        Боевик
-                    </Button>
-                    <Button outlined onClick={handleDrama}>
-                        Драма
-                    </Button>
-                </div>
+                <h1 className={cx('head')}>Подборка лучших фильмов</h1>
                 <div className={cx('grid-container')}>
-                    {filmsIds?.map((id) => <FilmCard filmId={id} />)}
+                    {films?.map((film) => <FilmCard film={film} />)}
                 </div>
             </section>
         );

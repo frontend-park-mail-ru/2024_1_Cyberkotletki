@@ -1,11 +1,13 @@
 import styles from './FilmCard.module.scss';
 
-import type { PreviewContentCard } from '@/api/content/service';
-import { contentService } from '@/api/content/service';
 import { AppComponent } from '@/core';
 import { RatingBadge } from '@/components/RatingBadge';
 import { Config } from '@/shared/constants';
-import { concatClasses } from '@/utils';
+import { concatClasses, getHumanDate } from '@/utils';
+import type { Film } from '@/api/content/types';
+import { LazyImg } from '@/components/LazyImg';
+import { Link } from '@/components/Link';
+import { routes } from '@/App/App.routes';
 
 const cx = concatClasses.bind(styles);
 
@@ -18,81 +20,55 @@ export interface FilmCardProps
         'ref' | 'children'
     > {
     filmId?: number;
+    film?: Film;
 }
 
-export interface FilmCardState {
-    loaded?: boolean;
-    film?: PreviewContentCard;
-    getPreviewContentCard: (id: number) => void;
-}
-
-export class FilmCard extends AppComponent<FilmCardProps, FilmCardState> {
-    constructor(props: FilmCardProps) {
-        super(props);
-        this.state.getPreviewContentCard = (id) => {
-            void contentService.getPreviewContentCard(id).then((data) => {
-                this.setState((prev) => ({
-                    ...prev,
-                    loaded: true,
-                    film: data,
-                }));
-            });
-        };
-    }
-
-    componentWillMount() {
-        this.state.getPreviewContentCard(this.props.filmId ?? 0);
-    }
-
-    componentDidUpdate(_: unknown, prevProps: FilmCardProps | null): void {
-        if (prevProps?.filmId !== this.props.filmId) {
-            this.state.getPreviewContentCard(this.props.filmId ?? 0);
-        }
-    }
-
+export class FilmCard extends AppComponent<FilmCardProps> {
     render() {
-        const { className, ...props } = this.props;
-        const { loaded, film } = this.state;
+        const { className, film, ...props } = this.props;
 
         return (
             <div {...props} className={cx('card', className)}>
-                {loaded && (
+                <Link href={routes.film(`${film?.id ?? 0}`)}>
                     <div className={cx('poster')}>
                         <RatingBadge rating={film?.rating} />
-                        <img
-                            src={`${Config.BACKEND_URL}/static/${film?.poster ?? ''}`}
+                        <LazyImg
+                            className={cx('i')}
+                            src={`${Config.BACKEND_URL}/static/${film?.posterURL ?? ''}`}
                             alt="Постер"
                         />
                     </div>
-                )}
-                {loaded && (
-                    <article className={cx('card-info')}>
-                        <h1>{film?.title}</h1>
-                        <span>
-                            {[
-                                film?.original_title || film?.title,
-                                film?.release_year,
-                                `${film?.duration ?? '0'} мин.`,
-                            ]
-                                .filter(Boolean)
-                                .join(', ')}
-                        </span>
-                        <span>
-                            {[
-                                film?.country,
-                                film?.genre,
-                                film?.director
-                                    ? `Режиссёр: ${film?.director}`
-                                    : '',
-                            ]
-                                .filter(Boolean)
-                                .join(' ▸ ')}
-                        </span>
-                        {!!film?.actors.length && (
-                            <span>{`В ролях: ${film.actors.join(', ')}`}</span>
-                        )}
-                    </article>
-                )}
+                </Link>
+                <article className={cx('card-info')}>
+                    <h1>
+                        <Link href={routes.film(`${film?.id ?? 0}`)}>
+                            {film?.title}
+                        </Link>
+                    </h1>
+                    <span>
+                        {[
+                            film?.originalTitle || film?.title,
+                            getHumanDate(film?.movie?.release),
+                            `${film?.movie?.duration ?? '0'} мин.`,
+                        ]
+                            .filter(Boolean)
+                            .join(', ')}
+                    </span>
+                    <span>
+                        {[
+                            film?.countries?.[0],
+                            film?.genres?.[0],
+                            film?.directors?.[0]
+                                ? `Режиссёр: ${film.directors[0].firstName ?? film.directors[0].lastName ?? ''}`
+                                : '',
+                        ]
+                            .filter(Boolean)
+                            .join(' ▸ ')}
+                    </span>
+                    {!!film?.actors?.length && (
+                        <span>{`В ролях: ${film.actors.map((actor) => `${actor.firstName} ${actor.lastName}`).join(', ')}`}</span>
+                    )}
+                </article>
             </div>
         );
     }

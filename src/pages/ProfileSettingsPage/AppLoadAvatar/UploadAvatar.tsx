@@ -77,13 +77,16 @@ export class UploadAvatar extends AppComponent<
                     tabIndex={0}
                     title="Выберите изображение"
                 >
-                    <Avatar imageSrc={imageUrl || imageSrc} />
+                    <Avatar
+                        imageSrc={imageUrl || imageSrc}
+                        prefix={imageUrl ? '' : undefined}
+                    />
                     <div className={cx('edit-icon')}>
                         <img src={icEditUrl} />
                     </div>
                     <input
                         type="file"
-                        accept="image/*"
+                        accept="image/jpeg,image/gif,image/png"
                         ref={this.inputRef}
                         className={cx('hidden-input')}
                         tabIndex={-1}

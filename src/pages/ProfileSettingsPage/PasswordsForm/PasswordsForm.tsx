@@ -60,31 +60,30 @@ export class PasswordsForm extends AppComponent<object, PasswordsFormState> {
 
         this.setState((prev) => ({ ...prev, isLoading: true }));
 
-        setTimeout(() => {
-            void userService
-                .updatePassword({
-                    oldPassword: body.oldPassword,
-                    newPassword: body.newPassword,
-                })
-                .then(() => {
+        void userService
+            .updatePassword({
+                oldPassword: body.oldPassword,
+                newPassword: body.newPassword,
+            })
+            .then(() => {
+                this.setState((prev) => ({
+                    ...prev,
+                    formError: '',
+                    isSuccess: true,
+                }));
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
                     this.setState((prev) => ({
                         ...prev,
-                        formError: '',
-                        isSuccess: true,
+                        formError: error.message,
+                        isSuccess: false,
                     }));
-                })
-                .catch((error) => {
-                    if (error instanceof Error) {
-                        this.setState((prev) => ({
-                            ...prev,
-                            formError: error.message,
-                        }));
-                    }
-                })
-                .finally(() => {
-                    this.setState((prev) => ({ ...prev, isLoading: false }));
-                });
-        }, 2000);
+                }
+            })
+            .finally(() => {
+                this.setState((prev) => ({ ...prev, isLoading: false }));
+            });
 
         return false;
     };
