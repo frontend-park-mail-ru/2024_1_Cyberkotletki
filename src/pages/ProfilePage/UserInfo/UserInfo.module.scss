@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    gap: var(--main-padding-2);
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--main-padding);
+}
+
+.user-name {
+    @include text-header-2;
+}
+
+.info-table {
+    display: flex;
+    flex-direction: column;
+    gap: var(--item-inline-padding);
+    width: fit-content;
+
+    @include text-primary;
+}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { getParentNodeFromElement } from '@/core/app-dom/src/utils/getParentNodeFromElement';
 
 /**
@@ -20,7 +21,7 @@ export const appendChildWithCheck = (
     const $parent = getParentNodeFromElement(owner);
 
     if (!$parent) {
-        throw new Error(`Нельзя добавить элемент к ${typeof $parent}`);
+        throw new Error(`Нельзя добавить элемент к ${$parent}`);
     }
 
     if ($element) {

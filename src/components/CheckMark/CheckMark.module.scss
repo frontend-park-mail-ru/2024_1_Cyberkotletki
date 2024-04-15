@@ -1,0 +1,31 @@
+.check-mark {
+    position: absolute;
+    top: 50%;
+    right: calc(-1 * var(--small-padding));
+    transform: translateY(-50%) translateX(100%);
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+
+    &.show {
+        animation: show-check 4000ms ease-in-out;
+    }
+}
+
+@keyframes show-check {
+    0% {
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 1;
+    }
+
+    95% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

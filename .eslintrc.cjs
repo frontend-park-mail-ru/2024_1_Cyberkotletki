@@ -65,6 +65,7 @@ const rules = {
     'jsdoc/require-returns-type': 'off',
     'no-continue': 'off',
     'import/no-cycle': 'error',
+    '@typescript-eslint/no-unsafe-enum-comparison': 'off',
 };
 
 module.exports = {

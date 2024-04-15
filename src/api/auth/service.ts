@@ -30,7 +30,7 @@ class AuthService {
             })
             .catch((error: Error) => {
                 if (error instanceof ResponseError) {
-                    switch (error.message) {
+                    switch (error.statusCode as ResponseStatus) {
                         case ResponseStatus.BAD_REQUEST:
                             throw new Error(AuthError.BAD_REQUEST);
                         case ResponseStatus.NOT_FOUND:
@@ -60,7 +60,7 @@ class AuthService {
             })
             .catch((error: Error) => {
                 if (error instanceof ResponseError) {
-                    switch (error.message) {
+                    switch (error.statusCode as ResponseStatus) {
                         case ResponseStatus.BAD_REQUEST:
                             throw new Error(AuthError.BAD_REQUEST);
                         case ResponseStatus.CONFLICT:
@@ -83,6 +83,25 @@ class AuthService {
     async logout(): Promise<void> {
         return appFetch
             .post<void, void>(authRoutes.logout())
+            .catch((error: Error) => {
+                if (error instanceof ResponseError) {
+                    throw new Error(AuthError.UNSUCCESSFUL_LOGOUT);
+                }
+                throw error;
+            });
+    }
+
+    /**
+     * Функция для выхода пользователя из из всех устройств.
+     * Если выход не удался,
+     * то выбрасывается ошибка. В противном случае можно считать, что юзер
+     * вышел и cookies удалены
+     * @returns {Promise<void>}
+     * то возвращает ошибку
+     */
+    async logoutAll(): Promise<void> {
+        return appFetch
+            .post<void, void>(authRoutes.logoutAll())
             .catch((error: Error) => {
                 if (error instanceof ResponseError) {
                     throw new Error(AuthError.UNSUCCESSFUL_LOGOUT);

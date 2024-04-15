@@ -1,22 +1,24 @@
 .header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 30%);
-    padding-block: var(--small-padding);
     position: sticky;
     top: 0;
     left: 0;
+    z-index: var(--header-z-index);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     max-height: var(--header-height);
-    z-index: var(--header-z-index);
+    background: rgb(0 0 0 / 40%);
+    border: 1px solid rgb(0 0 0 / 15%);
+    box-shadow: 0 4px 4px 0 rgb(0 0 0 / 25%);
+    backdrop-filter: blur(36px);
+    padding-block: var(--small-padding);
 }
 
 .logout-button {
+    color: var(--light-gray);
     cursor: pointer;
     transition: var(--item-transition-all);
-
-    color: var(--light-gray);
 
     &:hover {
         color: var(--background-gray);
@@ -35,10 +37,16 @@
 }
 
 .header-container {
-    width: 100%;
-    max-width: var(--max-content-width);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+    max-width: var(--max-content-width);
     padding-inline: var(--main-content-offset);
+}
+
+.tabs {
+    display: flex;
+    gap: var(--small-padding);
+    align-items: center;
 }

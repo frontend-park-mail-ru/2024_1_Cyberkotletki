@@ -32,7 +32,11 @@ export class Input extends AppComponent<InputProps> {
 
         return (
             <div className={cx('container', containerClassName)}>
-                {!!label && <label className={cx('label')}>{label}</label>}
+                {!!label && (
+                    <label className={cx('label')} htmlFor={props.id}>
+                        {label}
+                    </label>
+                )}
                 <input
                     {...props}
                     className={cx('input', className, {

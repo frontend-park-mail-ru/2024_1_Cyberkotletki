@@ -2,13 +2,18 @@ import { HistoryContext } from '@/Providers/HistoryProvider';
 import type { AppNode } from '@/core/shared/AppNode.types';
 import { AppComponent } from '@/core';
 import type { AppContext } from '@/types/Context.types';
+import type { RoutesValues } from '@/App/App.routes';
 
 export interface LinkProps
-    extends App.DetailedHTMLProps<
-        App.AnchorHTMLAttributes<HTMLAnchorElement>,
-        HTMLAnchorElement
+    extends Omit<
+        App.DetailedHTMLProps<
+            App.AnchorHTMLAttributes<HTMLAnchorElement>,
+            HTMLAnchorElement
+        >,
+        'href'
     > {
     context?: AppContext;
+    href: RoutesValues;
 }
 export interface LinkState {
     handleClick: (e: App.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;

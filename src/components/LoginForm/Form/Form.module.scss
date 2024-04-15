@@ -2,48 +2,20 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
 }
 
 .form {
-    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
     animation: 400ms fade-in ease;
 }
 
 .button {
     margin-block-start: 18px;
-}
-
-.error {
-    color: var(--error-red);
-    width: 100%;
-    text-align: center;
-
-    animation: fade-in-error 300ms ease-in-out;
-}
-
-@keyframes fade-in-error {
-    0% {
-        opacity: 0;
-        height: 18px;
-
-        transform: translateY(-4px);
-    }
-
-    50% {
-        opacity: 0;
-        height: 18px;
-        transform: translateY(-4px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-        height: 18px;
-    }
 }

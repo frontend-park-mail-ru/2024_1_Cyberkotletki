@@ -21,6 +21,7 @@ import { Button } from '@/components/Button';
 import type { AppContext } from '@/types/Context.types';
 import { HistoryContext } from '@/Providers/HistoryProvider';
 import { AuthContext } from '@/Providers/AuthProvider';
+import { ErrorMessage } from '@/components/ErrorMessage';
 
 const cx = concatClasses.bind(styles);
 
@@ -133,7 +134,7 @@ export class FormClass extends AppComponent<FormProps, FormState> {
                 >
                     {isLogin ? 'Войти' : 'Продолжить'}
                 </Button>
-                {!!error && <div className={cx('error')}>{error}</div>}
+                {!!error && <ErrorMessage message={error} />}
             </form>
         );
     }
