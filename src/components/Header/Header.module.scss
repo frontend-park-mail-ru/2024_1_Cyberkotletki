@@ -7,7 +7,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-height: var(--header-height);
+    height: var(--header-height);
     background: transparent;
     padding-block: var(--small-padding);
 
@@ -39,11 +39,18 @@
     }
 }
 
-.avatar {
+.avatar-container {
     display: flex;
+    gap: var(--small-padding);
     align-items: center;
     justify-content: center;
+    height: 100%;
     padding-block: 4px;
+
+    a {
+        height: 100%;
+        aspect-ratio: 1;
+    }
 }
 
 .header-container {
@@ -52,6 +59,7 @@
     justify-content: space-between;
     width: 100%;
     max-width: var(--max-content-width);
+    height: 100%;
     padding-inline: var(--main-content-offset);
 }
 
@@ -59,4 +67,8 @@
     display: flex;
     gap: var(--small-padding);
     align-items: center;
+}
+
+.avatar {
+    --avatar-size: 100% !important;
 }

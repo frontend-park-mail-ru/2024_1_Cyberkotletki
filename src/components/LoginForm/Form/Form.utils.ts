@@ -142,9 +142,10 @@ export function submitForm(this: FormClass, e: App.FormEvent<HTMLFormElement>) {
 
         submitLoginForm(e.currentTarget, isLogin)
             .then(() => {
-                const { history, auth } = context ?? {};
+                const { history, auth, profile } = context ?? {};
 
-                auth?.getIsAuth?.();
+                void auth?.getIsAuth?.();
+                void profile?.getProfile?.();
                 history?.changeRoute(routes.root());
 
                 this.setState((prev) => ({
