@@ -1,5 +1,6 @@
 import styles from './UploadAvatar.module.scss';
 
+import { ProfileContext } from '@/Providers/ProfileProvider';
 import { userService } from '@/api/user/service';
 import { icEditUrl } from '@/assets/icons';
 import { Avatar } from '@/components/Avatar';
@@ -8,11 +9,13 @@ import { ErrorMessage } from '@/components/ErrorMessage';
 import { Spinner } from '@/components/Spinner';
 import { AppComponent } from '@/core';
 import { concatClasses } from '@/utils';
+import type { AppContext } from '@/types/Context.types';
 
 const cx = concatClasses.bind(styles);
 
 export interface AppLoadAvatarProps {
     imageSrc?: string;
+    context?: AppContext;
 }
 
 export interface AppLoadAvatarState {
@@ -23,13 +26,14 @@ export interface AppLoadAvatarState {
     isSuccess?: boolean;
 }
 
-export class UploadAvatar extends AppComponent<
+export class UploadAvatarInner extends AppComponent<
     AppLoadAvatarProps,
     AppLoadAvatarState
 > {
     inputRef: App.RefObject<HTMLInputElement> = { current: null };
 
     handleFileChange = (e: App.ChangeEvent<HTMLInputElement>) => {
+        const { context } = this.props;
         const file = e.target.files?.[(e.target.files.length ?? 1) - 1];
 
         if (file) {
@@ -47,6 +51,7 @@ export class UploadAvatar extends AppComponent<
                         ...prev,
                         isSuccess: true,
                     }));
+                    void context?.profile?.getProfile();
                 })
                 .catch((error) => {
                     if (error instanceof Error) {
@@ -100,3 +105,5 @@ export class UploadAvatar extends AppComponent<
         );
     }
 }
+
+export const UploadAvatar = ProfileContext.Connect(UploadAvatarInner);

@@ -75,7 +75,7 @@ class FilmPageInner extends AppComponent<object, FilmPageState> {
                 <FilmMainContent film={this.state.film} />
                 <section className={cx('reviews-block')}>
                     <h1>Отзывы</h1>
-                    <div>
+                    <div className={cx('reviews-list')}>
                         {this.state.reviews?.length ? (
                             this.state.reviews?.map((review) => (
                                 <ReviewCard review={review} />

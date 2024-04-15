@@ -1,6 +1,7 @@
 import styles from './BaseDataForm.module.scss';
 import { validateBaseForm } from './BaseDataForm.utils';
 
+import { ProfileContext } from '@/Providers/ProfileProvider';
 import { userService } from '@/api/user/service';
 import type { ChangeProfileBody } from '@/api/user/types';
 import { Button } from '@/components/Button';
@@ -11,6 +12,7 @@ import { AuthFormError } from '@/components/LoginForm/Form/Form.constants';
 import { getEmailError } from '@/components/LoginForm/Form/Form.utils';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
+import type { AppContext } from '@/types/Context.types';
 import { concatClasses } from '@/utils';
 
 const cx = concatClasses.bind(styles);
@@ -18,6 +20,7 @@ const cx = concatClasses.bind(styles);
 export interface AppComponentProps {
     emailInitial?: string;
     nameInitial?: string;
+    context?: AppContext;
 }
 
 export interface AppComponentState {
@@ -36,7 +39,7 @@ export const BASE_DATA_FIELDS: Record<
     NAME: 'name',
 } as const;
 
-export class BaseDataForm extends AppComponent<
+export class BaseDataFormInner extends AppComponent<
     AppComponentProps,
     AppComponentState
 > {
@@ -57,6 +60,8 @@ export class BaseDataForm extends AppComponent<
 
         this.setState((prev) => ({ ...prev, isLoading: true }));
 
+        const { context } = this.props;
+
         void userService
             .updateProfile(body)
             .then(() => {
@@ -65,6 +70,7 @@ export class BaseDataForm extends AppComponent<
                     formError: '',
                     isSuccess: true,
                 }));
+                void context?.profile?.getProfile();
             })
             .catch((error) => {
                 if (error instanceof Error) {
@@ -168,3 +174,5 @@ export class BaseDataForm extends AppComponent<
         );
     }
 }
+
+export const BaseDataForm = ProfileContext.Connect(BaseDataFormInner);
