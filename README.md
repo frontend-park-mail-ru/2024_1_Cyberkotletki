@@ -19,4 +19,4 @@ Frontend проекта "Кинопоиск" команды Cyberkotletki.
 
 ## Ссылки
 
-[Деплой](http://85.192.32.157:8000/)
+[Деплой](https://kinoskop.online/)
