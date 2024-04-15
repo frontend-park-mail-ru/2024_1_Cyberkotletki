@@ -4,7 +4,6 @@ import { ReviewFormError } from './ReviewForm.constants';
 
 import { reviewService } from '@/api/review/service';
 import type { Review } from '@/api/review/types';
-import type { ProfileResponse } from '@/api/user/types';
 import { Avatar } from '@/components/Avatar';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
@@ -14,6 +13,8 @@ import { concatClasses, isDefined } from '@/utils';
 import { CheckMark } from '@/components/CheckMark';
 import { ResponseError } from '@/api/appFetch';
 import { ErrorMessage } from '@/components/ErrorMessage';
+import { ProfileContext } from '@/Providers/ProfileProvider';
+import type { AppContext } from '@/types/Context.types';
 
 const cx = concatClasses.bind(styles);
 
@@ -27,8 +28,8 @@ export interface ReviewFormState {
 }
 
 export interface ReviewFormProps {
-    profile?: ProfileResponse;
     contentId?: number;
+    context?: AppContext;
 }
 
 export const REVIEW_FORM_VALUES: Record<
@@ -40,7 +41,10 @@ export const REVIEW_FORM_VALUES: Record<
     TITLE: 'title',
 };
 
-export class ReviewForm extends AppComponent<ReviewFormProps, ReviewFormState> {
+export class ReviewFormClass extends AppComponent<
+    ReviewFormProps,
+    ReviewFormState
+> {
     handleSubmitForm = (e: App.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -119,7 +123,7 @@ export class ReviewForm extends AppComponent<ReviewFormProps, ReviewFormState> {
     };
 
     render() {
-        const { profile } = this.props;
+        const { context } = this.props;
         const {
             textError,
             titleError,
@@ -133,7 +137,7 @@ export class ReviewForm extends AppComponent<ReviewFormProps, ReviewFormState> {
             <form onSubmit={this.handleSubmitForm} className={cx('form')}>
                 <div className={cx('top')}>
                     <Avatar
-                        imageSrc={profile?.avatar}
+                        imageSrc={context?.profile?.profile?.avatar}
                         className={cx('avatar')}
                         width="64px"
                         height="64px"
@@ -178,3 +182,5 @@ export class ReviewForm extends AppComponent<ReviewFormProps, ReviewFormState> {
         );
     }
 }
+
+export const ReviewForm = ProfileContext.Connect(ReviewFormClass);

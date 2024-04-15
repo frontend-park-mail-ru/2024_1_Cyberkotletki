@@ -4,7 +4,7 @@ import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
 
-export interface HistoryContextProps {
+export interface HistoryContextValues {
     changeRoute: (path: string) => void;
 }
 
@@ -69,18 +69,18 @@ export class HistoryProvider extends AppComponent<
         )?.element;
 
         if (element) {
-            this.setState((prev) => ({
-                ...prev,
-                element,
-            }));
+            if (element !== this.state.element) {
+                this.state = { ...this.state, element };
+                this.forceUpdate();
 
-            if (!safeScroll) {
-                setTimeout(() => {
-                    window.scrollTo({
-                        top: 0,
-                        left: 0,
+                if (!safeScroll) {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: 0,
+                            left: 0,
+                        });
                     });
-                });
+                }
             }
 
             return;
@@ -92,30 +92,47 @@ export class HistoryProvider extends AppComponent<
             if (match.match) {
                 window.history.replaceState({ params: match.params }, '', path);
 
-                this.setState((prev) => ({
-                    ...prev,
-                    element: this.state.routesMap.get(key)?.element || <div />,
-                }));
+                const element =
+                    this.state.routesMap.get(key)?.element ||
+                    this.state.routesMap.get(routes.notFound())?.element;
 
-                if (!safeScroll) {
-                    setTimeout(() => {
-                        window.scrollTo({
-                            top: 0,
-                            left: 0,
+                if (element !== this.state.element) {
+                    this.state = {
+                        ...this.state,
+                        element: this.state.routesMap.get(key)?.element || (
+                            <div />
+                        ),
+                    };
+
+                    this.forceUpdate();
+
+                    if (!safeScroll) {
+                        setTimeout(() => {
+                            window.scrollTo({
+                                top: 0,
+                                left: 0,
+                            });
                         });
-                    });
+                    }
                 }
 
                 return;
             }
         }
 
-        this.setState((prev) => ({
-            ...prev,
-            element: this.state.routesMap.get(
-                routes.notFound().replace(EDGE_SLASHES_REGEXP, ''),
-            )?.element ?? <div />,
-        }));
+        const notFound = this.state.routesMap.get(
+            routes.notFound().replace(EDGE_SLASHES_REGEXP, ''),
+        )?.element;
+
+        if (notFound !== this.state.element) {
+            this.state = {
+                ...this.state,
+                element: this.state.routesMap.get(
+                    routes.notFound().replace(EDGE_SLASHES_REGEXP, ''),
+                )?.element ?? <div />,
+            };
+            this.forceUpdate();
+        }
     };
 
     listener = (event: PopStateEvent) => {

@@ -2,8 +2,6 @@ import styles from './ProfileSettingsPage.module.scss';
 import { BaseDataForm } from './BaseDataForm';
 import { PasswordsForm } from './PasswordsForm';
 
-import { userService } from '@/api/user/service';
-import type { ProfileResponse } from '@/api/user/types';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
@@ -14,27 +12,23 @@ import { UploadAvatar } from '@/pages/ProfileSettingsPage/AppLoadAvatar';
 import { HistoryContext } from '@/Providers/HistoryProvider';
 import type { AppContext } from '@/types/Context.types';
 import { routes } from '@/App/App.routes';
+import { ProfileContext } from '@/Providers/ProfileProvider';
+import type { ProfileResponse } from '@/api/user/types';
 
 const cx = concatClasses.bind(styles);
-
-export interface ProfileSettingsPageState {
-    profile?: ProfileResponse;
-}
 
 export interface ProfileSettingsPageProps {
     context?: AppContext;
 }
 
-class ProfileSettingsPageClass extends AppComponent<
+export interface ProfileSettingsPageState {
+    profile?: ProfileResponse;
+}
+
+class ProfileSettingsPageInnerClass extends AppComponent<
     ProfileSettingsPageProps,
     ProfileSettingsPageState
 > {
-    componentDidMount() {
-        void userService.getProfile().then((profile) => {
-            this.setState((prev) => ({ ...prev, profile }));
-        });
-    }
-
     handleLogoutAllClick = () => {
         const { history } = this.props.context ?? {};
 
@@ -47,50 +41,67 @@ class ProfileSettingsPageClass extends AppComponent<
         );
     };
 
+    componentDidMount(): void {
+        const { profile } = this.props.context ?? {};
+
+        if (!profile?.profile) {
+            void profile?.getProfile().then((profile) => {
+                this.setState((prev) => ({ ...prev, profile }));
+            });
+        }
+    }
+
     render(): AppNode {
-        const { profile } = this.state;
+        const { context } = this.props;
+
+        const { profile: stateProfile } = this.state;
+
+        const profile = context?.profile?.profile || stateProfile;
 
         return (
-            <LayoutWithHeader>
-                <div className={cx('content')}>
-                    <UploadAvatar imageSrc={profile?.avatar} />
+            <div className={cx('content')}>
+                <UploadAvatar imageSrc={profile?.avatar} />
+                <section className={cx('section')}>
+                    <h1 className={cx('title')} style="text-align:center">
+                        Редактирование профиля
+                    </h1>
                     <section className={cx('section')}>
-                        <h1 className={cx('title')} style="text-align:center">
-                            Редактирование профиля
-                        </h1>
-                        <section className={cx('section')}>
-                            <h1 className={cx('title')}>Общие данные</h1>
-                            <BaseDataForm
-                                nameInitial={profile?.name}
-                                emailInitial={profile?.email}
-                            />
-                        </section>
-                        <section className={cx('section')}>
-                            <h1 className={cx('title')}>Обновление пароля</h1>
-                            <PasswordsForm />
-                        </section>
-                        <section className={cx('section', 'logout')}>
-                            <h1 className={cx('title')}>
-                                Выход со всех устройств
-                            </h1>
-                            <p>
-                                Вы выйдите из аккаунта со всех устройств,
-                                включая это
-                            </p>
-                            <Button
-                                outlined
-                                onClick={this.handleLogoutAllClick}
-                            >
-                                Выйти со всех устройств
-                            </Button>
-                        </section>
+                        <h1 className={cx('title')}>Общие данные</h1>
+                        <BaseDataForm
+                            nameInitial={profile?.name}
+                            emailInitial={profile?.email}
+                        />
                     </section>
-                </div>
-            </LayoutWithHeader>
+                    <section className={cx('section')}>
+                        <h1 className={cx('title')}>Обновление пароля</h1>
+                        <PasswordsForm />
+                    </section>
+                    <section className={cx('section', 'logout')}>
+                        <h1 className={cx('title')}>Выход со всех устройств</h1>
+                        <p>
+                            Вы выйдите из аккаунта со всех устройств, включая
+                            это
+                        </p>
+                        <Button outlined onClick={this.handleLogoutAllClick}>
+                            Выйти со всех устройств
+                        </Button>
+                    </section>
+                </section>
+            </div>
         );
     }
 }
 
-export const ProfileSettingsPage = HistoryContext.Connect(
-    ProfileSettingsPageClass,
+export const ProfileSettingsInnerPage = ProfileContext.Connect(
+    HistoryContext.Connect(ProfileSettingsPageInnerClass),
 );
+
+export class ProfileSettingsPage extends AppComponent {
+    render() {
+        return (
+            <LayoutWithHeader>
+                <ProfileSettingsInnerPage />
+            </LayoutWithHeader>
+        );
+    }
+}

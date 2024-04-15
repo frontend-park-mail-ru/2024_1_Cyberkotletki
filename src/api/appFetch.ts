@@ -214,5 +214,7 @@ const createInstance = (baseURL: string) => {
     };
 };
 
-const appFetch = createInstance(`${Config.BACKEND_URL}/api`);
+const appFetch = createInstance(
+    `${Config.BACKEND_URL}${Config.BACKEND_URL_API_PREFiX}`,
+);
 export { appFetch };

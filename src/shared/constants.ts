@@ -20,9 +20,11 @@ export const LocalStorageKey = {
 } as const;
 
 class ConfigClass {
-    BACKEND_URL = `http://${process.env.BACKEND_HOST ?? 'localhost'}:${process.env.BACKEND_PORT || 3000}`;
+    BACKEND_URL = process.env.BACKEND_URL ?? '';
 
     BACKEND_STATIC_URL = `${this.BACKEND_URL}/static`;
+
+    BACKEND_URL_API_PREFiX = process.env.BACKEND_URL_API_PREFiX ?? '';
 }
 
 export const Config = new ConfigClass();

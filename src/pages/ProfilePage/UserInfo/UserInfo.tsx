@@ -1,10 +1,12 @@
 import styles from './UserInfo.module.scss';
 
 import { routes } from '@/App/App.routes';
+import { ProfileContext } from '@/Providers/ProfileProvider';
 import type { ProfileResponse } from '@/api/user/types';
 import { Avatar } from '@/components/Avatar';
 import { Button } from '@/components/Button';
 import { AppComponent } from '@/core';
+import type { AppContext } from '@/types/Context.types';
 import { concatClasses, isDefined } from '@/utils';
 
 const cx = concatClasses.bind(styles);
@@ -17,12 +19,29 @@ export interface UserInfoProps
         >,
         'ref' | 'children'
     > {
+    context?: AppContext;
+}
+
+export interface UserInfoState {
     profile?: ProfileResponse;
 }
 
-export class UserInfo extends AppComponent<UserInfoProps> {
+export class UserInfoClass extends AppComponent<UserInfoProps, UserInfoState> {
+    componentDidMount(): void {
+        const { profile } = this.props.context ?? {};
+
+        if (!profile?.profile) {
+            void profile?.getProfile().then((profile) => {
+                this.setState((prev) => ({ ...prev, profile }));
+            });
+        }
+    }
+
     render() {
-        const { profile, className, ...props } = this.props;
+        const { className, context, ...props } = this.props;
+        const { profile: stateProfile } = this.state;
+
+        const profile = context?.profile?.profile || stateProfile;
 
         return (
             <div className={cx('container', className)} {...props}>
@@ -44,3 +63,5 @@ export class UserInfo extends AppComponent<UserInfoProps> {
         );
     }
 }
+
+export const UserInfo = ProfileContext.Connect(UserInfoClass);

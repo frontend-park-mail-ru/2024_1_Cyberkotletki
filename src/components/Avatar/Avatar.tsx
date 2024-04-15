@@ -18,7 +18,7 @@ export interface AvatarPropsProps extends LazyImgProps {
 export class Avatar extends AppComponent<AvatarPropsProps> {
     render(): AppNode {
         const {
-            prefix = Config.BACKEND_STATIC_URL,
+            prefix = `${Config.BACKEND_STATIC_URL}/`,
             imageSrc,
             className,
             ...props
@@ -30,7 +30,7 @@ export class Avatar extends AppComponent<AvatarPropsProps> {
                 height="144px"
                 {...props}
                 className={cx('avatar', className)}
-                src={imageSrc ? `${prefix}/${imageSrc}` : icUserCircleUrl}
+                src={imageSrc ? `${prefix}${imageSrc}` : icUserCircleUrl}
                 alt="user avatar"
             />
         );

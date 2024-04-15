@@ -72,4 +72,6 @@ export interface AppComponentType<
      * Возвращает JSX
      */
     render(): AppNode;
+
+    forceUpdate(): void;
 }

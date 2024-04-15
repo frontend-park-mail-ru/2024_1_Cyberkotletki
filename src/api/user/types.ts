@@ -3,10 +3,10 @@ export interface UserMeResponse {
 }
 
 export interface ProfileResponse {
-    avatar: string;
-    email: string;
-    name: string;
-    rating: number;
+    avatar?: string;
+    email?: string;
+    name?: string;
+    rating?: number;
 }
 
 export type ChangeProfileBody = Pick<ProfileResponse, 'email' | 'name'>;

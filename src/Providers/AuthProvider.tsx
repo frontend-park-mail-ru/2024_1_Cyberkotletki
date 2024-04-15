@@ -3,58 +3,46 @@ import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
 
-export interface AuthContextProps {
-    isLoggedIn?: JSX.Children;
-    getIsAuth?: () => void;
+export interface AuthContextValues {
+    isLoggedIn: JSX.Children;
+    getIsAuth: () => Promise<boolean>;
 }
 
-export const AuthContext = new Context<AppContext>({
-    auth: { isLoggedIn: false, getIsAuth: () => null },
-});
+export const AuthContext = new Context<AppContext>({});
 
 export interface AuthProviderProps {
     children?: JSX.Element;
 }
 
-export class AuthProvider extends AppComponent<
+export class StoreProvider extends AppComponent<
     AuthProviderProps,
-    AuthContextProps
+    AuthContextValues
 > {
-    componentWillMount() {
-        this.state.isLoggedIn = false;
-
-        this.state.getIsAuth = () => {
+    state: AuthContextValues = {
+        isLoggedIn: false,
+        getIsAuth: () =>
             authService
                 .isAuth()
                 .then(() => {
-                    this.setState((prev) => ({
-                        ...prev,
-                        isLoggedIn: true,
-                    }));
+                    this.setState((prev) => ({ ...prev, isLoggedIn: true }));
+
+                    return true;
                 })
                 .catch(() => {
                     this.setState((prev) => ({
                         ...prev,
                         isLoggedIn: false,
                     }));
-                });
-        };
 
-        this.state.getIsAuth();
-    }
+                    return false;
+                }),
+    };
 
     render() {
         const { children } = this.props;
 
         return (
-            <AuthContext.Provider
-                value={{
-                    auth: {
-                        getIsAuth: this.state.getIsAuth,
-                        isLoggedIn: this.state.isLoggedIn,
-                    },
-                }}
-            >
+            <AuthContext.Provider value={{ auth: this.state }}>
                 {children}
             </AuthContext.Provider>
         );
