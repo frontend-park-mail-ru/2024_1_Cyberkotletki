@@ -20,31 +20,26 @@ export interface LinkProps
     context?: AppContext;
     href: RoutesValues;
 }
-export interface LinkState {
-    handleClick: (e: App.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
-}
 
-class LinkClass extends AppComponent<LinkProps, LinkState> {
-    componentWillMount() {
-        const { context, href } = this.props;
+class LinkClass extends AppComponent<LinkProps> {
+    render(): AppNode {
+        const { context, className, href, ...props } = this.props;
 
-        this.state.handleClick = (e) => {
+        const handleClick = (
+            e: App.MouseEvent<HTMLAnchorElement, MouseEvent>,
+        ) => {
             e.preventDefault();
 
             context?.history?.changeRoute(href ?? '');
 
             return false;
         };
-    }
-
-    render(): AppNode {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { context, className, ...props } = this.props;
 
         return (
             <a
                 className={cx('link', className)}
-                onClick={this.state.handleClick}
+                onClick={handleClick}
+                href={href}
                 {...props}
             />
         );
