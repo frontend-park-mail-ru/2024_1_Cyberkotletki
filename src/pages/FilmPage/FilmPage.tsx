@@ -1,7 +1,6 @@
 import { FilmMainContent } from './FilmMainContent';
 import styles from './FilmPage.module.scss';
 
-import { ResponseError } from '@/api/appFetch';
 import { contentService } from '@/api/content/service';
 import type { Film } from '@/api/content/types';
 import { AppComponent } from '@/core';
@@ -40,13 +39,11 @@ class FilmPageInner extends AppComponent<object, FilmPageState> {
                 .then((film) => {
                     this.setState((prev) => ({ ...prev, film }));
                 })
-                .catch((error) => {
-                    if (error instanceof ResponseError) {
-                        this.setState((prev) => ({
-                            ...prev,
-                            isNotFound: true,
-                        }));
-                    }
+                .catch(() => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        isNotFound: true,
+                    }));
                 })
                 .finally(() => {
                     this.setState((prev) => ({ ...prev, isLoading: false }));
@@ -62,13 +59,17 @@ class FilmPageInner extends AppComponent<object, FilmPageState> {
     render(): AppNode {
         const { params } = window.history.state as { params?: Params };
 
-        const { isLoading, film } = this.state;
+        const { isLoading, film, isNotFound } = this.state;
 
-        if ((!film || params?.uid !== `${film?.id ?? 0}`) && !isLoading) {
+        if (
+            (!film || params?.uid !== `${film?.id ?? 0}`) &&
+            !isLoading &&
+            !isNotFound
+        ) {
             this.getFilmById(Number(params?.uid));
         }
 
-        return this.state.isNotFound ? (
+        return isNotFound ? (
             <NotFound description="Фильм не найден" />
         ) : (
             <div>

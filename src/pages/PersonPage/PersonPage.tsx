@@ -2,7 +2,6 @@ import type { Film, PersonActor } from '@/api/content/types.ts';
 import { AppComponent } from '@/core';
 import { isDefined } from '@/utils';
 import { contentService } from '@/api/content/service.ts';
-import { ResponseError } from '@/api/appFetch.ts';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { NotFound } from '@/components/NotFound';
 import { PersonMainContent } from '@/pages/PersonPage/PersonMainContent';
@@ -45,13 +44,11 @@ class PersonPageInner extends AppComponent<object, PersonPageState> {
 
                     this.setState((prev) => ({ ...prev, roles: films }));
                 })
-                .catch((error) => {
-                    if (error instanceof ResponseError) {
-                        this.setState((prev) => ({
-                            ...prev,
-                            isNotFound: true,
-                        }));
-                    }
+                .catch(() => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        isNotFound: true,
+                    }));
                 })
                 .finally(() => {
                     this.setState((prev) => ({ ...prev, isLoading: false }));
@@ -71,13 +68,17 @@ class PersonPageInner extends AppComponent<object, PersonPageState> {
             (window.history.state as {
                 params?: { uid?: string };
             }) ?? {};
-        const { isLoading, person } = this.state;
+        const { isLoading, person, isNotFound } = this.state;
 
-        if ((!person || params?.uid !== `${person?.id ?? 0}`) && !isLoading) {
+        if (
+            (!person || params?.uid !== `${person?.id ?? 0}`) &&
+            !isLoading &&
+            !isNotFound
+        ) {
             this.getPersonById();
         }
 
-        return this.state.isNotFound ? (
+        return isNotFound ? (
             <NotFound description="Персона не найдена" />
         ) : (
             <PersonMainContent
