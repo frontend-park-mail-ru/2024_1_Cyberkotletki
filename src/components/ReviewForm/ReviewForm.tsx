@@ -55,11 +55,6 @@ export class ReviewFormClass extends AppComponent<
 
         const { isValid, ...validation } = validateReviewForm(body);
 
-        /*if (!isValid) {
-            this.setState((prev) => ({ ...prev, ...validation }));
-
-            return false;
-        }*/
         if (!isValid) {
             const stringValidation = {
                 ratingError: validation.ratingError?.reasonType,

@@ -13,11 +13,8 @@ export const validateReviewForm = ({ rating, text, title }: Review) => {
         ? ''
         : ReviewFormError.RATING_EMPTY_VALUE;
 
-    // const textError = text.trim() ? '' : ReviewFormError.EMPTY_VALUE;
     const textError = getReviewFormTitleError(text);
 
-
-    //const titleError = title.trim() ? '' : ReviewFormError.EMPTY_VALUE;
     const titleError = getReviewFormTextError(title);
 
     if (ratingError || textError || titleError) {
