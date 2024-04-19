@@ -41,13 +41,19 @@ class ProfileSettingsPageInnerClass extends AppComponent<
         );
     };
 
+    loadProfile = () => {
+        const { profile } = this.props.context ?? {};
+
+        void profile?.getProfile().then((profile) => {
+            this.setState((prev) => ({ ...prev, profile }));
+        });
+    };
+
     componentDidMount(): void {
         const { profile } = this.props.context ?? {};
 
         if (!profile?.profile) {
-            void profile?.getProfile().then((profile) => {
-                this.setState((prev) => ({ ...prev, profile }));
-            });
+            this.loadProfile();
         }
     }
 
@@ -70,6 +76,7 @@ class ProfileSettingsPageInnerClass extends AppComponent<
                         <BaseDataForm
                             nameInitial={profile?.name}
                             emailInitial={profile?.email}
+                            onSubmit={this.loadProfile}
                         />
                     </section>
                     <section className={cx('section')}>
@@ -78,11 +85,12 @@ class ProfileSettingsPageInnerClass extends AppComponent<
                     </section>
                     <section className={cx('section', 'logout')}>
                         <h1 className={cx('title')}>Выход со всех устройств</h1>
-                        <p>
-                            Вы выйдите из аккаунта со всех устройств, включая
-                            это
-                        </p>
-                        <Button outlined onClick={this.handleLogoutAllClick}>
+                        <p>Вы выйдите из аккаунта со всех устройств</p>
+                        <Button
+                            outlined
+                            onClick={this.handleLogoutAllClick}
+                            styleType="secondary"
+                        >
                             Выйти со всех устройств
                         </Button>
                     </section>

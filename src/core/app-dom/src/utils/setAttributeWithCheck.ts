@@ -19,9 +19,5 @@ export const setAttributeWithCheck = (
         } else {
             node?.removeAttribute(key);
         }
-    } else {
-        throw new TypeError(
-            `Тип "${typeof value}" невозможно назначить в качестве атрибута "${keyProp}"`,
-        );
     }
 };

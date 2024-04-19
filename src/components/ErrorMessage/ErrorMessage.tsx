@@ -24,7 +24,7 @@ export class ErrorMessage extends AppComponent<ErrorMessageProps> {
 
         return (
             <div className={cx('error', className, { hint })} {...props}>
-                {message}
+                <span className={cx('message')}>{message}</span>
             </div>
         );
     }

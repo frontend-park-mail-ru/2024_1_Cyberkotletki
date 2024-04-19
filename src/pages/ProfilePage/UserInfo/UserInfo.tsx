@@ -54,7 +54,11 @@ export class UserInfoClass extends AppComponent<UserInfoProps, UserInfoState> {
                         {isDefined(profile?.rating) && (
                             <span>{`Рейтинг: ${profile?.rating}`}</span>
                         )}
-                        <Button outlined href={routes.profileSettings()}>
+                        <Button
+                            outlined
+                            href={routes.profileSettings()}
+                            styleType="secondary"
+                        >
                             Настройки профиля
                         </Button>
                     </div>

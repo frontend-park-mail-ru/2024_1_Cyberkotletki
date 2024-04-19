@@ -61,7 +61,9 @@ export class Input extends AppComponent<InputProps> {
                             'with-error': hasError,
                             textarea: true,
                         })}
-                    />
+                    >
+                        {this.props.value}
+                    </textarea>
                 ) : (
                     <input
                         {...this.props}

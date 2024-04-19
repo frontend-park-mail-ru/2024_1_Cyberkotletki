@@ -9,10 +9,10 @@ import { HistoryContext } from '@/Providers/HistoryProvider';
 import { routes } from '@/App/App.routes';
 import { authService } from '@/api/auth/service';
 import { Link } from '@/components/Link';
-import { AuthContext } from '@/Providers/AuthProvider';
 import { ProfileContext } from '@/Providers/ProfileProvider';
 import { Avatar } from '@/components/Avatar';
 import type { ProfileResponse } from '@/api/user/types';
+import { LocalStorageKey } from '@/shared/constants';
 
 const cx = concatClasses.bind(styles);
 
@@ -22,15 +22,19 @@ export interface HeaderProps
         'ref' | 'children'
     > {
     context?: AppContext;
-    isLoggedIn?: boolean;
 }
 
 export interface HeaderState {
-    isLoggedIn?: boolean;
     profile?: ProfileResponse;
 }
 
 class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
+    state: HeaderState = {
+        profile: JSON.parse(
+            localStorage.getItem(LocalStorageKey.USER_DATA) ?? 'null',
+        ) as ProfileResponse,
+    };
+
     handleLoginClick = () => {
         const { context } = this.props;
 
@@ -50,26 +54,18 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
     componentDidMount(): void {
         const { context } = this.props;
 
-        if (!context?.profile?.profile) {
+        if (!context?.profile?.profile || !this.state.profile) {
             void context?.profile?.getProfile().then((profile) => {
                 this.setState((prev) => ({ ...prev, profile }));
-            });
-        }
-
-        if (!context?.auth?.isLoggedIn) {
-            void context?.auth?.getIsAuth().then((isLoggedIn) => {
-                this.setState((prev) => ({ ...prev, isLoggedIn }));
             });
         }
     }
 
     render() {
         const { className, context, ...props } = this.props;
-        const { profile: stateProfile, isLoggedIn: stateIsLoggedIn } =
-            this.state;
+        const { profile: stateProfile } = this.state;
 
         const profile = context?.profile?.profile || stateProfile;
-        const isLoggedIn = context?.auth?.isLoggedIn || stateIsLoggedIn;
 
         return (
             <header className={cx('header', className)} {...props}>
@@ -81,7 +77,7 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                             <Link href={tab.route}>{tab.title}</Link>
                         ))}
                     </div> */}
-                    {isLoggedIn ? (
+                    {profile ? (
                         <div className={cx('avatar-container')}>
                             <div
                                 className={cx('logout-button')}
@@ -98,7 +94,11 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                             </Link>
                         </div>
                     ) : (
-                        <Button outlined onClick={this.handleLoginClick}>
+                        <Button
+                            outlined
+                            onClick={this.handleLoginClick}
+                            styleType="secondary"
+                        >
                             Войти
                         </Button>
                     )}
@@ -109,5 +109,5 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
 }
 
 export const Header = ProfileContext.Connect(
-    AuthContext.Connect(HistoryContext.Connect(HeaderClass)),
+    HistoryContext.Connect(HeaderClass),
 );

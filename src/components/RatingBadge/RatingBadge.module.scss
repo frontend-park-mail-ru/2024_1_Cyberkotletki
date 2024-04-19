@@ -27,8 +27,6 @@
         aspect-ratio: 1;
     }
 
-    --rating-bg-color: transparent;
-
     &::after {
         position: absolute;
         top: 0;
@@ -36,20 +34,10 @@
         z-index: -1;
         width: 100%;
         height: 100%;
-        background-color: var(--rating-bg-color);
+        background-color: var(--rating-badge-color);
         border-radius: 4px;
         content: '';
     }
 
-    &.bad {
-        --rating-bg-color: var(--error-red);
-    }
-
-    &.medium {
-        --rating-bg-color: var(--yellow);
-    }
-
-    &.good {
-        --rating-bg-color: var(--success);
-    }
+    @include rating-badge-color;
 }

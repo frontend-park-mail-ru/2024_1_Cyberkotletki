@@ -5,12 +5,14 @@ import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
 
 export interface HistoryContextValues {
-    changeRoute: (path: string) => void;
+    changeRoute: (
+        path: string,
+        safeScroll?: boolean,
+        replace?: boolean,
+    ) => void;
 }
 
-export const HistoryContext = new Context<AppContext>({
-    history: { changeRoute: () => null },
-});
+export const HistoryContext = new Context<AppContext>({});
 
 export interface HistoryRoute {
     path: RoutesValues;
@@ -51,7 +53,11 @@ export class HistoryProvider extends AppComponent<
         window.addEventListener('popstate', this.listener);
     }
 
-    handleChangeRoute = (path: string, safeScroll?: boolean) => {
+    handleChangeRoute = (
+        path: string,
+        safeScroll?: boolean,
+        replace?: boolean,
+    ) => {
         const { pathname } = window.location;
 
         const pathnameWithoutEdgeSlashes = pathname.replace(
@@ -61,7 +67,11 @@ export class HistoryProvider extends AppComponent<
         const pathWithoutEdgeSlashes = path.replace(EDGE_SLASHES_REGEXP, '');
 
         if (pathnameWithoutEdgeSlashes !== pathWithoutEdgeSlashes) {
-            window.history.pushState(null, '', path);
+            if (replace) {
+                window.history.replaceState(null, '', path);
+            } else {
+                window.history.pushState(null, '', path);
+            }
         }
 
         const element = this.state.routesMap.get(

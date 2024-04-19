@@ -32,16 +32,17 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                 {...props}
                 className={cx('card', { small: size === 'small' }, className)}
             >
-                <Link href={routes.film(`${film?.id ?? 0}`)}>
-                    <div className={cx('poster')}>
-                        <RatingBadge rating={film?.rating} />
-                        <LazyImg
-                            src={getStaticUrl(film?.posterURL)}
-                            alt="Постер"
-                            width="136px"
-                            height="200px"
-                        />
-                    </div>
+                <Link
+                    href={routes.film(`${film?.id ?? 0}`)}
+                    className={cx('poster')}
+                >
+                    <RatingBadge rating={film?.rating} />
+                    <LazyImg
+                        src={getStaticUrl(film?.posterURL)}
+                        alt="Постер"
+                        width="136px"
+                        height="200px"
+                    />
                 </Link>
                 <div className={cx('card-info', { small: size === 'small' })}>
                     <Link href={routes.film(`${film?.id ?? 0}`)}>

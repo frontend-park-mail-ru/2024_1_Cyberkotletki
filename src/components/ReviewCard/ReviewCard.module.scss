@@ -49,22 +49,22 @@
     width: fit-content;
     color: var(--white);
     font-weight: 800;
-    background-color: var(--badge-background-color);
+    background-color: var(--rating-badge-color);
     border-radius: 4px;
     padding-inline: var(--small-padding);
     padding-block: 4px;
 
-    --badge-background-color: transparent;
+    @include rating-badge-color;
+}
 
-    &.bad {
-        --badge-background-color: var(--error-red);
-    }
+.action-buttons {
+    display: flex;
+    margin-inline-start: auto;
+    gap: var(--main-content-gap);
+}
 
-    &.medium {
-        --badge-background-color: var(--yellow);
-    }
+.text-td {
+    @include cut-for-n-rows(8);
 
-    &.good {
-        --badge-background-color: var(--success);
-    }
+    padding-bottom: 0 !important;
 }

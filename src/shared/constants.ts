@@ -15,9 +15,9 @@ export const Credentials = {
     SAME_ORIGIN: 'same-origin',
 } as const;
 
-export const LocalStorageKey = {
-    IS_LOGGED_IN: 'isLoggedIn',
-} as const;
+export enum LocalStorageKey {
+    USER_DATA = 'USER_DATA',
+}
 
 class ConfigClass {
     BACKEND_URL = process.env.BACKEND_URL ?? '';
@@ -37,6 +37,8 @@ export enum ResponseStatus {
     NOT_FOUND = '404',
     CONFLICT = '409',
     INTERNAL_SERVER_ERROR = '500',
+    SERVICE_UNAVAILABLE = '503',
+    GATEWAY_TIMEOUT = '504',
 }
 
 export interface HeaderPage {

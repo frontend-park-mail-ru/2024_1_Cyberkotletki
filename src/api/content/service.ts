@@ -46,7 +46,7 @@ class ContentService {
      */
     async getAllFilms() {
         return Promise.all(
-            Array.from({ length: 30 }).map((_, id) =>
+            Array.from({ length: 40 }).map((_, id) =>
                 appFetch.get<Film | undefined>(contentRoutes.content(id + 1)),
             ),
         );

@@ -83,3 +83,19 @@
     -webkit-line-clamp: $n;
     -webkit-box-orient: vertical;
 }
+
+@mixin rating-badge-color {
+    --rating-badge-color: transparent;
+
+    &.bad {
+        --rating-badge-color: var(--error-red);
+    }
+
+    &.medium {
+        --rating-badge-color: var(--yellow);
+    }
+
+    &.good {
+        --rating-badge-color: var(--success);
+    }
+}

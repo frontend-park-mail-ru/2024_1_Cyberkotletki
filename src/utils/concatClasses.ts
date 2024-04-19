@@ -18,7 +18,11 @@ export function concatClasses(
             if (typeof value === 'object') {
                 Object.entries(value).forEach(([key, value]) => {
                     if (value) {
-                        array.push(this[key] ?? key);
+                        if (typeof value === 'string') {
+                            array.push(this[value] ?? value);
+                        } else {
+                            array.push(this[key] ?? key);
+                        }
                     }
                 });
             }

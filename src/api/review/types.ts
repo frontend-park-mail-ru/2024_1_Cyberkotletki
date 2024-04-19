@@ -1,8 +1,12 @@
-export interface Review {
+export interface CreateReviewBody {
     contentID: number;
     rating: number;
     text: string;
     title: string;
+}
+
+export interface UpdateReviewBody extends Omit<CreateReviewBody, 'contentID'> {
+    reviewID: number;
 }
 
 export interface ReviewDetails {

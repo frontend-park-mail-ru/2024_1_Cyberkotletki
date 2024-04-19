@@ -33,7 +33,10 @@
 
     /* Header */
     --header-height: 80px;
+
+    /* z-indexes */
     --header-z-index: 100;
+    --modal-z-index: 1000;
 
     /* Transitions */
     --item-transition-all: all 200ms ease-in-out;

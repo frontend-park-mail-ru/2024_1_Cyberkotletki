@@ -6,6 +6,7 @@ import { LazyImg } from '@/components/LazyImg';
 import { Rating } from '@/components/Rating';
 import { AppComponent } from '@/core';
 import { InfoTable } from '@/pages/FilmPage/FilmMainContent/InfoTable/InfoTable';
+import { REVIEW_FORM_ID } from '@/pages/FilmPage/FilmPage';
 import { concatClasses, getStaticUrl } from '@/utils';
 
 const cx = concatClasses.bind(styles);
@@ -24,7 +25,7 @@ export class FilmMainContent extends AppComponent<FilmMainContentProps> {
                     className={cx('film-poster')}
                     src={getStaticUrl(film?.posterURL)}
                     width="232px"
-                    height="330px"
+                    height="347px"
                 />
                 <div className={cx('section')}>
                     <div className={cx('top-info')}>
@@ -37,8 +38,10 @@ export class FilmMainContent extends AppComponent<FilmMainContentProps> {
                                 rating={film?.rating}
                                 imdbRating={film?.imdbRating}
                             />
-                            <a href="#write-review">
-                                <Button outlined>Оценить</Button>
+                            <a href={`#${REVIEW_FORM_ID}`}>
+                                <Button outlined styleType="secondary">
+                                    Оценить
+                                </Button>
                             </a>
                         </section>
                     </div>

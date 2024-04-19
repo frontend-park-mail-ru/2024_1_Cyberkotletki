@@ -115,7 +115,10 @@ class AuthService {
      * @returns {Promise<boolean>} true - пользователь авторизован, false - нет
      */
     async isAuth(): Promise<boolean> {
-        return appFetch.get(authRoutes.isAuth());
+        return appFetch
+            .get(authRoutes.isAuth())
+            .then(() => true)
+            .catch(() => false);
     }
 }
 
