@@ -15,6 +15,7 @@ import { ResponseError } from '@/api/appFetch';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { ProfileContext } from '@/Providers/ProfileProvider';
 import type { AppContext } from '@/types/Context.types';
+import {validateReviewText, validateReviewTitle} from "@/validators/validators";
 
 const cx = concatClasses.bind(styles);
 
@@ -54,8 +55,18 @@ export class ReviewFormClass extends AppComponent<
 
         const { isValid, ...validation } = validateReviewForm(body);
 
-        if (!isValid) {
+        /*if (!isValid) {
             this.setState((prev) => ({ ...prev, ...validation }));
+
+            return false;
+        }*/
+        if (!isValid) {
+            const stringValidation = {
+                ratingError: validation.ratingError?.reasonType,
+                textError: validation.textError?.reasonType,
+                titleError: validation.titleError?.reasonType,
+            };
+            this.setState((prev) => ({ ...prev, ...stringValidation }));
 
             return false;
         }
@@ -87,29 +98,33 @@ export class ReviewFormClass extends AppComponent<
     };
 
     handleInputTitle = (e: App.FormEvent<HTMLInputElement>) => {
-        if (this.state.titleError && e.currentTarget.value.trim()) {
-            this.setState((prev) => ({ ...prev, titleError: '' }));
-        }
+        const title = e.currentTarget.value;
+        const titleValidation = validateReviewTitle(title);
+        const titleError = titleValidation.isValid ? '' : ReviewFormError[titleValidation.reasonType];
+
+        this.setState((prev) => ({ ...prev, titleError }));
     };
 
     handleChangeTitle = (e: App.ChangeEvent<HTMLInputElement>) => {
-        const titleError = e.currentTarget.value.trim()
-            ? ''
-            : ReviewFormError.EMPTY_VALUE;
+        const title = e.currentTarget.value;
+        const titleValidation = validateReviewTitle(title);
+        const titleError = titleValidation.isValid ? '' : ReviewFormError[titleValidation.reasonType];
 
         this.setState((prev) => ({ ...prev, titleError }));
     };
 
     handleInputText = (e: App.FormEvent<HTMLTextAreaElement>) => {
-        if (this.state.textError && e.currentTarget.value.trim()) {
-            this.setState((prev) => ({ ...prev, textError: '' }));
-        }
+        const text = e.currentTarget.value;
+        const textValidation = validateReviewText(text);
+        const textError = textValidation.isValid ? '' : ReviewFormError[textValidation.reasonType];
+
+        this.setState((prev) => ({ ...prev, textError }));
     };
 
     handleChangeText = (e: App.ChangeEvent<HTMLTextAreaElement>) => {
-        const textError = e.currentTarget.value.trim()
-            ? ''
-            : ReviewFormError.EMPTY_VALUE;
+        const text = e.currentTarget.value;
+        const textValidation = validateReviewText(text);
+        const textError = textValidation.isValid ? '' : ReviewFormError[textValidation.reasonType];
 
         this.setState((prev) => ({ ...prev, textError }));
     };
