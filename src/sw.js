@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_NAME = 'SW_CACHE_V1';
+const CACHE_NAME = 'SW_CACHE_V2';
 
 const CACHE_PATHS = ['/', '/main.css', '/main.js'];
 
