@@ -1,9 +1,5 @@
 const MIN_PASSWORD_LENGTH = 8 as const;
 const MAX_PASSWORD_LENGTH = 32 as const;
-const MAX_REVIEW_TEXT_LENGTH = 10000;
-const MAX_REVIEW_TITLE_LENGTH = 50;
-const MIN_REVIEW_TEXT_LENGTH = 1;
-const MIN_REVIEW_TITLE_LENGTH = 1;
 
 // регулярное выражение для проверки формата электронной почты:
 // строки, которые начинаются с одного или более символов, за
@@ -29,7 +25,6 @@ export const ReviewErrorReasonType = {
     REVIEW_TITLE_SHORT: 'REVIEW_TITLE_SHORT',
     REVIEW_TITLE_LONG: 'REVIEW_TITLE_LONG',
 };
-
 
 /**
  * Валидация почты
@@ -106,57 +101,4 @@ export function validatePassword(password: string) {
  */
 export function validatePasswordMatch(password1?: string, password2?: string) {
     return password1 === password2;
-}
-
-/**
- * Валидация текста отзыва
- * @param reviewText
- * @returns {{
- * isValid: boolean,
- * reasonType: 'REVIEW_TEXT_SHORT' | 'REVIEW_TEXT_LONG'
- * }} return
- */
-export function validateReviewText(reviewText: string ) {
-    if (reviewText.length < MIN_REVIEW_TEXT_LENGTH) {
-        return {
-            isValid: false,
-            reasonType: ReviewErrorReasonType.REVIEW_TEXT_SHORT,
-        };
-    }
-
-    if (reviewText.length > MAX_REVIEW_TEXT_LENGTH) {
-        return {
-            isValid: false,
-            reasonType: ReviewErrorReasonType.REVIEW_TEXT_LONG,
-        };
-    }
-
-    return { isValid: true };
-}
-
-/**
- * Валидация заголовка отзыва
- * @param reviewTitle
- * @returns {{
- * isValid: boolean,
- * reasonType: 'REVIEW_TITLE_SHORT'
- * |'REVIEW_TITLE_LONG'
- * }} return
- */
-export function validateReviewTitle(reviewTitle: string) {
-    if (reviewTitle.length < MIN_REVIEW_TITLE_LENGTH) {
-        return {
-            isValid: false,
-            reasonType: ReviewErrorReasonType.REVIEW_TITLE_SHORT,
-        };
-    }
-
-    if (reviewTitle.length > MAX_REVIEW_TITLE_LENGTH) {
-        return {
-            isValid: false,
-            reasonType: ReviewErrorReasonType.REVIEW_TITLE_LONG,
-        };
-    }
-
-    return { isValid: true };
 }

@@ -1,5 +1,9 @@
 import styles from './ReviewForm.module.scss';
-import { validateReviewForm } from './ReviewForm.utils';
+import {
+    getReviewFormTextError,
+    getReviewFormTitleError,
+    validateReviewForm,
+} from './ReviewForm.utils';
 import { ReviewFormError } from './ReviewForm.constants';
 
 import { ReviewError, reviewService } from '@/api/review/service';
@@ -13,12 +17,6 @@ import { concatClasses, isDefined } from '@/utils';
 import { CheckMark } from '@/components/CheckMark';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import type { ProfileResponse } from '@/api/user/types';
-import { ProfileContext } from '@/Providers/ProfileProvider';
-import type { AppContext } from '@/types/Context.types';
-import {
-    validateReviewText,
-    validateReviewTitle,
-} from '@/validators/validators';
 
 const cx = concatClasses.bind(styles);
 
@@ -60,12 +58,7 @@ export class ReviewForm extends AppComponent<ReviewFormProps, ReviewFormState> {
         const { isValid, ...validation } = validateReviewForm(body, this.props);
 
         if (!isValid) {
-            const stringValidation = {
-                ratingError: validation.ratingError?.reasonType,
-                textError: validation.textError?.reasonType,
-                titleError: validation.titleError?.reasonType,
-            };
-            this.setState((prev) => ({ ...prev, ...stringValidation }));
+            this.setState((prev) => ({ ...prev, ...validation }));
 
             return false;
         }
@@ -126,10 +119,7 @@ export class ReviewForm extends AppComponent<ReviewFormProps, ReviewFormState> {
 
     handleInputTitle = (e: App.FormEvent<HTMLInputElement>) => {
         const title = e.currentTarget.value;
-        const titleValidation = validateReviewTitle(title);
-        const titleError = titleValidation.isValid
-            ? ''
-            : ReviewFormError[titleValidation.reasonType];
+        const titleError = getReviewFormTitleError(title);
 
         this.setState((prev) => ({ ...prev, titleError }));
 
@@ -140,30 +130,21 @@ export class ReviewForm extends AppComponent<ReviewFormProps, ReviewFormState> {
 
     handleChangeTitle = (e: App.ChangeEvent<HTMLInputElement>) => {
         const title = e.currentTarget.value;
-        const titleValidation = validateReviewTitle(title);
-        const titleError = titleValidation.isValid
-            ? ''
-            : ReviewFormError[titleValidation.reasonType];
+        const titleError = getReviewFormTitleError(title);
 
         this.setState((prev) => ({ ...prev, titleError }));
     };
 
     handleInputText = (e: App.FormEvent<HTMLTextAreaElement>) => {
         const text = e.currentTarget.value;
-        const textValidation = validateReviewText(text);
-        const textError = textValidation.isValid
-            ? ''
-            : ReviewFormError[textValidation.reasonType];
+        const textError = getReviewFormTextError(text);
 
         this.setState((prev) => ({ ...prev, textError }));
     };
 
     handleChangeText = (e: App.ChangeEvent<HTMLTextAreaElement>) => {
         const text = e.currentTarget.value;
-        const textValidation = validateReviewText(text);
-        const textError = textValidation.isValid
-            ? ''
-            : ReviewFormError[textValidation.reasonType];
+        const textError = getReviewFormTextError(text);
 
         this.setState((prev) => ({ ...prev, textError }));
 

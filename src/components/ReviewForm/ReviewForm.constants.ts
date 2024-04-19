@@ -1,5 +1,3 @@
-import { ReviewErrorReasonType } from '@/validators/validators';
-
 export enum ReviewFormFields {
     RATING = 'rating',
     TITLE = 'title',

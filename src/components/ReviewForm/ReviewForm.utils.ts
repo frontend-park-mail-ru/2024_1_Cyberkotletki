@@ -2,10 +2,51 @@ import { ReviewFormError } from './ReviewForm.constants';
 
 import type { CreateReviewBody } from '@/api/review/types';
 import { isDefined } from '@/utils';
-import {
-    validateReviewText,
-    validateReviewTitle,
-} from '@/validators/validators';
+
+const MAX_REVIEW_TEXT_LENGTH = 10000 as const;
+const MAX_REVIEW_TITLE_LENGTH = 50 as const;
+const MIN_REVIEW_TEXT_LENGTH = 1 as const;
+const MIN_REVIEW_TITLE_LENGTH = 1 as const;
+
+/**
+ * Валидация заголовка отзыва
+ * @param title заголовок отзыва
+ * @returns Текст ошибки
+ */
+export const getReviewFormTitleError = (title?: string) => {
+    const trimTitle = title?.trim();
+
+    switch (true) {
+        case !trimTitle:
+            return ReviewFormError.EMPTY_VALUE;
+        case (trimTitle?.length ?? 0) < MIN_REVIEW_TITLE_LENGTH:
+            return ReviewFormError.REVIEW_TITLE_SHORT;
+        case (trimTitle?.length ?? 0) > MAX_REVIEW_TITLE_LENGTH:
+            return ReviewFormError.REVIEW_TITLE_LONG;
+        default:
+            return '';
+    }
+};
+
+/**
+ * Валидация текста отзыва
+ * @param text текст отзыва
+ * @returns Текст ошибки
+ */
+export const getReviewFormTextError = (text?: string) => {
+    const trimText = text?.trim();
+
+    switch (true) {
+        case !trimText:
+            return ReviewFormError.EMPTY_VALUE;
+        case (trimText?.length ?? 0) < MIN_REVIEW_TEXT_LENGTH:
+            return ReviewFormError.REVIEW_TEXT_SHORT;
+        case (trimText?.length ?? 0) > MAX_REVIEW_TEXT_LENGTH:
+            return ReviewFormError.REVIEW_TEXT_LONG;
+        default:
+            return '';
+    }
+};
 
 export const validateReviewForm = (
     { rating, text, title }: CreateReviewBody,
@@ -19,9 +60,9 @@ export const validateReviewForm = (
         ? ''
         : ReviewFormError.RATING_EMPTY_VALUE;
 
-    const textError = getReviewFormTitleError(text);
+    const titleError = getReviewFormTitleError(title);
 
-    const titleError = getReviewFormTextError(title);
+    const textError = getReviewFormTextError(text);
 
     if (ratingError || textError || titleError) {
         return { isValid: false, ratingError, textError, titleError } as const;
@@ -36,32 +77,4 @@ export const validateReviewForm = (
     }
 
     return { isValid: true } as const;
-};
-
-export const getReviewFormTitleError = (title?: string) => {
-    if (!title) {
-        return ReviewFormError.EMPTY_VALUE;
-    }
-
-    const titleValidation = validateReviewTitle(title);
-
-    if (!titleValidation.isValid) {
-        return ReviewFormError[titleValidation.reasonType];
-    }
-
-    return '';
-};
-
-export const getReviewFormTextError = (text?: string) => {
-    if (!text) {
-        return ReviewFormError.EMPTY_VALUE;
-    }
-
-    const textValidation = validateReviewText(text);
-
-    if (!textValidation.isValid) {
-        return ReviewFormError[textValidation.reasonType];
-    }
-
-    return '';
 };
