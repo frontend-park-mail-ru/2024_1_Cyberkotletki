@@ -98,6 +98,7 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                             outlined
                             onClick={this.handleLoginClick}
                             styleType="secondary"
+                            style="width: fit-content;"
                         >
                             Войти
                         </Button>
