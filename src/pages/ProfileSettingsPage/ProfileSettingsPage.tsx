@@ -108,7 +108,7 @@ export class ProfileSettingsPage extends AppComponent {
     render() {
         return (
             <LayoutWithHeader>
-                <ProfileSettingsInnerPage />
+                <ProfileSettingsInnerPage key="profile-settings-page" />
             </LayoutWithHeader>
         );
     }

@@ -67,4 +67,28 @@
     @include cut-for-n-rows(8);
 
     padding-bottom: 0 !important;
+
+    &.small {
+        @include cut-for-n-rows(5);
+    }
+}
+
+.likes-container {
+    display: flex;
+    gap: var(--main-text-gap);
+    align-items: center;
+}
+
+.dislike-button {
+    margin-inline-start: var(--main-padding);
+
+    img {
+        transform: rotate(180deg);
+    }
+}
+
+.rating-cell {
+    display: flex;
+    gap: var(--main-text-gap);
+    align-items: center;
 }

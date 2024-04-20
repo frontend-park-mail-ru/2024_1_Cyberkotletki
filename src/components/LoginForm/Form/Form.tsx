@@ -131,6 +131,7 @@ export class FormClass extends AppComponent<FormProps, FormState> {
                 <Button
                     className={cx('button')}
                     isLoading={isLoading}
+                    disabled={!!error}
                     type="submit"
                 >
                     {isLogin ? 'Войти' : 'Продолжить'}

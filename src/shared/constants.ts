@@ -22,7 +22,12 @@ export enum LocalStorageKey {
 class ConfigClass {
     BACKEND_URL = process.env.BACKEND_URL ?? '';
 
-    BACKEND_STATIC_URL = `${this.BACKEND_URL}/static`;
+    CDN_BACKEND_URL = process.env.CDN_BACKEND_URL ?? '';
+
+    BACKEND_STATIC_URL =
+        process.env.NODE_ENV === 'production'
+            ? `${this.CDN_BACKEND_URL}/static`
+            : `${this.BACKEND_URL}/static`;
 
     BACKEND_URL_API_PREFiX = process.env.BACKEND_URL_API_PREFiX ?? '';
 }

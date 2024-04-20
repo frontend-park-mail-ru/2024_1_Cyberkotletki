@@ -14,7 +14,7 @@ export interface ReviewDetails {
     authorID: number;
     authorName: string;
     contentID: number;
-    contentName: DataTransfer;
+    contentName: string;
     /** `2022-01-02T15:04:05Z` */
     createdAt: string;
     dislikes: number;

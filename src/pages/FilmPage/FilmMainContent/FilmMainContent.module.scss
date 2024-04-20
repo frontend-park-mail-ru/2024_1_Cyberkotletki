@@ -2,12 +2,20 @@
     display: flex;
     margin-block-start: 88px;
     gap: var(--main-padding-2);
+
+    @include mobile {
+        flex-direction: column;
+    }
 }
 
 .film-poster {
     min-width: 232px;
     max-width: 232px;
     aspect-ratio: 0.667;
+
+    @include mobile {
+        margin-inline: auto;
+    }
 }
 
 .section {
@@ -15,9 +23,28 @@
     flex-direction: column;
 }
 
+.rating-section {
+    display: flex;
+    gap: var(--large-padding);
+    align-items: flex-end;
+    height: fit-content;
+
+    @include mobile {
+        order: 0 !important;
+    }
+}
+
 .top-info {
     display: flex;
     gap: var(--main-padding-2);
+
+    @include mobile {
+        flex-direction: column;
+    }
+
+    > section {
+        order: 1;
+    }
 }
 
 .description-section {
@@ -30,11 +57,4 @@
 
 .title {
     @include text-header-2;
-}
-
-.rating-section {
-    display: flex;
-    gap: var(--large-padding);
-    align-items: flex-end;
-    height: fit-content;
 }

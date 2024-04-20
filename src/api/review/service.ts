@@ -107,6 +107,17 @@ class ReviewService {
     async deleteReview(id: number) {
         return appFetch.delete(reviewRoutes.review(id));
     }
+
+    /**
+     * Получить последние отзывы пользователя
+     * @param {number} id id профиля
+     * @returns unknown
+     */
+    async getMyRecentReviews(id: number) {
+        return appFetch.get<{ reviews?: ReviewDetails[] } | undefined>(
+            reviewRoutes.userReviewRecent(id),
+        );
+    }
 }
 
 export const reviewService = new ReviewService();

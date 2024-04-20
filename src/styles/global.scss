@@ -1,7 +1,7 @@
 /* stylelint-disable selector-max-id */
 :root {
     color: #efefef;
-    font-size: 14px;
+    font-size: var(--font-size);
     font-family: var(--font-family);
     font-variation-settings: normal;
     text-size-adjust: 100%;
@@ -11,6 +11,7 @@
     color-scheme: dark;
 
     /* Font */
+    --font-size: 14px;
     --font-family: 'Wix Madefor Display', arial, helvetica, sans-serif;
 
     /* Variables  */
@@ -64,11 +65,24 @@
             rgb(38 32 57 / 100%) 0%,
             rgb(15 17 21 / 100%) 100%
         );
+
+    @include tablet {
+        --font-size: 13px;
+    }
+
+    @include mobile {
+        --font-size: 12px;
+
+        /* Header */
+        --header-height: 64px;
+    }
 }
 
 html {
+    width: 100vw;
     height: 100%;
     overflow: hidden auto;
+    overflow-x: hidden;
     scroll-behavior: smooth;
 
     * {

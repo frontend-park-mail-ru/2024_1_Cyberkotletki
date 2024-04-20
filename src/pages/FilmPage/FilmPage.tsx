@@ -93,8 +93,6 @@ class FilmPageInnerClass extends AppComponent<
     };
 
     handleFormSubmit = () => {
-        // this.setState((prev) => ({ ...prev, reviewForEdit: undefined }));
-
         const { params } = window.history.state as { params?: Params };
 
         this.getFilmById(Number(params?.uid));

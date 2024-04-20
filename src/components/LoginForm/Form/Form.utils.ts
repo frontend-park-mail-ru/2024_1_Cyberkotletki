@@ -208,10 +208,16 @@ export function inputEmailInput(
         } else if (error !== this.state.emailError) {
             this.setState((prev) => ({
                 ...prev,
+                error: '',
                 emailError: error,
             }));
         }
     }
+
+    this.setState((prev) => ({
+        ...prev,
+        error: '',
+    }));
 }
 
 /**
@@ -254,6 +260,11 @@ export function inputPasswordInput(
             }));
         }
     }
+
+    this.setState((prev) => ({
+        ...prev,
+        error: '',
+    }));
 }
 
 /**
@@ -302,4 +313,9 @@ export function inputRepeatPasswordInput(
             }));
         }
     }
+
+    this.setState((prev) => ({
+        ...prev,
+        error: '',
+    }));
 }

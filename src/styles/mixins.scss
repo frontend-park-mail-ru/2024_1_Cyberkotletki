@@ -1,20 +1,69 @@
+/* Screen */
+$screen-mobile-max: 768px;
+$screen-tablet-max: 992px;
+$screen-notebook-max: 1200px;
+$screen-large-monitor-min: calc($screen-notebook-max + 1px);
+
+@mixin mobile {
+    @media screen and (max-width: #{$screen-mobile-max}) {
+        @content;
+    }
+}
+
+@mixin not-mobile {
+    @media screen and (min-width: #{calc($screen-mobile-max + 1px)}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media screen and (max-width: #{$screen-tablet-max}) {
+        @content;
+    }
+}
+
+/* desktop === not-tablet */
+@mixin desktop {
+    @media screen and (min-width: #{calc($screen-tablet-max + 1px)}) {
+        @content;
+    }
+}
+
+@mixin notebook {
+    @media screen and (max-width: #{$screen-notebook-max}) {
+        @content;
+    }
+}
+
+@mixin not-notebook {
+    @media screen and (min-width: #{calc($screen-notebook-max + 1px)}) {
+        @content;
+    }
+}
+
+@mixin large-monitor {
+    @media screen and (min-width: #{$screen-large-monitor-min}) {
+        @content;
+    }
+}
+
 @mixin text-button {
     font-weight: 700;
-    font-size: 16px;
+    font-size: 1.125rem;
     font-family: var(--font-family);
 }
 
 @mixin text-secondary-small {
     color: var(--secondary-gray);
     font-weight: 400;
-    font-size: 10px;
+    font-size: 0.725rem;
     font-family: var(--font-family);
 }
 
 @mixin text-secondary {
     color: var(--secondary-gray);
     font-weight: 400;
-    font-size: 12px;
+    font-size: 0.85rem;
     font-family: var(--font-family);
 }
 
@@ -27,13 +76,13 @@
 
 @mixin text-primary {
     font-weight: 500;
-    font-size: 14px;
+    font-size: 1rem;
     font-family: var(--font-family);
 }
 
 @mixin text-primary-light {
     font-weight: 400;
-    font-size: 14px;
+    font-size: 1rem;
     font-family: var(--font-family);
 }
 
@@ -46,31 +95,31 @@
 
 @mixin text-header-5 {
     font-weight: 400;
-    font-size: 20px;
+    font-size: 1.5rem;
     font-family: var(--font-family);
 }
 
 @mixin text-header-4 {
     font-weight: 500;
-    font-size: 24px;
+    font-size: 1.725rem;
     font-family: var(--font-family);
 }
 
 @mixin text-header-3 {
     font-weight: 700;
-    font-size: 28px;
+    font-size: 2rem;
     font-family: var(--font-family);
 }
 
 @mixin text-header-2 {
     font-weight: 500;
-    font-size: 32px;
+    font-size: 2.25rem;
     font-family: var(--font-family);
 }
 
 @mixin text-header-1 {
     font-weight: 500;
-    font-size: 36px;
+    font-size: 2.5rem;
     font-family: var(--font-family);
 }
 

@@ -64,7 +64,10 @@ export class HistoryProvider extends AppComponent<
             EDGE_SLASHES_REGEXP,
             '',
         );
-        const pathWithoutEdgeSlashes = path.replace(EDGE_SLASHES_REGEXP, '');
+        const pathWithoutEdgeSlashes = path
+            .replace(EDGE_SLASHES_REGEXP, '')
+            .split(`?`)[0]
+            .split(`#`)[0];
 
         if (pathnameWithoutEdgeSlashes !== pathWithoutEdgeSlashes) {
             if (replace) {

@@ -5,6 +5,10 @@
 .reviews-block {
     margin-block-start: calc(var(--large-padding) * 10);
 
+    @include mobile {
+        margin-block-start: calc(var(--large-padding) * 5);
+    }
+
     h1 {
         @include text-header-4;
     }

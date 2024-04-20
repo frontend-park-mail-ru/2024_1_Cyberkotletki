@@ -1,10 +1,12 @@
 import styles from './ReviewCard.module.scss';
 
+import { routes } from '@/App/App.routes';
 import type { ReviewDetails } from '@/api/review/types';
 import type { ProfileResponse } from '@/api/user/types';
 import { icEditUrl, icTrashUrl } from '@/assets/icons';
 import { Avatar } from '@/components/Avatar';
 import { Button } from '@/components/Button';
+import { Link } from '@/components/Link';
 import { RemoveReviewModal } from '@/components/RemoveReviewModal';
 import { AppComponent } from '@/core';
 import { REVIEW_FORM_ID } from '@/pages/FilmPage/FilmPage';
@@ -24,6 +26,9 @@ export interface ReviewCardProps
     onEditClick?: (review?: ReviewDetails) => void;
     profile?: ProfileResponse;
     onReviewRemove?: (review?: ReviewDetails) => void;
+    onLikeClick?: (review?: ReviewDetails) => void;
+    onDislikeClick?: (review?: ReviewDetails) => void;
+    isSmall?: boolean;
 }
 
 export interface ReviewCardState {
@@ -32,6 +37,14 @@ export interface ReviewCardState {
 export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
     handleEditClick = () => {
         this.props.onEditClick?.(this.props.review);
+    };
+
+    handleLikeClick = () => {
+        this.props.onLikeClick?.(this.props.review);
+    };
+
+    handleDislikeClick = () => {
+        this.props.onDislikeClick?.(this.props.review);
     };
 
     handleOpenModal = () => {
@@ -49,9 +62,21 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
     };
 
     render() {
-        const { review, ...props } = this.props;
+        const { review, isSmall, ...props } = this.props;
 
         const { profile } = this.props;
+
+        const isOwnReview = profile?.id === review?.authorID;
+
+        const reviewBadge = (
+            <div
+                className={cx('rating-badge', {
+                    bad: true,
+                    medium: (review?.rating ?? 0) >= 4,
+                    good: (review?.rating ?? 0) >= 7,
+                })}
+            >{`${review?.rating ?? 0}/10`}</div>
+        );
 
         return (
             <div {...props}>
@@ -64,11 +89,18 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                     />
                     <div className={cx('username')}>
                         <div>{review?.authorName}</div>
+                        {isSmall && (
+                            <Link href={routes.film(review?.contentID ?? 0)}>
+                                <u>
+                                    <b>{review?.contentName}</b>
+                                </u>
+                            </Link>
+                        )}
                         <div>
                             {getDateString(review?.createdAt.slice(0, 16))}
                         </div>
                     </div>
-                    {profile?.id === review?.authorID && (
+                    {isOwnReview && (
                         <div className={cx('action-buttons')}>
                             <a href={`#${REVIEW_FORM_ID}`}>
                                 <Button
@@ -96,29 +128,61 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                 <table className={cx('table')}>
                     <tbody>
                         <tr>
-                            <td>Оценка:</td>
                             <td>
-                                <div
-                                    className={cx('rating-badge', {
-                                        bad: true,
-                                        medium: (review?.rating ?? 0) >= 4,
-                                        good: (review?.rating ?? 0) >= 7,
-                                    })}
-                                >{`${review?.rating ?? 0}/10`}</div>
+                                <div className={cx('rating-cell')}>
+                                    Оценка: {isSmall && reviewBadge}
+                                </div>
                             </td>
+                            {!isSmall && <td>{reviewBadge}</td>}
                         </tr>
                         <tr>
-                            <td>Заголовок:</td>
+                            {!isSmall && <td>Заголовок:</td>}
                             <td className={cx('title-cell')}>
-                                {review?.title ?? ''}
+                                <b>{review?.title ?? ''}</b>
                             </td>
                         </tr>
                         <tr>
-                            <td>Текст:</td>
-                            <td className={cx('text-td')} title={review?.text}>
+                            {!isSmall && <td>Текст:</td>}
+                            <td
+                                className={cx('text-td', { small: isSmall })}
+                                title={review?.text}
+                            >
                                 {review?.text ?? ''}
                             </td>
                         </tr>
+                        {/** // Кнопки лайков */}
+                        {/** // ? Soon... */}
+                        {/* <tr>
+                            <td></td>
+                            <td>
+                                <div className={cx('likes-container')}>
+                                    <Button
+                                        isIconOnly
+                                        outlined
+                                        styleType="secondary"
+                                        disabled={isOwnReview}
+                                        title="Нравится"
+                                        onClick={this.handleLikeClick}
+                                    >
+                                        <img src={icLikeUrl} />
+                                    </Button>
+                                    {review?.likes}
+
+                                    <Button
+                                        isIconOnly
+                                        outlined
+                                        styleType="secondary"
+                                        disabled={isOwnReview}
+                                        title="Не нравится"
+                                        className={cx('dislike-button')}
+                                        onClick={this.handleDislikeClick}
+                                    >
+                                        <img src={icLikeUrl} />
+                                    </Button>
+                                    {review?.dislikes}
+                                </div>
+                            </td>
+                        </tr> */}
                     </tbody>
                 </table>
                 <RemoveReviewModal
