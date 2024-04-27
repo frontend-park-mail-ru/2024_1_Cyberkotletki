@@ -16,6 +16,10 @@ class Routes {
     notFound = () => `/not-found` as const;
 
     person = (id: string) => `/person/${id}` as const;
+
+    questionnaire = () => `/questionnaire` as const;
+
+    questionnaireCreate = () => `/questionnaire/create` as const;
 }
 
 export const routes = new Routes();

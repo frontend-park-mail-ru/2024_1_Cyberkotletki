@@ -11,6 +11,9 @@ import { ProfilePage } from '@/pages/ProfilePage';
 import { ProfileSettingsPage } from '@/pages/ProfileSettingsPage';
 import { ProfileProvider } from '@/Providers/ProfileProvider';
 import { ContentProvider } from '@/Providers/ContentProvider';
+import { QuestionnairePage } from '@/pages/QuestionnairePage';
+import { LayoutQuestionnaire } from '@/layouts/LayoutQuestionnaire';
+import { QuestionnaireCreatePage } from '@/pages/QuestionnaireCreatePage';
 
 import '@/styles/global.scss';
 
@@ -23,7 +26,11 @@ export class App extends AppComponent<object> {
                         router={[
                             {
                                 path: routes.root(),
-                                element: <IndexPage />,
+                                element: (
+                                    <LayoutQuestionnaire>
+                                        <IndexPage />
+                                    </LayoutQuestionnaire>
+                                ),
                             },
                             {
                                 path: routes.login(),
@@ -35,27 +42,55 @@ export class App extends AppComponent<object> {
                             },
                             {
                                 path: routes.collections(),
-                                element: <CollectionsPage />,
+                                element: (
+                                    <LayoutQuestionnaire>
+                                        <CollectionsPage />
+                                    </LayoutQuestionnaire>
+                                ),
                             },
                             {
                                 path: routes.profile(),
-                                element: <ProfilePage />,
+                                element: (
+                                    <LayoutQuestionnaire>
+                                        <ProfilePage />
+                                    </LayoutQuestionnaire>
+                                ),
                             },
                             {
                                 path: routes.profileSettings(),
-                                element: <ProfileSettingsPage />,
+                                element: (
+                                    <LayoutQuestionnaire>
+                                        <ProfileSettingsPage />
+                                    </LayoutQuestionnaire>
+                                ),
                             },
                             {
                                 path: routes.film(':uid'),
-                                element: <FilmPage />,
+                                element: (
+                                    <LayoutQuestionnaire>
+                                        <FilmPage />
+                                    </LayoutQuestionnaire>
+                                ),
                             },
                             {
                                 path: routes.person(':uid'),
-                                element: <PersonPage />,
+                                element: (
+                                    <LayoutQuestionnaire>
+                                        <PersonPage />
+                                    </LayoutQuestionnaire>
+                                ),
                             },
                             {
                                 path: routes.notFound(),
                                 element: <NotFound withButton />,
+                            },
+                            {
+                                path: routes.questionnaire(),
+                                element: <QuestionnairePage />,
+                            },
+                            {
+                                path: routes.questionnaireCreate(),
+                                element: <QuestionnaireCreatePage />,
                             },
                         ]}
                     />

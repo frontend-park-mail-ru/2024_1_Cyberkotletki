@@ -1,0 +1,19 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--main-text-gap);
+    justify-content: center;
+    height: 100%;
+    padding: var(--main-padding);
+    background: rgb(0 0 0 / 30%);
+    backdrop-filter: blur(24px);
+}
+
+.question {
+    font-size: 14px;
+    padding-inline-end: var(--main-padding-2);
+}
+
+.button {
+    width: fit-content;
+}

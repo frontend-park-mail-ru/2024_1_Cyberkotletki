@@ -1,0 +1,32 @@
+.aside {
+    position: fixed;
+    right: var(--main-padding);
+    bottom: var(--main-padding);
+    z-index: 1;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 2%);
+    border-radius: var(--card-border-radius);
+    transform: translateY(16px);
+    visibility: hidden;
+    filter: opacity(0);
+    backdrop-filter: blur(24px);
+    transition: var(--item-transition-all);
+
+    &.opened {
+        transform: translateY(0);
+        visibility: visible;
+        filter: opacity(1);
+    }
+}
+
+.iframe {
+    border: 0 none;
+    outline: 0;
+}
+
+.close-button {
+    position: absolute;
+    top: var(--small-padding);
+    right: var(--small-padding);
+}
