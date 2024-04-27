@@ -1,3 +1,7 @@
-.content {
-    margin: 0;
+.form {
+    margin-block-start: var(--main-padding-2);
+    display: flex;
+    flex: content;
+    flex-direction: column;
+    gap: var(--main-content-gap);
 }

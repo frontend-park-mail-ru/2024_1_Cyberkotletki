@@ -17,6 +17,7 @@ export const Credentials = {
 
 export enum LocalStorageKey {
     USER_DATA = 'USER_DATA',
+    LAST_ANSWERED_QUESTION = 'LAST_ANSWERED_QUESTION',
 }
 
 class ConfigClass {
@@ -53,6 +54,7 @@ export interface HeaderPage {
 }
 
 export const HEADER_TABS: HeaderPage[] = [
-    { route: routes.root(), title: 'Главная' },
-    { route: routes.collections(), title: 'Подборки' },
+    // { route: routes.root(), title: 'Главная' },
+    // { route: routes.collections(), title: 'Подборки' },
+    { route: routes.questionnaireCreate(), title: 'Создать опрос' },
 ] as const;

@@ -1,5 +1,5 @@
-import type { CreateReviewBody } from './types';
 import { questionRoutes } from './routes';
+import type { PollQuestion, PollQuestionBody } from './types';
 
 import { ResponseError, appFetch } from '@/api/appFetch.ts';
 import { ResponseStatus } from '@/shared/constants';
@@ -32,19 +32,39 @@ const throwReviewError = (error: unknown) => {
 };
 
 class QuestionService {
-    /**
-     * Создание отзыва
-     * @param {CreateReviewBody} Тело отзыва
-     * @returns {Promise<unknown>} unknown
-     */
-    async createReview({ pollName }: { pollName: string }) {
+    async createPoll({ pollName }: { pollName: string }) {
         try {
-            await appFetch.post<CreateReviewBody, unknown>(
+            await appFetch.post<unknown, unknown>(
                 questionRoutes.pollName(pollName),
             );
         } catch (error) {
             throwReviewError(error);
         }
+    }
+
+    getLatestPoll() {
+        return appFetch.get<{ questions: PollQuestion[] }>(
+            questionRoutes.pollQuestions(1),
+        );
+    }
+
+    async createQuestion(body: PollQuestionBody) {
+        const createdQuestion = await appFetch.post<void, PollQuestion>(
+            questionRoutes.polls(1),
+        );
+
+        const question = await appFetch.put<PollQuestionBody, PollQuestionBody>(
+            questionRoutes.pollQuestion(),
+            { ...body, text: body.text?.trim(), id: createdQuestion.id },
+        );
+
+        return question;
+    }
+
+    answerQuestion({ id, answer }: { id: number; answer: number }) {
+        return appFetch.post<unknown, unknown>(
+            questionRoutes.pollAnswer({ id, answer }),
+        );
     }
 }
 

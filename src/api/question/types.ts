@@ -1,26 +1,20 @@
-export interface CreateReviewBody {
-    contentID: number;
-    rating: number;
-    text: string;
-    title: string;
+export interface PollQuestion {
+    depends_min?: number;
+    depends_on_id?: number;
+    id?: number;
+    number?: number;
+    pollId?: number;
+    text?: string;
 }
 
-export interface UpdateReviewBody extends Omit<CreateReviewBody, 'contentID'> {
-    reviewID: number;
-}
+export type PollQuestionBody = Pick<
+    PollQuestion,
+    'depends_min' | 'depends_on_id' | 'id' | 'text'
+>;
 
-export interface ReviewDetails {
-    authorAvatar: string;
-    authorID: number;
-    authorName: string;
-    contentID: number;
-    contentName: string;
-    /** `2022-01-02T15:04:05Z` */
+export interface Poll {
     createdAt: string;
-    dislikes: number;
     id: number;
-    likes: number;
-    rating: number;
-    text: string;
-    title: string;
+    name: string;
+    questions?: PollQuestion;
 }

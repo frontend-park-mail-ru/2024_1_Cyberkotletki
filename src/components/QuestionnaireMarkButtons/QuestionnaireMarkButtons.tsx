@@ -9,6 +9,7 @@ const cx = concatClasses.bind(styles);
 
 export interface QuestionnaireMarkButtonsProps {
     maxMark?: number;
+    onMarkChange?: (mark: number) => void;
 }
 
 export interface QuestionnaireMarkButtonsState {
@@ -20,8 +21,8 @@ export class QuestionnaireMarkButtons extends AppComponent<
     QuestionnaireMarkButtonsState
 > {
     render(): AppNode {
-        const { selectedMark = 1 } = this.state;
-        const { maxMark = 10 } = this.props;
+        const { selectedMark } = this.state;
+        const { maxMark = 10, onMarkChange } = this.props;
 
         return (
             <div className={cx('container')}>
@@ -36,6 +37,8 @@ export class QuestionnaireMarkButtons extends AppComponent<
                                 ...prev,
                                 selectedMark: index + 1,
                             }));
+
+                            onMarkChange?.(index + 1);
                         }}
                         isIconOnly
                     >

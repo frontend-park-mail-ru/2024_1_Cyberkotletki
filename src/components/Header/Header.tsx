@@ -12,7 +12,7 @@ import { Link } from '@/components/Link';
 import { ProfileContext } from '@/Providers/ProfileProvider';
 import { Avatar } from '@/components/Avatar';
 import type { ProfileResponse } from '@/api/user/types';
-import { LocalStorageKey } from '@/shared/constants';
+import { HEADER_TABS, LocalStorageKey } from '@/shared/constants';
 
 const cx = concatClasses.bind(styles);
 
@@ -72,11 +72,11 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                 <div className={cx('header-container')}>
                     <LogoButton className={cx('header-logo')} />
                     {/** //? Soon... */}
-                    {/* <div className={cx('tabs')}>
+                    <div className={cx('tabs')}>
                         {HEADER_TABS.map((tab) => (
                             <Link href={tab.route}>{tab.title}</Link>
                         ))}
-                    </div> */}
+                    </div>
                     {profile ? (
                         <div className={cx('avatar-container')}>
                             <div
