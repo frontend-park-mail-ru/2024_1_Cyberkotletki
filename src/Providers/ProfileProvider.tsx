@@ -4,7 +4,7 @@ import type { ProfileResponse } from '@/api/user/types';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import { LocalStorageKey } from '@/shared/constants';
-import type { AppContext } from '@/types/Context.types';
+import type { AppContext, ContextProps } from '@/types/Context.types';
 
 export interface ProfileContextValues {
     profile?: ProfileResponse;
@@ -14,7 +14,7 @@ export interface ProfileContextValues {
 
 export const ProfileContext = new Context<AppContext>({});
 
-export interface ProfileProviderProps {
+export interface ProfileProviderProps extends ContextProps {
     children?: JSX.Element;
 }
 
@@ -68,11 +68,18 @@ export class ProfileProvider extends AppComponent<
         },
     };
 
+    componentDidMount(): void {
+        void this.state.getProfile();
+    }
+
     render() {
         const { children } = this.props;
 
         return (
-            <ProfileContext.Provider value={{ profile: this.state }}>
+            <ProfileContext.Provider
+                value={{ profile: this.state }}
+                context={this.props.context}
+            >
                 {children}
             </ProfileContext.Provider>
         );

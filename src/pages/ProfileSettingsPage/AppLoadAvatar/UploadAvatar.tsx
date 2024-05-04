@@ -1,6 +1,5 @@
 import styles from './UploadAvatar.module.scss';
 
-import { ProfileContext } from '@/Providers/ProfileProvider';
 import { userService } from '@/api/user/service';
 import { icEditUrl } from '@/assets/icons';
 import { Avatar } from '@/components/Avatar';
@@ -118,4 +117,4 @@ export class UploadAvatarInner extends AppComponent<
     }
 }
 
-export const UploadAvatar = ProfileContext.Connect(UploadAvatarInner);
+export const UploadAvatar = UploadAvatarInner;

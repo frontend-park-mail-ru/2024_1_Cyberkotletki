@@ -1,9 +1,7 @@
 import { LoginLayout } from '@/layouts/LoginLayout';
 import { LoginForm } from '@/components/LoginForm/LoginForm';
 import { AppComponent } from '@/core';
-import { ProfileContext } from '@/Providers/ProfileProvider';
 import type { AppContext } from '@/types/Context.types';
-import { HistoryContext } from '@/Providers/HistoryProvider';
 import { routes } from '@/App/App.routes';
 import { isDefined } from '@/utils';
 
@@ -46,6 +44,4 @@ class LoginPageClass extends AppComponent<LoginPageProps> {
     }
 }
 
-export const LoginPage = HistoryContext.Connect(
-    ProfileContext.Connect(LoginPageClass),
-);
+export const LoginPage = LoginPageClass;

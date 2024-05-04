@@ -7,7 +7,7 @@ import {
     isTextNode,
 } from './utils';
 
-import { isFunction } from '@/utils';
+import { isFunction, isPrimitive } from '@/utils';
 import type { AppNode } from '@/core/shared/AppNode.types';
 
 /**
@@ -28,7 +28,7 @@ export const createElement = (
         return null;
     }
 
-    element.owner = owner;
+    element.owner = { ...owner } as JSX.Element;
 
     if (isDOMElement(element)) {
         const $element = document.createElement(element.type);
@@ -45,6 +45,13 @@ export const createElement = (
         }
 
         element.props?.children?.forEach((child) => {
+            if (!isPrimitive(child)) {
+                child.props.context = {
+                    ...element.props.context,
+                    ...child.props.context,
+                };
+            }
+
             const node = createElement(child, element);
 
             appendChildWithCheck($element, node);
@@ -62,11 +69,18 @@ export const createElement = (
         instance.componentWillMount();
 
         const instanceRender = instance.render();
+
+        if (!isPrimitive(instanceRender)) {
+            instanceRender.props.context = {
+                ...element.props.context,
+                ...instanceRender.props.context,
+            };
+        }
         const $element = createElement(instanceRender, element);
 
         element.ref = $element;
         instance.ref = $element;
-        instance.owner = owner;
+        instance.owner = { ...owner } as JSX.Element;
         instance.instance = instanceRender;
         instance.componentDidMount();
 

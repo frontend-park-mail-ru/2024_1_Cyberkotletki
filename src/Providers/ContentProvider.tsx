@@ -2,7 +2,7 @@ import { contentService } from '@/api/content/service';
 import type { Film } from '@/api/content/types';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
-import type { AppContext } from '@/types/Context.types';
+import type { AppContext, ContextProps } from '@/types/Context.types';
 
 export interface ContentContextValues {
     films?: Film[];
@@ -13,7 +13,7 @@ export interface ContentContextValues {
 
 export const ContentContext = new Context<AppContext>({});
 
-export interface ContentProviderProps {
+export interface ContentProviderProps extends ContextProps {
     children?: JSX.Element;
 }
 
@@ -49,7 +49,10 @@ export class ContentProvider extends AppComponent<
         const { children } = this.props;
 
         return (
-            <ContentContext.Provider value={{ content: this.state }}>
+            <ContentContext.Provider
+                value={{ content: this.state }}
+                context={this.props.context}
+            >
                 {children}
             </ContentContext.Provider>
         );

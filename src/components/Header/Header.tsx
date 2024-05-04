@@ -5,14 +5,11 @@ import { LogoButton } from '@/components/LogoButton';
 import { concatClasses } from '@/utils';
 import type { AppContext } from '@/types/Context.types';
 import { Button } from '@/components/Button';
-import { HistoryContext } from '@/Providers/HistoryProvider';
 import { routes } from '@/App/App.routes';
 import { authService } from '@/api/auth/service';
 import { Link } from '@/components/Link';
-import { ProfileContext } from '@/Providers/ProfileProvider';
 import { Avatar } from '@/components/Avatar';
 import type { ProfileResponse } from '@/api/user/types';
-import { LocalStorageKey } from '@/shared/constants';
 
 const cx = concatClasses.bind(styles);
 
@@ -30,9 +27,9 @@ export interface HeaderState {
 
 class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
     state: HeaderState = {
-        profile: JSON.parse(
-            localStorage.getItem(LocalStorageKey.USER_DATA) ?? 'null',
-        ) as ProfileResponse,
+        // profile: JSON.parse(
+        //     localStorage.getItem(LocalStorageKey.USER_DATA) ?? 'null',
+        // ) as ProfileResponse,
     };
 
     handleLoginClick = () => {
@@ -51,15 +48,15 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
         });
     };
 
-    componentDidMount(): void {
-        const { context } = this.props;
+    // componentDidMount(): void {
+    //     const { context } = this.props;
 
-        if (!context?.profile?.profile || !this.state.profile) {
-            void context?.profile?.getProfile().then((profile) => {
-                this.setState((prev) => ({ ...prev, profile }));
-            });
-        }
-    }
+    //     if (!context?.profile?.profile || !this.state.profile) {
+    //         void context?.profile?.getProfile().then((profile) => {
+    //             this.setState((prev) => ({ ...prev, profile }));
+    //         });
+    //     }
+    // }
 
     render() {
         const { className, context, ...props } = this.props;
@@ -109,6 +106,4 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
     }
 }
 
-export const Header = ProfileContext.Connect(
-    HistoryContext.Connect(HeaderClass),
-);
+export const Header = HeaderClass;

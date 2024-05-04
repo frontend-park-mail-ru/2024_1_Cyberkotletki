@@ -12,7 +12,6 @@ import { ReviewForm } from '@/components/ReviewForm';
 import { reviewService } from '@/api/review/service';
 import type { ReviewDetails } from '@/api/review/types';
 import { ReviewCard } from '@/components/ReviewCard';
-import { ProfileContext } from '@/Providers/ProfileProvider';
 import type { ProfileResponse } from '@/api/user/types';
 import type { AppContext } from '@/types/Context.types';
 
@@ -207,7 +206,7 @@ class FilmPageInnerClass extends AppComponent<
     }
 }
 
-const FilmPageInner = ProfileContext.Connect(FilmPageInnerClass);
+const FilmPageInner = FilmPageInnerClass;
 
 export class FilmPage extends AppComponent {
     render(): AppNode {

@@ -7,3 +7,7 @@ export interface AppContext {
     profile?: ProfileContextValues;
     content?: ContentContextValues;
 }
+
+export interface ContextProps<T extends object = object> {
+    context?: T;
+}

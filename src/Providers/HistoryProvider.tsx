@@ -2,7 +2,7 @@ import { routes, type RoutesValues } from '@/App/App.routes';
 import { isRoutesMatch } from '@/Providers/isRoutesMatch';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
-import type { AppContext } from '@/types/Context.types';
+import type { AppContext, ContextProps } from '@/types/Context.types';
 
 export interface HistoryContextValues {
     changeRoute: (
@@ -19,7 +19,7 @@ export interface HistoryRoute {
     element: JSX.Element;
 }
 
-export interface HistoryProviderProps {
+export interface HistoryProviderProps extends ContextProps {
     router: HistoryRoute[];
 }
 
@@ -83,8 +83,10 @@ export class HistoryProvider extends AppComponent<
 
         if (element) {
             if (element !== this.state.element) {
-                this.state = { ...this.state, element };
-                this.forceUpdate();
+                // this.state = { ...this.state, element };
+                // this.forceUpdate();
+
+                this.setState((prev) => ({ ...prev, element }));
 
                 if (!safeScroll) {
                     setTimeout(() => {
@@ -110,14 +112,21 @@ export class HistoryProvider extends AppComponent<
                     this.state.routesMap.get(routes.notFound())?.element;
 
                 if (element !== this.state.element) {
-                    this.state = {
-                        ...this.state,
+                    // this.state = {
+                    //     ...this.state,
+                    //     element: this.state.routesMap.get(key)?.element || (
+                    //         <div />
+                    //     ),
+                    // };
+
+                    // this.forceUpdate();
+
+                    this.setState((prev) => ({
+                        ...prev,
                         element: this.state.routesMap.get(key)?.element || (
                             <div />
                         ),
-                    };
-
-                    this.forceUpdate();
+                    }));
 
                     if (!safeScroll) {
                         setTimeout(() => {
@@ -138,13 +147,20 @@ export class HistoryProvider extends AppComponent<
         )?.element;
 
         if (notFound !== this.state.element) {
-            this.state = {
-                ...this.state,
+            // this.state = {
+            //     ...this.state,
+            //     element: this.state.routesMap.get(
+            //         routes.notFound().replace(EDGE_SLASHES_REGEXP, ''),
+            //     )?.element ?? <div />,
+            // };
+            // this.forceUpdate();
+
+            this.setState((prev) => ({
+                ...prev,
                 element: this.state.routesMap.get(
                     routes.notFound().replace(EDGE_SLASHES_REGEXP, ''),
                 )?.element ?? <div />,
-            };
-            this.forceUpdate();
+            }));
         }
     };
 
@@ -168,6 +184,7 @@ export class HistoryProvider extends AppComponent<
                 value={{
                     history: { changeRoute: this.handleChangeRoute },
                 }}
+                context={this.props.context}
             >
                 {this.state.element}
             </HistoryContext.Provider>

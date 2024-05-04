@@ -1,6 +1,5 @@
 import styles from './Link.module.scss';
 
-import { HistoryContext } from '@/Providers/HistoryProvider';
 import type { AppNode } from '@/core/shared/AppNode.types';
 import { AppComponent } from '@/core';
 import type { AppContext } from '@/types/Context.types';
@@ -50,4 +49,4 @@ class LinkClass extends AppComponent<LinkProps> {
     }
 }
 
-export const Link = HistoryContext.Connect(LinkClass);
+export const Link = LinkClass;

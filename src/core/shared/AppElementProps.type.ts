@@ -8,4 +8,5 @@ export interface AppElementProps<T extends HTMLElement = HTMLElement> {
     key?: string | number;
     ref?: App.Ref<T>;
     children?: AppNode[];
+    context?: object;
 }

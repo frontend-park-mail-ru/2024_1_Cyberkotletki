@@ -9,10 +9,8 @@ import { concatClasses } from '@/utils';
 import { Button } from '@/components/Button';
 import { authService } from '@/api/auth/service';
 import { UploadAvatar } from '@/pages/ProfileSettingsPage/AppLoadAvatar';
-import { HistoryContext } from '@/Providers/HistoryProvider';
 import type { AppContext } from '@/types/Context.types';
 import { routes } from '@/App/App.routes';
-import { ProfileContext } from '@/Providers/ProfileProvider';
 import type { ProfileResponse } from '@/api/user/types';
 
 const cx = concatClasses.bind(styles);
@@ -49,13 +47,13 @@ class ProfileSettingsPageInnerClass extends AppComponent<
         });
     };
 
-    componentDidMount(): void {
-        const { profile } = this.props.context ?? {};
+    // componentDidMount(): void {
+    //     const { profile } = this.props.context ?? {};
 
-        if (!profile?.profile) {
-            this.loadProfile();
-        }
-    }
+    //     if (!profile?.profile) {
+    //         this.loadProfile();
+    //     }
+    // }
 
     render(): AppNode {
         const { context } = this.props;
@@ -100,9 +98,7 @@ class ProfileSettingsPageInnerClass extends AppComponent<
     }
 }
 
-export const ProfileSettingsInnerPage = ProfileContext.Connect(
-    HistoryContext.Connect(ProfileSettingsPageInnerClass),
-);
+export const ProfileSettingsInnerPage = ProfileSettingsPageInnerClass;
 
 export class ProfileSettingsPage extends AppComponent {
     render() {

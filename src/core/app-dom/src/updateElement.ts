@@ -37,6 +37,13 @@ export const updateElement = (
          * ? Случай 1. Нету предыдущего узла.
          * Создается новый элемент и добавляется к родительскому
          */
+
+        if (!isPrimitive(newNode)) {
+            newNode.props.context = {
+                ...owner?.props.context,
+                ...newNode.props.context,
+            };
+        }
         const $element = createElement(newNode, owner ?? null);
 
         requestAnimationFrame(() => {
@@ -62,29 +69,47 @@ export const updateElement = (
          * Старый узел заменяется новым
          */
 
+        if (!isPrimitive(newNode)) {
+            newNode.props.context = {
+                ...owner?.props.context,
+                ...newNode.props.context,
+            };
+        }
+
         return replaceElements(newNode, oldNode, owner, index);
     }
 
     if (!isPrimitive(newNode) && !isPrimitive(oldNode)) {
+        const oldNodeCopy = { ...oldNode };
+        oldNodeCopy.props = { ...oldNode.props };
+        newNode.props.context = {
+            ...owner?.props.context,
+            ...newNode.props.context,
+        };
+        newNode.owner = { ...oldNodeCopy.owner } as JSX.Element;
+
         /**
          * ? Случай 4. Оба узла одинакового типа. Но отличаются параметрами
          * Проверяются и изменяются аттрибуты
          * и следует проверка дочерних элементов
          */
         if (isDOMElement(newNode)) {
-            newNode.owner = oldNode.owner;
-            newNode.ref = oldNode.ref;
-            newNode.instance = oldNode.instance;
+            newNode.ref = oldNodeCopy.ref;
+            newNode.instance = oldNodeCopy.instance;
 
-            if (oldNode.ref instanceof HTMLElement) {
-                updateAttributes(oldNode.props, newNode.props, oldNode.ref);
+            if (oldNodeCopy.ref instanceof HTMLElement) {
+                updateAttributes(
+                    oldNodeCopy.props,
+                    newNode.props,
+                    oldNodeCopy.ref,
+                );
 
                 // Дочерние элементы фильтруются.
                 // Убираются boolean, null, undefined и "" значения
                 const newChildren =
                     newNode.props?.children?.filter(isElementDefined);
                 const oldChildren =
-                    oldNode.props?.children?.filter(isElementDefined);
+                    oldNodeCopy.props?.children?.filter(isElementDefined);
 
                 // Берется наибольшая длина, чтобы точно пройтись
                 // по всем новым и старым элементам
@@ -95,44 +120,60 @@ export const updateElement = (
 
                 for (let i = 0; i < maxChildLength; i++) {
                     const newChild = newChildren?.[i];
+                    const oldChild = oldChildren?.[i];
 
-                    updateElement(
-                        newChild,
-                        oldChildren?.[i],
-                        oldNode,
-                        i,
-                        isForce,
-                    );
+                    if (!isPrimitive(newChild)) {
+                        newChild.props.context = {
+                            ...newNode.props?.context,
+                            ...newChild.props?.context,
+                        };
+                    }
+
+                    updateElement(newChild, oldChild, oldNodeCopy, i, isForce);
                 }
             }
 
-            return oldNode.ref;
+            return oldNodeCopy.ref;
         }
 
         if (isAppElement(newNode)) {
-            newNode.owner = oldNode.owner;
-
             const GenerateInstance = newNode.type;
 
             const instance = new GenerateInstance(newNode.props ?? {});
 
             if (
                 isForce ||
-                oldNode.instance?.componentShouldUpdate(
+                oldNodeCopy.instance?.componentShouldUpdate(
                     instance.props,
-                    oldNode.instance.state,
+                    oldNodeCopy.instance.state,
                 )
             ) {
-                instance.state = oldNode.instance?.state ?? {};
+                instance.state = oldNodeCopy.instance?.state ?? {};
                 const instanceRender = instance.render();
                 instance.instance = instanceRender;
-                instance.owner = oldNode.owner;
+                instance.owner = { ...oldNodeCopy.owner } as JSX.Element;
 
                 newNode.instance = instance;
 
+                if (
+                    !isPrimitive(oldNodeCopy.instance?.instance) &&
+                    oldNodeCopy.instance?.instance.props
+                ) {
+                    oldNodeCopy.instance.instance.props = {
+                        ...oldNodeCopy.instance.instance.props,
+                    };
+                }
+
+                if (!isPrimitive(instanceRender)) {
+                    instanceRender.props.context = {
+                        ...newNode.props.context,
+                        ...instanceRender.props.context,
+                    };
+                }
+
                 updateElement(
                     instanceRender,
-                    oldNode.instance?.instance,
+                    oldNodeCopy.instance?.instance,
                     owner,
                     index,
                     isForce,

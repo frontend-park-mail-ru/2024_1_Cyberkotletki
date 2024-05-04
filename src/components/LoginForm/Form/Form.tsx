@@ -19,9 +19,7 @@ import { Input } from '@/components/Input';
 import { concatClasses } from '@/utils';
 import { Button } from '@/components/Button';
 import type { AppContext } from '@/types/Context.types';
-import { HistoryContext } from '@/Providers/HistoryProvider';
 import { ErrorMessage } from '@/components/ErrorMessage';
-import { ProfileContext } from '@/Providers/ProfileProvider';
 
 const cx = concatClasses.bind(styles);
 
@@ -142,4 +140,4 @@ export class FormClass extends AppComponent<FormProps, FormState> {
     }
 }
 
-export const Form = ProfileContext.Connect(HistoryContext.Connect(FormClass));
+export const Form = FormClass;

@@ -5,7 +5,6 @@ import { AppComponent } from '@/core';
 import { FilmCard } from '@/components/FilmCard';
 import { concatClasses } from '@/utils';
 import type { Film } from '@/api/content/types';
-import { ContentContext } from '@/Providers/ContentProvider';
 import type { AppContext } from '@/types/Context.types';
 import { Spinner } from '@/components/Spinner';
 
@@ -96,4 +95,4 @@ class FilmsContainerClass extends AppComponent<
     }
 }
 
-export const FilmsContainer = ContentContext.Connect(FilmsContainerClass);
+export const FilmsContainer = FilmsContainerClass;

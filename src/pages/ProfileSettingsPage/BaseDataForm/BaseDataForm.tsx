@@ -1,7 +1,6 @@
 import styles from './BaseDataForm.module.scss';
 import { getNameError, validateBaseForm } from './BaseDataForm.utils';
 
-import { ProfileContext } from '@/Providers/ProfileProvider';
 import { userService } from '@/api/user/service';
 import type { ChangeProfileBody } from '@/api/user/types';
 import { Button } from '@/components/Button';
@@ -175,4 +174,4 @@ export class BaseDataFormInner extends AppComponent<
     }
 }
 
-export const BaseDataForm = ProfileContext.Connect(BaseDataFormInner);
+export const BaseDataForm = BaseDataFormInner;

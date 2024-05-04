@@ -39,17 +39,45 @@ export abstract class AppComponent<
         if (this.owner && this.componentShouldUpdate(this.props, gotState)) {
             this.state = gotState;
 
-            const newInstance = this.render();
+            let newInstance = this.render();
 
             if (!isPrimitive(newInstance)) {
                 newInstance.owner = this.owner;
             }
 
-            updateElement(newInstance, this.instance, this.owner);
+            if (!isPrimitive(newInstance) && newInstance === this.instance) {
+                newInstance = { ...newInstance };
+            }
 
-            this.instance = newInstance;
+            if (!isPrimitive(this.instance)) {
+                const { ref } = this.instance;
+
+                this.owner.ref = ref;
+                // this.instance.owner.ref = ref;
+            }
+
+            updateElement(
+                newInstance,
+                isPrimitive(this.instance)
+                    ? this.instance
+                    : { ...this.instance },
+                { ...this.owner },
+            );
+
+            this.instance = isPrimitive(newInstance)
+                ? newInstance
+                : { ...newInstance };
 
             this.ref = isPrimitive(newInstance) ? null : newInstance.ref;
+            // this.owner.ref = this.ref;
+
+            // if (this.owner.instance) {
+            //     this.owner.instance.ref = this.ref;
+            // }
+
+            if (!isPrimitive(newInstance)) {
+                newInstance.owner = this.owner;
+            }
 
             this.componentDidUpdate(prevState, this.props);
 
