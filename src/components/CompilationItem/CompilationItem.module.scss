@@ -1,0 +1,28 @@
+.item {
+    @include card-hover-effect;
+
+    display: flex;
+    gap: var(--main-content-gap);
+    align-items: center;
+}
+
+.head {
+    @include text-header-5;
+
+    color: var(--text-color);
+    font-size: 1.25rem;
+
+    @include cut-for-n-rows(2);
+}
+
+.poster {
+    width: 144px !important;
+    min-width: 144px !important;
+    aspect-ratio: 1;
+    border-radius: var(--item-border-radius);
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+}

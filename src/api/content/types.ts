@@ -1,7 +1,7 @@
 export interface Person {
-    id: number;
-    firstName: string;
-    lastName: string;
+    enName?: string;
+    id?: number;
+    name?: string;
 }
 
 export interface Movie {
@@ -87,4 +87,33 @@ export interface PersonActor {
     /** `1956-07-09T00:00:00Z` */
     startCareer: string;
     roles: ActorRole[];
+}
+
+export interface CompilationType {
+    id?: number;
+    type?: string;
+}
+
+export interface CompilationTypesResponse {
+    compilation_types?: CompilationType[];
+}
+
+export interface Compilation {
+    id?: number;
+    title?: string;
+    compilation_type_id?: number;
+    poster?: string;
+}
+
+export interface CompilationsResponse {
+    compilations?: Compilation[];
+}
+
+export interface FilmsCompilation {
+    compilation?: Compilation;
+    content_ids?: number[];
+    content_length?: number;
+    page?: number;
+    per_page?: number;
+    total_pages?: number;
 }

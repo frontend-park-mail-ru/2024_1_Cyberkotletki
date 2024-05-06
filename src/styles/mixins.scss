@@ -170,3 +170,37 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
 
     scrollbar-color: #6f5aff transparent;
 }
+
+@mixin card-hover-effect {
+    position: relative;
+
+    &::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 0;
+        width: calc(100% + var(--large-padding));
+        height: calc(100% + var(--large-padding));
+        background-color: transparent;
+        border-radius: var(--card-border-radius);
+        transform: translateX(-50%) translateY(-50%);
+        transition: var(--item-transition-all);
+        content: '';
+    }
+
+    &:hover {
+        &::before {
+            background-color: var(--absolute-op-10);
+        }
+    }
+
+    &:active {
+        &::before {
+            background-color: var(--absolute-op-20);
+        }
+    }
+
+    > * {
+        z-index: 1;
+    }
+}

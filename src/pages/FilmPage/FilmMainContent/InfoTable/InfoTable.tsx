@@ -24,8 +24,8 @@ export class InfoTable extends AppComponent<InfoTableProps> {
         persons.map((person, index) => (
             <span>
                 <Link
-                    href={routes.person(`${person.id}`)}
-                >{`${person.firstName} ${person.lastName}`}</Link>
+                    href={routes.person(`${person.id ?? 0}`)}
+                >{`${person.name ?? ''}`}</Link>
                 {index < persons.length - 1 && ', '}
             </span>
         ));

@@ -1,0 +1,1 @@
+export { CollectionsDetailsPage } from './CollectionsDetailsPage';

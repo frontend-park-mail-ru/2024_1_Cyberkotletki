@@ -108,7 +108,12 @@
     &:not(.outlined) {
         color: var(--background-gray);
         background: var(--button-color);
-        border: 0 none;
+        border: 1px solid transparent;
+
+        &.primary {
+            border-right-color: #6f5aff;
+            border-left-color: #ff3797;
+        }
     }
 
     &:hover {

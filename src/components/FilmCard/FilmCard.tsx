@@ -37,19 +37,16 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                         className,
                     )}
                 >
-                    <Link
-                        href={routes.film(film?.id ?? 0)}
-                        className={cx('poster')}
-                        tabIndex={-1}
-                    >
+                    <div className={cx('poster')}>
                         <RatingBadge rating={film?.rating} />
                         <LazyImg
                             src={getStaticUrl(film?.posterURL)}
+                            className={cx('poster-img')}
                             alt="Постер"
                             width="136px"
                             height="200px"
                         />
-                    </Link>
+                    </div>
                     <div
                         className={cx('card-info', { small: size === 'small' })}
                     >
@@ -78,14 +75,14 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                                         film?.countries?.[0],
                                         film?.genres?.[0],
                                         film?.directors?.[0]
-                                            ? `Режиссёр: ${film.directors[0].firstName ?? film.directors[0].lastName ?? ''}`
+                                            ? `Режиссёр: ${film.directors[0].name ?? ''}`
                                             : '',
                                     ]
                                         .filter(Boolean)
                                         .join(' ▸ ')}
                                 </span>
                                 {!!film?.actors?.length && (
-                                    <span>{`В ролях: ${film.actors.map((actor) => `${actor.firstName} ${actor.lastName}`).join(', ')}`}</span>
+                                    <span>{`В ролях: ${film.actors.map((actor) => actor.name).join(', ')}`}</span>
                                 )}
                             </div>
                         ) : (

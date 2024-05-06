@@ -50,6 +50,8 @@
 
     /* Colors */
     --absolute: rgb(var(--absolute-rgb));
+    --absolute-op-10: rgb(var(--absolute-rgb) / 10%);
+    --absolute-op-20: rgb(var(--absolute-rgb) / 20%);
     --absolute-op-30: rgb(var(--absolute-rgb) / 30%);
     --black: #0f1014;
     --logo-black: #131e20;

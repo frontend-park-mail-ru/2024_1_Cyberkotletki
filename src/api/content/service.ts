@@ -1,4 +1,10 @@
-import type { Film, PersonActor } from './types';
+import type {
+    CompilationTypesResponse,
+    CompilationsResponse,
+    Film,
+    FilmsCompilation,
+    PersonActor,
+} from './types';
 
 import { appFetch } from '@/api/appFetch.ts';
 import { contentRoutes } from '@/api/content/routes.ts';
@@ -60,6 +66,39 @@ class ContentService {
     async getPersonById(id: number) {
         return appFetch.get<PersonActor | undefined>(
             contentRoutes.contentPerson(id),
+        );
+    }
+
+    /**
+     * Получение списка подборок
+     * @returns Список подборок
+     */
+    async getCompilationTypes() {
+        return appFetch.get<CompilationTypesResponse | undefined>(
+            contentRoutes.compilationTypes(),
+        );
+    }
+
+    /**
+     * Получение списка подборок по типу подборок
+     * @param id id типа подборки
+     * @returns Список подборок
+     */
+    async getCompilationByTypeId(id: number) {
+        return appFetch.get<CompilationsResponse | undefined>(
+            contentRoutes.compilationType(id),
+        );
+    }
+
+    /**
+     * Получение карточек контента подборки
+     * @param id id подборки
+     * @param page номер страницы
+     * @returns Список фильмов и/или сериалов
+     */
+    async getFilmsByCompilationId(id: number, page = 1) {
+        return appFetch.get<FilmsCompilation | undefined>(
+            contentRoutes.compilation(id, page),
         );
     }
 }
