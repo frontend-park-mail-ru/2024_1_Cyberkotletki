@@ -23,3 +23,41 @@
     margin-inline: auto;
     margin-block-start: var(--main-padding-2);
 }
+
+.header {
+    display: flex;
+    gap: var(--main-content-gap);
+    align-items: center;
+
+    @include mobile {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+.poster {
+    min-width: 100px;
+    max-width: 100px;
+    aspect-ratio: 1;
+    border-radius: var(--item-border-radius);
+
+    img {
+        height: 100%;
+    }
+}
+
+.film-card {
+    animation: card-fade-in 200ms ease-in-out;
+}
+
+@keyframes card-fade-in {
+    0% {
+        transform: translateY(16px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

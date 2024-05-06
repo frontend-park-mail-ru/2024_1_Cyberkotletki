@@ -137,7 +137,13 @@ export class InfoTable extends AppComponent<InfoTableProps> {
                     </tr>
                     <tr>
                         <td className={cx('label')}>Слоган:</td>
-                        <td>{`"${film?.slogan ?? ''}"`}</td>
+                        <td>
+                            {film?.slogan ? (
+                                `"${film?.slogan ?? ''}"`
+                            ) : (
+                                <NotFound />
+                            )}
+                        </td>
                     </tr>
                     <tr>
                         <td className={cx('label')}>Бюджет:</td>
@@ -169,11 +175,23 @@ export class InfoTable extends AppComponent<InfoTableProps> {
                     </tr>
                     <tr>
                         <td className={cx('label')}>Возрастное ограничение:</td>
-                        <td>{`${film?.ageRestriction ?? ''}+`}</td>
+                        <td>
+                            {isDefined(film?.ageRestriction) ? (
+                                `${film?.ageRestriction ?? ''}+`
+                            ) : (
+                                <NotFound />
+                            )}
+                        </td>
                     </tr>
                     <tr>
                         <td className={cx('label')}>Длительность:</td>
-                        <td>{`${film?.movie?.duration ?? ''} мин.`}</td>
+                        <td>
+                            {film?.movie?.duration ? (
+                                `${film?.movie?.duration ?? ''} мин.`
+                            ) : (
+                                <NotFound />
+                            )}
+                        </td>
                     </tr>
                 </tbody>
             </table>

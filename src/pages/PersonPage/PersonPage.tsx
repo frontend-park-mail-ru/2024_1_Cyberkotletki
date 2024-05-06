@@ -1,20 +1,26 @@
-import type { Film, PersonActor } from '@/api/content/types.ts';
+import styles from './PersonPage.module.scss';
+
+import type { PersonActor } from '@/api/content/types.ts';
 import { AppComponent } from '@/core';
-import { isDefined } from '@/utils';
+import { concatClasses, isDefined } from '@/utils';
 import { contentService } from '@/api/content/service.ts';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { NotFound } from '@/components/NotFound';
 import { PersonMainContent } from '@/pages/PersonPage/PersonMainContent';
+import { Spinner } from '@/components/Spinner';
+
+const cx = concatClasses.bind(styles);
 
 export interface PersonPageState {
     person?: PersonActor;
     isNotFound?: boolean;
-    roles?: Film[];
     isLoading?: boolean;
 }
 
 class PersonPageInner extends AppComponent<object, PersonPageState> {
-    getPersonById = () => {
+    state: PersonPageState = { isLoading: false };
+
+    getPersonById = async () => {
         const { params } =
             (window.history.state as {
                 params?: { uid?: string };
@@ -23,36 +29,19 @@ class PersonPageInner extends AppComponent<object, PersonPageState> {
         if (isDefined(params?.uid)) {
             this.setState((prev) => ({ ...prev, isLoading: true }));
 
-            void contentService
+            await contentService
                 .getPersonById(+params.uid)
-                .then(async (person) => {
-                    const filmIds = new Set<number>();
-
+                .then((person) => {
                     this.setState((prev) => ({ ...prev, person }));
-
-                    person?.roles.forEach(({ id }) => {
-                        filmIds.add(id);
-                    });
-
-                    const films = (
-                        await Promise.all(
-                            [...filmIds.values()].map((id) =>
-                                contentService.getFilmById(id),
-                            ),
-                        )
-                    ).filter(Boolean) as Film[];
-
-                    this.setState((prev) => ({ ...prev, roles: films }));
                 })
                 .catch(() => {
                     this.setState((prev) => ({
                         ...prev,
                         isNotFound: true,
                     }));
-                })
-                .finally(() => {
-                    this.setState((prev) => ({ ...prev, isLoading: false }));
                 });
+
+            this.setState((prev) => ({ ...prev, isLoading: false }));
 
             return;
         }
@@ -68,6 +57,7 @@ class PersonPageInner extends AppComponent<object, PersonPageState> {
             (window.history.state as {
                 params?: { uid?: string };
             }) ?? {};
+
         const { isLoading, person, isNotFound } = this.state;
 
         if (
@@ -75,16 +65,21 @@ class PersonPageInner extends AppComponent<object, PersonPageState> {
             !isLoading &&
             !isNotFound
         ) {
-            this.getPersonById();
+            void this.getPersonById();
+        }
+
+        if (isLoading) {
+            return (
+                <div className={cx('spinner-container')}>
+                    <Spinner />
+                </div>
+            );
         }
 
         return isNotFound ? (
             <NotFound description="Персона не найдена" />
         ) : (
-            <PersonMainContent
-                person={this.state.person}
-                roles={this.state.roles}
-            />
+            <PersonMainContent person={this.state.person} />
         );
     }
 }

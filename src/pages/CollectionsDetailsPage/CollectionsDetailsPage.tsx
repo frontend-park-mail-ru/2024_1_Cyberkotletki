@@ -7,9 +7,10 @@ import { FilmCard } from '@/components/FilmCard';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
-import { concatClasses } from '@/utils';
+import { concatClasses, getStaticUrl } from '@/utils';
 import type { AppContext } from '@/types/Context.types';
 import { NotFound } from '@/components/NotFound';
+import { LazyImg } from '@/components/LazyImg';
 
 const cx = concatClasses.bind(styles);
 
@@ -90,9 +91,24 @@ class CollectionsDetailsPageClass extends AppComponent<
                     <NotFound description="Подборка не найдена" />
                 ) : (
                     <section>
-                        <h1 className={cx('head')}>Подборки</h1>
+                        <header className={cx('header')}>
+                            <LazyImg
+                                src={getStaticUrl(
+                                    filmsCompilation?.compilation?.poster,
+                                )}
+                                className={cx('poster')}
+                            />
+                            <h1 className={cx('head')}>
+                                {filmsCompilation?.compilation?.title}
+                            </h1>
+                        </header>
                         <div className={cx('grid-container')}>
-                            {films?.map((film) => <FilmCard film={film} />)}
+                            {films?.map((film) => (
+                                <FilmCard
+                                    film={film}
+                                    className={cx('film-card')}
+                                />
+                            ))}
                         </div>
                         {currentPage < (filmsCompilation?.total_pages ?? 0) && (
                             <Button
@@ -109,8 +125,6 @@ class CollectionsDetailsPageClass extends AppComponent<
                                 Показать еще
                             </Button>
                         )}
-                        <pre>{JSON.stringify(filmsCompilation, null, 4)}</pre>
-                        <pre>{JSON.stringify(films, null, 4)}</pre>
                     </section>
                 )}
             </LayoutWithHeader>

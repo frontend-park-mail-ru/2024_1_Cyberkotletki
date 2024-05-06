@@ -37,7 +37,11 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                         className,
                     )}
                 >
-                    <div className={cx('poster')}>
+                    <div
+                        className={cx('poster', {
+                            'full-width': size === 'small',
+                        })}
+                    >
                         <RatingBadge rating={film?.rating} />
                         <LazyImg
                             src={getStaticUrl(film?.posterURL)}
@@ -60,8 +64,12 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                                 <span>
                                     {[
                                         film?.originalTitle || '',
-                                        film?.movie?.release
-                                            ? getHumanDate(film?.movie?.release)
+                                        film?.movie?.release ||
+                                        film?.movie?.premiere
+                                            ? getHumanDate(
+                                                  film?.movie?.release ||
+                                                      film?.movie?.premiere,
+                                              )
                                             : '',
                                         film?.movie?.duration
                                             ? `${film?.movie?.duration} мин.`
@@ -88,13 +96,18 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                         ) : (
                             <div className={cx('info', 'small')}>
                                 {[
-                                    film?.movie?.release
+                                    film?.movie?.release ||
+                                    film?.movie?.premiere
                                         ? new Date(
-                                              film?.movie?.release,
+                                              (film?.movie?.release ||
+                                                  film?.movie?.premiere) ??
+                                                  '',
                                           ).getFullYear()
                                         : '',
                                     ...(film?.genres ?? []),
-                                ]?.join(', ')}
+                                ]
+                                    ?.filter(Boolean)
+                                    ?.join(', ')}
                             </div>
                         )}
                     </div>

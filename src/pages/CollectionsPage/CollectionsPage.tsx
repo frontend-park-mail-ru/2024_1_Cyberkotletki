@@ -85,8 +85,7 @@ export class CollectionsPage extends AppComponent<
     };
 
     render(): AppNode {
-        const { compilationTypes, compilations, filteredCompilations } =
-            this.state;
+        const { compilationTypes, filteredCompilations } = this.state;
 
         const searchType = Number(
             new URLSearchParams(window.location.search).get(SEARCH_PARAM_TYPE),
@@ -124,8 +123,6 @@ export class CollectionsPage extends AppComponent<
                         ))}
                     </div>
                 </section>
-                <pre>{JSON.stringify(compilationTypes, null, 4)}</pre>
-                <pre>{JSON.stringify(compilations, null, 4)}</pre>
             </LayoutWithHeader>
         );
     }

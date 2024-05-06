@@ -32,12 +32,13 @@ export interface Series {
 }
 
 export interface Film {
-    id: number;
+    id?: number;
     actors?: Person[];
     ageRestriction?: number;
+    backdropURL?: string;
+    budget?: string;
     audience?: number;
     boxOffice?: number;
-    budget?: number;
     composers?: Person[];
     countries?: string[];
     description?: string;
@@ -57,36 +58,39 @@ export interface Film {
     title?: string;
     type?: 'movie' | 'series';
     writers?: Person[];
+    facts?: string[];
+    picturesURL?: string[];
+    trailerLink?: string;
 }
 
-export interface ActorRole
-    extends Pick<
-        Film,
-        'id' | 'actors' | 'originalTitle' | 'rating' | 'title' | 'type'
-    > {
-    country: string;
-    director: string;
-    genre: string;
-    poster: string;
-    releaseYear: number;
+export interface ActorRole {
+    genre?: string[];
+    id?: number;
+    poster?: string;
+    rating?: number;
+    releaseYear?: number;
+    title?: string;
+    type?: Film['type'];
+    yearEnd?: number;
+    yearStart?: number;
 }
 
 export interface PersonActor {
-    id: number;
-    firstName: string;
-    lastName: string;
-    sex: string;
-    photoURL: string;
-    height: number;
+    id?: number;
+    sex?: string;
+    photoURL?: string;
+    height?: number;
     /** `1956-07-09T00:00:00Z` */
-    birthDate: string;
+    birthDate?: string;
     /** `1956-07-09T00:00:00Z` */
-    deathDate: string;
+    deathDate?: string;
     /** `1956-07-09T00:00:00Z` */
-    endCareer: string;
+    endCareer?: string;
     /** `1956-07-09T00:00:00Z` */
-    startCareer: string;
-    roles: ActorRole[];
+    startCareer?: string;
+    roles?: Record<'string', ActorRole[]>;
+    enName?: string;
+    name?: string;
 }
 
 export interface CompilationType {

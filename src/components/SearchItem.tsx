@@ -4,7 +4,7 @@ import { LazyImg } from '@/components/LazyImg';
 import type { Film, PersonActor } from '@/api/content/types';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
-import { concatClasses, getStaticUrl } from '@/utils';
+import { concatClasses, getStaticUrl, objectValues } from '@/utils';
 import { RatingBadge } from '@/components/RatingBadge';
 import { Link } from '@/components/Link';
 import { routes } from '@/App/App.routes';
@@ -24,9 +24,11 @@ export class SearchItem extends AppComponent<SearchItemProps> {
     render(): AppNode {
         const { film, person, className, ...props } = this.props;
 
-        const name =
-            film?.title ??
-            `${person?.firstName ?? ''} ${person?.lastName ?? ''}`;
+        const name = film?.title ?? `${person?.name ?? ''}`;
+
+        const personRoles = person?.roles
+            ? objectValues(person.roles).flat()
+            : [];
 
         const info = film
             ? [
@@ -36,12 +38,14 @@ export class SearchItem extends AppComponent<SearchItemProps> {
               ]
                   .filter(Boolean)
                   .join(', ')
-            : person?.roles.map((role) => role.title).join(', ');
+            : personRoles.map((role) => role.title).join(', ');
 
         return (
             <Link
                 href={
-                    film ? routes.film(film.id) : routes.person(person?.id ?? 0)
+                    film
+                        ? routes.film(film.id ?? 0)
+                        : routes.person(person?.id ?? 0)
                 }
                 className={cx('link', className)}
             >
