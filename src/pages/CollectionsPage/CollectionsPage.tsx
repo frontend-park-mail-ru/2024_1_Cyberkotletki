@@ -8,6 +8,7 @@ import type {
 } from '@/api/content/types';
 import { Button } from '@/components/Button';
 import { CompilationItem } from '@/components/CompilationItem';
+import { Spinner } from '@/components/Spinner';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
@@ -16,6 +17,7 @@ import { concatClasses, createQueryParams, isDefined } from '@/utils';
 const cx = concatClasses.bind(styles);
 
 export interface CollectionsPageState {
+    isLoading: boolean;
     compilationTypes?: CompilationType[];
     compilations?: Compilation[];
     filteredCompilations?: Compilation[];
@@ -28,36 +30,44 @@ export class CollectionsPage extends AppComponent<
     CollectionsPageState
 > {
     componentDidMount(): void {
-        void contentService.getCompilationTypes().then(async (compilations) => {
-            this.setState((prev) => ({
-                ...prev,
-                compilationTypes: compilations?.compilation_types,
-            }));
+        this.setState((prev) => ({ ...prev, isLoading: true }));
+        void contentService
+            .getCompilationTypes()
+            .then(async (compilations) => {
+                this.setState((prev) => ({
+                    ...prev,
+                    compilationTypes: compilations?.compilation_types,
+                }));
 
-            const allCompilations = (
-                await Promise.all(
-                    compilations?.compilation_types?.map((compilation) =>
-                        contentService.getCompilationByTypeId(compilation.id!),
-                    ) ?? [],
-                )
-            ).filter(Boolean) as CompilationsResponse[];
+                const allCompilations = (
+                    await Promise.all(
+                        compilations?.compilation_types?.map((compilation) =>
+                            contentService.getCompilationByTypeId(
+                                compilation.id!,
+                            ),
+                        ) ?? [],
+                    )
+                ).filter(Boolean) as CompilationsResponse[];
 
-            this.setState((prev) => ({
-                ...prev,
-                compilations: allCompilations
-                    .map((compilation) => compilation.compilations)
-                    .flat()
-                    .filter(Boolean) as Compilation[],
-            }));
+                this.setState((prev) => ({
+                    ...prev,
+                    compilations: allCompilations
+                        .map((compilation) => compilation.compilations)
+                        .flat()
+                        .filter(Boolean) as Compilation[],
+                }));
 
-            const searchType = Number(
-                new URLSearchParams(window.location.search).get(
-                    SEARCH_PARAM_TYPE,
-                ),
-            );
+                const searchType = Number(
+                    new URLSearchParams(window.location.search).get(
+                        SEARCH_PARAM_TYPE,
+                    ),
+                );
 
-            this.handleTypeChange(searchType || undefined);
-        });
+                this.handleTypeChange(searchType || undefined);
+            })
+            .finally(() => {
+                this.setState((prev) => ({ ...prev, isLoading: false }));
+            });
     }
 
     handleTypeChange = (typeId?: number) => {
@@ -85,7 +95,8 @@ export class CollectionsPage extends AppComponent<
     };
 
     render(): AppNode {
-        const { compilationTypes, filteredCompilations } = this.state;
+        const { compilationTypes, filteredCompilations, isLoading } =
+            this.state;
 
         const searchType = Number(
             new URLSearchParams(window.location.search).get(SEARCH_PARAM_TYPE),
@@ -93,36 +104,46 @@ export class CollectionsPage extends AppComponent<
 
         return (
             <LayoutWithHeader>
-                <section>
-                    <h1 className={cx('head')}>Подборки</h1>
-                    <div className={cx('toggle-buttons')}>
-                        <Button
-                            onClick={() => this.handleTypeChange()}
-                            styleType={!searchType ? 'primary' : 'secondary'}
-                            outlined={!!searchType}
-                        >
-                            Показать все
-                        </Button>
-                        {compilationTypes?.map((type) => (
+                {isLoading ? (
+                    <div className={cx('loader-container')}>
+                        <Spinner />
+                    </div>
+                ) : (
+                    <section>
+                        <h1 className={cx('head')}>Подборки</h1>
+                        <div className={cx('toggle-buttons')}>
                             <Button
-                                onClick={() => this.handleTypeChange(type.id)}
+                                onClick={() => this.handleTypeChange()}
                                 styleType={
-                                    searchType === type.id
-                                        ? 'primary'
-                                        : 'secondary'
+                                    !searchType ? 'primary' : 'secondary'
                                 }
-                                outlined={searchType !== type.id}
+                                outlined={!!searchType}
                             >
-                                {type.type}
+                                Показать все
                             </Button>
-                        ))}
-                    </div>
-                    <div className={cx('grid-container')}>
-                        {filteredCompilations?.map((compilation) => (
-                            <CompilationItem compilation={compilation} />
-                        ))}
-                    </div>
-                </section>
+                            {compilationTypes?.map((type) => (
+                                <Button
+                                    onClick={() =>
+                                        this.handleTypeChange(type.id)
+                                    }
+                                    styleType={
+                                        searchType === type.id
+                                            ? 'primary'
+                                            : 'secondary'
+                                    }
+                                    outlined={searchType !== type.id}
+                                >
+                                    {type.type}
+                                </Button>
+                            ))}
+                        </div>
+                        <div className={cx('grid-container')}>
+                            {filteredCompilations?.map((compilation) => (
+                                <CompilationItem compilation={compilation} />
+                            ))}
+                        </div>
+                    </section>
+                )}
             </LayoutWithHeader>
         );
     }

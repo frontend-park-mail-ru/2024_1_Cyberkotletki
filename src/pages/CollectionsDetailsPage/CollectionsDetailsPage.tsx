@@ -11,6 +11,7 @@ import { concatClasses, getStaticUrl } from '@/utils';
 import type { AppContext } from '@/types/Context.types';
 import { NotFound } from '@/components/NotFound';
 import { LazyImg } from '@/components/LazyImg';
+import { Spinner } from '@/components/Spinner';
 
 const cx = concatClasses.bind(styles);
 
@@ -19,6 +20,7 @@ export interface CollectionsDetailsPageState {
     filmsCompilation?: FilmsCompilation;
     currentPage?: number;
     isLoading: boolean;
+    isFirstLoading?: boolean;
     error?: unknown;
 }
 
@@ -32,14 +34,14 @@ class CollectionsDetailsPageClass extends AppComponent<
 > {
     state: CollectionsDetailsPageState = { isLoading: false, films: null };
 
-    handlePageChange = (page: number) => {
+    handlePageChange = async (page: number) => {
         const { params } = window.history.state as {
             params?: { uid?: string };
         };
 
         this.setState((prev) => ({ ...prev, isLoading: true }));
 
-        void this.props.context?.content
+        await this.props.context?.content
             ?.loadFilms(Number(params?.uid), page)
             .then((data) => {
                 this.setState((prev) => ({
@@ -61,10 +63,42 @@ class CollectionsDetailsPageClass extends AppComponent<
             });
     };
 
+    componentDidMount(): void {
+        const { params } = window.history.state as {
+            params?: { uid?: string };
+        };
+
+        const { isLoading } = this.state;
+
+        const filmsByCollection =
+            this.props.context?.content?.filmsByCollection?.[
+                Number(params?.uid)
+            ];
+
+        const films = filmsByCollection?.films ?? null;
+
+        if (films === null && !isLoading) {
+            setTimeout(() => {
+                this.setState((prev) => ({ ...prev, isFirstLoading: true }));
+            });
+
+            void this.handlePageChange(1).finally(() => {
+                setTimeout(() => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        isFirstLoading: false,
+                    }));
+                });
+            });
+        }
+    }
+
     render(): AppNode {
         const { params } = window.history.state as {
             params?: { uid?: string };
         };
+
+        const { isLoading, error, isFirstLoading } = this.state;
 
         const filmsByCollection =
             this.props.context?.content?.filmsByCollection?.[
@@ -81,15 +115,15 @@ class CollectionsDetailsPageClass extends AppComponent<
 
         const films = this.state.films ?? filmsByCollection?.films ?? null;
 
-        if (films === null && !this.state.isLoading) {
-            this.handlePageChange(1);
-        }
-
         return (
             <LayoutWithHeader>
-                {this.state.error ? (
-                    <NotFound description="Подборка не найдена" />
-                ) : (
+                {!!error && <NotFound description="Подборка не найдена" />}
+                {!error && isFirstLoading && (
+                    <div className={cx('loader-container')}>
+                        <Spinner />
+                    </div>
+                )}
+                {!error && !isFirstLoading && (
                     <section>
                         <header className={cx('header')}>
                             <LazyImg
@@ -117,7 +151,7 @@ class CollectionsDetailsPageClass extends AppComponent<
                                         (currentPage ?? 0) + 1,
                                     );
                                 }}
-                                isLoading={this.state.isLoading}
+                                isLoading={isLoading}
                                 outlined
                                 styleType="secondary"
                                 className={cx('more-button')}

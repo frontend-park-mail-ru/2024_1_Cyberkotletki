@@ -47,17 +47,5 @@
 }
 
 .film-card {
-    animation: card-fade-in 200ms ease-in-out;
-}
-
-@keyframes card-fade-in {
-    0% {
-        transform: translateY(16px);
-        opacity: 0;
-    }
-
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
+    @include fade-in;
 }

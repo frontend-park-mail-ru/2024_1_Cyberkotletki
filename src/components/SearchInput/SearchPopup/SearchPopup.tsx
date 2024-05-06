@@ -34,7 +34,10 @@ export class SearchPopup extends AppComponent<SearchPopupProps> {
                             <h1 className={cx('label')}>Фильмы и сериалы</h1>
                             <div className={cx('list')}>
                                 {films.map((film) => (
-                                    <SearchItem film={film} />
+                                    <SearchItem
+                                        film={film}
+                                        className={cx('search-item')}
+                                    />
                                 ))}
                             </div>
                         </section>
@@ -44,7 +47,10 @@ export class SearchPopup extends AppComponent<SearchPopupProps> {
                             <h1 className={cx('label')}>Персоны</h1>
                             <div className={cx('list')}>
                                 {persons.map((person) => (
-                                    <SearchItem person={person} />
+                                    <SearchItem
+                                        person={person}
+                                        className={cx('search-item')}
+                                    />
                                 ))}
                             </div>
                         </section>

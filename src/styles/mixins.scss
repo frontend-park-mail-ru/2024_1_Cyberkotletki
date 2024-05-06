@@ -204,3 +204,19 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
         z-index: 1;
     }
 }
+
+@mixin fade-in($rule: 200ms ease-out) {
+    animation: fade-in $rule;
+}
+
+@keyframes fade-in {
+    0% {
+        transform: translateY(16px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
