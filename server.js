@@ -4,6 +4,7 @@ const path = require('path');
 const http = require('http');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
+const compression = require('compression');
 
 require('dotenv').config();
 
@@ -12,11 +13,17 @@ const port = process.env.PORT || 3000;
 const devConfig = require('./webpack.dev.js');
 const prodConfig = require('./webpack.prod.js');
 
-const config = process.env.NODE_ENV === 'development' ? devConfig : prodConfig;
+const isDev = process.env.NODE_ENV === 'development';
+
+const config = isDev ? devConfig : prodConfig;
 
 const compiler = webpack(config);
 
 const filename = path.join(compiler.outputPath, 'index.html');
+
+if (!isDev) {
+    app.use(compression());
+}
 
 app.use(
     webpackDevMiddleware(compiler, {
