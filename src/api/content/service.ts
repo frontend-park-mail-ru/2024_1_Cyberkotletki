@@ -4,6 +4,7 @@ import type {
     Film,
     FilmsCompilation,
     PersonActor,
+    SearchResponse,
 } from './types';
 
 import { appFetch } from '@/api/appFetch.ts';
@@ -99,6 +100,17 @@ class ContentService {
     async getFilmsByCompilationId(id: number, page = 1) {
         return appFetch.get<FilmsCompilation | undefined>(
             contentRoutes.compilation(id, page),
+        );
+    }
+
+    /**
+     * Поиск фильмов, сериалов и персон
+     * @param searchString Поисковый запрос
+     * @returns Список фильмов и/или сериалов или персон
+     */
+    async searchContent(searchString: string) {
+        return appFetch.get<SearchResponse | undefined>(
+            contentRoutes.search(searchString),
         );
     }
 }

@@ -121,3 +121,32 @@ export interface FilmsCompilation {
     per_page?: number;
     total_pages?: number;
 }
+
+export interface SearchContent {
+    actors?: string[];
+    country?: string;
+    director?: string;
+    duration?: number;
+    genre?: string;
+    id?: number;
+    originalTitle?: string;
+    poster?: string;
+    rating?: number;
+    seasonsNumber?: number;
+    title?: string;
+    type?: Film['type'];
+    yearEnd?: number;
+    yearStart?: number;
+}
+
+export interface SearchPerson {
+    enName?: string;
+    id?: number;
+    name?: string;
+    photoURL?: string;
+}
+
+export interface SearchResponse {
+    content?: SearchContent[];
+    persons?: SearchPerson[];
+}

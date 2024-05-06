@@ -1,7 +1,7 @@
 import styles from './SearchItem.module.scss';
 
 import { LazyImg } from '@/components/LazyImg';
-import type { Film, PersonActor } from '@/api/content/types';
+import type { PersonActor, SearchContent } from '@/api/content/types';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
 import { concatClasses, getStaticUrl, objectValues } from '@/utils';
@@ -16,7 +16,7 @@ export interface SearchItemProps
         App.DetailedHTMLProps<App.HTMLAttributes<HTMLElement>, HTMLElement>,
         'children'
     > {
-    film?: Film;
+    film?: SearchContent;
     person?: PersonActor;
 }
 
@@ -33,8 +33,8 @@ export class SearchItem extends AppComponent<SearchItemProps> {
         const info = film
             ? [
                   film?.originalTitle,
-                  film?.countries?.join(', '),
-                  new Date(film?.movie?.release ?? new Date()).getFullYear(),
+                  film.country,
+                  film.yearStart || film.yearEnd,
               ]
                   .filter(Boolean)
                   .join(', ')
@@ -52,7 +52,7 @@ export class SearchItem extends AppComponent<SearchItemProps> {
                 <article className={cx('item')} {...props}>
                     <LazyImg
                         className={cx('image')}
-                        src={getStaticUrl(film?.posterURL ?? person?.photoURL)}
+                        src={getStaticUrl(film?.poster ?? person?.photoURL)}
                     />
                     <div className={cx('info-container')}>
                         <h1 className={cx('head')} title={name}>
@@ -67,7 +67,7 @@ export class SearchItem extends AppComponent<SearchItemProps> {
                                     rating={film?.rating}
                                     className={cx('rating')}
                                 />
-                                {film?.genres?.join(', ')}
+                                {film.genre}
                             </div>
                         )}
                     </div>

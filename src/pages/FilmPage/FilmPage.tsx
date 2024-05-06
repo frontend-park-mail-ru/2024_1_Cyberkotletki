@@ -35,6 +35,7 @@ export const REVIEW_FORM_ID = 'review-form';
 
 export interface FilmPageInnerProps {
     context?: AppContext;
+    uid?: string;
 }
 
 class FilmPageInnerClass extends AppComponent<
@@ -209,11 +210,27 @@ class FilmPageInnerClass extends AppComponent<
 
 const FilmPageInner = ProfileContext.Connect(FilmPageInnerClass);
 
-export class FilmPage extends AppComponent {
+export class FilmPage extends AppComponent<object, { key?: string }> {
+    state = { key: (window.history.state as { params?: Params }).params?.uid };
+
     render(): AppNode {
+        const { params } = window.history.state as { params?: Params };
+
+        if (params?.uid !== this.state.key) {
+            this.setState((prev) => ({ ...prev, key: params?.uid }));
+
+            this.forceUpdate();
+
+            return (
+                <LayoutWithHeader key={params?.uid}>
+                    <FilmPageInner key={params?.uid} uid={params?.uid} />
+                </LayoutWithHeader>
+            );
+        }
+
         return (
-            <LayoutWithHeader>
-                <FilmPageInner />
+            <LayoutWithHeader key={this.state.key}>
+                <FilmPageInner key={this.state.key} uid={this.state.key} />
             </LayoutWithHeader>
         );
     }

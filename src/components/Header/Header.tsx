@@ -15,6 +15,8 @@ import { HEADER_TABS, LocalStorageKey } from '@/shared/constants';
 import { SearchInput } from '@/components/SearchInput';
 import { Popover } from '@/components/Popover';
 import { Link } from '@/components/Link';
+import { contentService } from '@/api/content/service';
+import type { SearchResponse } from '@/api/content/types';
 
 const cx = concatClasses.bind(styles);
 
@@ -29,6 +31,8 @@ export interface HeaderProps
 export interface HeaderState {
     profile?: ProfileResponse;
     searchOpened?: boolean;
+    searchResponse?: SearchResponse;
+    isSearchLoading?: boolean;
 }
 
 class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
@@ -72,9 +76,35 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
         }
     }
 
+    handleSearch = (searchString?: string) => {
+        if (searchString) {
+            this.setState((prev) => ({ ...prev, isSearchLoading: true }));
+
+            void contentService
+                .searchContent(searchString)
+                .then((searchResponse) => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        searchResponse,
+                    }));
+                })
+                .finally(() => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        isSearchLoading: false,
+                    }));
+                });
+        }
+    };
+
     render() {
         const { className, context, ...props } = this.props;
-        const { profile: stateProfile, searchOpened } = this.state;
+        const {
+            profile: stateProfile,
+            searchOpened,
+            searchResponse,
+            isSearchLoading,
+        } = this.state;
 
         const profile = context?.profile?.profile || stateProfile;
 
@@ -99,6 +129,10 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                         <SearchInput
                             onOpen={this.handleSearchOpen}
                             onClose={this.handleSearchClose}
+                            onSearch={this.handleSearch}
+                            isLoading={isSearchLoading}
+                            persons={searchResponse?.persons}
+                            films={searchResponse?.content}
                         />
                     </div>
                     {profile ? (

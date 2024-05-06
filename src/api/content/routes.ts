@@ -1,4 +1,4 @@
-import { isDefined } from '@/utils';
+import { createQueryParams, isDefined } from '@/utils';
 
 class ContentRoutes {
     contentPreview = (): string => '/content/contentPreview' as const;
@@ -16,6 +16,9 @@ class ContentRoutes {
 
     compilation = (id: number, page = 1): string =>
         `/compilation/${id}/${page}` as const;
+
+    search = (searchString: string): string =>
+        `/search${createQueryParams({ query: searchString })}` as const;
 }
 
 export const contentRoutes = new ContentRoutes();

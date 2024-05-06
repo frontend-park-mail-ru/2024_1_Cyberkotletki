@@ -8,7 +8,7 @@ class Routes {
     register = () => '/register' as const;
 
     collections = (id?: string | number) =>
-        `/collections${isDefined(id) ? `/${id}` : ''}` as const;
+        `/${isDefined(id) ? `collections/${id}` : ''}` as const;
 
     profile = () => '/profile' as const;
 

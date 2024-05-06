@@ -6,14 +6,14 @@ import { Spinner } from '@/components/Spinner';
 import { AppComponent } from '@/core';
 import { concatClasses } from '@/utils';
 import { SearchItem } from '@/components/SearchItem';
-import type { Film, PersonActor } from '@/api/content/types';
+import type { PersonActor, SearchContent } from '@/api/content/types';
 
 const cx = concatClasses.bind(styles);
 
 export interface SearchPopupProps
     extends Omit<PopoverProps, 'ref' | 'children'> {
     isLoading?: boolean;
-    films?: Film[];
+    films?: SearchContent[];
     persons?: PersonActor[];
 }
 

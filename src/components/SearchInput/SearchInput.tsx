@@ -4,6 +4,7 @@ import { SearchPopup } from './SearchPopup';
 import { icCloseUrl, icSearchUrl } from '@/assets/icons';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
+import type { SearchPopupProps } from '@/components/SearchInput/SearchPopup/SearchPopup';
 import { AppComponent } from '@/core';
 import { concatClasses, debounce, hasField } from '@/utils';
 
@@ -11,12 +12,13 @@ const cx = concatClasses.bind(styles);
 
 export interface SearchInputProps
     extends Omit<
-        App.DetailedHTMLProps<
-            App.HTMLAttributes<HTMLDivElement>,
-            HTMLDivElement
+            App.DetailedHTMLProps<
+                App.HTMLAttributes<HTMLDivElement>,
+                HTMLDivElement
+            >,
+            'ref' | 'children'
         >,
-        'ref' | 'children'
-    > {
+        Pick<SearchPopupProps, 'persons' | 'films'> {
     isLoading?: boolean;
     onSearch?: (searchString?: string) => void;
     searchDelay?: number;
@@ -71,7 +73,7 @@ export class SearchInput extends AppComponent<
     }
 
     render() {
-        const { className, ...props } = this.props;
+        const { className, persons, films, isLoading, ...props } = this.props;
         const { isFocused } = this.state;
 
         return (
@@ -106,7 +108,9 @@ export class SearchInput extends AppComponent<
                         <SearchPopup
                             id="search-popover"
                             isOpen={isFocused}
-                            isLoading={!!this.state.value}
+                            isLoading={isLoading}
+                            persons={persons}
+                            films={films}
                         />
                     </div>
                 ) : (
