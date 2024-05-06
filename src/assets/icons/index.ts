@@ -7,3 +7,5 @@ export { default as icCheckUrl } from './ic-check.svg';
 export { default as icEditUrl } from './ic-edit.svg';
 export { default as icTrashUrl } from './ic-trash.svg';
 export { default as icLikeUrl } from './ic-like.svg';
+export { default as icSearchUrl } from './ic-search.svg';
+export { default as icCloseUrl } from './ic-close.svg';

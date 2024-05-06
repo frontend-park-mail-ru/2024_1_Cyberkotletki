@@ -1,6 +1,6 @@
 /* stylelint-disable selector-max-id */
 :root {
-    color: #efefef;
+    color: var(--text-color);
     font-size: var(--font-size);
     font-family: var(--font-family);
     font-variation-settings: normal;
@@ -16,7 +16,7 @@
 
     /* Variables  */
     --small-padding: 8px;
-    --item-border-radius: 6px;
+    --item-border-radius: 8px;
     --item-padding: 8px;
     --item-inline-padding: 12px;
     --button-height: 36px;
@@ -38,19 +38,29 @@
     /* z-indexes */
     --header-z-index: 100;
     --modal-z-index: 1000;
+    --popup-z-index: 900;
 
     /* Transitions */
     --item-transition-all: all 200ms ease-in-out;
 
+    /* Colors rgb */
+    --absolute-rgb: 0 0 0; // #000000
+    --light-gray-rgb: 155 161 168; // #9ba1a8
+    --secondary-gray-rgb: 101 104 108; // #65686c
+
     /* Colors */
+    --absolute: rgb(var(--absolute-rgb));
+    --absolute-op-30: rgb(var(--absolute-rgb) / 30%);
     --black: #0f1014;
     --logo-black: #131e20;
     --white: #ffffff;
+    --text-color: #efefef;
     --solid-blue: #477bff;
     --success: #50b773;
     --background-gray: #f0f1f3;
-    --light-gray: #9ba1a8;
-    --secondary-gray: #65686c;
+    --light-gray: rgb(var(--light-gray-rgb));
+    --secondary-gray: rgb(var(--secondary-gray-rgb));
+    --secondary-gray-op-30: rgb(var(--secondary-gray-rgb) / 30%);
     --error-red: #ed0a34;
     --yellow: #f5c518;
     --primary-gradient: linear-gradient(
@@ -65,6 +75,9 @@
             rgb(38 32 57 / 100%) 0%,
             rgb(15 17 21 / 100%) 100%
         );
+
+    /** Shadows */
+    --modal-shadow: rgb(0 0 0 / 35%) 0 5px 15px;
 
     @include tablet {
         --font-size: 13px;
@@ -87,6 +100,8 @@ html {
     * {
         box-sizing: border-box;
     }
+
+    @include custom-scrollbar;
 }
 
 html,

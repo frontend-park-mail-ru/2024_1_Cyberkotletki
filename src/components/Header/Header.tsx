@@ -8,11 +8,13 @@ import { Button } from '@/components/Button';
 import { HistoryContext } from '@/Providers/HistoryProvider';
 import { routes } from '@/App/App.routes';
 import { authService } from '@/api/auth/service';
-import { Link } from '@/components/Link';
 import { ProfileContext } from '@/Providers/ProfileProvider';
 import { Avatar } from '@/components/Avatar';
 import type { ProfileResponse } from '@/api/user/types';
-import { LocalStorageKey } from '@/shared/constants';
+import { HEADER_TABS, LocalStorageKey } from '@/shared/constants';
+import { SearchInput } from '@/components/SearchInput';
+import { Popover } from '@/components/Popover';
+import { Link } from '@/components/Link';
 
 const cx = concatClasses.bind(styles);
 
@@ -26,6 +28,7 @@ export interface HeaderProps
 
 export interface HeaderState {
     profile?: ProfileResponse;
+    searchOpened?: boolean;
 }
 
 class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
@@ -33,6 +36,14 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
         profile: JSON.parse(
             localStorage.getItem(LocalStorageKey.USER_DATA) ?? 'null',
         ) as ProfileResponse,
+    };
+
+    handleSearchOpen = () => {
+        this.setState((prev) => ({ ...prev, searchOpened: true }));
+    };
+
+    handleSearchClose = () => {
+        this.setState((prev) => ({ ...prev, searchOpened: false }));
     };
 
     handleLoginClick = () => {
@@ -63,35 +74,79 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
 
     render() {
         const { className, context, ...props } = this.props;
-        const { profile: stateProfile } = this.state;
+        const { profile: stateProfile, searchOpened } = this.state;
 
         const profile = context?.profile?.profile || stateProfile;
 
         return (
             <header className={cx('header', className)} {...props}>
                 <div className={cx('header-container')}>
-                    <LogoButton className={cx('header-logo')} />
+                    <LogoButton
+                        className={cx('header-logo', {
+                            'mobile-hidden': searchOpened,
+                        })}
+                    />
                     {/** //? Soon... */}
-                    {/* <div className={cx('tabs')}>
+                    <div className={cx('tabs')}>
                         {HEADER_TABS.map((tab) => (
-                            <Link href={tab.route}>{tab.title}</Link>
-                        ))}
-                    </div> */}
-                    {profile ? (
-                        <div className={cx('avatar-container')}>
-                            <div
-                                className={cx('logout-button')}
-                                onClick={this.handleLogoutClick}
-                                role="button"
+                            <Link
+                                href={tab.route}
+                                className={cx({ hidden: searchOpened })}
                             >
-                                Выйти
-                            </div>
-                            <Link href={routes.profile()}>
+                                {tab.title}
+                            </Link>
+                        ))}
+                        <SearchInput
+                            onOpen={this.handleSearchOpen}
+                            onClose={this.handleSearchClose}
+                        />
+                    </div>
+                    {profile ? (
+                        <div
+                            className={cx('avatar-container', {
+                                'mobile-hidden': searchOpened,
+                            })}
+                        >
+                            <button
+                                className={cx('avatar-button')}
+                                popoverTarget="profile-popover"
+                                popoverTargetAction="toggle"
+                            >
                                 <Avatar
                                     className={cx('avatar')}
                                     imageSrc={profile?.avatar}
                                 />
-                            </Link>
+                            </button>
+                            <Popover
+                                id="profile-popover"
+                                width="fit"
+                                horizonPos="right"
+                            >
+                                <div>
+                                    <Link href={routes.profile()}>
+                                        <Button
+                                            isText
+                                            styleType="secondary"
+                                            outlined
+                                            isFullWidth
+                                            className={cx('popover-button')}
+                                        >
+                                            Профиль
+                                        </Button>
+                                    </Link>
+                                    <Button
+                                        isText
+                                        styleType="error"
+                                        outlined
+                                        isFullWidth
+                                        onClick={this.handleLogoutClick}
+                                        size="small"
+                                        className={cx('popover-button')}
+                                    >
+                                        Выйти
+                                    </Button>
+                                </div>
+                            </Popover>
                         </div>
                     ) : (
                         <Button
@@ -99,6 +154,9 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                             onClick={this.handleLoginClick}
                             styleType="secondary"
                             style="width: fit-content;"
+                            className={cx({
+                                'mobile-hidden': searchOpened,
+                            })}
                         >
                             Войти
                         </Button>

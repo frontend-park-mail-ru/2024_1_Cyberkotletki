@@ -19,6 +19,9 @@ export interface InputProps
     styleType?: 'primary' | 'secondary' | 'error';
     rounded?: boolean;
     isIconOnly?: boolean;
+    isText?: boolean;
+    isFullWidth?: boolean;
+    size?: 'small';
 }
 
 export class Button extends AppComponent<InputProps> {
@@ -35,6 +38,9 @@ export class Button extends AppComponent<InputProps> {
             styleType = 'primary',
             rounded,
             isIconOnly,
+            isText,
+            isFullWidth,
+            size,
             ...props
         } = this.props;
 
@@ -55,6 +61,9 @@ export class Button extends AppComponent<InputProps> {
                         outlined,
                         rounded,
                         'icon-only': isIconOnly,
+                        text: isText,
+                        'full-width': isFullWidth,
+                        small: size === 'small',
                     })}
                     aria-hidden
                     tabIndex={-1}
@@ -72,6 +81,9 @@ export class Button extends AppComponent<InputProps> {
                     outlined,
                     rounded,
                     'icon-only': isIconOnly,
+                    text: isText,
+                    'full-width': isFullWidth,
+                    small: size === 'small',
                 })}
             >
                 {isLoading ? <Spinner /> : children}

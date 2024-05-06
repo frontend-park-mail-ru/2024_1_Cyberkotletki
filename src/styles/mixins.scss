@@ -148,3 +148,25 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
         --rating-badge-color: var(--success);
     }
 }
+
+@mixin custom-scrollbar {
+    /* плашка-бегунок и фон */
+
+    &::-webkit-scrollbar {
+        width: 6px; /* в основном для вертикальных полос прокрутки */
+        height: 6px; /* в основном для горизонтальных полос прокрутки */
+    }
+
+    &::-webkit-scrollbar-thumb {
+        /* плашка-бегунок */
+        background: #6f5aff;
+        border-radius: 8px;
+    }
+
+    &:-webkit-scrollbar-track {
+        /* фон */
+        background: transparent;
+    }
+
+    scrollbar-color: #6f5aff transparent;
+}

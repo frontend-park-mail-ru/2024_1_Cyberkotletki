@@ -84,10 +84,21 @@
         }
     }
 
+    &.text {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border: 0 none;
+    }
+
     &:not(.icon-only) {
         @include mobile {
             width: 100%;
         }
+    }
+
+    &.full-width {
+        width: 100%;
     }
 
     &.rounded {
@@ -101,7 +112,6 @@
     }
 
     &:hover {
-        // color: var(--background-gray);
         background-color: var(--button-hover-color);
         background-size: 150%;
         transform: scale(1.01);

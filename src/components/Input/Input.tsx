@@ -14,6 +14,7 @@ export type InputTypeProps = Omit<
     'ref' | 'children'
 > & {
     inputType?: 'input';
+    inputRef?: App.Ref<HTMLInputElement>;
     label?: string;
     hasError?: boolean;
     errorHint?: string;
@@ -28,6 +29,7 @@ export type TextareaTypeProps = Omit<
     'ref' | 'children'
 > & {
     inputType: 'textarea';
+    textareaRef?: App.Ref<HTMLTextAreaElement>;
     label?: string;
     hasError?: boolean;
     errorHint?: string;
@@ -57,6 +59,7 @@ export class Input extends AppComponent<InputProps> {
                 {this.props.inputType === 'textarea' ? (
                     <textarea
                         {...this.props}
+                        ref={this.props.textareaRef}
                         className={cx('input', className, {
                             'with-error': hasError,
                             textarea: true,
@@ -67,6 +70,7 @@ export class Input extends AppComponent<InputProps> {
                 ) : (
                     <input
                         {...this.props}
+                        ref={this.props.inputRef}
                         className={cx('input', className, {
                             'with-error': hasError,
                             input: true,
