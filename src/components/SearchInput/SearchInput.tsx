@@ -102,6 +102,7 @@ export class SearchInput extends AppComponent<
                             isIconOnly
                             styleType="secondary"
                             className={cx('close-button')}
+                            aria-label="Закрыть поиск"
                         >
                             <img src={icCloseUrl} aria-hidden />
                         </Button>
@@ -119,6 +120,7 @@ export class SearchInput extends AppComponent<
                         outlined
                         isIconOnly
                         styleType="secondary"
+                        aria-label="Поиск"
                     >
                         <img src={icSearchUrl} aria-hidden />
                     </Button>

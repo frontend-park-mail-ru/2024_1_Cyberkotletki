@@ -4,7 +4,7 @@ import { FilmCard } from '@/components/FilmCard';
 import type { ActorRole, Film, PersonActor } from '@/api/content/types';
 import { LazyImg } from '@/components/LazyImg';
 import { AppComponent } from '@/core';
-import { InfoTable } from '@/pages/PersonPage/PersonMainContent/InfoTable/InfoTable';
+import { PersonInfoTable } from '@/pages/PersonPage/PersonMainContent/PersonInfoTable';
 import { concatClasses, getStaticUrl, objectEntries } from '@/utils';
 
 const cx = concatClasses.bind(styles);
@@ -42,12 +42,13 @@ export class PersonMainContent extends AppComponent<PersonMainContentProps> {
                         src={getStaticUrl(person?.photoURL)}
                         width="232px"
                         height="347px"
+                        alt={person?.name}
                     />
                     <section>
                         {person?.name && (
                             <h1 className={cx('title')}>{person.name}</h1>
                         )}
-                        <InfoTable person={person} />
+                        <PersonInfoTable person={person} />
                     </section>
                 </div>
                 <section className={cx('roles-section')}>

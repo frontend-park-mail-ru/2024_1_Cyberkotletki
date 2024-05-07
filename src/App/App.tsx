@@ -18,8 +18,8 @@ import '@/styles/global.scss';
 export class App extends AppComponent<object> {
     render() {
         return (
-            <ContentProvider>
-                <ProfileProvider>
+            <ProfileProvider>
+                <ContentProvider>
                     <HistoryProvider
                         router={[
                             {
@@ -64,8 +64,8 @@ export class App extends AppComponent<object> {
                             },
                         ]}
                     />
-                </ProfileProvider>
-            </ContentProvider>
+                </ContentProvider>
+            </ProfileProvider>
         );
     }
 }

@@ -48,11 +48,13 @@ export class SearchItem extends AppComponent<SearchItemProps> {
                         : routes.person(person?.id ?? 0)
                 }
                 className={cx('link', className)}
+                aria-label={name}
             >
                 <article className={cx('item')} {...props}>
                     <LazyImg
                         className={cx('image')}
                         src={getStaticUrl(film?.poster ?? person?.photoURL)}
+                        alt={name}
                     />
                     <div className={cx('info-container')}>
                         <h1 className={cx('head')} title={name}>

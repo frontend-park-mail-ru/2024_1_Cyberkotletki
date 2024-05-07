@@ -1855,7 +1855,13 @@ declare global {
             | undefined;
 
         type Children = AppNode | Iterable<AppNode>;
-        // type Element = App.AppElement<unknown, unknown>;
+
+        type JSXElementConstructor<P> =
+            | ((props: P) => AppComponent<P>)
+            | (new (props: P) => AppComponent<P>);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        type ElementType = string | JSXElementConstructor<any>;
+
         interface ElementClass extends AppComponent<unknown> {
             render(): Node;
         }

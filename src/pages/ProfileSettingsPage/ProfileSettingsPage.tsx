@@ -41,10 +41,14 @@ class ProfileSettingsPageInnerClass extends AppComponent<
         );
     };
 
-    loadProfile = () => {
+    loadProfile = (isForce?: boolean) => {
         const { profile } = this.props.context ?? {};
 
-        void profile?.getProfile().then((profile) => {
+        const promise = isForce
+            ? profile?.getProfile()
+            : profile?.getProfilePromise;
+
+        void promise?.then((profile) => {
             this.setState((prev) => ({ ...prev, profile }));
         });
     };
@@ -76,7 +80,7 @@ class ProfileSettingsPageInnerClass extends AppComponent<
                         <BaseDataForm
                             nameInitial={profile?.name}
                             emailInitial={profile?.email}
-                            onSubmit={this.loadProfile}
+                            onSubmit={() => this.loadProfile(true)}
                         />
                     </section>
                     <section className={cx('section')}>

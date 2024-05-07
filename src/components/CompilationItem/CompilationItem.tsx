@@ -25,6 +25,7 @@ export class CompilationItem extends AppComponent<CompilationItemProps> {
             <Link
                 className={cx(className)}
                 href={routes.collections(compilation?.id)}
+                aria-label={compilation?.title}
             >
                 <article {...props} className={cx('item')}>
                     <LazyImg
@@ -32,6 +33,7 @@ export class CompilationItem extends AppComponent<CompilationItemProps> {
                         width="144px"
                         height="144px"
                         className={cx('poster')}
+                        alt={compilation?.title}
                     />
                     <div className={cx('info')}>
                         <h1 className={cx('head')} title={compilation?.title}>

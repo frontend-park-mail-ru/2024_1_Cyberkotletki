@@ -5,7 +5,7 @@ import { Button } from '@/components/Button';
 import { LazyImg } from '@/components/LazyImg';
 import { Rating } from '@/components/Rating';
 import { AppComponent } from '@/core';
-import { InfoTable } from '@/pages/FilmPage/FilmMainContent/InfoTable/InfoTable';
+import { FilmInfoTable } from '@/pages/FilmPage/FilmMainContent/FilmInfoTable';
 import { REVIEW_FORM_ID } from '@/pages/FilmPage/FilmPage';
 import { concatClasses, getStaticUrl } from '@/utils';
 
@@ -26,12 +26,13 @@ export class FilmMainContent extends AppComponent<FilmMainContentProps> {
                     src={getStaticUrl(film?.posterURL)}
                     width="232px"
                     height="347px"
+                    alt={film?.title}
                 />
                 <div className={cx('section')}>
                     <div className={cx('top-info')}>
                         <section>
                             <h1 className={cx('title')}>{film?.title}</h1>
-                            <InfoTable film={film} />
+                            <FilmInfoTable film={film} />
                         </section>
                         <section className={cx('rating-section')}>
                             <Rating

@@ -1,15 +1,14 @@
-import styles from './InfoTable.module.scss';
+import styles from './FilmInfoTable.module.scss';
 
 import { Link } from '@/components/Link';
 import type { Film, Person } from '@/api/content/types';
 import { AppComponent } from '@/core';
-import type { AppNode } from '@/core/shared/AppNode.types';
 import { concatClasses, getHumanDate, isDefined } from '@/utils';
 import { routes } from '@/App/App.routes';
 
 const cx = concatClasses.bind(styles);
 
-export interface InfoTableProps {
+export interface FilmInfoTableProps {
     film?: Film;
 }
 
@@ -19,7 +18,7 @@ class NotFound extends AppComponent {
     }
 }
 
-export class InfoTable extends AppComponent<InfoTableProps> {
+export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
     renderPersons = (persons: Person[]) =>
         persons.map((person, index) => (
             <span>
@@ -30,7 +29,7 @@ export class InfoTable extends AppComponent<InfoTableProps> {
             </span>
         ));
 
-    render(): AppNode {
+    render() {
         const { film } = this.props;
 
         return (

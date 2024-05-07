@@ -1,4 +1,4 @@
-import styles from './InfoTable.module.scss';
+import styles from './PersonInfoTable.module.scss';
 
 import type { PersonActor } from '@/api/content/types';
 import { AppComponent } from '@/core';
@@ -7,14 +7,14 @@ import { concatClasses, getHumanDate } from '@/utils';
 
 const cx = concatClasses.bind(styles);
 
-export interface InfoTableProps {
+export interface PersonInfoTableProps {
     person?: PersonActor;
 }
 
 const isDateDefined = (date?: string): date is string =>
     date ? new Date(date).getFullYear() > 1 : false;
 
-export class InfoTable extends AppComponent<InfoTableProps> {
+export class PersonInfoTable extends AppComponent<PersonInfoTableProps> {
     render(): AppNode {
         const { person } = this.props;
 

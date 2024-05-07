@@ -69,11 +69,9 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
     componentDidMount(): void {
         const { context } = this.props;
 
-        if (!context?.profile?.profile || !this.state.profile) {
-            void context?.profile?.getProfile().then((profile) => {
-                this.setState((prev) => ({ ...prev, profile }));
-            });
-        }
+        void context?.profile?.getProfilePromise?.then((profile) => {
+            this.setState((prev) => ({ ...prev, profile }));
+        });
     }
 
     handleSearch = (searchString?: string) => {
@@ -164,6 +162,7 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                                             outlined
                                             isFullWidth
                                             className={cx('popover-button')}
+                                            aria-label="Перейти к профилю"
                                         >
                                             Профиль
                                         </Button>
@@ -176,6 +175,7 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                                         onClick={this.handleLogoutClick}
                                         size="small"
                                         className={cx('popover-button')}
+                                        aria-label="Выйти"
                                     >
                                         Выйти
                                     </Button>
@@ -191,6 +191,7 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                             className={cx({
                                 'mobile-hidden': searchOpened,
                             })}
+                            aria-label="Войти"
                         >
                             Войти
                         </Button>

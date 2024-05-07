@@ -38,9 +38,8 @@ export class UserInfoClass extends AppComponent<UserInfoProps, UserInfoState> {
 
         if (!isDefined(profile?.isLoggedIn) && !this.isLoading) {
             this.isLoading = true;
-            void profile
-                ?.getProfile()
-                .then((profile) => {
+            void profile?.getProfilePromise
+                ?.then((profile) => {
                     this.setState((prev) => ({ ...prev, profile }));
 
                     if (isDefined(profile?.id)) {
@@ -75,9 +74,11 @@ export class UserInfoClass extends AppComponent<UserInfoProps, UserInfoState> {
             });
     };
 
-    render() {
+    componentDidMount() {
         this.loadData();
+    }
 
+    render() {
         const { className, context, ...props } = this.props;
         const { profile: stateProfile, recentReviews } = this.state;
 

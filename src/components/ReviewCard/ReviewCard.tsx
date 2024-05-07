@@ -109,6 +109,7 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                                     styleType="secondary"
                                     isIconOnly
                                     title="Редактировать отзыв"
+                                    aria-label="Редактировать отзыв"
                                 >
                                     <img src={icEditUrl} aria-hidden />
                                 </Button>
@@ -119,6 +120,7 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                                 isIconOnly
                                 onClick={this.handleOpenModal}
                                 title="Удалить отзыв"
+                                aria-label="Удалить отзыв"
                             >
                                 <img src={icTrashUrl} aria-hidden />
                             </Button>

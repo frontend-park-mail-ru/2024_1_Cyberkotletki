@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
+    target: ['web', 'es2017'],
     entry: {
         main: './src/index.tsx',
         sw: './src/sw.js',
@@ -16,7 +17,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(js|ts|jsx|tsx)?$/,
+                test: /\.m?(js|ts|jsx|tsx)?$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
             },

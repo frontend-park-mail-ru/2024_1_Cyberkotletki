@@ -1,6 +1,7 @@
 import { setAttributes } from './setAttributes';
 import {
     appendChildWithCheck,
+    generateInstance,
     isAppElement,
     isDOMElement,
     isElementDefined,
@@ -54,9 +55,8 @@ export const createElement = (
     }
 
     if (isAppElement(element)) {
-        const GenerateInstance = element.type;
+        const instance = generateInstance(element);
 
-        const instance = new GenerateInstance(element.props);
         element.instance = instance;
 
         instance.componentWillMount();
