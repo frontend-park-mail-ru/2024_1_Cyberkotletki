@@ -17,6 +17,7 @@ import { Popover } from '@/components/Popover';
 import { Link } from '@/components/Link';
 import { contentService } from '@/api/content/service';
 import type { SearchResponse } from '@/api/content/types';
+import { icStarOutlinedUrl } from '@/assets/icons';
 
 const cx = concatClasses.bind(styles);
 
@@ -139,6 +140,16 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                                 'mobile-hidden': searchOpened,
                             })}
                         >
+                            <Button
+                                isIconOnly
+                                styleType="secondary"
+                                outlined
+                                aria-label="Перейти в избранное"
+                                title="Перейти в избранное"
+                                href={routes.favourites()}
+                            >
+                                <img src={icStarOutlinedUrl} aria-hidden />
+                            </Button>
                             <button
                                 className={cx('avatar-button')}
                                 popoverTarget="profile-popover"

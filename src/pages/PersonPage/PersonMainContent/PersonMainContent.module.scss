@@ -37,14 +37,7 @@
 }
 
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: var(--large-padding);
     margin-block-start: var(--main-content-offset);
-
-    @include mobile {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 .role-type-section {

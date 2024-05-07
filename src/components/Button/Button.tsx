@@ -2,7 +2,7 @@ import styles from './Button.module.scss';
 
 import { AppComponent } from '@/core';
 import { Spinner } from '@/components/Spinner';
-import { concatClasses, isPrimitive } from '@/utils';
+import { concatClasses } from '@/utils';
 import { Link } from '@/components/Link';
 import type { LinkProps } from '@/components/Link/Link';
 
@@ -47,10 +47,10 @@ export class Button extends AppComponent<InputProps> {
         return href ? (
             <Link
                 href={href}
-                className={className}
+                className={cx('link', className)}
                 rel={rel}
                 target={target}
-                aria-label={isPrimitive(children) ? `${children || ''}` : ''}
+                aria-label={props['aria-label']}
             >
                 <button
                     {...props}

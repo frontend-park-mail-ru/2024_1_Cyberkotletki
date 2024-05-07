@@ -24,13 +24,13 @@ const filename = path.join(compiler.outputPath, 'index.html');
 
 if (!isDev) {
     app.use(compression());
-}
 
-app.use(
-    serveStatic(path.join(__dirname, '/dist'), {
-        maxAge: '1d',
-    }),
-);
+    app.use(
+        serveStatic(path.join(__dirname, '/dist'), {
+            maxAge: '1d',
+        }),
+    );
+}
 
 app.use(
     webpackDevMiddleware(compiler, {

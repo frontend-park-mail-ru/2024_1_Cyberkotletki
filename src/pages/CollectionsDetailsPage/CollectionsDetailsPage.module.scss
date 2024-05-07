@@ -3,14 +3,7 @@
 }
 
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--large-padding);
     margin-block-start: var(--main-padding-2);
-
-    @include mobile {
-        grid-template-columns: repeat(1, 1fr);
-    }
 }
 
 .toggle-buttons {

@@ -6,6 +6,7 @@ import { LazyImg } from '@/components/LazyImg';
 import { AppComponent } from '@/core';
 import { PersonInfoTable } from '@/pages/PersonPage/PersonMainContent/PersonInfoTable';
 import { concatClasses, getStaticUrl, objectEntries } from '@/utils';
+import { LayoutGrid } from '@/layouts/LayoutGrid';
 
 const cx = concatClasses.bind(styles);
 
@@ -57,11 +58,15 @@ export class PersonMainContent extends AppComponent<PersonMainContentProps> {
                         {roles.map(([key, films]) => (
                             <section>
                                 <h1>{key}</h1>
-                                <div className={cx('grid-container')}>
+                                <LayoutGrid
+                                    className={cx('grid-container')}
+                                    itemsPerRow={6}
+                                    itemsPerRowMobile={2}
+                                >
                                     {films.map((film) => (
                                         <FilmCard film={film} size="small" />
                                     ))}
-                                </div>
+                                </LayoutGrid>
                             </section>
                         ))}
                     </div>

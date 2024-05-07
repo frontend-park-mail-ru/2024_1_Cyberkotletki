@@ -29,13 +29,6 @@ export class LazyImg extends AppComponent<LazyImgProps, AppComponentState> {
         this.props.onLoad?.(e);
     };
 
-    // componentShouldUpdate(
-    //     newConfig: LazyImgProps | null,
-    //     newState: AppComponentState | null,
-    // ): boolean {
-    //     // return false;
-    // }
-
     render() {
         const { isLoading } = this.state;
         const {

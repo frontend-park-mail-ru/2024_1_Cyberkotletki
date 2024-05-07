@@ -1,6 +1,7 @@
 import styles from './FilmMainContent.module.scss';
 
 import type { Film } from '@/api/content/types';
+import { icStarFilledUrl, icStarOutlinedUrl } from '@/assets/icons';
 import { Button } from '@/components/Button';
 import { LazyImg } from '@/components/LazyImg';
 import { Rating } from '@/components/Rating';
@@ -13,21 +14,44 @@ const cx = concatClasses.bind(styles);
 
 export interface FilmMainContentProps {
     film?: Film;
+    onFavouriteClick?: (film?: Film) => void;
+    addedToFavourite?: boolean;
+    withFavButton?: boolean;
 }
 
 export class FilmMainContent extends AppComponent<FilmMainContentProps> {
     render() {
-        const { film } = this.props;
+        const { film, onFavouriteClick, addedToFavourite, withFavButton } =
+            this.props;
 
         return (
             <div className={cx('content')}>
-                <LazyImg
-                    className={cx('film-poster')}
-                    src={getStaticUrl(film?.posterURL)}
-                    width="232px"
-                    height="347px"
-                    alt={film?.title}
-                />
+                <div>
+                    <LazyImg
+                        className={cx('film-poster')}
+                        src={getStaticUrl(film?.posterURL)}
+                        width="232px"
+                        height="347px"
+                        alt={film?.title}
+                    />
+                    {withFavButton && (
+                        <Button
+                            outlined
+                            styleType="secondary"
+                            onClick={() => {
+                                onFavouriteClick?.(film);
+                            }}
+                            className={cx('fav-button')}
+                        >
+                            {addedToFavourite ? (
+                                <img src={icStarFilledUrl} aria-hidden />
+                            ) : (
+                                <img src={icStarOutlinedUrl} aria-hidden />
+                            )}
+                            {addedToFavourite ? 'В избранном' : 'В избранное'}
+                        </Button>
+                    )}
+                </div>
                 <div className={cx('section')}>
                     <div className={cx('top-info')}>
                         <section>

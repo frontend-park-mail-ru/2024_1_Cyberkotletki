@@ -11,6 +11,7 @@ import { CompilationItem } from '@/components/CompilationItem';
 import { Spinner } from '@/components/Spinner';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
+import { LayoutGrid } from '@/layouts/LayoutGrid';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { concatClasses, createQueryParams, isDefined } from '@/utils';
 
@@ -137,11 +138,11 @@ export class CollectionsPage extends AppComponent<
                                 </Button>
                             ))}
                         </div>
-                        <div className={cx('grid-container')}>
+                        <LayoutGrid className={cx('grid-container')}>
                             {filteredCompilations?.map((compilation) => (
                                 <CompilationItem compilation={compilation} />
                             ))}
-                        </div>
+                        </LayoutGrid>
                     </section>
                 )}
             </LayoutWithHeader>

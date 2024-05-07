@@ -19,6 +19,8 @@ class Routes {
     notFound = () => `/not-found` as const;
 
     person = (id: number | string) => `/person/${id}` as const;
+
+    favourites = () => `/favourites` as const;
 }
 
 export const routes = new Routes();

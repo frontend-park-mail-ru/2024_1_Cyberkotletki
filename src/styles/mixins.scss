@@ -111,6 +111,12 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
     font-family: var(--font-family);
 }
 
+@mixin text-header-3-light {
+    font-weight: 400;
+    font-size: 2rem;
+    font-family: var(--font-family);
+}
+
 @mixin text-header-2 {
     font-weight: 500;
     font-size: 2.25rem;
@@ -182,15 +188,20 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
         width: calc(100% + var(--large-padding));
         height: calc(100% + var(--large-padding));
         background-color: transparent;
+        border: 1px solid transparent;
         border-radius: var(--card-border-radius);
         transform: translateX(-50%) translateY(-50%);
         transition: var(--item-transition-all);
         content: '';
     }
 
+    &:focus-visible,
     &:hover {
+        outline: none;
+
         &::before {
             background-color: var(--absolute-op-10);
+            border: 1px solid var(--secondary-gray-op-30);
         }
     }
 

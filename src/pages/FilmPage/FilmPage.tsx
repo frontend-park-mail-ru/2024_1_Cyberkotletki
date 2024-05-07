@@ -15,6 +15,7 @@ import { ReviewCard } from '@/components/ReviewCard';
 import { ProfileContext } from '@/Providers/ProfileProvider';
 import type { ProfileResponse } from '@/api/user/types';
 import type { AppContext } from '@/types/Context.types';
+import { favouriteService } from '@/api/favourite/favourite.service';
 
 const cx = concatClasses.bind(styles);
 interface Params {
@@ -29,13 +30,13 @@ export interface FilmPageState {
     reviewForEdit?: ReviewDetails;
     profile?: ProfileResponse;
     isEdit?: boolean;
+    addedToFavourite?: boolean;
 }
 
 export const REVIEW_FORM_ID = 'review-form';
 
 export interface FilmPageInnerProps {
     context?: AppContext;
-    uid?: string;
 }
 
 class FilmPageInnerClass extends AppComponent<
@@ -71,7 +72,7 @@ class FilmPageInnerClass extends AppComponent<
         const { profile } = this.props.context ?? {};
 
         if (!isDefined(profile?.isLoggedIn)) {
-            void profile?.getProfile().then((profile) => {
+            void profile?.getProfilePromise?.then((profile) => {
                 this.setState((prev) => ({ ...prev, profile }));
 
                 if (this.state.reviews?.length) {
@@ -141,15 +142,47 @@ class FilmPageInnerClass extends AppComponent<
         }
     };
 
+    handleAddToFavourite = (film?: Film) => {
+        if (isDefined(film?.id)) {
+            const promise = this.state.addedToFavourite
+                ? favouriteService.deleteFavouriteContent(film.id)
+                : favouriteService.addToFavourite(film.id);
+
+            void promise.then(() => {
+                this.getIsAddedToFavourite();
+            });
+        }
+    };
+
+    getIsAddedToFavourite = () => {
+        const { params } = window.history.state as { params?: Params };
+
+        void favouriteService
+            .getContentFavouriteStatus(+(params?.uid ?? ''))
+            .then(() => {
+                this.setState((prev) => ({ ...prev, addedToFavourite: true }));
+            })
+            .catch(() => {
+                this.setState((prev) => ({ ...prev, addedToFavourite: false }));
+            });
+    };
+
     componentDidMount() {
         this.getProfile();
+        this.getIsAddedToFavourite();
     }
 
     render(): AppNode {
         const { params } = window.history.state as { params?: Params };
 
-        const { isLoading, film, isNotFound, isEdit, reviewForEdit } =
-            this.state;
+        const {
+            isLoading,
+            film,
+            isNotFound,
+            isEdit,
+            reviewForEdit,
+            addedToFavourite,
+        } = this.state;
         const profile =
             this.state.profile || this.props.context?.profile?.profile;
 
@@ -165,7 +198,12 @@ class FilmPageInnerClass extends AppComponent<
             <NotFound description="Фильм не найден" />
         ) : (
             <div>
-                <FilmMainContent film={this.state.film} />
+                <FilmMainContent
+                    film={this.state.film}
+                    onFavouriteClick={this.handleAddToFavourite}
+                    addedToFavourite={addedToFavourite}
+                    withFavButton={!!profile}
+                />
                 <section className={cx('reviews-block')}>
                     <h1>Отзывы:</h1>
                     <div className={cx('reviews-list')}>
@@ -210,27 +248,11 @@ class FilmPageInnerClass extends AppComponent<
 
 const FilmPageInner = ProfileContext.Connect(FilmPageInnerClass);
 
-export class FilmPage extends AppComponent<object, { key?: string }> {
-    state = { key: (window.history.state as { params?: Params }).params?.uid };
-
+export class FilmPage extends AppComponent {
     render(): AppNode {
-        const { params } = window.history.state as { params?: Params };
-
-        if (params?.uid !== this.state.key) {
-            this.setState((prev) => ({ ...prev, key: params?.uid }));
-
-            this.forceUpdate();
-
-            return (
-                <LayoutWithHeader key={params?.uid}>
-                    <FilmPageInner key={params?.uid} uid={params?.uid} />
-                </LayoutWithHeader>
-            );
-        }
-
         return (
-            <LayoutWithHeader key={this.state.key}>
-                <FilmPageInner key={this.state.key} uid={this.state.key} />
+            <LayoutWithHeader>
+                <FilmPageInner />
             </LayoutWithHeader>
         );
     }

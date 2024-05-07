@@ -22,6 +22,37 @@
             flex-grow: 1;
         }
     }
+
+    &::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        width: 120%;
+        background: linear-gradient(rgb(0 0 0 / 90%) 50%, rgb(0 0 0 / 0%) 100%);
+        transform: translateX(50%) translateY(-50%) rotate(45deg);
+        filter: blur(6px);
+        content: '';
+        aspect-ratio: 1;
+    }
+
+    &.left-shadow {
+        &::after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            width: 120%;
+            background: linear-gradient(
+                rgb(0 0 0 / 90%) 50%,
+                rgb(0 0 0 / 0%) 100%
+            );
+            transform: translateX(-50%) translateY(-50%) rotate(-45deg);
+            filter: blur(6px);
+            content: '';
+            aspect-ratio: 1;
+        }
+    }
 }
 
 .poster-img {
@@ -75,4 +106,11 @@
     span {
         @include cut-for-n-rows(2);
     }
+}
+
+.remove-button {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 2;
 }

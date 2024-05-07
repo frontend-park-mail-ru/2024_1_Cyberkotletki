@@ -58,3 +58,7 @@
 .title {
     @include text-header-2;
 }
+
+.fav-button {
+    margin-block-start: var(--main-padding);
+}

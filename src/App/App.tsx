@@ -12,6 +12,7 @@ import { ProfileSettingsPage } from '@/pages/ProfileSettingsPage';
 import { ProfileProvider } from '@/Providers/ProfileProvider';
 import { ContentProvider } from '@/Providers/ContentProvider';
 import { CollectionsDetailsPage } from '@/pages/CollectionsDetailsPage';
+import { FavouritesPage } from '@/pages/FavouritesPage';
 
 import '@/styles/global.scss';
 
@@ -61,6 +62,10 @@ export class App extends AppComponent<object> {
                             {
                                 path: routes.notFound(),
                                 element: <NotFound withButton />,
+                            },
+                            {
+                                path: routes.favourites(),
+                                element: <FavouritesPage />,
                             },
                         ]}
                     />

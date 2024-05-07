@@ -121,6 +121,7 @@ export class SearchInput extends AppComponent<
                         isIconOnly
                         styleType="secondary"
                         aria-label="Поиск"
+                        title="Поиск"
                     >
                         <img src={icSearchUrl} aria-hidden />
                     </Button>

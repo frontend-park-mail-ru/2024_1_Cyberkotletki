@@ -12,6 +12,7 @@ import type { AppContext } from '@/types/Context.types';
 import { NotFound } from '@/components/NotFound';
 import { LazyImg } from '@/components/LazyImg';
 import { Spinner } from '@/components/Spinner';
+import { LayoutGrid } from '@/layouts/LayoutGrid';
 
 const cx = concatClasses.bind(styles);
 
@@ -137,14 +138,14 @@ class CollectionsDetailsPageClass extends AppComponent<
                                 {filmsCompilation?.compilation?.title}
                             </h1>
                         </header>
-                        <div className={cx('grid-container')}>
+                        <LayoutGrid className={cx('grid-container')}>
                             {films?.map((film) => (
                                 <FilmCard
                                     film={film}
                                     className={cx('film-card')}
                                 />
                             ))}
-                        </div>
+                        </LayoutGrid>
                         {currentPage < (filmsCompilation?.total_pages ?? 0) && (
                             <Button
                                 onClick={() => {
