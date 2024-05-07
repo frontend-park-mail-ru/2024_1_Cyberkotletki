@@ -54,7 +54,7 @@ export class SearchItem extends AppComponent<SearchItemProps> {
                     <LazyImg
                         className={cx('image')}
                         src={getStaticUrl(film?.poster ?? person?.photoURL)}
-                        alt={name}
+                        alt="Постер"
                     />
                     <div className={cx('info-container')}>
                         <h1 className={cx('head')} title={name}>

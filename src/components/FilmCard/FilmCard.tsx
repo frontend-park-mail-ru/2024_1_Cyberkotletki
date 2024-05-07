@@ -46,7 +46,7 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                         <LazyImg
                             src={getStaticUrl(film?.posterURL)}
                             className={cx('poster-img')}
-                            alt={film?.title}
+                            alt="Постер"
                             width="136px"
                             height="200px"
                         />

@@ -33,7 +33,7 @@ export class CompilationItem extends AppComponent<CompilationItemProps> {
                         width="144px"
                         height="144px"
                         className={cx('poster')}
-                        alt={compilation?.title}
+                        alt="Постер подборки"
                     />
                     <div className={cx('info')}>
                         <h1 className={cx('head')} title={compilation?.title}>

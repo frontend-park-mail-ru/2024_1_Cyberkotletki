@@ -131,7 +131,7 @@ class CollectionsDetailsPageClass extends AppComponent<
                                     filmsCompilation?.compilation?.poster,
                                 )}
                                 className={cx('poster')}
-                                alt={filmsCompilation?.compilation?.title}
+                                alt="Постер подборки"
                             />
                             <h1 className={cx('head')}>
                                 {filmsCompilation?.compilation?.title}
