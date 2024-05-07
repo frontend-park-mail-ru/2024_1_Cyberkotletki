@@ -115,31 +115,22 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                             'mobile-hidden': searchOpened,
                         })}
                     />
-                    {/** //? Soon... */}
-                    <div className={cx('tabs')}>
+                    <div className={cx('tabs', { hidden: searchOpened })}>
                         {HEADER_TABS.map((tab) => (
-                            <Link
-                                href={tab.route}
-                                className={cx({ hidden: searchOpened })}
-                            >
-                                {tab.title}
-                            </Link>
+                            <Link href={tab.route}>{tab.title}</Link>
                         ))}
-                        <SearchInput
-                            onOpen={this.handleSearchOpen}
-                            onClose={this.handleSearchClose}
-                            onSearch={this.handleSearch}
-                            isLoading={isSearchLoading}
-                            persons={searchResponse?.persons}
-                            films={searchResponse?.content}
-                        />
                     </div>
                     {profile ? (
-                        <div
-                            className={cx('avatar-container', {
-                                'mobile-hidden': searchOpened,
-                            })}
-                        >
+                        <div className={cx('avatar-container')}>
+                            <SearchInput
+                                onOpen={this.handleSearchOpen}
+                                onClose={this.handleSearchClose}
+                                onSearch={this.handleSearch}
+                                isLoading={isSearchLoading}
+                                persons={searchResponse?.persons}
+                                films={searchResponse?.content}
+                                className={cx('search')}
+                            />
                             <Button
                                 isIconOnly
                                 styleType="secondary"
@@ -147,11 +138,16 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                                 aria-label="Перейти в избранное"
                                 title="Перейти в избранное"
                                 href={routes.favourites()}
+                                className={cx({
+                                    'mobile-hidden': searchOpened,
+                                })}
                             >
                                 <img src={icStarOutlinedUrl} aria-hidden />
                             </Button>
                             <button
-                                className={cx('avatar-button')}
+                                className={cx('avatar-button', {
+                                    'mobile-hidden': searchOpened,
+                                })}
                                 popoverTarget="profile-popover"
                                 popoverTargetAction="toggle"
                             >

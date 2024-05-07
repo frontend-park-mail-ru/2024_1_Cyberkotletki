@@ -31,6 +31,7 @@
     --main-padding: 16px;
     --main-padding-2: 32px;
     --large-padding: 24px;
+    --footer-height: 240px;
 
     /* Header */
     --header-height: 80px;
@@ -94,22 +95,26 @@
 }
 
 html {
-    width: 100vw;
-    height: 100%;
-    overflow: hidden auto;
+    @include custom-scrollbar;
 
     * {
         box-sizing: border-box;
     }
-
-    @include custom-scrollbar;
 }
 
 html,
 body {
-    height: 100%;
     margin: 0;
     padding: 0;
+}
+
+body {
+    overflow: auto;
+    background: var(--background);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
 }
 
 a {
@@ -119,10 +124,6 @@ a {
 
 input {
     appearance: none;
-}
-
-#root {
-    height: 100%;
 }
 
 input,

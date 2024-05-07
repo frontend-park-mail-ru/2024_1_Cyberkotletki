@@ -1,10 +1,24 @@
 .footer {
     display: flex;
     flex-direction: column;
-    gap: var(--main-padding-2);
+    gap: var(--main-padding);
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 72px;
-    background-color: var(--black);
+    height: var(--footer-height);
+    background-color: var(--absolute-op-10);
+    border-top: 1px solid var(--secondary-gray-op-30);
+    padding-inline: var(--main-padding);
+
+    h1 {
+        @include text-header-5;
+    }
+}
+
+.logo-icon {
+    height: 2rem;
+}
+
+.x-icon {
+    height: 1rem;
 }

@@ -16,6 +16,7 @@
 
     position: relative;
     display: flex;
+    flex-shrink: 0;
     gap: var(--main-text-gap);
     align-items: center;
     justify-content: center;
