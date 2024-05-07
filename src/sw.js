@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_NAME = 'SW_CACHE_V3';
+const CACHE_NAME = 'SW_CACHE_V4';
 
-const CACHE_PATHS = ['/', '/main.css', '/main.js'];
+const CACHE_PATHS = ['/'];
 
 self.addEventListener('install', (e) => {
     e.waitUntil(
@@ -21,14 +21,15 @@ self.addEventListener('fetch', (e) => {
                 return r;
             }
 
+            const response = await fetch(e.request);
+
             if (!navigator.onLine) {
-                return;
+                return response;
             }
 
-            const response = await fetch(e.request);
-            const cache = await caches.open(CACHE_NAME);
-
             if (e.request.method === 'GET' && !r) {
+                const cache = await caches.open(CACHE_NAME);
+
                 cache.put(e.request, response.clone());
             }
 
