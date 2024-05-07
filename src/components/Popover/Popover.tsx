@@ -17,6 +17,7 @@ export interface PopoverProps
     onClose?: () => void;
     width?: 'fit';
     horizonPos?: 'center' | 'left' | 'right';
+    fixed?: boolean;
 }
 const cx = concatClasses.bind(styles);
 
@@ -84,11 +85,11 @@ export class Popover extends AppComponent<PopoverProps, PopoverState> {
     }
 
     render() {
-        const { children, className, id, ...props } = this.props;
+        const { children, className, id, fixed, ...props } = this.props;
 
         return (
             <div
-                className={cx('popover', className)}
+                className={cx('popover', className, { fixed })}
                 popover="auto"
                 id={id}
                 {...props}

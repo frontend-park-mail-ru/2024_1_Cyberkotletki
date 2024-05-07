@@ -164,6 +164,7 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                                 id="profile-popover"
                                 width="fit"
                                 horizonPos="right"
+                                fixed
                             >
                                 <div>
                                     <Link href={routes.profile()}>

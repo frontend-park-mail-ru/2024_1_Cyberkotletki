@@ -97,7 +97,6 @@ html {
     width: 100vw;
     height: 100%;
     overflow: hidden auto;
-    scroll-behavior: smooth;
 
     * {
         box-sizing: border-box;
@@ -124,11 +123,6 @@ input {
 
 #root {
     height: 100%;
-
-    > * {
-        max-width: 100vmax;
-        overflow-x: hidden;
-    }
 }
 
 input,

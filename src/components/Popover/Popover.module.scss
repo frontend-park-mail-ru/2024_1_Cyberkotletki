@@ -20,8 +20,13 @@
 
     &:popover-open {
         position: absolute;
+        top: 0;
         margin-top: 0;
         visibility: visible;
         opacity: 1;
+
+        &.fixed {
+            position: fixed;
+        }
     }
 }

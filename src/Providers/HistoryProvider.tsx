@@ -31,6 +31,16 @@ export interface HistoryProviderState {
 
 const EDGE_SLASHES_REGEXP = /^\/|\/$/g;
 
+const scrollToTop = () => {
+    setTimeout(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'instant',
+        });
+    });
+};
+
 export class HistoryProvider extends AppComponent<
     HistoryProviderProps,
     HistoryProviderState
@@ -88,12 +98,7 @@ export class HistoryProvider extends AppComponent<
                 this.forceUpdate();
 
                 if (!safeScroll) {
-                    setTimeout(() => {
-                        window.scrollTo({
-                            top: 0,
-                            left: 0,
-                        });
-                    });
+                    scrollToTop();
                 }
             }
 
@@ -125,12 +130,7 @@ export class HistoryProvider extends AppComponent<
                     this.forceUpdate();
 
                     if (!safeScroll) {
-                        setTimeout(() => {
-                            window.scrollTo({
-                                top: 0,
-                                left: 0,
-                            });
-                        });
+                        scrollToTop();
                     }
                 } else if (!isEqual(prevParams.params, match.params)) {
                     window.location.reload();

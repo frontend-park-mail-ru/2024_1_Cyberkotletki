@@ -26,6 +26,7 @@ export class SearchPopup extends AppComponent<SearchPopupProps> {
             <Popover
                 className={cx('popup', className)}
                 isOpen={isOpen}
+                fixed
                 {...props}
             >
                 <div className={cx('content', { loading: isLoading })}>

@@ -63,11 +63,19 @@ export class FilmMainContent extends AppComponent<FilmMainContentProps> {
                                 rating={film?.rating}
                                 imdbRating={film?.imdbRating}
                             />
-                            <a href={`#${REVIEW_FORM_ID}`}>
-                                <Button outlined styleType="secondary">
-                                    Оценить
-                                </Button>
-                            </a>
+                            <Button
+                                outlined
+                                styleType="secondary"
+                                onClick={() => {
+                                    document
+                                        .getElementById(REVIEW_FORM_ID)
+                                        ?.scrollIntoView({
+                                            behavior: 'smooth',
+                                        });
+                                }}
+                            >
+                                Оценить
+                            </Button>
                         </section>
                     </div>
                     <section className={cx('description-section')}>
