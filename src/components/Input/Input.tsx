@@ -50,7 +50,7 @@ export class Input extends AppComponent<InputProps> {
             className,
             containerClassName,
             icon,
-            iconPos = 'start',
+            iconPos,
             ...props
         } = this.props;
 
@@ -87,7 +87,7 @@ export class Input extends AppComponent<InputProps> {
                         )}
                     ></input>
                 )}
-                <div className={cx('end-icon', iconPos)}>{icon}</div>
+                {icon && <div className={cx('end-icon', iconPos)}>{icon}</div>}
                 {hasError && !!errorHint && (
                     <ErrorMessage message={errorHint} hint />
                 )}
