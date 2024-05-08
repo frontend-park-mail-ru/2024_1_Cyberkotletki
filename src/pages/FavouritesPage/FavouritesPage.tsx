@@ -70,14 +70,18 @@ export class FavouritesPage extends AppComponent<object, FavouritesPageState> {
                             itemsPerRow={6}
                             itemsPerRowMobile={2}
                         >
-                            {favouriteContent?.map((film) => (
-                                <FilmCard
-                                    film={film}
-                                    size="small"
-                                    withDeleteButton
-                                    onDeleteClick={this.handleDelete}
-                                />
-                            ))}
+                            {favouriteContent?.length ? (
+                                favouriteContent?.map((film) => (
+                                    <FilmCard
+                                        film={film}
+                                        size="small"
+                                        withDeleteButton
+                                        onDeleteClick={this.handleDelete}
+                                    />
+                                ))
+                            ) : (
+                                <p>Здесь пока ничего нет</p>
+                            )}
                         </LayoutGrid>
                     </section>
                 )}

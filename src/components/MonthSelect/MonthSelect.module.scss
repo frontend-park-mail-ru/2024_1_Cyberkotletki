@@ -1,0 +1,16 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
+
+.item {
+    @include text-primary-light;
+
+    color: var(--light-gray) !important;
+
+    &.active {
+        color: var(--text-color) !important;
+        font-weight: bold;
+    }
+}

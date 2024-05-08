@@ -150,3 +150,13 @@ export interface SearchResponse {
     content?: SearchContent[];
     persons?: SearchPerson[];
 }
+
+export interface Release {
+    genre?: string[];
+    id?: number;
+    poster?: string;
+    /** 2022-01-02T15:04:05Z */
+    releaseDate?: string;
+    title?: string;
+    type?: Film['type'];
+}

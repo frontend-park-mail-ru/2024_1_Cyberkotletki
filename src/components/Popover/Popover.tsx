@@ -15,6 +15,7 @@ export interface PopoverProps
     id: string;
     isOpen?: boolean;
     onClose?: () => void;
+    onOpen?: () => void;
     width?: 'fit';
     horizonPos?: 'center' | 'left' | 'right';
     fixed?: boolean;
@@ -51,6 +52,8 @@ export class Popover extends AppComponent<PopoverProps, PopoverState> {
 
         if (e.newState === 'closed') {
             this.props.onClose?.();
+        } else {
+            this.props.onOpen?.();
         }
     };
 

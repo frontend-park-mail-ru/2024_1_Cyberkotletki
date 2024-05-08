@@ -13,6 +13,7 @@ import { ProfileProvider } from '@/Providers/ProfileProvider';
 import { ContentProvider } from '@/Providers/ContentProvider';
 import { CollectionsDetailsPage } from '@/pages/CollectionsDetailsPage';
 import { FavouritesPage } from '@/pages/FavouritesPage';
+import { ReleasesPage } from '@/pages/ReleasesPage';
 
 import '@/styles/global.scss';
 
@@ -66,6 +67,10 @@ export class App extends AppComponent<object> {
                             {
                                 path: routes.favourites(),
                                 element: <FavouritesPage />,
+                            },
+                            {
+                                path: routes.releases(),
+                                element: <ReleasesPage />,
                             },
                         ]}
                     />

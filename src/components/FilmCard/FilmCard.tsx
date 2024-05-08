@@ -7,13 +7,15 @@ import {
     concatClasses,
     getHumanDate,
     getStaticUrl,
+    isDefined,
 } from '@/utils';
 import type { Film } from '@/api/content/types';
 import { LazyImg } from '@/components/LazyImg';
 import { Link } from '@/components/Link';
-import { routes } from '@/App/App.routes';
+import { routes, type RoutesValues } from '@/App/App.routes';
 import { Button } from '@/components/Button';
 import { icTrashUrl } from '@/assets/icons';
+import { ReleaseBadge } from '@/components/ReleaseBadge';
 
 const cx = concatClasses.bind(styles);
 
@@ -30,6 +32,8 @@ export interface FilmCardProps
     size?: 'small' | 'large';
     withDeleteButton?: boolean;
     onDeleteClick?: (film?: Film) => void;
+    link?: RoutesValues | '';
+    withReleaseBadge?: boolean;
 }
 
 export class FilmCard extends AppComponent<FilmCardProps> {
@@ -42,15 +46,19 @@ export class FilmCard extends AppComponent<FilmCardProps> {
             size = 'large',
             withDeleteButton,
             onDeleteClick,
+            link = routes.film(film?.id ?? 0),
+            withReleaseBadge,
             ...props
         } = this.props;
 
         return (
             <article
                 {...props}
-                className={cx('card', { small: size === 'small' }, className)}
-                role="button"
-                tabIndex={0}
+                className={cx('card', { small: size === 'small' }, className, {
+                    button: !!link,
+                })}
+                role={link ? 'button' : undefined}
+                tabIndex={link ? 0 : -1}
                 onClick={() => {
                     this.linkRef.current?.click();
                 }}
@@ -62,7 +70,6 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                         'left-shadow': withDeleteButton,
                     })}
                 >
-                    <RatingBadge rating={film?.rating} />
                     <LazyImg
                         src={getStaticUrl(film?.posterURL)}
                         className={cx('poster-img')}
@@ -70,6 +77,18 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                         width="136px"
                         height="200px"
                     />
+                    {withReleaseBadge && (
+                        <ReleaseBadge
+                            date={film?.movie?.release}
+                            className={cx('badge')}
+                        />
+                    )}
+                    {!withReleaseBadge && isDefined(film?.rating) && (
+                        <RatingBadge
+                            rating={film?.rating}
+                            className={cx('badge')}
+                        />
+                    )}
                     {withDeleteButton && (
                         <Button
                             isIconOnly
@@ -90,16 +109,18 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                     )}
                 </div>
                 <div className={cx('card-info', { small: size === 'small' })}>
-                    <Link
-                        href={routes.film(film?.id ?? 0)}
-                        tabIndex={-1}
-                        aria-label={film?.title}
-                        ref={this.linkRef}
-                    >
+                    {link ? (
+                        <Link href={link} tabIndex={-1} ref={this.linkRef}>
+                            <h1 className={cx('title')} title={film?.title}>
+                                {film?.title}
+                            </h1>
+                        </Link>
+                    ) : (
                         <h1 className={cx('title')} title={film?.title}>
                             {film?.title}
                         </h1>
-                    </Link>
+                    )}
+
                     {size === 'large' ? (
                         <div className={cx('info')}>
                             <span>

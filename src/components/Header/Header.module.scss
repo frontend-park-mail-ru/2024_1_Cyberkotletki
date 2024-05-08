@@ -46,10 +46,6 @@
     justify-content: flex-end;
     height: 100%;
     padding-block: 4px;
-
-    @include mobile {
-        width: 100%;
-    }
 }
 
 .header-container {
@@ -67,9 +63,10 @@
     gap: var(--small-padding);
     align-items: center;
     justify-content: center;
+    margin-inline-start: auto;
 
     @include mobile {
-        width: 100%;
+        display: none;
     }
 }
 
@@ -114,7 +111,9 @@
 }
 
 .search {
-    margin-inline-end: var(--main-padding-2);
+    display: flex;
+    margin-inline: auto var(--main-padding-2);
+    justify-content: center;
 
     @include mobile {
         margin-inline-end: 0;

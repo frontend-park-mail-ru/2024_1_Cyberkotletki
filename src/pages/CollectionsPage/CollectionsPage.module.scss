@@ -8,6 +8,7 @@
 
 .toggle-buttons {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--main-content-gap);
     margin-block-start: var(--main-padding-2);
 }

@@ -6,20 +6,26 @@ import { concatClasses } from '@/utils';
 
 const cx = concatClasses.bind(styles as Record<string, string | undefined>);
 
+interface InputDefaultProps {
+    label?: string;
+    hasError?: boolean;
+    errorHint?: string;
+    containerClassName?: string;
+    icon?: JSX.Children;
+    iconPos?: 'start' | 'end';
+}
+
 export type InputTypeProps = Omit<
     App.DetailedHTMLProps<
         App.InputHTMLAttributes<HTMLInputElement>,
         HTMLInputElement
     >,
     'ref' | 'children'
-> & {
-    inputType?: 'input';
-    inputRef?: App.Ref<HTMLInputElement>;
-    label?: string;
-    hasError?: boolean;
-    errorHint?: string;
-    containerClassName?: string;
-};
+> &
+    InputDefaultProps & {
+        inputType?: 'input';
+        inputRef?: App.Ref<HTMLInputElement>;
+    };
 
 export type TextareaTypeProps = Omit<
     App.DetailedHTMLProps<
@@ -27,14 +33,11 @@ export type TextareaTypeProps = Omit<
         HTMLTextAreaElement
     >,
     'ref' | 'children'
-> & {
-    inputType: 'textarea';
-    textareaRef?: App.Ref<HTMLTextAreaElement>;
-    label?: string;
-    hasError?: boolean;
-    errorHint?: string;
-    containerClassName?: string;
-};
+> &
+    InputDefaultProps & {
+        inputType: 'textarea';
+        textareaRef?: App.Ref<HTMLTextAreaElement>;
+    };
 
 export type InputProps = InputTypeProps | TextareaTypeProps;
 
@@ -46,6 +49,8 @@ export class Input extends AppComponent<InputProps> {
             errorHint,
             className,
             containerClassName,
+            icon,
+            iconPos = 'start',
             ...props
         } = this.props;
 
@@ -71,13 +76,18 @@ export class Input extends AppComponent<InputProps> {
                     <input
                         {...this.props}
                         ref={this.props.inputRef}
-                        className={cx('input', className, {
-                            'with-error': hasError,
-                            input: true,
-                        })}
-                    />
+                        className={cx(
+                            'input',
+                            className,
+                            {
+                                'with-error': hasError,
+                                input: true,
+                            },
+                            iconPos,
+                        )}
+                    ></input>
                 )}
-
+                <div className={cx('end-icon', iconPos)}>{icon}</div>
                 {hasError && !!errorHint && (
                     <ErrorMessage message={errorHint} hint />
                 )}

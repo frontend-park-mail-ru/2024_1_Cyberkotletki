@@ -120,17 +120,17 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                             <Link href={tab.route}>{tab.title}</Link>
                         ))}
                     </div>
+                    <SearchInput
+                        onOpen={this.handleSearchOpen}
+                        onClose={this.handleSearchClose}
+                        onSearch={this.handleSearch}
+                        isLoading={isSearchLoading}
+                        persons={searchResponse?.persons}
+                        films={searchResponse?.content}
+                        className={cx('search')}
+                    />
                     {profile ? (
                         <div className={cx('avatar-container')}>
-                            <SearchInput
-                                onOpen={this.handleSearchOpen}
-                                onClose={this.handleSearchClose}
-                                onSearch={this.handleSearch}
-                                isLoading={isSearchLoading}
-                                persons={searchResponse?.persons}
-                                films={searchResponse?.content}
-                                className={cx('search')}
-                            />
                             <Button
                                 isIconOnly
                                 styleType="secondary"

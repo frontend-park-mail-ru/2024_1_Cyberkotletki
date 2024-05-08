@@ -4,6 +4,7 @@ import type {
     Film,
     FilmsCompilation,
     PersonActor,
+    Release,
     SearchResponse,
 } from './types';
 
@@ -111,6 +112,46 @@ class ContentService {
     async searchContent(searchString: string) {
         return appFetch.get<SearchResponse | undefined>(
             contentRoutes.search(searchString),
+        );
+    }
+
+    /**
+     * Получить ближайшие релизы
+     * @param limit Лимит
+     * @returns Список Ближайших релизов
+     */
+    async getNearestReleases(limit = 6) {
+        return appFetch.get<Release[] | undefined>(
+            contentRoutes.ongoingNearest(limit),
+        );
+    }
+
+    /**
+     * Получить все года релизов
+     * @returns Года релизов
+     */
+    async getReleaseYears() {
+        return appFetch.get<number[] | undefined>(contentRoutes.ongoingYears());
+    }
+
+    /**
+     * Получить релиз
+     * @param id id релиза
+     * @returns Релиз
+     */
+    async getReleaseById(id: number) {
+        return appFetch.get<Release | undefined>(contentRoutes.ongoing(id));
+    }
+
+    /**
+     * Получить релизы по месяцу и году
+     * @param year Год
+     * @param month месяц
+     * @returns Список релизов
+     */
+    async getReleasesByYearAndMonth(year: number, month: number) {
+        return appFetch.get<Release[] | undefined>(
+            contentRoutes.ongoing(year, month),
         );
     }
 }

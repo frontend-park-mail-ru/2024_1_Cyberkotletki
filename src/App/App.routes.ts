@@ -8,7 +8,7 @@ class Routes {
     register = () => '/register' as const;
 
     collections = (id?: string | number) =>
-        `/${isDefined(id) ? `collections/${id}` : ''}` as const;
+        `/collections${isDefined(id) ? `/${id}` : ''}` as const;
 
     profile = () => '/profile' as const;
 
@@ -21,6 +21,8 @@ class Routes {
     person = (id: number | string) => `/person/${id}` as const;
 
     favourites = () => `/favourites` as const;
+
+    releases = () => `/releases` as const;
 }
 
 export const routes = new Routes();

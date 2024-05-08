@@ -1,10 +1,6 @@
 .rating-circle {
     @include text-secondary-small;
 
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    z-index: 2;
     display: flex;
     justify-content: center;
     width: fit-content;
