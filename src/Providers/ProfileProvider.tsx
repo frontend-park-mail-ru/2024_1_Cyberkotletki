@@ -80,7 +80,16 @@ export class ProfileProvider extends AppComponent<
         return (
             <ProfileContext.Provider
                 value={{
-                    profile: this.state,
+                    profile: {
+                        ...this.state,
+                        getProfile: () => {
+                            const promise = this.state.getProfile();
+
+                            this.state.getProfilePromise = promise;
+
+                            return promise;
+                        },
+                    },
                 }}
             >
                 {children}
