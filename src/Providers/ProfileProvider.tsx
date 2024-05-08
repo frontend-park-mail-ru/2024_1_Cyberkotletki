@@ -40,8 +40,11 @@ export class ProfileProvider extends AppComponent<
                 return undefined;
             }
 
-            return userService
-                .getProfile()
+            const promise = userService.getProfile();
+
+            this.state.getProfilePromise = promise;
+
+            return promise
                 .then((profile = {}) => {
                     this.setState((prev) => ({
                         ...prev,
@@ -80,16 +83,7 @@ export class ProfileProvider extends AppComponent<
         return (
             <ProfileContext.Provider
                 value={{
-                    profile: {
-                        ...this.state,
-                        getProfile: () => {
-                            const promise = this.state.getProfile();
-
-                            this.state.getProfilePromise = promise;
-
-                            return promise;
-                        },
-                    },
+                    profile: this.state,
                 }}
             >
                 {children}
