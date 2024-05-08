@@ -26,6 +26,12 @@
     width: 100%;
 
     @include text-primary;
+
+    @include mobile {
+        a {
+            width: 100%;
+        }
+    }
 }
 
 .main-info {

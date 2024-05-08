@@ -84,7 +84,6 @@ export class Dropdown extends AppComponent<DropdownProps, DropdownState> {
                             className={cx('icon', { rotate: isOpen })}
                         />
                     }
-                    placeholder="fvsdfvdv"
                     type="button"
                 />
                 <Popover

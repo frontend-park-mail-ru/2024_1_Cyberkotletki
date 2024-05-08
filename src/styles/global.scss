@@ -11,7 +11,7 @@
     color-scheme: dark;
 
     /* Font */
-    --font-size: 16px;
+    --font-size: 14px;
     --font-family: 'Wix Madefor Display', arial, helvetica, sans-serif;
 
     /* Variables  */
@@ -85,11 +85,11 @@
     --modal-shadow: rgb(0 0 0 / 35%) 0 5px 15px;
 
     @include tablet {
-        --font-size: 13px;
+        --font-size: 15px;
     }
 
     @include mobile {
-        --font-size: 12px;
+        --font-size: 16px;
 
         /* Header */
         --header-height: 64px;

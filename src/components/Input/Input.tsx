@@ -61,6 +61,7 @@ export class Input extends AppComponent<InputProps> {
                         {label}
                     </label>
                 )}
+                {icon && <i className={cx('end-icon', iconPos)}>{icon}</i>}
                 {this.props.inputType === 'textarea' ? (
                     <textarea
                         {...this.props}
@@ -85,9 +86,8 @@ export class Input extends AppComponent<InputProps> {
                             },
                             iconPos,
                         )}
-                    ></input>
+                    />
                 )}
-                {icon && <div className={cx('end-icon', iconPos)}>{icon}</div>}
                 {hasError && !!errorHint && (
                     <ErrorMessage message={errorHint} hint />
                 )}

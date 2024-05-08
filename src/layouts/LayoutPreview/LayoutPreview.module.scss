@@ -6,6 +6,7 @@
 
 .head-container {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--main-content-gap);
     align-items: center;
     justify-content: space-between;

@@ -1,6 +1,10 @@
 .input {
     width: fit-content;
-    cursor: pointer;
+    color: var(--text-color);
+
+    input {
+        cursor: pointer;
+    }
 }
 
 .icon {

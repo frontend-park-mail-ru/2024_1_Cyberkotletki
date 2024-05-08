@@ -22,6 +22,7 @@
     width: 100%;
     max-width: var(--max-content-width);
     height: 100%;
+    overflow-x: hidden;
     padding-block: calc(2 * var(--main-content-offset))
         calc(4 * var(--main-content-offset));
     padding-inline: var(--main-content-offset);
