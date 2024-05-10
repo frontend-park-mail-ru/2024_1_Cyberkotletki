@@ -7,7 +7,7 @@
     padding: 4px 8px;
     color: var(--white);
     font-weight: 800;
-    background: var(--success);
+    background-color: var(--rating-badge-color);
     border-radius: 4px;
 
     @include rating-badge-color;
