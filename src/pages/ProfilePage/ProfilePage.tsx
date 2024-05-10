@@ -8,7 +8,7 @@ export class ProfilePage extends AppComponent<object> {
     render(): AppNode {
         return (
             <LayoutWithHeader>
-                <UserInfo key="profile-page" />
+                <UserInfo />
             </LayoutWithHeader>
         );
     }

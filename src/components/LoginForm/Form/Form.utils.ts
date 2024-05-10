@@ -144,9 +144,7 @@ export function submitForm(this: FormClass, e: App.FormEvent<HTMLFormElement>) {
             .then(() => {
                 const { history, profile } = context ?? {};
 
-                void profile?.getProfile?.();
-
-                setTimeout(() => {
+                void profile?.getProfile?.().then(() => {
                     history?.changeRoute(routes.root(), undefined, true);
                 });
 

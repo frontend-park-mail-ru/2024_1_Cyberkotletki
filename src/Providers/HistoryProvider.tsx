@@ -94,8 +94,7 @@ export class HistoryProvider extends AppComponent<
 
         if (element) {
             if (element !== this.state.element) {
-                this.state = { ...this.state, element };
-                this.forceUpdate();
+                this.setState((prev) => ({ ...prev, element }));
 
                 if (!safeScroll) {
                     scrollToTop();
@@ -120,14 +119,12 @@ export class HistoryProvider extends AppComponent<
                     this.state.routesMap.get(routes.notFound())?.element;
 
                 if (element !== this.state.element) {
-                    this.state = {
-                        ...this.state,
+                    this.setState((prev) => ({
+                        ...prev,
                         element: this.state.routesMap.get(key)?.element || (
                             <div />
                         ),
-                    };
-
-                    this.forceUpdate();
+                    }));
 
                     if (!safeScroll) {
                         scrollToTop();
@@ -145,13 +142,12 @@ export class HistoryProvider extends AppComponent<
         )?.element;
 
         if (notFound !== this.state.element) {
-            this.state = {
-                ...this.state,
+            this.setState((prev) => ({
+                ...prev,
                 element: this.state.routesMap.get(
                     routes.notFound().replace(EDGE_SLASHES_REGEXP, ''),
                 )?.element ?? <div />,
-            };
-            this.forceUpdate();
+            }));
         }
     };
 
@@ -169,13 +165,13 @@ export class HistoryProvider extends AppComponent<
         window.removeEventListener('popstate', this.listener);
     }
 
+    contextValue: AppContext = {
+        history: { changeRoute: this.handleChangeRoute },
+    };
+
     render() {
         return (
-            <HistoryContext.Provider
-                value={{
-                    history: { changeRoute: this.handleChangeRoute },
-                }}
-            >
+            <HistoryContext.Provider value={this.contextValue}>
                 {this.state.element}
             </HistoryContext.Provider>
         );

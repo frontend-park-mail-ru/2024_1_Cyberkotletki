@@ -88,7 +88,7 @@ export class PersonPage extends AppComponent {
     render() {
         return (
             <LayoutWithHeader>
-                <PersonPageInner key="person-page" />
+                <PersonPageInner />
             </LayoutWithHeader>
         );
     }

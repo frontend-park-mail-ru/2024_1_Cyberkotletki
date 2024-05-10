@@ -48,6 +48,7 @@ export class Popover extends AppComponent<PopoverProps, PopoverState> {
             this.state.triggerElement?.getBoundingClientRect(),
             this.props.width === 'fit',
             this.props.horizonPos,
+            this.props.fixed,
         );
 
         if (e.newState === 'closed') {
