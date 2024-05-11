@@ -154,24 +154,20 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                             )}
                         </td>
                     </tr>
-                    <tr>
-                        <td className={cx('label')}>Зрители:</td>
-                        <td>
-                            {isDefined(film?.audience) ? (
-                                film?.audience
-                            ) : (
-                                <NotFound />
-                            )}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className={cx('label')}>Дата премьеры:</td>
-                        <td>{getHumanDate(film?.movie?.premiere)}</td>
-                    </tr>
-                    <tr>
-                        <td className={cx('label')}>Дата релиза:</td>
-                        <td>{getHumanDate(film?.movie?.release)}</td>
-                    </tr>
+                    {film?.movie?.premiere ? (
+                        <tr>
+                            <td className={cx('label')}>Дата премьеры:</td>
+                            <td>{getHumanDate(film?.movie?.premiere)}</td>
+                        </tr>
+                    ) : (
+                        <NotFound />
+                    )}
+                    {film?.movie?.release && (
+                        <tr>
+                            <td className={cx('label')}>Дата релиза:</td>
+                            <td>{getHumanDate(film?.movie?.release)}</td>
+                        </tr>
+                    )}
                     <tr>
                         <td className={cx('label')}>Возрастное ограничение:</td>
                         <td>

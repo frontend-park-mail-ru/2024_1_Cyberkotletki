@@ -3,11 +3,12 @@ import styles from './PersonPage.module.scss';
 import type { PersonActor } from '@/api/content/types.ts';
 import { AppComponent } from '@/core';
 import { concatClasses, isDefined } from '@/utils';
-import { contentService } from '@/api/content/service.ts';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { NotFound } from '@/components/NotFound';
 import { PersonMainContent } from '@/pages/PersonPage/PersonMainContent';
 import { Spinner } from '@/components/Spinner';
+import { ContentContext } from '@/Providers/ContentProvider';
+import type { AppContext } from '@/types/Context.types';
 
 const cx = concatClasses.bind(styles);
 
@@ -17,7 +18,10 @@ export interface PersonPageState {
     isLoading?: boolean;
 }
 
-class PersonPageInner extends AppComponent<object, PersonPageState> {
+class PersonPageInner extends AppComponent<
+    { context?: AppContext },
+    PersonPageState
+> {
     state: PersonPageState = { isLoading: false };
 
     getPersonById = async () => {
@@ -29,8 +33,8 @@ class PersonPageInner extends AppComponent<object, PersonPageState> {
         if (isDefined(params?.uid)) {
             this.setState((prev) => ({ ...prev, isLoading: true }));
 
-            await contentService
-                .getPersonById(+params.uid)
+            await this.props.context?.content
+                ?.loadPersonById?.(+params.uid)
                 .then((person) => {
                     this.setState((prev) => ({ ...prev, person }));
                 })
@@ -52,44 +56,54 @@ class PersonPageInner extends AppComponent<object, PersonPageState> {
         }));
     };
 
+    componentDidMount(): void {
+        const { params } =
+            (window.history.state as {
+                params?: { uid?: string };
+            }) ?? {};
+
+        const personsMap = this.props.context?.content?.personsMap;
+
+        if (!personsMap?.[Number(params?.uid)]) {
+            void this.getPersonById();
+        }
+    }
+
     render() {
         const { params } =
             (window.history.state as {
                 params?: { uid?: string };
             }) ?? {};
 
-        const { isLoading, person, isNotFound } = this.state;
+        const { isLoading, isNotFound } = this.state;
 
-        if (
-            (!person || params?.uid !== `${person?.id ?? 0}`) &&
-            !isLoading &&
-            !isNotFound
-        ) {
-            void this.getPersonById();
+        const person =
+            this.props.context?.content?.personsMap[Number(params?.uid)] ??
+            this.state.person;
+
+        switch (true) {
+            case isLoading:
+                return (
+                    <div className={cx('spinner-container')}>
+                        <Spinner />
+                    </div>
+                );
+            case isNotFound:
+                return <NotFound description="Персона не найдена" />;
+            default:
+                return <PersonMainContent person={person} />;
         }
-
-        if (isLoading) {
-            return (
-                <div className={cx('spinner-container')}>
-                    <Spinner />
-                </div>
-            );
-        }
-
-        return isNotFound ? (
-            <NotFound description="Персона не найдена" />
-        ) : (
-            <PersonMainContent person={this.state.person} />
-        );
     }
 }
 
-export class PersonPage extends AppComponent {
+class PersonPageClass extends AppComponent<{ context?: AppContext }> {
     render() {
         return (
             <LayoutWithHeader>
-                <PersonPageInner />
+                <PersonPageInner context={this.props.context} />
             </LayoutWithHeader>
         );
     }
 }
+
+export const PersonPage = ContentContext.Connect(PersonPageClass);

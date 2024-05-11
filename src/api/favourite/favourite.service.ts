@@ -5,7 +5,9 @@ import type {
     FavouriteStatus,
 } from './favourite.types';
 
+import { contentService } from '@/api/content/service';
 import { appFetch } from '@/api/appFetch.ts';
+import type { Film } from '@/api/content/types';
 
 class FavouriteService {
     /**
@@ -26,7 +28,17 @@ class FavouriteService {
      * @returns Список фильмов и/или сериалов или персон
      */
     async getMyFavourites() {
-        return appFetch.get<FavouriteResponse>(favoriteRoutes.favouriteMy());
+        const favourites = await appFetch.get<FavouriteResponse>(
+            favoriteRoutes.favouriteMy(),
+        );
+
+        return (
+            await Promise.all(
+                favourites.favourites?.map(({ contentID }) =>
+                    contentService.getFilmById(contentID ?? 0),
+                ) ?? [],
+            )
+        ).filter(Boolean) as Film[];
     }
 
     /**

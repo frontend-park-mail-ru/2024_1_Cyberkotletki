@@ -1,41 +1,36 @@
 import styles from './FavouritesPage.module.scss';
 
-import { contentService } from '@/api/content/service';
+import { ContentContext } from '@/Providers/ContentProvider';
 import type { Film } from '@/api/content/types';
 import { favouriteService } from '@/api/favourite/favourite.service';
-import type { FavouriteResponse } from '@/api/favourite/favourite.types';
 import { FilmCard } from '@/components/FilmCard';
 import { Spinner } from '@/components/Spinner';
 import { AppComponent } from '@/core';
 import { LayoutGrid } from '@/layouts/LayoutGrid';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { concatClasses, isDefined } from '@/utils';
+import type { AppContextComponentProps } from '@/types/Context.types';
 
 const cx = concatClasses.bind(styles);
 
 export interface FavouritesPageState {
-    favouritesResponse?: FavouriteResponse;
     favouriteContent?: Film[];
     isFirstLoading?: boolean;
 }
 
-export class FavouritesPage extends AppComponent<object, FavouritesPageState> {
+class FavouritesPageInner extends AppComponent<
+    AppContextComponentProps,
+    FavouritesPageState
+> {
     loadMyFavourites = async () => {
-        const favouritesResponse = await favouriteService.getMyFavourites();
-
-        const favouriteContent = (
-            await Promise.all(
-                favouritesResponse.favourites?.map(({ contentID }) =>
-                    contentService.getFilmById(contentID ?? 0),
-                ) ?? [],
-            )
-        ).filter(Boolean) as Film[];
-
-        this.setState((prev) => ({
-            ...prev,
-            favouritesResponse,
-            favouriteContent,
-        }));
+        await this.props.context?.content
+            ?.loadFavouriteFilms?.()
+            .then((films) => {
+                this.setState((prev) => ({
+                    ...prev,
+                    favouriteContent: films,
+                }));
+            });
     };
 
     handleDelete = (film?: Film) => {
@@ -47,14 +42,23 @@ export class FavouritesPage extends AppComponent<object, FavouritesPageState> {
     };
 
     componentDidMount(): void {
-        this.setState((prev) => ({ ...prev, isFirstLoading: true }));
-        void this.loadMyFavourites().finally(() => {
-            this.setState((prev) => ({ ...prev, isFirstLoading: false }));
-        });
+        const favouriteFilms = this.props.context?.content?.favouriteFilms;
+
+        if (!favouriteFilms) {
+            this.setState((prev) => ({ ...prev, isFirstLoading: true }));
+
+            void this.loadMyFavourites().finally(() => {
+                this.setState((prev) => ({ ...prev, isFirstLoading: false }));
+            });
+        }
     }
 
     render() {
-        const { favouriteContent, isFirstLoading } = this.state;
+        const { isFirstLoading } = this.state;
+
+        const favouriteContent =
+            this.props.context?.content?.favouriteFilms ||
+            this.state.favouriteContent;
 
         return (
             <LayoutWithHeader>
@@ -89,3 +93,11 @@ export class FavouritesPage extends AppComponent<object, FavouritesPageState> {
         );
     }
 }
+
+class FavouritesPageClass extends AppComponent<AppContextComponentProps> {
+    render() {
+        return <FavouritesPageInner context={this.props.context} />;
+    }
+}
+
+export const FavouritesPage = ContentContext.Connect(FavouritesPageClass);

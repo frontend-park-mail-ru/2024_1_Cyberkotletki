@@ -21,6 +21,7 @@
 .section {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .rating-section {
@@ -39,6 +40,7 @@
 .top-info {
     display: flex;
     gap: var(--main-padding-2);
+    justify-content: space-between;
 
     @include mobile {
         flex-direction: column;

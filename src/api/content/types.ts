@@ -37,7 +37,6 @@ export interface Film {
     ageRestriction?: number;
     backdropURL?: string;
     budget?: string;
-    audience?: number;
     boxOffice?: number;
     composers?: Person[];
     countries?: string[];

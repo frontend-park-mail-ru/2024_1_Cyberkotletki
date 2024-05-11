@@ -1,5 +1,6 @@
 import { contentService } from '@/api/content/service';
-import type { Film, FilmsCompilation } from '@/api/content/types';
+import type { Film, FilmsCompilation, PersonActor } from '@/api/content/types';
+import { favouriteService } from '@/api/favourite/favourite.service';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
@@ -12,9 +13,14 @@ export interface FilmsByCollection {
 export interface ContentContextValues {
     films?: Film[];
     film?: Film;
+    favouriteFilms?: Film[];
     filmsByCollection?: Record<string | number, FilmsByCollection>;
+    personsMap: Record<number, PersonActor | undefined>;
+    filmsMap: Record<number, Film | undefined>;
     getAllFilms?: () => Promise<Film[] | undefined>;
-    getFilmById?: (id: number) => Promise<Film | undefined>;
+    loadFavouriteFilms?: () => Promise<Film[] | undefined>;
+    loadFilmById?: (id: number) => Promise<Film | undefined>;
+    loadPersonById?: (id: number) => Promise<PersonActor | undefined>;
     loadFilms: (typeId: number, page: number) => Promise<FilmsByCollection>;
 }
 
@@ -29,6 +35,8 @@ export class ContentProvider extends AppComponent<
     ContentContextValues
 > {
     state: ContentContextValues = {
+        filmsMap: {},
+        personsMap: {},
         getAllFilms: () =>
             contentService.getAllFilms().then((response) => {
                 const films = response.filter(Boolean) as Film[];
@@ -41,14 +49,29 @@ export class ContentProvider extends AppComponent<
                 return films;
             }),
 
-        getFilmById: (id) =>
+        loadFilmById: (id) =>
             contentService.getFilmById(id).then((film) => {
+                const filmsMap = { ...this.state.filmsMap, [id]: film };
+
                 this.setState((prev) => ({
                     ...prev,
                     film,
+                    filmsMap,
                 }));
 
                 return film;
+            }),
+
+        loadPersonById: (id) =>
+            contentService.getPersonById(id).then((person) => {
+                const personsMap = { ...this.state.personsMap, [id]: person };
+
+                this.setState((prev) => ({
+                    ...prev,
+                    personsMap,
+                }));
+
+                return person;
             }),
 
         loadFilms: async (typeId: number, page: number) => {
@@ -79,6 +102,16 @@ export class ContentProvider extends AppComponent<
 
             return filmsByCollection[typeId];
         },
+
+        loadFavouriteFilms: () =>
+            favouriteService.getMyFavourites().then((films) => {
+                this.setState((prev) => ({
+                    ...prev,
+                    favouriteFilms: films,
+                }));
+
+                return films;
+            }),
     };
 
     render() {

@@ -5,9 +5,9 @@ export interface ContextProviderProps<Value = object> {
     value: Value;
     children?: AppNode;
 }
-export class ContextProvider extends AppComponent<{
-    children?: AppNode;
-}> {
+export class ContextProvider<Value = object> extends AppComponent<
+    ContextProviderProps<Value>
+> {
     render() {
         const children = (this.props?.children ?? []) as JSX.Element[];
 
@@ -22,8 +22,8 @@ export class Context<Value = object> {
         this.value = value;
     }
 
-    Provider = ({ value, ...props }: ContextProviderProps<Value>) => {
-        this.value = value;
+    Provider = (props: ContextProviderProps<Value>) => {
+        this.value = props.value;
 
         return new ContextProvider(props);
     };
@@ -42,7 +42,7 @@ export class Context<Value = object> {
                       ...props,
                       context: { ...contextProp, ...this.value },
                   })
-                : (Component as unknown as (props: Props) => AppComponent)({
+                : (Component as (props: Props) => AppComponent)({
                       ...props,
                       context: { ...contextProp, ...this.value },
                   });
