@@ -133,6 +133,7 @@ export class FormClass extends AppComponent<FormProps, FormState> {
                     isLoading={isLoading}
                     disabled={!!error}
                     type="submit"
+                    aria-label={isLogin ? 'Войти' : 'Продолжить'}
                 >
                     {isLogin ? 'Войти' : 'Продолжить'}
                 </Button>

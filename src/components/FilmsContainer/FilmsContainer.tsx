@@ -8,6 +8,7 @@ import type { Film } from '@/api/content/types';
 import { ContentContext } from '@/Providers/ContentProvider';
 import type { AppContext } from '@/types/Context.types';
 import { Spinner } from '@/components/Spinner';
+import { LayoutGrid } from '@/layouts/LayoutGrid';
 
 const cx = concatClasses.bind(styles);
 
@@ -87,9 +88,9 @@ class FilmsContainerClass extends AppComponent<
                         <Spinner />
                     </div>
                 ) : (
-                    <div className={cx('grid-container')}>
+                    <LayoutGrid className={cx('grid-container')}>
                         {films?.map((film) => <FilmCard film={film} />)}
-                    </div>
+                    </LayoutGrid>
                 )}
             </section>
         );

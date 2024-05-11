@@ -6,19 +6,26 @@ import { concatClasses } from '@/utils';
 
 const cx = concatClasses.bind(styles as Record<string, string | undefined>);
 
+interface InputDefaultProps {
+    label?: string;
+    hasError?: boolean;
+    errorHint?: string;
+    containerClassName?: string;
+    icon?: JSX.Children;
+    iconPos?: 'start' | 'end';
+}
+
 export type InputTypeProps = Omit<
     App.DetailedHTMLProps<
         App.InputHTMLAttributes<HTMLInputElement>,
         HTMLInputElement
     >,
     'ref' | 'children'
-> & {
-    inputType?: 'input';
-    label?: string;
-    hasError?: boolean;
-    errorHint?: string;
-    containerClassName?: string;
-};
+> &
+    InputDefaultProps & {
+        inputType?: 'input';
+        inputRef?: App.Ref<HTMLInputElement>;
+    };
 
 export type TextareaTypeProps = Omit<
     App.DetailedHTMLProps<
@@ -26,13 +33,11 @@ export type TextareaTypeProps = Omit<
         HTMLTextAreaElement
     >,
     'ref' | 'children'
-> & {
-    inputType: 'textarea';
-    label?: string;
-    hasError?: boolean;
-    errorHint?: string;
-    containerClassName?: string;
-};
+> &
+    InputDefaultProps & {
+        inputType: 'textarea';
+        textareaRef?: App.Ref<HTMLTextAreaElement>;
+    };
 
 export type InputProps = InputTypeProps | TextareaTypeProps;
 
@@ -44,6 +49,8 @@ export class Input extends AppComponent<InputProps> {
             errorHint,
             className,
             containerClassName,
+            icon,
+            iconPos,
             ...props
         } = this.props;
 
@@ -54,9 +61,11 @@ export class Input extends AppComponent<InputProps> {
                         {label}
                     </label>
                 )}
+                {icon && <i className={cx('end-icon', iconPos)}>{icon}</i>}
                 {this.props.inputType === 'textarea' ? (
                     <textarea
                         {...this.props}
+                        ref={this.props.textareaRef}
                         className={cx('input', className, {
                             'with-error': hasError,
                             textarea: true,
@@ -67,13 +76,18 @@ export class Input extends AppComponent<InputProps> {
                 ) : (
                     <input
                         {...this.props}
-                        className={cx('input', className, {
-                            'with-error': hasError,
-                            input: true,
-                        })}
+                        ref={this.props.inputRef}
+                        className={cx(
+                            'input',
+                            className,
+                            {
+                                'with-error': hasError,
+                                input: true,
+                            },
+                            iconPos,
+                        )}
                     />
                 )}
-
                 {hasError && !!errorHint && (
                     <ErrorMessage message={errorHint} hint />
                 )}

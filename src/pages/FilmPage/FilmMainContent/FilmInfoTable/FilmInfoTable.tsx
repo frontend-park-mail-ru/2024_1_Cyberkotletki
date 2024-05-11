@@ -1,15 +1,14 @@
-import styles from './InfoTable.module.scss';
+import styles from './FilmInfoTable.module.scss';
 
 import { Link } from '@/components/Link';
 import type { Film, Person } from '@/api/content/types';
 import { AppComponent } from '@/core';
-import type { AppNode } from '@/core/shared/AppNode.types';
 import { concatClasses, getHumanDate, isDefined } from '@/utils';
 import { routes } from '@/App/App.routes';
 
 const cx = concatClasses.bind(styles);
 
-export interface InfoTableProps {
+export interface FilmInfoTableProps {
     film?: Film;
 }
 
@@ -19,18 +18,18 @@ class NotFound extends AppComponent {
     }
 }
 
-export class InfoTable extends AppComponent<InfoTableProps> {
+export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
     renderPersons = (persons: Person[]) =>
         persons.map((person, index) => (
             <span>
                 <Link
-                    href={routes.person(`${person.id}`)}
-                >{`${person.firstName} ${person.lastName}`}</Link>
+                    href={routes.person(`${person.id ?? 0}`)}
+                >{`${person.name ?? ''}`}</Link>
                 {index < persons.length - 1 && ', '}
             </span>
         ));
 
-    render(): AppNode {
+    render() {
         const { film } = this.props;
 
         return (
@@ -137,7 +136,13 @@ export class InfoTable extends AppComponent<InfoTableProps> {
                     </tr>
                     <tr>
                         <td className={cx('label')}>Слоган:</td>
-                        <td>{`"${film?.slogan ?? ''}"`}</td>
+                        <td>
+                            {film?.slogan ? (
+                                `"${film?.slogan ?? ''}"`
+                            ) : (
+                                <NotFound />
+                            )}
+                        </td>
                     </tr>
                     <tr>
                         <td className={cx('label')}>Бюджет:</td>
@@ -149,31 +154,39 @@ export class InfoTable extends AppComponent<InfoTableProps> {
                             )}
                         </td>
                     </tr>
+                    {film?.movie?.premiere ? (
+                        <tr>
+                            <td className={cx('label')}>Дата премьеры:</td>
+                            <td>{getHumanDate(film?.movie?.premiere)}</td>
+                        </tr>
+                    ) : (
+                        <NotFound />
+                    )}
+                    {film?.movie?.release && (
+                        <tr>
+                            <td className={cx('label')}>Дата релиза:</td>
+                            <td>{getHumanDate(film?.movie?.release)}</td>
+                        </tr>
+                    )}
                     <tr>
-                        <td className={cx('label')}>Зрители:</td>
+                        <td className={cx('label')}>Возрастное ограничение:</td>
                         <td>
-                            {isDefined(film?.audience) ? (
-                                film?.audience
+                            {isDefined(film?.ageRestriction) ? (
+                                `${film?.ageRestriction ?? ''}+`
                             ) : (
                                 <NotFound />
                             )}
                         </td>
                     </tr>
                     <tr>
-                        <td className={cx('label')}>Дата премьеры:</td>
-                        <td>{getHumanDate(film?.movie?.premiere)}</td>
-                    </tr>
-                    <tr>
-                        <td className={cx('label')}>Дата релиза:</td>
-                        <td>{getHumanDate(film?.movie?.release)}</td>
-                    </tr>
-                    <tr>
-                        <td className={cx('label')}>Возрастное ограничение:</td>
-                        <td>{`${film?.ageRestriction ?? ''}+`}</td>
-                    </tr>
-                    <tr>
                         <td className={cx('label')}>Длительность:</td>
-                        <td>{`${film?.movie?.duration ?? ''} мин.`}</td>
+                        <td>
+                            {film?.movie?.duration ? (
+                                `${film?.movie?.duration ?? ''} мин.`
+                            ) : (
+                                <NotFound />
+                            )}
+                        </td>
                     </tr>
                 </tbody>
             </table>

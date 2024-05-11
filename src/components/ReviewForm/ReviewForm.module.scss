@@ -4,6 +4,7 @@
 
 .top {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--large-padding);
     align-items: flex-start;
 }

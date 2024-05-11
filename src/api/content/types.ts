@@ -1,7 +1,7 @@
 export interface Person {
-    id: number;
-    firstName: string;
-    lastName: string;
+    enName?: string;
+    id?: number;
+    name?: string;
 }
 
 export interface Movie {
@@ -32,12 +32,12 @@ export interface Series {
 }
 
 export interface Film {
-    id: number;
+    id?: number;
     actors?: Person[];
     ageRestriction?: number;
-    audience?: number;
+    backdropURL?: string;
+    budget?: string;
     boxOffice?: number;
-    budget?: number;
     composers?: Person[];
     countries?: string[];
     description?: string;
@@ -57,34 +57,105 @@ export interface Film {
     title?: string;
     type?: 'movie' | 'series';
     writers?: Person[];
+    facts?: string[];
+    picturesURL?: string[];
+    trailerLink?: string;
 }
 
-export interface ActorRole
-    extends Pick<
-        Film,
-        'id' | 'actors' | 'originalTitle' | 'rating' | 'title' | 'type'
-    > {
-    country: string;
-    director: string;
-    genre: string;
-    poster: string;
-    releaseYear: number;
+export interface ActorRole {
+    genre?: string[];
+    id?: number;
+    poster?: string;
+    rating?: number;
+    releaseYear?: number;
+    title?: string;
+    type?: Film['type'];
+    yearEnd?: number;
+    yearStart?: number;
 }
 
 export interface PersonActor {
-    id: number;
-    firstName: string;
-    lastName: string;
-    sex: string;
-    photoURL: string;
-    height: number;
+    id?: number;
+    sex?: string;
+    photoURL?: string;
+    height?: number;
     /** `1956-07-09T00:00:00Z` */
-    birthDate: string;
+    birthDate?: string;
     /** `1956-07-09T00:00:00Z` */
-    deathDate: string;
+    deathDate?: string;
     /** `1956-07-09T00:00:00Z` */
-    endCareer: string;
+    endCareer?: string;
     /** `1956-07-09T00:00:00Z` */
-    startCareer: string;
-    roles: ActorRole[];
+    startCareer?: string;
+    roles?: Record<'string', ActorRole[]>;
+    enName?: string;
+    name?: string;
+}
+
+export interface CompilationType {
+    id?: number;
+    type?: string;
+}
+
+export interface CompilationTypesResponse {
+    compilation_types?: CompilationType[];
+}
+
+export interface Compilation {
+    id?: number;
+    title?: string;
+    compilation_type_id?: number;
+    poster?: string;
+}
+
+export interface CompilationsResponse {
+    compilations?: Compilation[];
+}
+
+export interface FilmsCompilation {
+    compilation?: Compilation;
+    content_ids?: number[];
+    content_length?: number;
+    page?: number;
+    per_page?: number;
+    total_pages?: number;
+}
+
+export interface SearchContent {
+    actors?: string[];
+    country?: string;
+    director?: string;
+    duration?: number;
+    genre?: string;
+    id?: number;
+    originalTitle?: string;
+    poster?: string;
+    rating?: number;
+    seasonsNumber?: number;
+    title?: string;
+    type?: Film['type'];
+    yearEnd?: number;
+    yearStart?: number;
+}
+
+export interface SearchPerson {
+    enName?: string;
+    id?: number;
+    name?: string;
+    photoURL?: string;
+}
+
+export interface SearchResponse {
+    content?: SearchContent[];
+    persons?: SearchPerson[];
+}
+
+export interface Release {
+    genre?: string[];
+    id?: number;
+    poster?: string;
+    /** 2022-01-02T15:04:05Z */
+    releaseDate?: string;
+    title?: string;
+    type?: Film['type'];
 }

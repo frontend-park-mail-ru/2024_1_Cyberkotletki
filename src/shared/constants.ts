@@ -1,5 +1,4 @@
-import type { RoutesValues } from '@/App/App.routes';
-import { routes } from '@/App/App.routes';
+import { routes, type RoutesValues } from '@/App/App.routes';
 
 export enum Method {
     GET = 'GET',
@@ -55,4 +54,19 @@ export interface HeaderPage {
 export const HEADER_TABS: HeaderPage[] = [
     { route: routes.root(), title: 'Главная' },
     { route: routes.collections(), title: 'Подборки' },
+] as const;
+
+export const MONTHS = [
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь',
 ] as const;

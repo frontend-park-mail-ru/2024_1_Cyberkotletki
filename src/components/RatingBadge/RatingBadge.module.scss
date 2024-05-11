@@ -1,43 +1,14 @@
 .rating-circle {
     @include text-secondary-small;
 
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    z-index: 1;
     display: flex;
     justify-content: center;
     width: fit-content;
     padding: 4px 8px;
     color: var(--white);
     font-weight: 800;
-    background: var(--success);
+    background-color: var(--rating-badge-color);
     border-radius: 4px;
-
-    &::before {
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: -1;
-        width: 500%;
-        background: linear-gradient(rgb(0 0 0 / 90%) 50%, rgb(0 0 0 / 0%) 100%);
-        transform: translateX(50%) translateY(-50%) rotate(45deg);
-        filter: blur(6px);
-        content: '';
-        aspect-ratio: 1;
-    }
-
-    &::after {
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: -1;
-        width: 100%;
-        height: 100%;
-        background-color: var(--rating-badge-color);
-        border-radius: 4px;
-        content: '';
-    }
 
     @include rating-badge-color;
 }

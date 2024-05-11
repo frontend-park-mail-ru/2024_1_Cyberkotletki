@@ -8,11 +8,16 @@ import { Button } from '@/components/Button';
 import { HistoryContext } from '@/Providers/HistoryProvider';
 import { routes } from '@/App/App.routes';
 import { authService } from '@/api/auth/service';
-import { Link } from '@/components/Link';
 import { ProfileContext } from '@/Providers/ProfileProvider';
 import { Avatar } from '@/components/Avatar';
 import type { ProfileResponse } from '@/api/user/types';
-import { LocalStorageKey } from '@/shared/constants';
+import { HEADER_TABS, LocalStorageKey } from '@/shared/constants';
+import { SearchInput } from '@/components/SearchInput';
+import { Popover } from '@/components/Popover';
+import { Link } from '@/components/Link';
+import { contentService } from '@/api/content/service';
+import type { SearchResponse } from '@/api/content/types';
+import { icStarOutlinedUrl } from '@/assets/icons';
 
 const cx = concatClasses.bind(styles);
 
@@ -26,6 +31,9 @@ export interface HeaderProps
 
 export interface HeaderState {
     profile?: ProfileResponse;
+    searchOpened?: boolean;
+    searchResponse?: SearchResponse;
+    isSearchLoading?: boolean;
 }
 
 class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
@@ -33,6 +41,14 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
         profile: JSON.parse(
             localStorage.getItem(LocalStorageKey.USER_DATA) ?? 'null',
         ) as ProfileResponse,
+    };
+
+    handleSearchOpen = () => {
+        this.setState((prev) => ({ ...prev, searchOpened: true }));
+    };
+
+    handleSearchClose = () => {
+        this.setState((prev) => ({ ...prev, searchOpened: false }));
     };
 
     handleLoginClick = () => {
@@ -54,44 +70,125 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
     componentDidMount(): void {
         const { context } = this.props;
 
-        if (!context?.profile?.profile || !this.state.profile) {
-            void context?.profile?.getProfile().then((profile) => {
-                this.setState((prev) => ({ ...prev, profile }));
-            });
-        }
+        void context?.profile?.getProfilePromise?.then((profile) => {
+            this.setState((prev) => ({ ...prev, profile }));
+        });
     }
+
+    handleSearch = (searchString?: string) => {
+        if (searchString) {
+            this.setState((prev) => ({ ...prev, isSearchLoading: true }));
+
+            void contentService
+                .searchContent(searchString)
+                .then((searchResponse) => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        searchResponse,
+                    }));
+                })
+                .finally(() => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        isSearchLoading: false,
+                    }));
+                });
+        }
+    };
 
     render() {
         const { className, context, ...props } = this.props;
-        const { profile: stateProfile } = this.state;
+        const {
+            profile: stateProfile,
+            searchOpened,
+            searchResponse,
+            isSearchLoading,
+        } = this.state;
 
         const profile = context?.profile?.profile || stateProfile;
 
         return (
             <header className={cx('header', className)} {...props}>
                 <div className={cx('header-container')}>
-                    <LogoButton className={cx('header-logo')} />
-                    {/** //? Soon... */}
-                    {/* <div className={cx('tabs')}>
+                    <LogoButton
+                        className={cx('header-logo', {
+                            'mobile-hidden': searchOpened,
+                        })}
+                    />
+                    <div className={cx('tabs', { hidden: searchOpened })}>
                         {HEADER_TABS.map((tab) => (
                             <Link href={tab.route}>{tab.title}</Link>
                         ))}
-                    </div> */}
+                    </div>
+                    <SearchInput
+                        onOpen={this.handleSearchOpen}
+                        onClose={this.handleSearchClose}
+                        onSearch={this.handleSearch}
+                        isLoading={isSearchLoading}
+                        persons={searchResponse?.persons}
+                        films={searchResponse?.content}
+                        className={cx('search')}
+                    />
                     {profile ? (
                         <div className={cx('avatar-container')}>
-                            <div
-                                className={cx('logout-button')}
-                                onClick={this.handleLogoutClick}
-                                role="button"
+                            <Button
+                                isIconOnly
+                                styleType="secondary"
+                                outlined
+                                aria-label="Перейти в избранное"
+                                title="Перейти в избранное"
+                                href={routes.favourites()}
+                                className={cx({
+                                    'mobile-hidden': searchOpened,
+                                })}
                             >
-                                Выйти
-                            </div>
-                            <Link href={routes.profile()}>
+                                <img src={icStarOutlinedUrl} aria-hidden />
+                            </Button>
+                            <button
+                                className={cx('avatar-button', {
+                                    'mobile-hidden': searchOpened,
+                                })}
+                                popoverTarget="profile-popover"
+                                popoverTargetAction="toggle"
+                            >
                                 <Avatar
                                     className={cx('avatar')}
                                     imageSrc={profile?.avatar}
                                 />
-                            </Link>
+                            </button>
+                            <Popover
+                                id="profile-popover"
+                                width="fit"
+                                horizonPos="right"
+                                fixed
+                            >
+                                <div>
+                                    <Link href={routes.profile()}>
+                                        <Button
+                                            isText
+                                            styleType="secondary"
+                                            outlined
+                                            isFullWidth
+                                            className={cx('popover-button')}
+                                            aria-label="Перейти к профилю"
+                                        >
+                                            Профиль
+                                        </Button>
+                                    </Link>
+                                    <Button
+                                        isText
+                                        styleType="error"
+                                        outlined
+                                        isFullWidth
+                                        onClick={this.handleLogoutClick}
+                                        size="small"
+                                        className={cx('popover-button')}
+                                        aria-label="Выйти"
+                                    >
+                                        Выйти
+                                    </Button>
+                                </div>
+                            </Popover>
                         </div>
                     ) : (
                         <Button
@@ -99,6 +196,10 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                             onClick={this.handleLoginClick}
                             styleType="secondary"
                             style="width: fit-content;"
+                            className={cx({
+                                'mobile-hidden': searchOpened,
+                            })}
+                            aria-label="Войти"
                         >
                             Войти
                         </Button>

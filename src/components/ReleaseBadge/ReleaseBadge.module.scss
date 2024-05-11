@@ -1,0 +1,13 @@
+.badge {
+    @include text-secondary;
+
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    padding: 4px 8px;
+    color: var(--background-gray);
+    background: var(--light-gray-op-30);
+    border-radius: 4px;
+    box-shadow: var(--modal-shadow);
+    backdrop-filter: blur(24px);
+}

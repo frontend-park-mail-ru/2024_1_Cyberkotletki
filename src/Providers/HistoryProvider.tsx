@@ -3,6 +3,7 @@ import { isRoutesMatch } from '@/Providers/isRoutesMatch';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
+import { isEqual } from '@/utils/isEqual';
 
 export interface HistoryContextValues {
     changeRoute: (
@@ -29,6 +30,16 @@ export interface HistoryProviderState {
 }
 
 const EDGE_SLASHES_REGEXP = /^\/|\/$/g;
+
+const scrollToTop = () => {
+    setTimeout(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'instant',
+        });
+    });
+};
 
 export class HistoryProvider extends AppComponent<
     HistoryProviderProps,
@@ -71,9 +82,9 @@ export class HistoryProvider extends AppComponent<
 
         if (pathnameWithoutEdgeSlashes !== pathWithoutEdgeSlashes) {
             if (replace) {
-                window.history.replaceState(null, '', path);
+                window.history.replaceState(window.history.state, '', path);
             } else {
-                window.history.pushState(null, '', path);
+                window.history.pushState(window.history.state, '', path);
             }
         }
 
@@ -83,16 +94,10 @@ export class HistoryProvider extends AppComponent<
 
         if (element) {
             if (element !== this.state.element) {
-                this.state = { ...this.state, element };
-                this.forceUpdate();
+                this.setState((prev) => ({ ...prev, element }));
 
                 if (!safeScroll) {
-                    setTimeout(() => {
-                        window.scrollTo({
-                            top: 0,
-                            left: 0,
-                        });
-                    });
+                    scrollToTop();
                 }
             }
 
@@ -103,6 +108,10 @@ export class HistoryProvider extends AppComponent<
             const match = isRoutesMatch(key, pathWithoutEdgeSlashes);
 
             if (match.match) {
+                const prevParams = window.history.state as {
+                    params: Record<string, string>;
+                };
+
                 window.history.replaceState({ params: match.params }, '', path);
 
                 const element =
@@ -110,23 +119,18 @@ export class HistoryProvider extends AppComponent<
                     this.state.routesMap.get(routes.notFound())?.element;
 
                 if (element !== this.state.element) {
-                    this.state = {
-                        ...this.state,
+                    this.setState((prev) => ({
+                        ...prev,
                         element: this.state.routesMap.get(key)?.element || (
                             <div />
                         ),
-                    };
-
-                    this.forceUpdate();
+                    }));
 
                     if (!safeScroll) {
-                        setTimeout(() => {
-                            window.scrollTo({
-                                top: 0,
-                                left: 0,
-                            });
-                        });
+                        scrollToTop();
                     }
+                } else if (!isEqual(prevParams.params, match.params)) {
+                    window.location.reload();
                 }
 
                 return;
@@ -138,13 +142,12 @@ export class HistoryProvider extends AppComponent<
         )?.element;
 
         if (notFound !== this.state.element) {
-            this.state = {
-                ...this.state,
+            this.setState((prev) => ({
+                ...prev,
                 element: this.state.routesMap.get(
                     routes.notFound().replace(EDGE_SLASHES_REGEXP, ''),
                 )?.element ?? <div />,
-            };
-            this.forceUpdate();
+            }));
         }
     };
 
@@ -162,13 +165,13 @@ export class HistoryProvider extends AppComponent<
         window.removeEventListener('popstate', this.listener);
     }
 
+    contextValue: AppContext = {
+        history: { changeRoute: this.handleChangeRoute },
+    };
+
     render() {
         return (
-            <HistoryContext.Provider
-                value={{
-                    history: { changeRoute: this.handleChangeRoute },
-                }}
-            >
+            <HistoryContext.Provider value={this.contextValue}>
                 {this.state.element}
             </HistoryContext.Provider>
         );

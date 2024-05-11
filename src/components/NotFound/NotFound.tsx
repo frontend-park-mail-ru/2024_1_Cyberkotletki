@@ -42,6 +42,7 @@ export class NotFound extends AppComponent<NotFoundProps> {
                         className={cx('button')}
                         outlined
                         styleType="secondary"
+                        aria-label={buttonTitle}
                     >
                         {buttonTitle}
                     </Button>

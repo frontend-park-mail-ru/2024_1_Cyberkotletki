@@ -12,3 +12,6 @@ export { hasField } from './hasField';
 export { getHumanDate } from './getHumanDate';
 export { getDateString } from './getDateString';
 export { getStaticUrl } from './getStaticUrl';
+export { debounce } from './debounce';
+export { clickOnEnter } from './clickOnEnter';
+export { convertReleaseToFilm } from './convertReleaseToFilm';

@@ -471,6 +471,9 @@ declare global {
             // Transition Events
             onTransitionEnd?: TransitionEventHandler<T> | undefined;
             onTransitionEndCapture?: TransitionEventHandler<T> | undefined;
+
+            // Custom
+            onToggle?: (e: ToggleEvent) => void;
         }
 
         export type CSSProperties = CSS.Properties<string | number>;
@@ -943,6 +946,7 @@ declare global {
             tabIndex?: number | undefined;
             title?: string | undefined;
             translate?: 'yes' | 'no' | undefined;
+            popover?: 'auto' | 'manual' | boolean;
 
             // Unknown
             radioGroup?: string | undefined; // <command>, <menuitem>
@@ -999,6 +1003,10 @@ declare global {
              * @see https://html.spec.whatwg.org/multipage/custom-elements.html#attr-is
              */
             is?: string | undefined;
+
+            // Popover
+            popoverTarget?: string;
+            popoverTargetAction?: 'hide' | 'show' | 'toggle';
         }
 
         /**
@@ -1847,7 +1855,13 @@ declare global {
             | undefined;
 
         type Children = AppNode | Iterable<AppNode>;
-        // type Element = App.AppElement<unknown, unknown>;
+
+        type JSXElementConstructor<P> =
+            | ((props: P) => AppComponent<P>)
+            | (new (props: P) => AppComponent<P>);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        type ElementType = string | JSXElementConstructor<any>;
+
         interface ElementClass extends AppComponent<unknown> {
             render(): Node;
         }

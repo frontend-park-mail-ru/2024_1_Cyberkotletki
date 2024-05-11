@@ -1,3 +1,5 @@
+import { isDefined } from '@/utils/isDefined';
+
 class Routes {
     root = () => '/' as const;
 
@@ -5,7 +7,8 @@ class Routes {
 
     register = () => '/register' as const;
 
-    collections = () => '/collections' as const;
+    collections = (id?: string | number) =>
+        `/collections${isDefined(id) ? `/${id}` : ''}` as const;
 
     profile = () => '/profile' as const;
 
@@ -15,7 +18,11 @@ class Routes {
 
     notFound = () => `/not-found` as const;
 
-    person = (id: string) => `/person/${id}` as const;
+    person = (id: number | string) => `/person/${id}` as const;
+
+    favourites = () => `/favourites` as const;
+
+    releases = () => `/releases` as const;
 }
 
 export const routes = new Routes();

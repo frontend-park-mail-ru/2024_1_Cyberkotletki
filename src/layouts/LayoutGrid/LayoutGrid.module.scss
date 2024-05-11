@@ -1,0 +1,12 @@
+.grid-container {
+    --grid-items-in-row: 2;
+    --grid-items-in-row-mobile: 1;
+
+    display: grid;
+    grid-template-columns: repeat(var(--grid-items-in-row), 1fr);
+    gap: var(--large-padding);
+
+    @include mobile {
+        grid-template-columns: repeat(var(--grid-items-in-row-mobile), 1fr);
+    }
+}

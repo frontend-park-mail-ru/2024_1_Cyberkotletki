@@ -2,15 +2,15 @@
     position: relative;
     padding: var(--main-content-gap) var(--large-padding);
     background: transparent;
-    background-color: rgb(0 0 0 / 0%);
-    border: 1px solid rgb(255 255 255 / 2%);
+    background-color: transparent;
+    border: 1px solid var(--secondary-gray-op-30);
     border-radius: var(--card-border-radius);
 }
 
 .modal {
-    background-color: rgb(0 0 0 / 30%) !important;
+    background-color: var(--absolute-op-30) !important;
     border-radius: var(--card-border-radius);
-    box-shadow: rgb(0 0 0 / 35%) 0 5px 15px !important;
+    box-shadow: var(--modal-shadow) !important;
     backdrop-filter: blur(24px);
 }
 

@@ -1,0 +1,9 @@
+.head {
+    @include text-header-3-light;
+
+    font-weight: normal;
+}
+
+.grid-container {
+    margin-block-start: var(--main-padding-2);
+}

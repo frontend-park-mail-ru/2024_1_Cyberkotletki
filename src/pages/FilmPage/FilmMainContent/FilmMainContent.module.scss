@@ -21,6 +21,7 @@
 .section {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .rating-section {
@@ -30,6 +31,8 @@
     height: fit-content;
 
     @include mobile {
+        flex-direction: column;
+        align-items: center;
         order: 0 !important;
     }
 }
@@ -37,6 +40,7 @@
 .top-info {
     display: flex;
     gap: var(--main-padding-2);
+    justify-content: space-between;
 
     @include mobile {
         flex-direction: column;
@@ -57,4 +61,8 @@
 
 .title {
     @include text-header-2;
+}
+
+.fav-button {
+    margin-block-start: var(--main-padding);
 }

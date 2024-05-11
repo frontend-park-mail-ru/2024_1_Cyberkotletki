@@ -8,6 +8,10 @@
 
         &:first-child {
             padding-inline-end: var(--main-padding-2);
+
+            @include mobile {
+                padding-inline-end: var(--main-padding);
+            }
         }
     }
 }

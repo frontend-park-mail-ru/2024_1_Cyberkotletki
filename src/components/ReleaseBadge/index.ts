@@ -1,0 +1,1 @@
+export { ReleaseBadge } from './ReleaseBadge';

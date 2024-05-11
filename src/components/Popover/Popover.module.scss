@@ -1,0 +1,32 @@
+.popover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    margin: 0;
+    margin-top: -8px;
+    overflow: hidden auto;
+    background-color: var(--absolute-op-30);
+    border: 1px solid var(--secondary-gray-op-30);
+    border-radius: var(--item-border-radius);
+    box-shadow: var(--modal-shadow);
+    visibility: hidden;
+    opacity: 0;
+    backdrop-filter: blur(24px);
+    transition:
+        opacity 200ms ease,
+        visibility 200ms ease,
+        position 200ms ease,
+        margin 200ms ease;
+
+    &:popover-open {
+        top: 0;
+        margin-top: 0;
+        visibility: visible;
+        opacity: 1;
+    }
+
+    &.fixed {
+        position: fixed;
+    }
+}

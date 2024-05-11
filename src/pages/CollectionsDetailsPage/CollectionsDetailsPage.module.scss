@@ -1,0 +1,44 @@
+.head {
+    @include text-header-3;
+}
+
+.grid-container {
+    margin-block-start: var(--main-padding-2);
+}
+
+.toggle-buttons {
+    display: flex;
+    gap: var(--main-content-gap);
+    margin-block-start: var(--main-padding-2);
+}
+
+.more-button {
+    margin-inline: auto;
+    margin-block-start: var(--main-padding-2);
+}
+
+.header {
+    display: flex;
+    gap: var(--main-content-gap);
+    align-items: center;
+
+    @include mobile {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+.poster {
+    min-width: 100px;
+    max-width: 100px;
+    aspect-ratio: 1;
+    border-radius: var(--item-border-radius);
+
+    img {
+        height: 100%;
+    }
+}
+
+.film-card {
+    @include fade-in;
+}

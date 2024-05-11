@@ -9,6 +9,8 @@ import type { AppContext } from '@/types/Context.types';
 export interface ProfileContextValues {
     profile?: ProfileResponse;
     getProfile: () => Promise<ProfileResponse | undefined>;
+    getProfilePromise?: Promise<ProfileResponse | undefined>;
+
     isLoggedIn?: boolean;
 }
 
@@ -38,8 +40,11 @@ export class ProfileProvider extends AppComponent<
                 return undefined;
             }
 
-            return userService
-                .getProfile()
+            const promise = userService.getProfile();
+
+            this.state.getProfilePromise = promise;
+
+            return promise
                 .then((profile = {}) => {
                     this.setState((prev) => ({
                         ...prev,
@@ -71,8 +76,16 @@ export class ProfileProvider extends AppComponent<
     render() {
         const { children } = this.props;
 
+        if (!this.state.getProfilePromise) {
+            this.state.getProfilePromise = this.state.getProfile();
+        }
+
         return (
-            <ProfileContext.Provider value={{ profile: this.state }}>
+            <ProfileContext.Provider
+                value={{
+                    profile: this.state,
+                }}
+            >
                 {children}
             </ProfileContext.Provider>
         );

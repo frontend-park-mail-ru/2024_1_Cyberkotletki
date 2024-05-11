@@ -3,7 +3,6 @@ import styles from './Avatar.module.scss';
 import { LazyImg } from '@/components/LazyImg';
 import { icUserCircleUrl } from '@/assets/icons';
 import { AppComponent } from '@/core';
-import type { AppNode } from '@/core/shared/AppNode.types';
 import { Config } from '@/shared/constants';
 import { concatClasses } from '@/utils';
 import type { LazyImgProps } from '@/components/LazyImg/LazyImg';
@@ -16,7 +15,7 @@ export interface AvatarPropsProps extends LazyImgProps {
 }
 
 export class Avatar extends AppComponent<AvatarPropsProps> {
-    render(): AppNode {
+    render() {
         const {
             prefix = `${Config.BACKEND_STATIC_URL}/`,
             imageSrc,

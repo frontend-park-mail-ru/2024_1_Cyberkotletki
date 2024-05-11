@@ -1,0 +1,36 @@
+.input {
+    width: fit-content;
+    color: var(--text-color);
+
+    input {
+        cursor: pointer;
+    }
+}
+
+.icon {
+    transition: transform 200ms ease;
+
+    &.rotate {
+        transform: rotate(180deg);
+    }
+}
+
+.items-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.popover {
+    padding-inline: 0;
+    padding-block: var(--main-text-gap);
+    max-height: 200px;
+}
+
+.item {
+    @include text-primary-light;
+
+    &.active {
+        background-color: rgb(101 104 108 / 10%);
+    }
+}

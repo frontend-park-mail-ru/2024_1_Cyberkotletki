@@ -1,5 +1,6 @@
 import {
     appendChildWithCheck,
+    generateInstance,
     isAppElement,
     isChangedElements,
     isDOMElement,
@@ -112,9 +113,7 @@ export const updateElement = (
         if (isAppElement(newNode)) {
             newNode.owner = oldNode.owner;
 
-            const GenerateInstance = newNode.type;
-
-            const instance = new GenerateInstance(newNode.props ?? {});
+            const instance = generateInstance(newNode);
 
             if (
                 isForce ||

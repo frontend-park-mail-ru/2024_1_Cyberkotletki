@@ -11,14 +11,17 @@ import { ProfilePage } from '@/pages/ProfilePage';
 import { ProfileSettingsPage } from '@/pages/ProfileSettingsPage';
 import { ProfileProvider } from '@/Providers/ProfileProvider';
 import { ContentProvider } from '@/Providers/ContentProvider';
+import { CollectionsDetailsPage } from '@/pages/CollectionsDetailsPage';
+import { FavouritesPage } from '@/pages/FavouritesPage';
+import { ReleasesPage } from '@/pages/ReleasesPage';
 
 import '@/styles/global.scss';
 
 export class App extends AppComponent<object> {
     render() {
         return (
-            <ContentProvider>
-                <ProfileProvider>
+            <ProfileProvider>
+                <ContentProvider>
                     <HistoryProvider
                         router={[
                             {
@@ -36,6 +39,10 @@ export class App extends AppComponent<object> {
                             {
                                 path: routes.collections(),
                                 element: <CollectionsPage />,
+                            },
+                            {
+                                path: routes.collections(':uid'),
+                                element: <CollectionsDetailsPage />,
                             },
                             {
                                 path: routes.profile(),
@@ -57,10 +64,18 @@ export class App extends AppComponent<object> {
                                 path: routes.notFound(),
                                 element: <NotFound withButton />,
                             },
+                            {
+                                path: routes.favourites(),
+                                element: <FavouritesPage />,
+                            },
+                            {
+                                path: routes.releases(),
+                                element: <ReleasesPage />,
+                            },
                         ]}
                     />
-                </ProfileProvider>
-            </ContentProvider>
+                </ContentProvider>
+            </ProfileProvider>
         );
     }
 }

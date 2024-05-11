@@ -5,9 +5,6 @@
 }
 
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--large-padding);
     animation: films-fade-in 200ms ease-out;
     margin-block-start: var(--main-content-offset);
 

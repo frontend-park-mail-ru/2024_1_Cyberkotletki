@@ -6,3 +6,4 @@ export { removeEventListenerWithCheck } from './removeEventListenerWithCheck';
 export { replaceChildWithCheck } from './replaceChildWithCheck';
 export { setAttributeWithCheck } from './setAttributeWithCheck';
 export * from './is.utils';
+export { generateInstance } from './generateInstance';

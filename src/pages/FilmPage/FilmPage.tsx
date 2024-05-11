@@ -1,10 +1,8 @@
 import { FilmMainContent } from './FilmMainContent';
 import styles from './FilmPage.module.scss';
 
-import { contentService } from '@/api/content/service';
 import type { Film } from '@/api/content/types';
 import { AppComponent } from '@/core';
-import type { AppNode } from '@/core/shared/AppNode.types';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { concatClasses, isDefined } from '@/utils';
 import { NotFound } from '@/components/NotFound';
@@ -14,7 +12,10 @@ import type { ReviewDetails } from '@/api/review/types';
 import { ReviewCard } from '@/components/ReviewCard';
 import { ProfileContext } from '@/Providers/ProfileProvider';
 import type { ProfileResponse } from '@/api/user/types';
-import type { AppContext } from '@/types/Context.types';
+import type { AppContextComponentProps } from '@/types/Context.types';
+import { favouriteService } from '@/api/favourite/favourite.service';
+import { Spinner } from '@/components/Spinner';
+import { ContentContext } from '@/Providers/ContentProvider';
 
 const cx = concatClasses.bind(styles);
 interface Params {
@@ -29,16 +30,13 @@ export interface FilmPageState {
     reviewForEdit?: ReviewDetails;
     profile?: ProfileResponse;
     isEdit?: boolean;
+    addedToFavourite?: boolean;
 }
 
 export const REVIEW_FORM_ID = 'review-form';
 
-export interface FilmPageInnerProps {
-    context?: AppContext;
-}
-
-class FilmPageInnerClass extends AppComponent<
-    FilmPageInnerProps,
+class FilmPageClass extends AppComponent<
+    AppContextComponentProps,
     FilmPageState
 > {
     finedOwnReview = () => {
@@ -70,7 +68,7 @@ class FilmPageInnerClass extends AppComponent<
         const { profile } = this.props.context ?? {};
 
         if (!isDefined(profile?.isLoggedIn)) {
-            void profile?.getProfile().then((profile) => {
+            void profile?.getProfilePromise?.then((profile) => {
                 this.setState((prev) => ({ ...prev, profile }));
 
                 if (this.state.reviews?.length) {
@@ -108,8 +106,11 @@ class FilmPageInnerClass extends AppComponent<
 
             this.getFilmReviews(id);
 
-            void contentService
-                .getFilmById(id)
+            void this.props.context?.content
+                ?.loadFilmById?.(id)
+                .finally(() => {
+                    this.setState((prev) => ({ ...prev, isLoading: false }));
+                })
                 .then((film) => {
                     this.setState((prev) => ({ ...prev, film }));
                 })
@@ -118,9 +119,6 @@ class FilmPageInnerClass extends AppComponent<
                         ...prev,
                         isNotFound: true,
                     }));
-                })
-                .finally(() => {
-                    this.setState((prev) => ({ ...prev, isLoading: false }));
                 });
         } else {
             this.setState((prev) => ({
@@ -135,86 +133,145 @@ class FilmPageInnerClass extends AppComponent<
             void reviewService.deleteReview(review.id).then(() => {
                 const { params } = window.history.state as { params?: Params };
 
-                this.getFilmById(Number(params?.uid));
+                this.getFilmReviews(Number(params?.uid));
             });
         }
     };
 
-    componentDidMount() {
-        this.getProfile();
-    }
+    handleAddToFavourite = (film?: Film) => {
+        if (isDefined(film?.id)) {
+            const promise = this.state.addedToFavourite
+                ? favouriteService.deleteFavouriteContent(film.id)
+                : favouriteService.addToFavourite(film.id);
 
-    render(): AppNode {
+            void promise.then(() => {
+                this.getIsAddedToFavourite();
+            });
+        }
+    };
+
+    getIsAddedToFavourite = () => {
         const { params } = window.history.state as { params?: Params };
 
-        const { isLoading, film, isNotFound, isEdit, reviewForEdit } =
-            this.state;
+        void favouriteService
+            .getContentFavouriteStatus(+(params?.uid ?? ''))
+            .then(() => {
+                this.setState((prev) => ({ ...prev, addedToFavourite: true }));
+            })
+            .catch(() => {
+                this.setState((prev) => ({ ...prev, addedToFavourite: false }));
+            });
+    };
+
+    componentDidMount() {
+        const { params } = window.history.state as { params?: Params };
+
+        const filmsMap = this.props.context?.content?.filmsMap;
+
+        this.getProfile();
+        this.getIsAddedToFavourite();
+
+        if (!filmsMap?.[Number(params?.uid)]) {
+            this.getFilmById(Number(params?.uid));
+        }
+    }
+
+    render() {
+        const { params } = window.history.state as { params?: Params };
+
+        const film =
+            this.props.context?.content?.filmsMap?.[Number(params?.uid)] ??
+            this.state.film;
+
+        const {
+            isNotFound,
+            isEdit,
+            reviewForEdit,
+            addedToFavourite,
+            isLoading,
+        } = this.state;
         const profile =
             this.state.profile || this.props.context?.profile?.profile;
 
-        if (
-            (!film || params?.uid !== `${film?.id ?? 0}`) &&
-            !isLoading &&
-            !isNotFound
-        ) {
-            this.getFilmById(Number(params?.uid));
-        }
-
-        return isNotFound ? (
-            <NotFound description="Фильм не найден" />
-        ) : (
-            <div>
-                <FilmMainContent film={this.state.film} />
-                <section className={cx('reviews-block')}>
-                    <h1>Отзывы:</h1>
-                    <div className={cx('reviews-list')}>
-                        {this.state.reviews?.length ? (
-                            this.state.reviews?.map((review) => (
-                                <ReviewCard
-                                    className={cx('review-card')}
-                                    review={review}
-                                    onEditClick={this.handleEditReviewClick}
+        switch (true) {
+            case isNotFound:
+                return (
+                    <LayoutWithHeader>
+                        <NotFound description="Фильм не найден" />
+                    </LayoutWithHeader>
+                );
+            case isLoading:
+                return (
+                    <LayoutWithHeader>
+                        <div className={cx('loader-container')} key="loader">
+                            <Spinner />
+                        </div>
+                    </LayoutWithHeader>
+                );
+            default:
+                return (
+                    <LayoutWithHeader>
+                        <div key="content">
+                            <FilmMainContent
+                                film={film}
+                                onFavouriteClick={this.handleAddToFavourite}
+                                addedToFavourite={addedToFavourite}
+                                withFavButton={!!profile}
+                            />
+                            <section className={cx('reviews-block')}>
+                                <h1>Отзывы:</h1>
+                                <div className={cx('reviews-list')}>
+                                    {this.state.reviews?.length ? (
+                                        this.state.reviews?.map((review) => (
+                                            <ReviewCard
+                                                className={cx('review-card')}
+                                                review={review}
+                                                onEditClick={
+                                                    this.handleEditReviewClick
+                                                }
+                                                profile={profile}
+                                                onReviewRemove={
+                                                    this.handleReviewRemove
+                                                }
+                                            />
+                                        ))
+                                    ) : (
+                                        <div>Отзывов пока нет</div>
+                                    )}
+                                </div>
+                            </section>
+                            <section
+                                className={cx('write-review-block')}
+                                id={REVIEW_FORM_ID}
+                            >
+                                <h1>
+                                    {this.state.reviewForEdit
+                                        ? 'Редактировать отзыв:'
+                                        : 'Написать отзыв:'}
+                                </h1>
+                                <ReviewForm
+                                    key={isEdit ? 'isEdit' : undefined}
                                     profile={profile}
-                                    onReviewRemove={this.handleReviewRemove}
+                                    contentId={+(params?.uid ?? 0)}
+                                    onSubmit={this.handleFormSubmit}
+                                    isEdit={isEdit}
+                                    reviewID={reviewForEdit?.id}
+                                    {...reviewForEdit}
                                 />
-                            ))
-                        ) : (
-                            <div>Отзывов пока нет</div>
-                        )}
-                    </div>
-                </section>
-                <section
-                    className={cx('write-review-block')}
-                    id={REVIEW_FORM_ID}
-                >
-                    <h1>
-                        {this.state.reviewForEdit
-                            ? 'Редактировать отзыв:'
-                            : 'Написать отзыв:'}
-                    </h1>
-                    <ReviewForm
-                        key={isEdit ? 'isEdit' : undefined}
-                        profile={profile}
-                        contentId={+(params?.uid ?? 0)}
-                        onSubmit={this.handleFormSubmit}
-                        isEdit={isEdit}
-                        reviewID={reviewForEdit?.id}
-                        {...reviewForEdit}
-                    />
-                </section>
-            </div>
-        );
+                            </section>
+                        </div>
+                    </LayoutWithHeader>
+                );
+        }
     }
 }
 
-const FilmPageInner = ProfileContext.Connect(FilmPageInnerClass);
-
-export class FilmPage extends AppComponent {
-    render(): AppNode {
-        return (
-            <LayoutWithHeader>
-                <FilmPageInner />
-            </LayoutWithHeader>
-        );
+class FilmPageInner extends AppComponent<AppContextComponentProps> {
+    render() {
+        return <FilmPageClass context={this.props.context} />;
     }
 }
+
+export const FilmPage = ContentContext.Connect(
+    ProfileContext.Connect(FilmPageInner),
+);

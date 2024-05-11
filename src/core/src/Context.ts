@@ -1,13 +1,13 @@
 import type { AppNode } from '@/core/shared/AppNode.types';
-import type { AppComponentConstructor } from '@/core';
-import { AppComponent } from '@/core';
+import { AppComponent } from '@/core/src/AppComponent';
 
 export interface ContextProviderProps<Value = object> {
     value: Value;
     children?: AppNode;
 }
-
-class ContextProvider<Value> extends AppComponent<ContextProviderProps<Value>> {
+export class ContextProvider<Value = object> extends AppComponent<
+    ContextProviderProps<Value>
+> {
     render() {
         const children = (this.props?.children ?? []) as JSX.Element[];
 
@@ -16,31 +16,38 @@ class ContextProvider<Value> extends AppComponent<ContextProviderProps<Value>> {
 }
 
 export class Context<Value = object> {
-    #value: Value;
+    value: Value;
 
     constructor(value: Value) {
-        this.#value = value;
+        this.value = value;
     }
 
-    Provider = ((props: ContextProviderProps<Value>) => {
-        this.#value = props.value;
+    Provider = (props: ContextProviderProps<Value>) => {
+        this.value = props.value;
 
         return new ContextProvider(props);
-    }) as unknown as typeof ContextProvider<Value>;
+    };
 
-    Connect<Props extends object>(Component: AppComponentConstructor<Props>) {
-        const Connect = ((props: Props) => {
+    Connect = <Props extends object>(
+        Component: JSX.JSXElementConstructor<Props>,
+    ) => {
+        const ConnectFunction = (props: Props) => {
             const contextProp =
                 props && 'context' in props && typeof props.context === 'object'
                     ? props.context
                     : {};
 
-            return new Component({
-                ...props,
-                context: { ...contextProp, ...this.#value },
-            });
-        }) as unknown as typeof Component;
+            return Component.prototype instanceof AppComponent
+                ? new (Component as new (props: Props) => AppComponent)({
+                      ...props,
+                      context: { ...contextProp, ...this.value },
+                  })
+                : (Component as (props: Props) => AppComponent)({
+                      ...props,
+                      context: { ...contextProp, ...this.value },
+                  });
+        };
 
-        return Connect;
-    }
+        return ConnectFunction;
+    };
 }

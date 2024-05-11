@@ -1,20 +1,30 @@
-import type { Film, PersonActor } from '@/api/content/types.ts';
+import styles from './PersonPage.module.scss';
+
+import type { PersonActor } from '@/api/content/types.ts';
 import { AppComponent } from '@/core';
-import { isDefined } from '@/utils';
-import { contentService } from '@/api/content/service.ts';
+import { concatClasses, isDefined } from '@/utils';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { NotFound } from '@/components/NotFound';
 import { PersonMainContent } from '@/pages/PersonPage/PersonMainContent';
+import { Spinner } from '@/components/Spinner';
+import { ContentContext } from '@/Providers/ContentProvider';
+import type { AppContext } from '@/types/Context.types';
+
+const cx = concatClasses.bind(styles);
 
 export interface PersonPageState {
     person?: PersonActor;
     isNotFound?: boolean;
-    roles?: Film[];
     isLoading?: boolean;
 }
 
-class PersonPageInner extends AppComponent<object, PersonPageState> {
-    getPersonById = () => {
+class PersonPageInner extends AppComponent<
+    { context?: AppContext },
+    PersonPageState
+> {
+    state: PersonPageState = { isLoading: false };
+
+    getPersonById = async () => {
         const { params } =
             (window.history.state as {
                 params?: { uid?: string };
@@ -23,36 +33,19 @@ class PersonPageInner extends AppComponent<object, PersonPageState> {
         if (isDefined(params?.uid)) {
             this.setState((prev) => ({ ...prev, isLoading: true }));
 
-            void contentService
-                .getPersonById(+params.uid)
-                .then(async (person) => {
-                    const filmIds = new Set<number>();
-
+            await this.props.context?.content
+                ?.loadPersonById?.(+params.uid)
+                .then((person) => {
                     this.setState((prev) => ({ ...prev, person }));
-
-                    person?.roles.forEach(({ id }) => {
-                        filmIds.add(id);
-                    });
-
-                    const films = (
-                        await Promise.all(
-                            [...filmIds.values()].map((id) =>
-                                contentService.getFilmById(id),
-                            ),
-                        )
-                    ).filter(Boolean) as Film[];
-
-                    this.setState((prev) => ({ ...prev, roles: films }));
                 })
                 .catch(() => {
                     this.setState((prev) => ({
                         ...prev,
                         isNotFound: true,
                     }));
-                })
-                .finally(() => {
-                    this.setState((prev) => ({ ...prev, isLoading: false }));
                 });
+
+            this.setState((prev) => ({ ...prev, isLoading: false }));
 
             return;
         }
@@ -63,38 +56,54 @@ class PersonPageInner extends AppComponent<object, PersonPageState> {
         }));
     };
 
+    componentDidMount(): void {
+        const { params } =
+            (window.history.state as {
+                params?: { uid?: string };
+            }) ?? {};
+
+        const personsMap = this.props.context?.content?.personsMap;
+
+        if (!personsMap?.[Number(params?.uid)]) {
+            void this.getPersonById();
+        }
+    }
+
     render() {
         const { params } =
             (window.history.state as {
                 params?: { uid?: string };
             }) ?? {};
-        const { isLoading, person, isNotFound } = this.state;
 
-        if (
-            (!person || params?.uid !== `${person?.id ?? 0}`) &&
-            !isLoading &&
-            !isNotFound
-        ) {
-            this.getPersonById();
+        const { isLoading, isNotFound } = this.state;
+
+        const person =
+            this.props.context?.content?.personsMap[Number(params?.uid)] ??
+            this.state.person;
+
+        switch (true) {
+            case isLoading:
+                return (
+                    <div className={cx('spinner-container')}>
+                        <Spinner />
+                    </div>
+                );
+            case isNotFound:
+                return <NotFound description="Персона не найдена" />;
+            default:
+                return <PersonMainContent person={person} />;
         }
-
-        return isNotFound ? (
-            <NotFound description="Персона не найдена" />
-        ) : (
-            <PersonMainContent
-                person={this.state.person}
-                roles={this.state.roles}
-            />
-        );
     }
 }
 
-export class PersonPage extends AppComponent {
+class PersonPageClass extends AppComponent<{ context?: AppContext }> {
     render() {
         return (
             <LayoutWithHeader>
-                <PersonPageInner key="person-page" />
+                <PersonPageInner context={this.props.context} />
             </LayoutWithHeader>
         );
     }
 }
+
+export const PersonPage = ContentContext.Connect(PersonPageClass);

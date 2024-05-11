@@ -1,4 +1,5 @@
 .container {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--small-padding);
@@ -45,6 +46,14 @@
         resize: vertical;
     }
 
+    &.start {
+        padding-inline-start: 36px;
+    }
+
+    &.end {
+        padding-inline-end: 36px;
+    }
+
     &:hover {
         background-color: rgb(255 255 255 / 5%);
     }
@@ -69,5 +78,24 @@
     &.with-error {
         --input-border-color: var(--error-red);
         --input-shadow-color: transparent;
+    }
+}
+
+.end-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    aspect-ratio: 1;
+
+    &.start {
+        left: 0;
+    }
+
+    &.end {
+        right: 0;
     }
 }

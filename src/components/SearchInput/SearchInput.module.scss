@@ -1,0 +1,53 @@
+.container {
+    &.focused {
+        width: 100%;
+    }
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    gap: var(--small-padding);
+    align-items: center;
+
+    input {
+        animation: fade-in 400ms ease;
+    }
+
+    @include mobile {
+        width: 100%;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        transform: translateX(20px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.button-wrapper {
+    --search-input-width: 500px;
+
+    all: unset;
+    min-width: var(--search-input-width);
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    outline: none;
+
+    @include mobile {
+        flex-grow: 1;
+
+        --search-input-width: auto;
+    }
+}
+
+.close-button {
+    flex-shrink: 0;
+}
