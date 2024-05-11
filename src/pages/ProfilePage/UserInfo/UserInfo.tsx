@@ -79,6 +79,8 @@ export class UserInfoClass extends AppComponent<UserInfoProps, UserInfoState> {
     }
 
     render() {
+        this.loadData();
+
         const { className, context, ...props } = this.props;
         const { profile: stateProfile, recentReviews } = this.state;
 

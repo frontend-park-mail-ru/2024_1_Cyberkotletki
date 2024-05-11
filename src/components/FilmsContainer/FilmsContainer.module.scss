@@ -7,6 +7,10 @@
 .grid-container {
     animation: films-fade-in 200ms ease-out;
     margin-block-start: var(--main-content-offset);
+
+    @include mobile {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
 
 @keyframes films-fade-in {

@@ -38,6 +38,10 @@
 
 .grid-container {
     margin-block-start: var(--main-content-offset);
+
+    @include mobile {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 .role-type-section {
