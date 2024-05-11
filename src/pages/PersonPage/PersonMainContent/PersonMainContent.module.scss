@@ -8,13 +8,20 @@
 .film-poster {
     min-width: 232px;
     max-width: 232px;
-    min-height: 330px;
-    max-height: 330px;
+    aspect-ratio: 0.667;
+
+    @include mobile {
+        margin-inline: auto;
+    }
 }
 
 .top-info {
     display: flex;
     gap: var(--main-padding-2);
+
+    @include mobile {
+        flex-direction: column;
+    }
 }
 
 .title {
@@ -34,4 +41,8 @@
     grid-template-columns: repeat(6, 1fr);
     gap: var(--large-padding);
     margin-block-start: var(--main-content-offset);
+
+    @include mobile {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }

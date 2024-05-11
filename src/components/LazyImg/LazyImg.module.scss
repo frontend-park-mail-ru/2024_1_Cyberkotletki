@@ -2,6 +2,7 @@
     position: relative;
     width: fit-content;
     height: fit-content;
+    overflow: hidden;
 
     img {
         width: 100%;
@@ -26,7 +27,7 @@
         &::after {
             z-index: 3;
             background-color: var(--secondary-gray);
-            opacity: 0.5;
+            opacity: 1;
         }
     }
 }

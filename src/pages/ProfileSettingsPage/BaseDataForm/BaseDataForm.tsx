@@ -1,5 +1,5 @@
 import styles from './BaseDataForm.module.scss';
-import { validateBaseForm } from './BaseDataForm.utils';
+import { getNameError, validateBaseForm } from './BaseDataForm.utils';
 
 import { ProfileContext } from '@/Providers/ProfileProvider';
 import { userService } from '@/api/user/service';
@@ -8,7 +8,6 @@ import { Button } from '@/components/Button';
 import { CheckMark } from '@/components/CheckMark';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { Input } from '@/components/Input';
-import { AuthFormError } from '@/components/LoginForm/Form/Form.constants';
 import { getEmailError } from '@/components/LoginForm/Form/Form.utils';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
@@ -21,6 +20,7 @@ export interface AppComponentProps {
     emailInitial?: string;
     nameInitial?: string;
     context?: AppContext;
+    onSubmit?: () => void;
 }
 
 export interface AppComponentState {
@@ -50,7 +50,12 @@ export class BaseDataFormInner extends AppComponent<
 
         const body = Object.fromEntries(formData) as ChangeProfileBody;
 
-        const validation = validateBaseForm(body);
+        const { emailInitial, nameInitial } = this.props;
+
+        const validation = validateBaseForm(body, {
+            emailInitial,
+            nameInitial,
+        });
 
         if (!validation.isValid) {
             this.setState((prev) => ({ ...prev, ...validation }));
@@ -60,8 +65,6 @@ export class BaseDataFormInner extends AppComponent<
 
         this.setState((prev) => ({ ...prev, isLoading: true }));
 
-        const { context } = this.props;
-
         void userService
             .updateProfile(body)
             .then(() => {
@@ -70,7 +73,7 @@ export class BaseDataFormInner extends AppComponent<
                     formError: '',
                     isSuccess: true,
                 }));
-                void context?.profile?.getProfile();
+                this.props.onSubmit?.();
             })
             .catch((error) => {
                 if (error instanceof Error) {
@@ -104,9 +107,7 @@ export class BaseDataFormInner extends AppComponent<
     };
 
     handleChangeName = (e: App.ChangeEvent<HTMLInputElement>) => {
-        const nameError = e.currentTarget.value
-            ? ''
-            : AuthFormError.EMPTY_VALUE;
+        const nameError = getNameError(e.currentTarget.value);
 
         if (nameError) {
             this.setState((prev) => ({ ...prev, nameError }));
@@ -115,9 +116,7 @@ export class BaseDataFormInner extends AppComponent<
 
     handleInputName = (e: App.FormEvent<HTMLInputElement>) => {
         if (this.state.nameError) {
-            const nameError = e.currentTarget.value
-                ? ''
-                : AuthFormError.EMPTY_VALUE;
+            const nameError = getNameError(e.currentTarget.value);
 
             this.setState((prev) => ({ ...prev, nameError }));
         }
@@ -161,6 +160,7 @@ export class BaseDataFormInner extends AppComponent<
                 />
                 <Button
                     outlined
+                    styleType="secondary"
                     type="submit"
                     isLoading={isLoading}
                     disabled={isLoading}

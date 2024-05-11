@@ -5,8 +5,12 @@
 .reviews-block {
     margin-block-start: calc(var(--large-padding) * 10);
 
+    @include mobile {
+        margin-block-start: calc(var(--large-padding) * 5);
+    }
+
     h1 {
-        margin-block-end: var(--main-content-offset);
+        @include text-header-4;
     }
 }
 
@@ -15,11 +19,31 @@
 
     h1 {
         margin-block-end: var(--main-content-offset);
+
+        @include text-header-4;
     }
 }
 
 .reviews-list {
+    margin-block-start: var(--main-padding-2);
     display: flex;
     flex-direction: column;
     gap: var(--main-padding-2);
+}
+
+.review-card {
+    position: relative;
+    padding-block-end: var(--main-padding);
+
+    &::after {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: calc(100% - 2 * var(--main-padding-2));
+        height: 1px;
+        background-color: var(--secondary-gray);
+        transform: translateX(-50%);
+        opacity: 0.5;
+        content: '';
+    }
 }

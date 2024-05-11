@@ -28,6 +28,7 @@ export class FormFooter extends AppComponent<FormFooterProps> {
                 <Link
                     href={isLogin ? routes.register() : routes.login()}
                     className={cx('link')}
+                    replace
                 >
                     {isLogin ? 'Зарегистрируйтесь' : 'Войти'}
                 </Link>

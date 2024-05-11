@@ -8,16 +8,16 @@ import { PersonPage } from '@/pages/PersonPage';
 import { IndexPage } from '@/pages/IndexPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { ProfilePage } from '@/pages/ProfilePage';
-import { StoreProvider } from '@/Providers/AuthProvider';
 import { ProfileSettingsPage } from '@/pages/ProfileSettingsPage';
 import { ProfileProvider } from '@/Providers/ProfileProvider';
+import { ContentProvider } from '@/Providers/ContentProvider';
 
 import '@/styles/global.scss';
 
 export class App extends AppComponent<object> {
     render() {
         return (
-            <StoreProvider>
+            <ContentProvider>
                 <ProfileProvider>
                     <HistoryProvider
                         router={[
@@ -60,7 +60,7 @@ export class App extends AppComponent<object> {
                         ]}
                     />
                 </ProfileProvider>
-            </StoreProvider>
+            </ContentProvider>
         );
     }
 }

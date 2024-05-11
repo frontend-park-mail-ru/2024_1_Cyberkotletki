@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_NAME = 'SW_CACHE_V1';
+const CACHE_NAME = 'SW_CACHE_V2';
 
 const CACHE_PATHS = ['/', '/main.css', '/main.js'];
 
@@ -27,7 +27,10 @@ self.addEventListener('fetch', (e) => {
 
             const response = await fetch(e.request);
             const cache = await caches.open(CACHE_NAME);
-            cache.put(e.request, response.clone());
+
+            if (e.request.method === 'GET') {
+                cache.put(e.request, response.clone());
+            }
 
             return response;
         })(),

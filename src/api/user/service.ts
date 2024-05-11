@@ -28,14 +28,15 @@ class UserService {
             .put<ChangeProfileBody, unknown>(userRoutes.profile(), data)
             .catch((error) => {
                 if (error instanceof ResponseError) {
-                    if (error.statusCode === ResponseStatus.BAD_REQUEST) {
-                        throw new Error(AuthError.BAD_REQUEST);
+                    if (
+                        error.statusCode === ResponseStatus.BAD_REQUEST ||
+                        error.statusCode === ResponseStatus.SERVICE_UNAVAILABLE
+                    ) {
+                        throw error;
                     }
-
-                    throw error;
                 }
 
-                throw error;
+                throw new Error(AuthError.UNKNOWN_ERROR);
             });
 
     updatePassword = (data: ChangePasswordBody) =>
@@ -47,17 +48,37 @@ class UserService {
                         throw new Error('Введен неверный текущий пароль');
                     }
 
-                    throw error;
+                    if (
+                        error.statusCode === ResponseStatus.SERVICE_UNAVAILABLE
+                    ) {
+                        throw error;
+                    }
                 }
 
-                throw error;
+                throw new ResponseError('Произошла неизвестная ошибка');
             });
 
     updateAvatar = (image: File) => {
-        const formData = new FormData();
-        formData.append('avatar', image);
+        try {
+            const formData = new FormData();
+            formData.append('avatar', image);
 
-        return appFetch.put<unknown, unknown>(userRoutes.avatar(), formData);
+            return appFetch.put<unknown, unknown>(
+                userRoutes.avatar(),
+                formData,
+            );
+        } catch (error) {
+            if (error instanceof ResponseError) {
+                if (
+                    error.statusCode === ResponseStatus.BAD_REQUEST ||
+                    error.statusCode === ResponseStatus.SERVICE_UNAVAILABLE
+                ) {
+                    throw error;
+                }
+            }
+
+            throw new ResponseError('Произошла неизвестная ошибка');
+        }
     };
 }
 

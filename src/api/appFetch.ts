@@ -117,9 +117,16 @@ const createInstance = (baseURL: string) => {
             .catch((error: Error) => {
                 // сетевые ошибки отлавливаем здесь и выбрасываем свою ошибку
                 if (error.name === 'AbortError') {
-                    throw new Error(NetworkError.TIMEOUT);
+                    throw new ResponseError(
+                        NetworkError.CONNECTION_ERROR,
+                        ResponseStatus.GATEWAY_TIMEOUT,
+                    );
                 }
-                throw new Error(NetworkError.CONNECTION_ERROR);
+
+                throw new ResponseError(
+                    NetworkError.CONNECTION_ERROR,
+                    ResponseStatus.SERVICE_UNAVAILABLE,
+                );
             })
             .then(async (response) => {
                 if (!response.ok) {

@@ -23,7 +23,13 @@ export class Rating extends AppComponent<RatingProps> {
         return (
             <div className={cx('rating', className)} {...props}>
                 {isDefined(rating) && (
-                    <div className={cx('native-rating')}>
+                    <div
+                        className={cx('native-rating', {
+                            bad: true,
+                            medium: (rating ?? 0) >= 4,
+                            good: (rating ?? 0) >= 7,
+                        })}
+                    >
                         {rating.toFixed(1)}
                     </div>
                 )}

@@ -37,7 +37,12 @@ export class NotFound extends AppComponent<NotFoundProps> {
                 <h1>{title}</h1>
                 <p>{description}</p>
                 {withButton && (
-                    <Button href={buttonLink} className={cx('button')} outlined>
+                    <Button
+                        href={buttonLink}
+                        className={cx('button')}
+                        outlined
+                        styleType="secondary"
+                    >
                         {buttonTitle}
                     </Button>
                 )}

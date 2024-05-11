@@ -11,7 +11,7 @@ class Routes {
 
     profileSettings = () => '/profile/settings' as const;
 
-    film = (id: string) => `/film/${id}` as const;
+    film = (id: number | string) => `/film/${id}` as const;
 
     notFound = () => `/not-found` as const;
 

@@ -16,6 +16,9 @@ export interface InputProps
         Partial<Pick<LinkProps, 'href' | 'rel' | 'target'>> {
     isLoading?: boolean;
     outlined?: boolean;
+    styleType?: 'primary' | 'secondary' | 'error';
+    rounded?: boolean;
+    isIconOnly?: boolean;
 }
 
 export class Button extends AppComponent<InputProps> {
@@ -29,6 +32,9 @@ export class Button extends AppComponent<InputProps> {
             rel,
             target,
             type = 'button',
+            styleType = 'primary',
+            rounded,
+            isIconOnly,
             ...props
         } = this.props;
 
@@ -44,8 +50,11 @@ export class Button extends AppComponent<InputProps> {
                     {...props}
                     type={type}
                     className={cx('button', {
+                        styleType,
                         loading: isLoading,
                         outlined,
+                        rounded,
+                        'icon-only': isIconOnly,
                     })}
                     aria-hidden
                     tabIndex={-1}
@@ -58,8 +67,11 @@ export class Button extends AppComponent<InputProps> {
                 {...props}
                 type={type}
                 className={cx('button', className, {
+                    styleType,
                     loading: isLoading,
                     outlined,
+                    rounded,
+                    'icon-only': isIconOnly,
                 })}
             >
                 {isLoading ? <Spinner /> : children}

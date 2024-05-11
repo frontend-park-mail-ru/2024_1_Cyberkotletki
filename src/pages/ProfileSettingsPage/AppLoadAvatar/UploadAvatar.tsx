@@ -26,6 +26,8 @@ export interface AppLoadAvatarState {
     isSuccess?: boolean;
 }
 
+const TEN_MB = 1024 * 1024 * 10;
+
 export class UploadAvatarInner extends AppComponent<
     AppLoadAvatarProps,
     AppLoadAvatarState
@@ -36,6 +38,15 @@ export class UploadAvatarInner extends AppComponent<
         const { context } = this.props;
         const file = e.target.files?.[(e.target.files.length ?? 1) - 1];
 
+        if ((file?.size ?? 0) > TEN_MB) {
+            this.setState((prev) => ({
+                ...prev,
+                error: 'Размер фото не должен превышать 10 МБ',
+            }));
+
+            return;
+        }
+
         if (file) {
             this.setState((prev) => ({
                 ...prev,
@@ -44,11 +55,12 @@ export class UploadAvatarInner extends AppComponent<
                 isLoading: true,
             }));
 
-            void userService
+            userService
                 .updateAvatar(file)
                 .then(() => {
                     this.setState((prev) => ({
                         ...prev,
+                        error: '',
                         isSuccess: true,
                     }));
                     void context?.profile?.getProfile();

@@ -142,11 +142,10 @@ export function submitForm(this: FormClass, e: App.FormEvent<HTMLFormElement>) {
 
         submitLoginForm(e.currentTarget, isLogin)
             .then(() => {
-                const { history, auth, profile } = context ?? {};
+                const { history, profile } = context ?? {};
 
-                void auth?.getIsAuth?.();
                 void profile?.getProfile?.();
-                history?.changeRoute(routes.root());
+                history?.changeRoute(routes.root(), undefined, true);
 
                 this.setState((prev) => ({
                     ...prev,
@@ -209,10 +208,16 @@ export function inputEmailInput(
         } else if (error !== this.state.emailError) {
             this.setState((prev) => ({
                 ...prev,
+                error: '',
                 emailError: error,
             }));
         }
     }
+
+    this.setState((prev) => ({
+        ...prev,
+        error: '',
+    }));
 }
 
 /**
@@ -255,6 +260,11 @@ export function inputPasswordInput(
             }));
         }
     }
+
+    this.setState((prev) => ({
+        ...prev,
+        error: '',
+    }));
 }
 
 /**
@@ -303,4 +313,9 @@ export function inputRepeatPasswordInput(
             }));
         }
     }
+
+    this.setState((prev) => ({
+        ...prev,
+        error: '',
+    }));
 }

@@ -6,4 +6,8 @@
     overflow: hidden;
     border-radius: 50%;
     aspect-ratio: 1;
+
+    @include mobile {
+        --avatar-size: 100px;
+    }
 }

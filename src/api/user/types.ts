@@ -5,6 +5,7 @@ export interface UserMeResponse {
 export interface ProfileResponse {
     avatar?: string;
     email?: string;
+    id?: number;
     name?: string;
     rating?: number;
 }

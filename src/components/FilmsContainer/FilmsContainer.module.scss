@@ -1,14 +1,24 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--large-padding);
-    animation: films-fade-in 0.4s ease-out;
+    animation: films-fade-in 200ms ease-out;
     margin-block-start: var(--main-content-offset);
+
+    @include mobile {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
 
 @keyframes films-fade-in {
     0% {
-        transform: translateY(64px);
+        transform: translateY(16px);
         opacity: 0;
     }
 
@@ -26,4 +36,13 @@
 
 .head {
     @include text-header-4;
+}
+
+.spinner-container {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }

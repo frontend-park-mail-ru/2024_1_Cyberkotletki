@@ -27,5 +27,12 @@ export const validatePasswordForm = ({
         } as const;
     }
 
+    const formError =
+        oldPassword === newPassword ? 'Старый и новый пароли совпадают' : '';
+
+    if (formError) {
+        return { isValid: false, formError } as const;
+    }
+
     return { isValid: true } as const;
 };

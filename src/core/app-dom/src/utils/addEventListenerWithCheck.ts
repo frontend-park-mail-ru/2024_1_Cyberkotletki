@@ -2,7 +2,7 @@ import {
     APP_NODE_EVENT_MAP,
     type AppNodeEventType,
 } from '@/core/shared/AppNodeEvent.type';
-import { isFunction } from '@/utils';
+import { isDefined, isFunction } from '@/utils';
 
 /**
  * Добавляет проуслушиватель события или выводит ошибку,
@@ -19,7 +19,7 @@ export const addEventListenerWithCheck = (
 ) => {
     if (isFunction(listener)) {
         node?.addEventListener(APP_NODE_EVENT_MAP[key], listener);
-    } else {
+    } else if (isDefined(listener)) {
         throw new TypeError(
             `Тип "${typeof listener}" невозможно назначить в качестве обработчика события "${key}"`,
         );

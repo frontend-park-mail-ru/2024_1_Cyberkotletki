@@ -28,12 +28,20 @@ export class FilmCard extends AppComponent<FilmCardProps> {
         const { className, film, size = 'large', ...props } = this.props;
 
         return (
-            <article
-                {...props}
-                className={cx('card', { small: size === 'small' }, className)}
-            >
-                <Link href={routes.film(`${film?.id ?? 0}`)}>
-                    <div className={cx('poster')}>
+            <Link href={routes.film(film?.id ?? 0)}>
+                <article
+                    {...props}
+                    className={cx(
+                        'card',
+                        { small: size === 'small' },
+                        className,
+                    )}
+                >
+                    <Link
+                        href={routes.film(film?.id ?? 0)}
+                        className={cx('poster')}
+                        tabIndex={-1}
+                    >
                         <RatingBadge rating={film?.rating} />
                         <LazyImg
                             src={getStaticUrl(film?.posterURL)}
@@ -41,58 +49,60 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                             width="136px"
                             height="200px"
                         />
-                    </div>
-                </Link>
-                <div className={cx('card-info', { small: size === 'small' })}>
-                    <Link href={routes.film(`${film?.id ?? 0}`)}>
-                        <h1 className={cx('title')} title={film?.title}>
-                            {film?.title}
-                        </h1>
                     </Link>
-                    {size === 'large' ? (
-                        <div className={cx('info')}>
-                            <span>
+                    <div
+                        className={cx('card-info', { small: size === 'small' })}
+                    >
+                        <Link href={routes.film(film?.id ?? 0)} tabIndex={-1}>
+                            <h1 className={cx('title')} title={film?.title}>
+                                {film?.title}
+                            </h1>
+                        </Link>
+                        {size === 'large' ? (
+                            <div className={cx('info')}>
+                                <span>
+                                    {[
+                                        film?.originalTitle || '',
+                                        film?.movie?.release
+                                            ? getHumanDate(film?.movie?.release)
+                                            : '',
+                                        film?.movie?.duration
+                                            ? `${film?.movie?.duration} мин.`
+                                            : '',
+                                    ]
+                                        .filter(Boolean)
+                                        .join(', ')}
+                                </span>
+                                <span>
+                                    {[
+                                        film?.countries?.[0],
+                                        film?.genres?.[0],
+                                        film?.directors?.[0]
+                                            ? `Режиссёр: ${film.directors[0].firstName ?? film.directors[0].lastName ?? ''}`
+                                            : '',
+                                    ]
+                                        .filter(Boolean)
+                                        .join(' ▸ ')}
+                                </span>
+                                {!!film?.actors?.length && (
+                                    <span>{`В ролях: ${film.actors.map((actor) => `${actor.firstName} ${actor.lastName}`).join(', ')}`}</span>
+                                )}
+                            </div>
+                        ) : (
+                            <div className={cx('info', 'small')}>
                                 {[
-                                    film?.originalTitle || '',
                                     film?.movie?.release
-                                        ? getHumanDate(film?.movie?.release)
+                                        ? new Date(
+                                              film?.movie?.release,
+                                          ).getFullYear()
                                         : '',
-                                    film?.movie?.duration
-                                        ? `${film?.movie?.duration} мин.`
-                                        : '',
-                                ]
-                                    .filter(Boolean)
-                                    .join(', ')}
-                            </span>
-                            <span>
-                                {[
-                                    film?.countries?.[0],
-                                    film?.genres?.[0],
-                                    film?.directors?.[0]
-                                        ? `Режиссёр: ${film.directors[0].firstName ?? film.directors[0].lastName ?? ''}`
-                                        : '',
-                                ]
-                                    .filter(Boolean)
-                                    .join(' ▸ ')}
-                            </span>
-                            {!!film?.actors?.length && (
-                                <span>{`В ролях: ${film.actors.map((actor) => `${actor.firstName} ${actor.lastName}`).join(', ')}`}</span>
-                            )}
-                        </div>
-                    ) : (
-                        <div className={cx('info', 'small')}>
-                            {[
-                                film?.movie?.release
-                                    ? new Date(
-                                          film?.movie?.release,
-                                      ).getFullYear()
-                                    : '',
-                                ...(film?.genres ?? []),
-                            ]?.join(', ')}
-                        </div>
-                    )}
-                </div>
-            </article>
+                                    ...(film?.genres ?? []),
+                                ]?.join(', ')}
+                            </div>
+                        )}
+                    </div>
+                </article>
+            </Link>
         );
     }
 }

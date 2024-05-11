@@ -205,7 +205,12 @@ export class PasswordsForm extends AppComponent<object, PasswordsFormState> {
                     onChange={this.handleChangeNewPassRep}
                     onInput={this.handleInputNewPassRep}
                 />
-                <Button outlined type="submit" isLoading={isLoading}>
+                <Button
+                    outlined
+                    type="submit"
+                    isLoading={isLoading}
+                    styleType="secondary"
+                >
                     Обновить
                     <CheckMark show={isSuccess} />
                 </Button>

@@ -25,7 +25,7 @@ export class PersonMainContent extends AppComponent<PersonMainContentProps> {
                         className={cx('film-poster')}
                         src={getStaticUrl(person?.photoURL)}
                         width="232px"
-                        height="330px"
+                        height="347px"
                     />
                     <section>
                         {person?.firstName && (

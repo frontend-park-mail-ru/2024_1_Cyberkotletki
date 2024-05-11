@@ -60,6 +60,7 @@ export const createElement = (
         element.instance = instance;
 
         instance.componentWillMount();
+
         const instanceRender = instance.render();
         const $element = createElement(instanceRender, element);
 

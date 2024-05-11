@@ -19,18 +19,20 @@ export interface LinkProps
     > {
     context?: AppContext;
     href: RoutesValues;
+    replace?: boolean;
 }
 
 class LinkClass extends AppComponent<LinkProps> {
     render(): AppNode {
-        const { context, className, href, ...props } = this.props;
+        const { context, className, href, children, replace, ...props } =
+            this.props;
 
         const handleClick = (
             e: App.MouseEvent<HTMLAnchorElement, MouseEvent>,
         ) => {
             e.preventDefault();
 
-            context?.history?.changeRoute(href ?? '');
+            context?.history?.changeRoute(href ?? '', undefined, replace);
 
             return false;
         };
@@ -41,7 +43,9 @@ class LinkClass extends AppComponent<LinkProps> {
                 onClick={handleClick}
                 href={href}
                 {...props}
-            />
+            >
+                {children}
+            </a>
         );
     }
 }

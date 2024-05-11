@@ -15,14 +15,19 @@ export const Credentials = {
     SAME_ORIGIN: 'same-origin',
 } as const;
 
-export const LocalStorageKey = {
-    IS_LOGGED_IN: 'isLoggedIn',
-} as const;
+export enum LocalStorageKey {
+    USER_DATA = 'USER_DATA',
+}
 
 class ConfigClass {
     BACKEND_URL = process.env.BACKEND_URL ?? '';
 
-    BACKEND_STATIC_URL = `${this.BACKEND_URL}/static`;
+    CDN_BACKEND_URL = process.env.CDN_BACKEND_URL ?? '';
+
+    BACKEND_STATIC_URL =
+        process.env.NODE_ENV === 'production'
+            ? `${this.CDN_BACKEND_URL}/static`
+            : `${this.BACKEND_URL}/static`;
 
     BACKEND_URL_API_PREFiX = process.env.BACKEND_URL_API_PREFiX ?? '';
 }
@@ -37,6 +42,8 @@ export enum ResponseStatus {
     NOT_FOUND = '404',
     CONFLICT = '409',
     INTERNAL_SERVER_ERROR = '500',
+    SERVICE_UNAVAILABLE = '503',
+    GATEWAY_TIMEOUT = '504',
 }
 
 export interface HeaderPage {

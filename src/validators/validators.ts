@@ -19,6 +19,13 @@ export const PasswordErrorReasonType = {
     PASSWORD_SPECIAL_SYMBOLS: 'PASSWORD_SPECIAL_SYMBOLS',
 } as const;
 
+export const ReviewErrorReasonType = {
+    REVIEW_TEXT_SHORT: 'REVIEW_TEXT_SHORT',
+    REVIEW_TEXT_LONG: 'REVIEW_TEXT_LONG',
+    REVIEW_TITLE_SHORT: 'REVIEW_TITLE_SHORT',
+    REVIEW_TITLE_LONG: 'REVIEW_TITLE_LONG',
+};
+
 /**
  * Валидация почты
  * @param {string} email почта для проверки

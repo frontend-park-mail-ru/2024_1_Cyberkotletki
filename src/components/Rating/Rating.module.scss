@@ -1,7 +1,9 @@
 .native-rating {
     @include text-header-1;
 
-    color: var(--yellow);
+    color: var(--rating-badge-color);
+
+    @include rating-badge-color;
 }
 
 .imdb-rating {
