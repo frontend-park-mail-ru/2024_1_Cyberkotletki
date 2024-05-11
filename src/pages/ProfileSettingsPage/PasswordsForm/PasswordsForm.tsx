@@ -62,8 +62,8 @@ export class PasswordsForm extends AppComponent<object, PasswordsFormState> {
 
         void userService
             .updatePassword({
-                oldPassword: body.oldPassword,
-                newPassword: body.newPassword,
+                oldPassword: body.oldPassword.trim(),
+                newPassword: body.newPassword.trim(),
             })
             .then(() => {
                 this.setState((prev) => ({

@@ -66,7 +66,10 @@ export class BaseDataFormInner extends AppComponent<
         this.setState((prev) => ({ ...prev, isLoading: true }));
 
         void userService
-            .updateProfile(body)
+            .updateProfile({
+                email: body.email?.trim(),
+                name: body.name?.trim(),
+            })
             .then(() => {
                 this.setState((prev) => ({
                     ...prev,

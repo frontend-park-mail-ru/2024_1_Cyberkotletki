@@ -11,11 +11,13 @@ import {
 import { routes } from '@/App/App.routes';
 
 export const getEmailError = (email?: string) => {
-    if (!email) {
+    const trimEmail = email?.trim();
+
+    if (!trimEmail) {
         return AuthFormError.EMPTY_VALUE;
     }
 
-    if (!validateEmail(email.trim())) {
+    if (!validateEmail(trimEmail)) {
         return AuthFormError.INVALID_EMAIL;
     }
 
@@ -23,11 +25,13 @@ export const getEmailError = (email?: string) => {
 };
 
 export const getPasswordError = (password?: string) => {
-    if (!password) {
+    const trimPassword = password?.trim();
+
+    if (!trimPassword) {
         return AuthFormError.EMPTY_VALUE;
     }
 
-    const passwordValidation = validatePassword(password);
+    const passwordValidation = validatePassword(trimPassword);
 
     if (!passwordValidation.isValid) {
         return AuthFormError[passwordValidation.reasonType];
@@ -40,11 +44,13 @@ export const getPasswordRepeatError = (
     password?: string,
     passwordRepeat?: string,
 ) => {
-    if (!passwordRepeat) {
+    const trimPasswordRepeat = passwordRepeat?.trim();
+
+    if (!trimPasswordRepeat) {
         return AuthFormError.EMPTY_VALUE;
     }
 
-    if (!validatePasswordMatch(password, passwordRepeat)) {
+    if (!validatePasswordMatch(password, trimPasswordRepeat)) {
         return AuthFormError.NOT_MATCH_PASSWORDS;
     }
 
@@ -117,10 +123,10 @@ export const submitLoginForm = async (
     }
 
     if (isLogin) {
-        return authService.login(email, password);
+        return authService.login(email.trim(), password.trim());
     }
 
-    return authService.register(email, password);
+    return authService.register(email.trim(), password.trim());
 };
 
 /**
