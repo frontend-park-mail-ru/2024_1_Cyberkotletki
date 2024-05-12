@@ -1,3 +1,7 @@
+.card {
+    overflow: hidden;
+}
+
 .top {
     display: flex;
     gap: var(--main-content-gap);
@@ -19,6 +23,11 @@
     > *:last-child {
         color: var(--secondary-gray);
     }
+
+    > div,
+    a {
+        @include cut-for-n-rows(1);
+    }
 }
 
 .table {
@@ -39,8 +48,7 @@
 
 .title-cell {
     @include text-primary;
-
-    font-weight: bold;
+    @include cut-for-n-rows(1);
 }
 
 .rating-badge {

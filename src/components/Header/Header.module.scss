@@ -9,6 +9,7 @@
     width: 100%;
     height: var(--header-height);
     overflow: hidden;
+    overflow: visible;
     background: transparent;
     padding-block: var(--small-padding);
 
@@ -18,10 +19,10 @@
         width: 100%;
         height: 100%;
         background: inherit;
-        background-color: var(--absolute-op-30);
+        background-color: rgb(var(--violet-black-rgb) / 50%);
         border-bottom: 1px solid rgb(0 0 0 / 15%);
-        filter: drop-shadow(0 4px 4px rgb(0 0 0 / 25%));
-        backdrop-filter: blur(16px);
+        filter: drop-shadow(0 8px 24px rgb(0 0 0 / 10%));
+        backdrop-filter: blur(32px);
         content: '';
     }
 }

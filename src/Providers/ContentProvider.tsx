@@ -39,7 +39,7 @@ export class ContentProvider extends AppComponent<
         personsMap: {},
         getAllFilms: () =>
             contentService.getAllFilms().then((response) => {
-                const films = response.filter(Boolean) as Film[];
+                const films = response.filter(Boolean);
 
                 this.setState((prev) => ({
                     ...prev,
@@ -84,7 +84,7 @@ export class ContentProvider extends AppComponent<
                         contentService.getFilmById(id),
                     ) ?? [],
                 )
-            ).filter(Boolean) as Film[];
+            ).filter(Boolean);
 
             const filmsByCollection = this.state.filmsByCollection ?? {};
 

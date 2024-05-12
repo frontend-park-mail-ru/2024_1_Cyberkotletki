@@ -6,13 +6,13 @@
     margin: 0;
     margin-top: -8px;
     overflow: hidden auto;
-    background-color: var(--absolute-op-30);
+    background-color: rgb(var(--violet-dark-rgb) / 70%);
     border: 1px solid var(--secondary-gray-op-30);
     border-radius: var(--item-border-radius);
     box-shadow: var(--modal-shadow);
     visibility: hidden;
     opacity: 0;
-    backdrop-filter: blur(24px);
+    backdrop-filter: blur(32px);
     transition:
         opacity 200ms ease,
         visibility 200ms ease,

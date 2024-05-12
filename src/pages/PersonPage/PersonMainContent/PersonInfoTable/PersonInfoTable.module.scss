@@ -4,7 +4,7 @@
 
 .table {
     td {
-        padding-block: calc(var(--main-content-gap) / 2);
+        padding-block: var(--main-content-gap);
 
         &:first-child {
             padding-inline-end: var(--main-padding-2);

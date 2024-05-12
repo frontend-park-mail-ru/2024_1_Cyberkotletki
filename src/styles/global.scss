@@ -42,12 +42,16 @@
     --popup-z-index: 900;
 
     /* Transitions */
-    --item-transition-all: all 200ms ease-in-out;
+    --item-transition-all: all 200ms ease;
 
     /* Colors rgb */
     --absolute-rgb: 0 0 0; // #000000
     --light-gray-rgb: 155 161 168; // #9ba1a8
     --secondary-gray-rgb: 101 104 108; // #65686c
+    --logo-black-rgb: 19 30 32; // #131e20
+    --violet-dark-rgb: 38 32 57; // #262039
+    --violet-black-rgb: 15 17 21; // #0f1115
+    --violet-rgb: 111 90 255; // #6f5aff
 
     /* Colors */
     --absolute: rgb(var(--absolute-rgb));
@@ -55,13 +59,18 @@
     --absolute-op-20: rgb(var(--absolute-rgb) / 20%);
     --absolute-op-30: rgb(var(--absolute-rgb) / 30%);
     --black: #0f1014;
-    --logo-black: #131e20;
-    --sdvdf: #b9b9b9;
+    --logo-black: rgb(var(--logo-black-rgb));
     --white: #ffffff;
     --text-color: #efefef;
     --solid-blue: #477bff;
     --success: #50b773;
     --background-gray: #f0f1f3;
+    --pink: #ff3797;
+    --purple: #c135ff;
+    --violet: rgb(var(--violet-rgb)); // #6f5aff
+    --violet-dark: rgb(var(--violet-dark-rgb)); // #262039;
+    --violet-black: rgb(var(--violet-black-rgb)); // #0f1115
+    --violet-black-op-80: rgb(var(--violet-black-rgb) / 80%);
     --light-gray: rgb(var(--light-gray-rgb));
     --light-gray-op-30: rgb(var(--light-gray-rgb) / 30%);
     --secondary-gray: rgb(var(--secondary-gray-rgb));
@@ -70,16 +79,12 @@
     --yellow: #f5c518;
     --primary-gradient: linear-gradient(
         270deg,
-        #6f5aff 0%,
-        #c135ff 50.5%,
-        #ff3797 100%
+        var(--violet) 0%,
+        var(--purple) 50%,
+        var(--pink) 100%
     );
-    --background: rgb(38 32 57 / 100%)
-        linear-gradient(
-            180deg,
-            rgb(38 32 57 / 100%) 0%,
-            rgb(15 17 21 / 100%) 100%
-        );
+    --background: var(--violet-dark)
+        linear-gradient(180deg, var(--violet-dark) 0%, var(--violet-black) 100%);
 
     /** Shadows */
     --modal-shadow: rgb(0 0 0 / 35%) 0 5px 15px;
@@ -163,4 +168,16 @@ p {
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
+}
+
+.hide-on-mobile {
+    @include mobile {
+        display: none;
+    }
+}
+
+.hide-on-desktop {
+    @include not-mobile {
+        display: none;
+    }
 }

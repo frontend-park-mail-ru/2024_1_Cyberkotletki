@@ -8,7 +8,14 @@ import { routes } from '@/App/App.routes';
 
 const cx = concatClasses.bind(styles);
 
-export interface FilmInfoTableProps {
+export interface FilmInfoTableProps
+    extends Omit<
+        App.DetailedHTMLProps<
+            App.TableHTMLAttributes<HTMLTableElement>,
+            HTMLTableElement
+        >,
+        'children'
+    > {
     film?: Film;
 }
 
@@ -30,10 +37,10 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
         ));
 
     render() {
-        const { film } = this.props;
+        const { film, className, ...props } = this.props;
 
         return (
-            <table className={cx('table')}>
+            <table className={cx('table', className)} {...props}>
                 <tbody>
                     {film?.originalTitle && (
                         <tr>
@@ -69,16 +76,6 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         <td>
                             {film?.directors?.length ? (
                                 this.renderPersons(film?.directors)
-                            ) : (
-                                <NotFound />
-                            )}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className={cx('label')}>В главных ролях:</td>
-                        <td>
-                            {film?.actors?.length ? (
-                                this.renderPersons(film.actors)
                             ) : (
                                 <NotFound />
                             )}

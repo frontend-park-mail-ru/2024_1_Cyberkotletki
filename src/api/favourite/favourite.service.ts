@@ -7,7 +7,6 @@ import type {
 
 import { contentService } from '@/api/content/service';
 import { appFetch } from '@/api/appFetch.ts';
-import type { Film } from '@/api/content/types';
 
 class FavouriteService {
     /**
@@ -38,7 +37,7 @@ class FavouriteService {
                     contentService.getFilmById(contentID ?? 0),
                 ) ?? [],
             )
-        ).filter(Boolean) as Film[];
+        ).filter(Boolean);
     }
 
     /**

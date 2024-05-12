@@ -113,8 +113,8 @@
         border: 1px solid transparent;
 
         &.primary {
-            border-right-color: #6f5aff;
-            border-left-color: #ff3797;
+            border-right-color: var(--violet);
+            border-left-color: var(--pink);
         }
     }
 

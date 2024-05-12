@@ -135,6 +135,8 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
     overflow: hidden;
     white-space: pre-line;
     text-overflow: ellipsis;
+    word-break: break-word;
+    line-break: normal;
     -webkit-line-clamp: $n;
     -webkit-box-orient: vertical;
 }
@@ -165,7 +167,7 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
 
     &::-webkit-scrollbar-thumb {
         /* плашка-бегунок */
-        background: #6f5aff;
+        background: rgb(var(--violet-rgb) / 50%);
         border-radius: 8px;
     }
 
@@ -174,7 +176,7 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
         background: transparent;
     }
 
-    scrollbar-color: #6f5aff transparent;
+    scrollbar-color: rgb(var(--violet-rgb) / 50%) transparent;
 }
 
 @mixin card-hover-effect {

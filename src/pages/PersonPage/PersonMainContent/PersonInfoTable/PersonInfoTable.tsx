@@ -2,12 +2,18 @@ import styles from './PersonInfoTable.module.scss';
 
 import type { PersonActor } from '@/api/content/types';
 import { AppComponent } from '@/core';
-import type { AppNode } from '@/core/shared/AppNode.types';
-import { concatClasses, getHumanDate } from '@/utils';
+import { concatClasses, getHumanDate, objectKeys } from '@/utils';
 
 const cx = concatClasses.bind(styles);
 
-export interface PersonInfoTableProps {
+export interface PersonInfoTableProps
+    extends Omit<
+        App.DetailedHTMLProps<
+            App.TableHTMLAttributes<HTMLTableElement>,
+            HTMLTableElement
+        >,
+        'children'
+    > {
     person?: PersonActor;
 }
 
@@ -15,12 +21,18 @@ const isDateDefined = (date?: string): date is string =>
     date ? new Date(date).getFullYear() > 1 : false;
 
 export class PersonInfoTable extends AppComponent<PersonInfoTableProps> {
-    render(): AppNode {
-        const { person } = this.props;
+    render() {
+        const { person, className, ...props } = this.props;
 
         return (
-            <table className={cx('table')}>
+            <table className={cx('table', className)} {...props}>
                 <tbody>
+                    {person?.roles && (
+                        <tr>
+                            <td className={cx('label')}>Карьера:</td>
+                            <td>{objectKeys(person?.roles).join(', ')}</td>
+                        </tr>
+                    )}
                     {isDateDefined(person?.birthDate) && (
                         <tr>
                             <td className={cx('label')}>Дата рождения:</td>
@@ -56,7 +68,7 @@ export class PersonInfoTable extends AppComponent<PersonInfoTableProps> {
                     {person?.height && (
                         <tr>
                             <td className={cx('label')}>Рост:</td>
-                            <td>{`${person.height} см`}</td>
+                            <td>{`${(person.height / 100).toLocaleString()} м`}</td>
                         </tr>
                     )}
                 </tbody>

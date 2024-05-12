@@ -1,9 +1,11 @@
 import styles from './FilmMainContent.module.scss';
 
+import { routes } from '@/App/App.routes';
 import type { Film } from '@/api/content/types';
 import { icStarFilledUrl, icStarOutlinedUrl } from '@/assets/icons';
 import { Button } from '@/components/Button';
 import { LazyImg } from '@/components/LazyImg';
+import { Link } from '@/components/Link';
 import { Rating } from '@/components/Rating';
 import { AppComponent } from '@/core';
 import { FilmInfoTable } from '@/pages/FilmPage/FilmMainContent/FilmInfoTable';
@@ -19,21 +21,59 @@ export interface FilmMainContentProps {
     withFavButton?: boolean;
 }
 
-export class FilmMainContent extends AppComponent<FilmMainContentProps> {
+export interface FilmMainContentState {
+    backdropRef: App.RefObject<HTMLDivElement>;
+}
+
+const scrollToReviewForm = () => {
+    document.getElementById(REVIEW_FORM_ID)?.scrollIntoView({
+        behavior: 'smooth',
+    });
+};
+
+export class FilmMainContent extends AppComponent<
+    FilmMainContentProps,
+    FilmMainContentState
+> {
+    state: FilmMainContentState = { backdropRef: { current: null } };
+
+    setBackdropImage = () => {
+        if (this.state.backdropRef.current) {
+            this.state.backdropRef.current.style.backgroundImage = `url("${getStaticUrl(this.props.film?.backdropURL || this.props.film?.posterURL)}")`;
+        }
+    };
+
+    componentDidMount() {
+        this.setBackdropImage();
+    }
+
+    componentDidUpdate(
+        _: object | null,
+        prevProps: FilmMainContentProps | null,
+    ) {
+        if (prevProps?.film !== this.props.film) {
+            this.setBackdropImage();
+        }
+    }
+
     render() {
         const { film, onFavouriteClick, addedToFavourite, withFavButton } =
             this.props;
 
         return (
             <div className={cx('content')}>
-                <div>
+                <div ref={this.state.backdropRef} className={cx('backdrop')} />
+                <div className={cx('left-container')}>
                     <LazyImg
                         className={cx('film-poster')}
                         src={getStaticUrl(film?.posterURL)}
-                        width="232px"
-                        height="347px"
+                        width="300px"
+                        height="443px"
                         alt={film?.title}
                     />
+                    <h1 className={cx('title', 'hide-on-desktop')}>
+                        {film?.title}
+                    </h1>
                     {withFavButton && (
                         <Button
                             outlined
@@ -55,32 +95,45 @@ export class FilmMainContent extends AppComponent<FilmMainContentProps> {
                 <div className={cx('section')}>
                     <div className={cx('top-info')}>
                         <section>
-                            <h1 className={cx('title')}>{film?.title}</h1>
-                            <FilmInfoTable film={film} />
-                        </section>
-                        <section className={cx('rating-section')}>
-                            <Rating
-                                rating={film?.rating}
-                                imdbRating={film?.imdbRating}
+                            <h1 className={cx('title', 'hide-on-mobile')}>
+                                {film?.title}
+                            </h1>
+                            <FilmInfoTable
+                                film={film}
+                                className={cx('info-table')}
                             />
-                            <Button
-                                outlined
-                                styleType="secondary"
-                                onClick={() => {
-                                    document
-                                        .getElementById(REVIEW_FORM_ID)
-                                        ?.scrollIntoView({
-                                            behavior: 'smooth',
-                                        });
-                                }}
-                            >
-                                Оценить
-                            </Button>
                         </section>
+                        <div className={cx('right-container')}>
+                            <div className={cx('rating-container')}>
+                                <Rating
+                                    rating={film?.rating}
+                                    imdbRating={film?.imdbRating}
+                                />
+                                <Button
+                                    outlined
+                                    styleType="secondary"
+                                    onClick={scrollToReviewForm}
+                                >
+                                    Оценить
+                                </Button>
+                            </div>
+                            <section className={cx('roles-section')}>
+                                <h1>В главных ролях:</h1>
+                                <ul>
+                                    {film?.actors?.map(({ name, id }) => (
+                                        <li>
+                                            <Link href={routes.person(id ?? 0)}>
+                                                {name}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                        </div>
                     </div>
                     <section className={cx('description-section')}>
                         <h1>Описание</h1>
-                        <p>{film?.description}</p>
+                        <p title={film?.description}>{film?.description}</p>
                     </section>
                 </div>
             </div>

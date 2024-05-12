@@ -62,7 +62,7 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
     };
 
     render() {
-        const { review, isSmall, ...props } = this.props;
+        const { review, isSmall, className, ...props } = this.props;
 
         const { profile } = this.props;
 
@@ -79,7 +79,7 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
         );
 
         return (
-            <div {...props}>
+            <div {...props} className={cx('card', className)}>
                 <div className={cx('top')}>
                     <Avatar
                         className={cx('avatar')}
@@ -88,9 +88,14 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                         imageSrc={review?.authorAvatar}
                     />
                     <div className={cx('username')}>
-                        <div>{review?.authorName}</div>
+                        <div title={review?.authorName}>
+                            {review?.authorName}
+                        </div>
                         {isSmall && (
-                            <Link href={routes.film(review?.contentID ?? 0)}>
+                            <Link
+                                href={routes.film(review?.contentID ?? 0)}
+                                title={review?.contentName}
+                            >
                                 <u>
                                     <b>{review?.contentName}</b>
                                 </u>
@@ -139,7 +144,10 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                         </tr>
                         <tr>
                             {!isSmall && <td>Заголовок:</td>}
-                            <td className={cx('title-cell')}>
+                            <td
+                                className={cx('title-cell')}
+                                title={review?.title}
+                            >
                                 <b>{review?.title ?? ''}</b>
                             </td>
                         </tr>

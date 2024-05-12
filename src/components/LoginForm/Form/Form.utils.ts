@@ -24,11 +24,15 @@ export const getEmailError = (email?: string) => {
     return '';
 };
 
-export const getPasswordError = (password?: string) => {
+export const getPasswordError = (password?: string, isStrong = true) => {
     const trimPassword = password?.trim();
 
     if (!trimPassword) {
         return AuthFormError.EMPTY_VALUE;
+    }
+
+    if (!isStrong) {
+        return '';
     }
 
     const passwordValidation = validatePassword(trimPassword);
@@ -88,7 +92,7 @@ export const validateForm = (form?: HTMLFormElement, isLogin?: boolean) => {
         formValidation.isValid = false;
     }
 
-    const passwordError = getPasswordError(password);
+    const passwordError = getPasswordError(password, !isLogin);
 
     if (passwordError) {
         formValidation.passwordError = passwordError;
@@ -236,7 +240,7 @@ export function changePasswordInput(
 ) {
     this.state.passwordValue = e.target.value;
 
-    const passwordError = getPasswordError(e.target.value);
+    const passwordError = getPasswordError(e.target.value, !this.props.isLogin);
 
     this.setState((prev) => ({
         ...prev,
@@ -253,7 +257,10 @@ export function inputPasswordInput(
     e: App.FormEvent<HTMLInputElement>,
 ) {
     if (this.state.passwordError) {
-        const error = getPasswordError(e.currentTarget.value);
+        const error = getPasswordError(
+            e.currentTarget.value,
+            !this.props.isLogin,
+        );
 
         if (!error) {
             this.setState((prev) => ({

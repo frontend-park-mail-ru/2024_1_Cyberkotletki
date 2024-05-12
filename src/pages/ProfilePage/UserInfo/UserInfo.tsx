@@ -1,7 +1,6 @@
 import styles from './UserInfo.module.scss';
 
 import { routes } from '@/App/App.routes';
-import { ProfileContext } from '@/Providers/ProfileProvider';
 import { reviewService } from '@/api/review/service';
 import type { ReviewDetails } from '@/api/review/types';
 import type { ProfileResponse } from '@/api/user/types';
@@ -30,7 +29,7 @@ export interface UserInfoState {
     recentReviews?: ReviewDetails[];
 }
 
-export class UserInfoClass extends AppComponent<UserInfoProps, UserInfoState> {
+export class UserInfo extends AppComponent<UserInfoProps, UserInfoState> {
     isLoading = false;
 
     loadData = () => {
@@ -75,12 +74,16 @@ export class UserInfoClass extends AppComponent<UserInfoProps, UserInfoState> {
     };
 
     componentDidMount() {
-        this.loadData();
+        const profile = this.props.context?.profile?.profile;
+
+        if (!profile) {
+            this.loadData();
+        } else {
+            this.loadRecentReviews(profile?.id ?? 0);
+        }
     }
 
     render() {
-        this.loadData();
-
         const { className, context, ...props } = this.props;
         const { profile: stateProfile, recentReviews } = this.state;
 
@@ -129,5 +132,3 @@ export class UserInfoClass extends AppComponent<UserInfoProps, UserInfoState> {
         );
     }
 }
-
-export const UserInfo = ProfileContext.Connect(UserInfoClass);
