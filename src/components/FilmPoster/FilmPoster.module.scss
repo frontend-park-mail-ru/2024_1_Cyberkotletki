@@ -1,0 +1,31 @@
+.poster-container {
+    position: relative;
+    width: fit-content;
+    transform: translate3d(0, 0, 0);
+}
+
+.poster {
+    z-index: 2;
+    min-width: 300px;
+    max-width: 300px;
+    border-radius: 6px;
+    aspect-ratio: 0.667;
+    box-shadow: rgb(0 0 0 / 10%) 0 4px 12px;
+
+    @include mobile {
+        width: 100%;
+        min-width: auto;
+    }
+}
+
+.poster-blur {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 1;
+    width: calc(100% + 48px);
+    height: calc(100% + 64px);
+    transform: translate3d(0, 0, 0) translateX(-50%);
+    backface-visibility: hidden;
+    filter: blur(50px) brightness(0.5) opacity(0.6);
+}

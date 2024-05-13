@@ -24,7 +24,7 @@ export class CheckMark extends AppComponent<CheckMarkProps> {
 
         return (
             <div className={cx('check-mark', className, { show })} {...props}>
-                <img src={icCheckUrl} />
+                <img src={icCheckUrl} aria-hidden />
             </div>
         );
     }

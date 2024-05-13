@@ -4,7 +4,7 @@ import { routes } from '@/App/App.routes';
 import type { Film } from '@/api/content/types';
 import { icStarFilledUrl, icStarOutlinedUrl } from '@/assets/icons';
 import { Button } from '@/components/Button';
-import { LazyImg } from '@/components/LazyImg';
+import { FilmPoster } from '@/components/FilmPoster';
 import { Link } from '@/components/Link';
 import { Rating } from '@/components/Rating';
 import { AppComponent } from '@/core';
@@ -64,12 +64,11 @@ export class FilmMainContent extends AppComponent<
             <div className={cx('content')}>
                 <div ref={this.state.backdropRef} className={cx('backdrop')} />
                 <div className={cx('left-container')}>
-                    <LazyImg
-                        className={cx('film-poster')}
-                        src={getStaticUrl(film?.posterURL)}
-                        width="300px"
-                        height="443px"
+                    <FilmPoster
+                        src={film?.posterURL}
                         alt={film?.title}
+                        className={cx('film-poster')}
+                        loading="eager"
                     />
                     <h1 className={cx('title', 'hide-on-desktop')}>
                         {film?.title}
@@ -117,18 +116,24 @@ export class FilmMainContent extends AppComponent<
                                     Оценить
                                 </Button>
                             </div>
-                            <section className={cx('roles-section')}>
-                                <h1>В главных ролях:</h1>
-                                <ul>
-                                    {film?.actors?.map(({ name, id }) => (
-                                        <li>
-                                            <Link href={routes.person(id ?? 0)}>
-                                                {name}
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </section>
+                            {!!film?.actors?.length && (
+                                <section className={cx('roles-section')}>
+                                    <h1>В главных ролях:</h1>
+                                    <ul>
+                                        {film?.actors?.map(({ name, id }) => (
+                                            <li>
+                                                <Link
+                                                    href={routes.person(
+                                                        id ?? 0,
+                                                    )}
+                                                >
+                                                    {name}
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </section>
+                            )}
                         </div>
                     </div>
                     <section className={cx('description-section')}>

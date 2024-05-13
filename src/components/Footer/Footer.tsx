@@ -18,8 +18,16 @@ export class Footer extends AppComponent<FooterProps> {
         return (
             <footer className={cx('footer', className)} {...props}>
                 <h1>Киберкотлетки</h1>
-                <img src={icDeleteUrl} aria-hidden className={cx('x-icon')} />
                 <img
+                    loading="lazy"
+                    decoding="async"
+                    src={icDeleteUrl}
+                    aria-hidden
+                    className={cx('x-icon')}
+                />
+                <img
+                    loading="lazy"
+                    decoding="async"
                     src={icVkLogoUrl}
                     alt="Лого ВК"
                     className={cx('logo-icon')}

@@ -17,9 +17,6 @@
 
 .film-poster {
     z-index: 2;
-    min-width: 300px;
-    max-width: 300px;
-    aspect-ratio: 0.667;
 
     @include mobile {
         margin-inline: auto;
@@ -93,6 +90,9 @@
 }
 
 .title {
+    position: relative;
+    z-index: 2;
+
     @include text-header-1;
 
     @include not-mobile {
@@ -112,12 +112,11 @@
 
 .fav-button {
     margin-block-start: var(--main-padding);
+    z-index: 2;
 }
 
 .backdrop {
     position: absolute;
-
-    // top: var(--header-height);
     top: 0;
     left: 0;
     z-index: 1;

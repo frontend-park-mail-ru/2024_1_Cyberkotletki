@@ -50,10 +50,10 @@ export class RadioRating extends AppComponent<
     }
 
     render(): AppNode {
-        const { hasError, errorHint, className, ...props } = this.props;
+        const { hasError, errorHint, className, id, ...props } = this.props;
 
         return (
-            <div className={cx('container-box', className)}>
+            <div className={cx('container-box', className)} id={id}>
                 <div className={cx('container', { error: hasError })}>
                     {Array.from({ length: 10 }).map((_, index) => (
                         <label className={cx('value')} tabIndex={0}>
