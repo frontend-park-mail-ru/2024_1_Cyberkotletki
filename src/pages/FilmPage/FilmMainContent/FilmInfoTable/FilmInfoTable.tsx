@@ -3,8 +3,9 @@ import styles from './FilmInfoTable.module.scss';
 import { Link } from '@/components/Link';
 import type { Film, Person } from '@/api/content/types';
 import { AppComponent } from '@/core';
-import { concatClasses, getHumanDate, isDefined } from '@/utils';
+import { concatClasses, getHumanDate, isDefined, parseBudget } from '@/utils';
 import { routes } from '@/App/App.routes';
+import { AgeLimitBadge } from '@/components/AgeLimitBadge';
 
 const cx = concatClasses.bind(styles);
 
@@ -135,7 +136,7 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         <td className={cx('label')}>Слоган:</td>
                         <td>
                             {film?.slogan ? (
-                                `"${film?.slogan ?? ''}"`
+                                `«${film?.slogan ?? ''}»`
                             ) : (
                                 <NotFound />
                             )}
@@ -145,20 +146,22 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         <td className={cx('label')}>Бюджет:</td>
                         <td>
                             {isDefined(film?.budget) ? (
-                                film.budget
+                                parseBudget(film.budget)
                             ) : (
                                 <NotFound />
                             )}
                         </td>
                     </tr>
-                    {film?.movie?.premiere ? (
-                        <tr>
-                            <td className={cx('label')}>Дата премьеры:</td>
-                            <td>{getHumanDate(film?.movie?.premiere)}</td>
-                        </tr>
-                    ) : (
-                        <NotFound />
-                    )}
+                    <tr>
+                        <td className={cx('label')}>Дата премьеры:</td>
+                        <td>
+                            {film?.movie?.premiere ? (
+                                getHumanDate(film?.movie?.premiere)
+                            ) : (
+                                <NotFound />
+                            )}
+                        </td>
+                    </tr>
                     {film?.movie?.release && (
                         <tr>
                             <td className={cx('label')}>Дата релиза:</td>
@@ -166,10 +169,10 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         </tr>
                     )}
                     <tr>
-                        <td className={cx('label')}>Возрастное ограничение:</td>
+                        <td className={cx('label')}>Возраст:</td>
                         <td>
                             {isDefined(film?.ageRestriction) ? (
-                                `${film?.ageRestriction ?? ''}+`
+                                <AgeLimitBadge age={film.ageRestriction} />
                             ) : (
                                 <NotFound />
                             )}

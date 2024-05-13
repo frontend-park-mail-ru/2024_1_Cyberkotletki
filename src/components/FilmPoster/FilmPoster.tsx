@@ -1,5 +1,6 @@
 import styles from './FilmPoster.module.scss';
 
+import { DefaultPoster } from '@/components/DefaultPoster';
 import { LazyImg } from '@/components/LazyImg';
 import type { LazyImgProps } from '@/components/LazyImg/LazyImg';
 import { AppComponent } from '@/core';
@@ -18,21 +19,31 @@ export class FilmPoster extends AppComponent<FilmPosterProps> {
 
         return (
             <div className={cx('poster-container', className)}>
-                <LazyImg
-                    className={cx('poster-blur')}
-                    src={getStaticUrl(src)}
-                    width="300px"
-                    height="443px"
-                    aria-hidden
-                    {...props}
-                />
-                <LazyImg
-                    className={cx('poster')}
-                    src={getStaticUrl(src)}
-                    width="300px"
-                    height="443px"
-                    {...props}
-                />
+                {src && (
+                    <LazyImg
+                        className={cx('poster-blur')}
+                        src={getStaticUrl(src)}
+                        width="300px"
+                        height="443px"
+                        aria-hidden
+                        {...props}
+                    />
+                )}
+                {src ? (
+                    <LazyImg
+                        className={cx('poster')}
+                        src={getStaticUrl(src)}
+                        width="300px"
+                        height="443px"
+                        {...props}
+                    />
+                ) : (
+                    <DefaultPoster
+                        className={cx('poster')}
+                        type="film"
+                        {...props}
+                    />
+                )}
             </div>
         );
     }

@@ -35,6 +35,13 @@
     font-weight: bold;
 }
 
+.en-title {
+    color: var(--light-gray);
+    margin-block-start: var(--main-text-gap);
+
+    @include text-header-5;
+}
+
 .roles-section {
     margin-block-start: var(--main-padding-2);
 

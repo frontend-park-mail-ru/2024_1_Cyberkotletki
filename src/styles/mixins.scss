@@ -233,3 +233,9 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
         opacity: 1;
     }
 }
+
+@mixin centered-flexbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

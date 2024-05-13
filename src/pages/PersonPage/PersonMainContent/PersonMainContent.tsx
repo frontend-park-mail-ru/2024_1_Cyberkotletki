@@ -12,6 +12,7 @@ import {
     objectEntries,
 } from '@/utils';
 import { LayoutGrid } from '@/layouts/LayoutGrid';
+import { DefaultPoster } from '@/components/DefaultPoster';
 
 const cx = concatClasses.bind(styles);
 
@@ -43,16 +44,23 @@ export class PersonMainContent extends AppComponent<PersonMainContentProps> {
         return (
             <div className={cx('content')}>
                 <div className={cx('top-info')}>
-                    <LazyImg
-                        className={cx('film-poster')}
-                        src={getStaticUrl(person?.photoURL)}
-                        width="300px"
-                        height="443px"
-                        alt={person?.name}
-                    />
+                    {person?.photoURL ? (
+                        <LazyImg
+                            className={cx('film-poster')}
+                            src={getStaticUrl(person?.photoURL)}
+                            width="300px"
+                            height="443px"
+                            alt={person?.name}
+                        />
+                    ) : (
+                        <DefaultPoster className={cx('film-poster')} />
+                    )}
                     <section>
                         {person?.name && (
                             <h1 className={cx('title')}>{person.name}</h1>
+                        )}
+                        {person?.enName && (
+                            <h2 className={cx('en-title')}>{person.enName}</h2>
                         )}
                         <PersonInfoTable
                             person={person}

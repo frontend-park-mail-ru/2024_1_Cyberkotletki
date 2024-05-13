@@ -10,6 +10,7 @@ import { routes, type RoutesValues } from '@/App/App.routes';
 import { Button } from '@/components/Button';
 import { icTrashUrl } from '@/assets/icons';
 import { ReleaseBadge } from '@/components/ReleaseBadge';
+import { DefaultPoster } from '@/components/DefaultPoster';
 
 const cx = concatClasses.bind(styles);
 
@@ -67,13 +68,21 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                         'left-shadow': withDeleteButton,
                     })}
                 >
-                    <LazyImg
-                        src={getStaticUrl(film?.posterURL)}
-                        className={cx('poster-img')}
-                        alt="Постер"
-                        width="136px"
-                        height="200px"
-                    />
+                    {' '}
+                    {film?.posterURL ? (
+                        <LazyImg
+                            src={getStaticUrl(film?.posterURL)}
+                            className={cx('poster-img')}
+                            alt="Постер"
+                            width="136px"
+                            height="200px"
+                        />
+                    ) : (
+                        <DefaultPoster
+                            className={cx('poster-img')}
+                            type="film"
+                        />
+                    )}
                     {withReleaseBadge && (
                         <ReleaseBadge
                             date={film?.movie?.release}
