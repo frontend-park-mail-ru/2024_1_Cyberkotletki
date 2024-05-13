@@ -72,7 +72,7 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         </td>
                     </tr>
                     <tr>
-                        <td className={cx('label')}>Режиссеры:</td>
+                        <td className={cx('label')}>Режиссёры:</td>
                         <td>
                             {film?.directors?.length ? (
                                 this.renderPersons(film?.directors)

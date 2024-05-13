@@ -139,11 +139,13 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                                         .filter(Boolean)
                                         .join(' ▸ ')}
                                 </span>
-                                <span>
-                                    {film?.directors?.[0]
-                                        ? `Режиссёр: ${film.directors[0].name ?? ''}`
-                                        : ''}
-                                </span>
+                                {!!film?.directors?.length && (
+                                    <span>
+                                        {film?.directors?.[0]
+                                            ? `Режиссёр: ${film.directors[0].name ?? ''}`
+                                            : ''}
+                                    </span>
+                                )}
                             </span>
                             {!!film?.actors?.length && (
                                 <span>{`В ролях: ${film.actors

@@ -14,7 +14,7 @@ export const convertPreviewToFilm = ({
     ...film,
     actors: actors?.map((name) => ({ name })),
     posterURL: poster,
-    directors: [{ name: director }],
+    directors: director ? [{ name: director }] : [],
     genres: [genre].filter(Boolean),
     countries: [country].filter(Boolean),
     movie: {
