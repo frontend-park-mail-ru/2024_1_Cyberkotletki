@@ -108,11 +108,7 @@ export class FilmMainContent extends AppComponent<
                                     rating={film?.rating}
                                     imdbRating={film?.imdbRating}
                                 />
-                                <Button
-                                    outlined
-                                    styleType="secondary"
-                                    onClick={scrollToReviewForm}
-                                >
+                                <Button onClick={scrollToReviewForm}>
                                     Оценить
                                 </Button>
                             </div>

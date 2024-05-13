@@ -217,13 +217,7 @@ export class ReviewForm extends AppComponent<ReviewFormProps, ReviewFormState> {
                     placeholder="Введите текст"
                     value={text}
                 />
-                <Button
-                    type="submit"
-                    isLoading={isLoading}
-                    outlined
-                    styleType="secondary"
-                    disabled={!!error}
-                >
+                <Button type="submit" isLoading={isLoading} disabled={!!error}>
                     {isEdit ? 'Редактировать' : 'Опубликовать'}
                     <CheckMark show={isSuccess} />
                 </Button>

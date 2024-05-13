@@ -162,14 +162,12 @@ export class BaseDataFormInner extends AppComponent<
                     onInput={this.handleInputName}
                 />
                 <Button
-                    outlined
-                    styleType="secondary"
                     type="submit"
                     isLoading={isLoading}
                     disabled={isLoading}
                     className={cx('button')}
                 >
-                    Обновить
+                    Редактировать
                     <CheckMark show={isSuccess} />
                 </Button>
                 {!!formError && <ErrorMessage message={formError} />}
