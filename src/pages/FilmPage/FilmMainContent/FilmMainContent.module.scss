@@ -126,21 +126,7 @@
     background-position: center;
     background-size: cover;
     background-attachment: fixed;
-    filter: blur(1px);
-
-    &::after {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgb(0 0 0 / 20%);
-        content: '';
-
-        @include mobile {
-            background: rgb(0 0 0 / 40%);
-        }
-    }
+    filter: blur(1px) brightness(0.8);
 
     &::before {
         position: absolute;
@@ -160,7 +146,7 @@
     }
 
     @include mobile {
-        filter: blur(8px);
+        filter: blur(8px) brightness(0.6);
     }
 }
 

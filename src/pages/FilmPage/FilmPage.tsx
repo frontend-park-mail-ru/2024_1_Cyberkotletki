@@ -93,7 +93,7 @@ class FilmPageClass extends AppComponent<
     handleFormSubmit = () => {
         const { params } = window.history.state as { params?: Params };
 
-        this.getFilmById(Number(params?.uid));
+        this.getFilmReviews(Number(params?.uid));
     };
 
     handleEditReviewClick = (reviewForEdit?: ReviewDetails) => {
@@ -145,7 +145,12 @@ class FilmPageClass extends AppComponent<
                 : favouriteService.addToFavourite(film.id);
 
             void promise.then(() => {
-                this.getIsAddedToFavourite();
+                this.setState((prev) => ({
+                    ...prev,
+                    addedToFavourite: !this.state.addedToFavourite,
+                }));
+
+                this.props.context?.content?.resetFavouriteFilms();
             });
         }
     };

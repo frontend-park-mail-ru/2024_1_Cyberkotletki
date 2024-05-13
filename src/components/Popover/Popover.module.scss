@@ -1,5 +1,5 @@
 .popover {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     display: flex;
@@ -20,13 +20,14 @@
         margin 200ms ease;
 
     &:popover-open {
+        position: absolute;
         top: 0;
         margin-top: 0;
         visibility: visible;
         opacity: 1;
-    }
 
-    &.fixed {
-        position: fixed;
+        &.fixed {
+            position: fixed;
+        }
     }
 }

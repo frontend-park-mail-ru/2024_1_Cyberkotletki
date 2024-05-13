@@ -2,13 +2,7 @@ import styles from './FilmCard.module.scss';
 
 import { AppComponent } from '@/core';
 import { RatingBadge } from '@/components/RatingBadge';
-import {
-    clickOnEnter,
-    concatClasses,
-    getHumanDate,
-    getStaticUrl,
-    isDefined,
-} from '@/utils';
+import { clickOnEnter, concatClasses, getStaticUrl, isDefined } from '@/utils';
 import type { Film } from '@/api/content/types';
 import { LazyImg } from '@/components/LazyImg';
 import { Link } from '@/components/Link';
@@ -35,6 +29,9 @@ export interface FilmCardProps
     link?: RoutesValues | '';
     withReleaseBadge?: boolean;
 }
+
+const getYearFromDate = (date?: string) =>
+    date ? new Date(date).getFullYear() : '';
 
 export class FilmCard extends AppComponent<FilmCardProps> {
     linkRef: App.RefObject<HTMLAnchorElement> = { current: null };
@@ -120,19 +117,15 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                             {film?.title}
                         </h1>
                     )}
-
                     {size === 'large' ? (
                         <div className={cx('info')}>
-                            <span>
+                            <span className={cx('bright')}>
                                 {[
                                     film?.originalTitle || '',
-                                    film?.movie?.release ||
-                                    film?.movie?.premiere
-                                        ? getHumanDate(
-                                              film?.movie?.release ||
-                                                  film?.movie?.premiere,
-                                          )
-                                        : '',
+                                    getYearFromDate(
+                                        film?.movie?.release ||
+                                            film?.movie?.premiere,
+                                    ),
                                     film?.movie?.duration
                                         ? `${film?.movie?.duration} мин.`
                                         : '',
@@ -141,18 +134,22 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                                     .join(', ')}
                             </span>
                             <span>
-                                {[
-                                    film?.countries?.[0],
-                                    film?.genres?.[0],
-                                    film?.directors?.[0]
+                                <span>
+                                    {[film?.countries?.[0], film?.genres?.[0]]
+                                        .filter(Boolean)
+                                        .join(' ▸ ')}
+                                </span>
+                                <span>
+                                    {film?.directors?.[0]
                                         ? `Режиссёр: ${film.directors[0].name ?? ''}`
-                                        : '',
-                                ]
-                                    .filter(Boolean)
-                                    .join(' ▸ ')}
+                                        : ''}
+                                </span>
                             </span>
                             {!!film?.actors?.length && (
-                                <span>{`В ролях: ${film.actors.map((actor) => actor.name).join(', ')}`}</span>
+                                <span>{`В ролях: ${film.actors
+                                    .slice(0, 3)
+                                    .map((actor) => actor.name)
+                                    .join(', ')}`}</span>
                             )}
                         </div>
                     ) : (

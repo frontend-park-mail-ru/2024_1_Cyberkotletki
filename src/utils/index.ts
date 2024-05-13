@@ -16,3 +16,4 @@ export { debounce } from './debounce';
 export { clickOnEnter } from './clickOnEnter';
 export { convertReleaseToFilm } from './convertReleaseToFilm';
 export { capitalize } from './capitalize';
+export { convertPreviewToFilm } from './convertPreviewToFilm';

@@ -26,12 +26,13 @@
     --main-content-gap: 12px;
     --main-content-offset: 16px;
     --main-text-gap: 8px;
-    --max-content-width: 1200px;
+    --max-content-width: calc(1200px + 2 * var(--main-padding-2));
     --card-border-radius: 16px;
     --main-padding: 16px;
     --main-padding-2: 32px;
     --large-padding: 24px;
     --footer-height: 240px;
+    --main-content-padding: 32px;
 
     /* Header */
     --header-height: 80px;
@@ -91,10 +92,12 @@
 
     @include tablet {
         --font-size: 15px;
+        --main-content-padding: 24px;
     }
 
     @include mobile {
         --font-size: 16px;
+        --main-content-padding: 16px;
 
         /* Header */
         --header-height: 64px;
