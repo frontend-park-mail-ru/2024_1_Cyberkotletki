@@ -19,7 +19,7 @@ export class YouTubeIframe extends AppComponent<YouTubeIframeProps> {
 
         return src ? (
             <iframe
-                id="player"
+                loading="lazy"
                 className={cx('iframe', className)}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
