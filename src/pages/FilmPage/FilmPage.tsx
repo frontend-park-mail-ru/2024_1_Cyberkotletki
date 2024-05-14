@@ -176,9 +176,13 @@ class FilmPageClass extends AppComponent<
         this.getProfile();
         this.getIsAddedToFavourite();
 
-        if (!filmsMap?.[Number(params?.uid)]) {
-            this.getFilmById(Number(params?.uid));
+        const paramsId = Number(params?.uid);
+
+        if (!filmsMap?.[paramsId]) {
+            this.getFilmById(paramsId);
         }
+
+        this.getFilmReviews(paramsId);
     }
 
     render() {
