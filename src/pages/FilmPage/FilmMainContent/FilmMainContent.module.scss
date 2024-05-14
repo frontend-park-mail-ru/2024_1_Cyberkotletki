@@ -122,6 +122,7 @@
     z-index: 1;
     width: 100%;
     height: var(--backdrop-height);
+    background-color: var(--absolute);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -136,12 +137,10 @@
         height: 100%;
         background: linear-gradient(
             180deg,
-            rgb(0 0 0 / 0%) 0%,
-            rgb(0 0 0) 50%,
-            rgb(0 0 0 / 70%) 60%,
-            rgb(0 0 0 / 0%) 100%
+            rgb(var(--absolute-rgb) / 0%) 0%,
+            rgb(var(--absolute-rgb)) 50%,
+            rgb(var(--absolute-rgb) / 0%) 100%
         );
-        filter: blur(4px);
         content: '';
     }
 
@@ -185,4 +184,15 @@
             content: '';
         }
     }
+}
+
+.player-iframe {
+    margin-block-start: var(--large-padding);
+}
+
+.trailer-title {
+    margin-block-start: var(--main-text-gap);
+    color: var(--light-gray);
+
+    @include text-button;
 }

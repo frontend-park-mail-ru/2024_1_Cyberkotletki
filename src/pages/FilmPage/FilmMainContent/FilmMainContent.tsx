@@ -7,6 +7,7 @@ import { Button } from '@/components/Button';
 import { FilmPoster } from '@/components/FilmPoster';
 import { Link } from '@/components/Link';
 import { Rating } from '@/components/Rating';
+import { YouTubeIframe } from '@/components/YouTubeIframe';
 import { AppComponent } from '@/core';
 import { FilmInfoTable } from '@/pages/FilmPage/FilmMainContent/FilmInfoTable';
 import { REVIEW_FORM_ID } from '@/pages/FilmPage/FilmPage';
@@ -89,6 +90,15 @@ export class FilmMainContent extends AppComponent<
                             )}
                             {addedToFavourite ? 'В избранном' : 'В избранное'}
                         </Button>
+                    )}
+                    {film?.trailerLink && (
+                        <section>
+                            <YouTubeIframe
+                                src={film.trailerLink}
+                                className={cx('player-iframe')}
+                            />
+                            <h2 className={cx('trailer-title')}>Трейлер</h2>
+                        </section>
                     )}
                 </div>
                 <div className={cx('section')}>

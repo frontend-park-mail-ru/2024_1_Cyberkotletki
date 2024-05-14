@@ -18,3 +18,4 @@ export { convertReleaseToFilm } from './convertReleaseToFilm';
 export { capitalize } from './capitalize';
 export { convertPreviewToFilm } from './convertPreviewToFilm';
 export { parseBudget } from './parseBudget';
+export { getYouTubeLink } from './getYouTubeLink';
