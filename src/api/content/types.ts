@@ -159,3 +159,11 @@ export interface Release {
     title?: string;
     type?: Film['type'];
 }
+
+export interface News {
+    id?: number;
+    title?: string;
+    text?: string;
+    date?: string;
+    pictureURL?: string;
+}

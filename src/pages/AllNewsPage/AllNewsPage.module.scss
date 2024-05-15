@@ -1,0 +1,14 @@
+.head {
+    @include text-header-3;
+}
+
+.header {
+    display: flex;
+    gap: var(--main-content-gap);
+    align-items: center;
+
+    @include mobile {
+        flex-direction: column;
+        text-align: center;
+    }
+}

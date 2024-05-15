@@ -1,0 +1,79 @@
+.title {
+    @include text-header-5;
+
+    width: 100%;
+    font-weight: 500;
+}
+
+.poster {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 320px;
+    max-width: 320px;
+    overflow: hidden;
+    aspect-ratio: 320 / 180;
+
+    &.full-width {
+        min-width: 100%;
+        max-width: 100%;
+
+        img {
+            flex-grow: 1;
+        }
+    }
+
+    &::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        width: 120%;
+        background: linear-gradient(rgb(0 0 0 / 90%) 50%, rgb(0 0 0 / 0%) 100%);
+        transform: translateX(50%) translateY(-50%) rotate(45deg);
+        filter: blur(6px);
+        content: '';
+        aspect-ratio: 1;
+    }
+
+    &.left-shadow {
+        &::after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            width: 120%;
+            background: linear-gradient(
+                rgb(0 0 0 / 90%) 50%,
+                rgb(0 0 0 / 0%) 100%
+            );
+            transform: translateX(-50%) translateY(-50%) rotate(-45deg);
+            filter: blur(6px);
+            content: '';
+            aspect-ratio: 1;
+        }
+    }
+}
+
+.poster-img {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    gap: var(--main-content-gap);
+    align-items: flex-start;
+    color: var(--light-gray);
+    text-align: left;
+
+    .title {
+        @include text-primary;
+        @include cut-for-n-rows(3);
+    }
+
+}
