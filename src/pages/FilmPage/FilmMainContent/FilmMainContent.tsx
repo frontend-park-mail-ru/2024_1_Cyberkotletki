@@ -2,9 +2,10 @@ import styles from './FilmMainContent.module.scss';
 
 import { routes } from '@/App/App.routes';
 import type { Film } from '@/api/content/types';
-import { icStarFilledUrl, icStarOutlinedUrl } from '@/assets/icons';
+import { icStarOutlinedUrl } from '@/assets/icons';
 import { Button } from '@/components/Button';
 import { FilmPoster } from '@/components/FilmPoster';
+import { Icon } from '@/components/Icon';
 import { Link } from '@/components/Link';
 import { Rating } from '@/components/Rating';
 import { YouTubeIframe } from '@/components/YouTubeIframe';
@@ -83,11 +84,12 @@ export class FilmMainContent extends AppComponent<
                             }}
                             className={cx('fav-button')}
                         >
-                            {addedToFavourite ? (
-                                <img src={icStarFilledUrl} aria-hidden />
-                            ) : (
-                                <img src={icStarOutlinedUrl} aria-hidden />
-                            )}
+                            <Icon
+                                icon={icStarOutlinedUrl}
+                                className={cx('icon', {
+                                    added: addedToFavourite,
+                                })}
+                            />
                             {addedToFavourite ? 'В избранном' : 'В избранное'}
                         </Button>
                     )}

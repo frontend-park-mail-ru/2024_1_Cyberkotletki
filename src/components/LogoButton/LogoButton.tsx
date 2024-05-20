@@ -3,6 +3,7 @@ import { AppComponent } from '@/core';
 import { icLogoUrl } from '@/assets/icons';
 import { Link } from '@/components/Link';
 import type { LinkProps } from '@/components/Link/Link';
+import { Icon } from '@/components/Icon';
 
 export type LogoButtonProps = Omit<LinkProps, 'children' | 'href' | 'ref'>;
 
@@ -14,7 +15,7 @@ export class LogoButton extends AppComponent<LogoButtonProps> {
                 href={routes.root()}
                 aria-label="На главную страницу"
             >
-                <img src={icLogoUrl} aria-hidden />
+                <Icon icon={icLogoUrl} />
             </Link>
         );
     }

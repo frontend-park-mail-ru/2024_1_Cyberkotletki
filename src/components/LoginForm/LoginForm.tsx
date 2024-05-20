@@ -5,6 +5,7 @@ import { FormFooter } from './FormFooter';
 import { concatClasses } from '@/utils/concatClasses';
 import { icUserUrl } from '@/assets/icons';
 import { AppComponent } from '@/core';
+import { Icon } from '@/components/Icon';
 
 const cx = concatClasses.bind(styles);
 
@@ -21,7 +22,7 @@ export class LoginForm extends AppComponent<LoginFormProps> {
                 className={cx('section')}
                 key={isLogin ? 'login-form' : 'register-form'}
             >
-                <img src={icUserUrl} aria-hidden className={cx('user-icon')} />
+                <Icon icon={icUserUrl} className={cx('user-icon')} />
                 <h1>{isLogin ? 'Авторизация' : 'Регистрация'}</h1>
                 <Form isLogin={isLogin} />
                 <FormFooter isLogin={isLogin} className={cx('footer')} />

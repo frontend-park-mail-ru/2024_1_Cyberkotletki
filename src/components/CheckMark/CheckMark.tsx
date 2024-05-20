@@ -1,5 +1,6 @@
 import styles from './CheckMark.module.scss';
 
+import { Icon } from '@/components/Icon';
 import { icCheckUrl } from '@/assets/icons';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
@@ -23,9 +24,11 @@ export class CheckMark extends AppComponent<CheckMarkProps> {
         const { show, className, ...props } = this.props;
 
         return (
-            <div className={cx('check-mark', className, { show })} {...props}>
-                <img src={icCheckUrl} aria-hidden />
-            </div>
+            <Icon
+                icon={icCheckUrl}
+                className={cx('check-mark', className, { show })}
+                {...props}
+            />
         );
     }
 }

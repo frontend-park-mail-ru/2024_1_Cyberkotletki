@@ -3,6 +3,7 @@ import { SearchPopup } from './SearchPopup';
 
 import { icCloseUrl, icSearchUrl } from '@/assets/icons';
 import { Button } from '@/components/Button';
+import { Icon } from '@/components/Icon';
 import { Input } from '@/components/Input';
 import type { SearchPopupProps } from '@/components/SearchInput/SearchPopup/SearchPopup';
 import { AppComponent } from '@/core';
@@ -104,7 +105,7 @@ export class SearchInput extends AppComponent<
                             className={cx('close-button')}
                             aria-label="Закрыть поиск"
                         >
-                            <img src={icCloseUrl} aria-hidden />
+                            <Icon icon={icCloseUrl} />
                         </Button>
                         <SearchPopup
                             id="search-popover"
@@ -123,7 +124,7 @@ export class SearchInput extends AppComponent<
                         aria-label="Поиск"
                         title="Поиск"
                     >
-                        <img src={icSearchUrl} aria-hidden />
+                        <Icon icon={icSearchUrl} />
                     </Button>
                 )}
             </div>

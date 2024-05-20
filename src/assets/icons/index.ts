@@ -10,6 +10,5 @@ export { default as icLikeUrl } from './ic-like.svg';
 export { default as icSearchUrl } from './ic-search.svg';
 export { default as icCloseUrl } from './ic-close.svg';
 export { default as icPlusUrl } from './ic-plus.svg';
-export { default as icStarFilledUrl } from './ic-star-filled.svg';
 export { default as icStarOutlinedUrl } from './ic-star-outlined.svg';
 export { default as icArrowDownUrl } from './ic-arrow-down.svg';

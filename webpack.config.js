@@ -21,10 +21,7 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'babel-loader',
             },
-            {
-                test: /\.svg$/i,
-                type: 'asset',
-            },
+            { test: /\.svg$/, loader: 'raw-loader' },
         ],
     },
     resolve: {

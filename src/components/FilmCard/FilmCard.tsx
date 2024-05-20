@@ -11,6 +11,7 @@ import { Button } from '@/components/Button';
 import { icTrashUrl } from '@/assets/icons';
 import { ReleaseBadge } from '@/components/ReleaseBadge';
 import { DefaultPoster } from '@/components/DefaultPoster';
+import { Icon } from '@/components/Icon';
 
 const cx = concatClasses.bind(styles);
 
@@ -110,7 +111,7 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                             }}
                             className={cx('remove-button')}
                         >
-                            <img src={icTrashUrl} aria-hidden />
+                            <Icon icon={icTrashUrl} />
                         </Button>
                     )}
                 </div>

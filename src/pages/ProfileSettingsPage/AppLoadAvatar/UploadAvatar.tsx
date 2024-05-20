@@ -10,6 +10,7 @@ import { Spinner } from '@/components/Spinner';
 import { AppComponent } from '@/core';
 import { concatClasses } from '@/utils';
 import type { AppContext } from '@/types/Context.types';
+import { Icon } from '@/components/Icon';
 
 const cx = concatClasses.bind(styles);
 
@@ -99,7 +100,7 @@ export class UploadAvatarInner extends AppComponent<
                         prefix={imageUrl ? '' : undefined}
                     />
                     <div className={cx('edit-icon')}>
-                        <img src={icEditUrl} />
+                        <Icon icon={icEditUrl} />
                     </div>
                     <input
                         type="file"

@@ -108,12 +108,10 @@ export class ReviewForm extends AppComponent<ReviewFormProps, ReviewFormState> {
                 }));
             })
             .finally(() => {
-                // setTimeout(() => {
                 this.setState((prev) => ({
                     ...prev,
                     isLoading: false,
                 }));
-                // }, 100);
             });
     };
 

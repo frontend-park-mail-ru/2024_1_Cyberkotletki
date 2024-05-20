@@ -18,6 +18,7 @@ import { Link } from '@/components/Link';
 import { contentService } from '@/api/content/service';
 import type { SearchResponse } from '@/api/content/types';
 import { icStarOutlinedUrl } from '@/assets/icons';
+import { Icon } from '@/components/Icon';
 
 const cx = concatClasses.bind(styles);
 
@@ -142,7 +143,7 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                                     'mobile-hidden': searchOpened,
                                 })}
                             >
-                                <img src={icStarOutlinedUrl} aria-hidden />
+                                <Icon icon={icStarOutlinedUrl} />
                             </Button>
                             <button
                                 className={cx('avatar-button', {

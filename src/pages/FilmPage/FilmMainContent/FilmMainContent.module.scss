@@ -200,3 +200,17 @@
 
     @include text-button;
 }
+
+.icon {
+    svg path {
+        transition: var(--item-transition-all);
+        fill: transparent;
+    }
+
+    &.added {
+        svg path {
+            fill: var(--yellow);
+            stroke: var(--yellow);
+        }
+    }
+}
