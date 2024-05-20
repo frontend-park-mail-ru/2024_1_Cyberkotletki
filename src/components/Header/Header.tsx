@@ -143,7 +143,10 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                                     'mobile-hidden': searchOpened,
                                 })}
                             >
-                                <Icon icon={icStarOutlinedUrl} />
+                                <Icon
+                                    icon={icStarOutlinedUrl}
+                                    className={cx('star-icon')}
+                                />
                             </Button>
                             <button
                                 className={cx('avatar-button', {

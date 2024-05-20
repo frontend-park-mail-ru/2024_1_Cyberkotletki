@@ -82,10 +82,7 @@
 
 .header-logo {
     height: 100%;
-
-    img {
-        height: 100%;
-    }
+    aspect-ratio: 1;
 }
 
 .avatar-button {
@@ -124,4 +121,8 @@
     @include mobile {
         margin-inline-end: 0;
     }
+}
+
+.star-icon {
+    height: 100% !important;
 }

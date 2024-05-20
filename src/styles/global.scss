@@ -53,6 +53,7 @@
     --violet-dark-rgb: 38 32 57; // #262039
     --violet-black-rgb: 15 17 21; // #0f1115
     --violet-rgb: 111 90 255; // #6f5aff
+    --error-red-rgb: 237 10 52; // #ed0a34
 
     /* Colors */
     --absolute: rgb(var(--absolute-rgb));
@@ -75,8 +76,10 @@
     --light-gray: rgb(var(--light-gray-rgb));
     --light-gray-op-30: rgb(var(--light-gray-rgb) / 30%);
     --secondary-gray: rgb(var(--secondary-gray-rgb));
+    --secondary-gray-op-20: rgb(var(--secondary-gray-rgb) / 20%);
     --secondary-gray-op-30: rgb(var(--secondary-gray-rgb) / 30%);
-    --error-red: #ed0a34;
+    --error-red: rgb(var(--error-red-rgb));
+    --error-red-op-20: rgb(var(--error-red-rgb) / 20%);
     --yellow: #f5c518;
     --primary-gradient: linear-gradient(
         270deg,

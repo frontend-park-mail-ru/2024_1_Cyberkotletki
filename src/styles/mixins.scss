@@ -239,3 +239,12 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
     align-items: center;
     justify-content: center;
 }
+
+/* Enable hover only on non-touch devices */
+@mixin hover {
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            @content;
+        }
+    }
+}

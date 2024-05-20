@@ -39,13 +39,13 @@
     &.secondary {
         --button-color: var(--background-gray);
         --button-border-color: var(--secondary-gray);
-        --button-hover-color: rgb(101 104 108 / 10%);
+        --button-hover-color: var(--absolute-op-20);
     }
 
     &.error {
         --button-color: var(--error-red);
         --button-border-color: var(--error-red);
-        --button-hover-color: rgb(237 10 52 / 10%);
+        --button-hover-color: var(--error-red-op-20);
     }
 
     &.outlined {
