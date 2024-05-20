@@ -188,6 +188,10 @@
 
 .player-iframe {
     margin-block-start: var(--large-padding);
+
+    @include mobile {
+        width: 100%;
+    }
 }
 
 .trailer-title {

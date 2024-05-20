@@ -73,7 +73,11 @@
 }
 
 .avatar {
-    --avatar-size: 100% !important;
+    --avatar-size: 56px !important;
+
+    @include mobile {
+        --avatar-size: 40px !important;
+    }
 }
 
 .header-logo {

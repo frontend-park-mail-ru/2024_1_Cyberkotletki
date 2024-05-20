@@ -23,6 +23,10 @@
 
         @include text-header-4;
     }
+
+    @include mobile {
+        max-width: 100%;
+    }
 }
 
 .reviews-list {
