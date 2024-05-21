@@ -51,9 +51,9 @@ export class FilmCard extends AppComponent<FilmCardProps> {
         } = this.props;
 
         return (
-            <article
+            <div
                 {...props}
-                className={cx('card', { small: size === 'small' }, className, {
+                className={cx('card', className, {
                     button: !!link,
                 })}
                 role={link ? 'button' : undefined}
@@ -63,125 +63,132 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                 }}
                 onKeyDown={clickOnEnter}
             >
-                <div
-                    className={cx('poster', {
-                        'full-width': size === 'small',
-                        'left-shadow': withDeleteButton,
-                    })}
-                >
-                    {' '}
-                    {film?.posterURL ? (
-                        <LazyImg
-                            src={getStaticUrl(film?.posterURL)}
-                            className={cx('poster-img')}
-                            alt="Постер"
-                            width="136px"
-                            height="200px"
-                        />
-                    ) : (
-                        <DefaultPoster
-                            className={cx('poster-img')}
-                            type="film"
-                        />
-                    )}
-                    {withReleaseBadge && (
-                        <ReleaseBadge
-                            date={film?.movie?.release}
-                            className={cx('badge')}
-                        />
-                    )}
-                    {!withReleaseBadge && isDefined(film?.rating) && (
-                        <RatingBadge
-                            rating={film?.rating}
-                            className={cx('badge')}
-                        />
-                    )}
-                    {withDeleteButton && (
-                        <Button
-                            isIconOnly
-                            outlined
-                            styleType="error"
-                            title="Удалить"
-                            onClick={(e) => {
-                                e.stopPropagation();
+                <article className={cx('article', { small: size === 'small' })}>
+                    <div
+                        className={cx('poster', {
+                            'full-width': size === 'small',
+                            'left-shadow': withDeleteButton,
+                        })}
+                    >
+                        {film?.posterURL ? (
+                            <LazyImg
+                                src={getStaticUrl(film?.posterURL)}
+                                className={cx('poster-img')}
+                                alt="Постер"
+                                width="136px"
+                                height="200px"
+                            />
+                        ) : (
+                            <DefaultPoster
+                                className={cx('poster-img')}
+                                type="film"
+                            />
+                        )}
+                        {withReleaseBadge && (
+                            <ReleaseBadge
+                                date={film?.movie?.release}
+                                className={cx('badge')}
+                            />
+                        )}
+                        {!withReleaseBadge && isDefined(film?.rating) && (
+                            <RatingBadge
+                                rating={film?.rating}
+                                className={cx('badge')}
+                            />
+                        )}
+                        {withDeleteButton && (
+                            <Button
+                                isIconOnly
+                                outlined
+                                styleType="error"
+                                title="Удалить"
+                                onClick={(e) => {
+                                    e.stopPropagation();
 
-                                onDeleteClick?.(film);
+                                    onDeleteClick?.(film);
 
-                                return false;
-                            }}
-                            className={cx('remove-button')}
-                        >
-                            <Icon icon={icTrashUrl} />
-                        </Button>
-                    )}
-                </div>
-                <div className={cx('card-info', { small: size === 'small' })}>
-                    {link ? (
-                        <Link href={link} tabIndex={-1} ref={this.linkRef}>
+                                    return false;
+                                }}
+                                className={cx('remove-button')}
+                            >
+                                <Icon icon={icTrashUrl} />
+                            </Button>
+                        )}
+                    </div>
+                    <div
+                        className={cx('card-info', { small: size === 'small' })}
+                    >
+                        {link ? (
+                            <Link href={link} tabIndex={-1} ref={this.linkRef}>
+                                <h1 className={cx('title')} title={film?.title}>
+                                    {film?.title}
+                                </h1>
+                            </Link>
+                        ) : (
                             <h1 className={cx('title')} title={film?.title}>
                                 {film?.title}
                             </h1>
-                        </Link>
-                    ) : (
-                        <h1 className={cx('title')} title={film?.title}>
-                            {film?.title}
-                        </h1>
-                    )}
-                    {size === 'large' ? (
-                        <div className={cx('info')}>
-                            <span className={cx('bright')}>
-                                {[
-                                    film?.originalTitle || '',
-                                    getYearFromDate(
-                                        film?.movie?.release ||
-                                            film?.movie?.premiere,
-                                    ),
-                                    film?.movie?.duration
-                                        ? `${film?.movie?.duration} мин.`
-                                        : '',
-                                ]
-                                    .filter(Boolean)
-                                    .join(', ')}
-                            </span>
-                            <span>
-                                <span>
-                                    {[film?.countries?.[0], film?.genres?.[0]]
+                        )}
+                        {size === 'large' ? (
+                            <div className={cx('info')}>
+                                <span className={cx('bright')}>
+                                    {[
+                                        film?.originalTitle || '',
+                                        getYearFromDate(
+                                            film?.movie?.release ||
+                                                film?.movie?.premiere,
+                                        ),
+                                        film?.movie?.duration
+                                            ? `${film?.movie?.duration} мин.`
+                                            : '',
+                                    ]
                                         .filter(Boolean)
-                                        .join(' ▸ ')}
+                                        .join(', ')}
                                 </span>
-                                {!!film?.directors?.length && (
+                                <span>
                                     <span>
-                                        {film?.directors?.[0]
-                                            ? `Режиссёр: ${film.directors[0].name ?? ''}`
-                                            : ''}
+                                        {[
+                                            film?.countries?.[0],
+                                            film?.genres?.[0],
+                                        ]
+                                            .filter(Boolean)
+                                            .join(' ▸ ')}
                                     </span>
+                                    {!!film?.directors?.length && (
+                                        <span>
+                                            {film?.directors?.[0]
+                                                ? `Режиссёр: ${film.directors[0].name ?? ''}`
+                                                : ''}
+                                        </span>
+                                    )}
+                                </span>
+                                {!!film?.actors?.length && (
+                                    <span>{`В ролях: ${film.actors
+                                        .slice(0, 3)
+                                        .map((actor) => actor.name)
+                                        .join(', ')}`}</span>
                                 )}
-                            </span>
-                            {!!film?.actors?.length && (
-                                <span>{`В ролях: ${film.actors
-                                    .slice(0, 3)
-                                    .map((actor) => actor.name)
-                                    .join(', ')}`}</span>
-                            )}
-                        </div>
-                    ) : (
-                        <div className={cx('info', 'small')}>
-                            {[
-                                film?.movie?.release || film?.movie?.premiere
-                                    ? new Date(
-                                          (film?.movie?.release ||
-                                              film?.movie?.premiere) ??
-                                              '',
-                                      ).getFullYear()
-                                    : '',
-                                ...(film?.genres ?? []),
-                            ]
-                                ?.filter(Boolean)
-                                ?.join(', ')}
-                        </div>
-                    )}
-                </div>
-            </article>
+                            </div>
+                        ) : (
+                            <div className={cx('info', 'small')}>
+                                {[
+                                    film?.movie?.release ||
+                                    film?.movie?.premiere
+                                        ? new Date(
+                                              (film?.movie?.release ||
+                                                  film?.movie?.premiere) ??
+                                                  '',
+                                          ).getFullYear()
+                                        : '',
+                                    ...(film?.genres ?? []),
+                                ]
+                                    ?.filter(Boolean)
+                                    ?.join(', ')}
+                            </div>
+                        )}
+                    </div>
+                </article>
+            </div>
         );
     }
 }

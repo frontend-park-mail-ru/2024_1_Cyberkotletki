@@ -9,4 +9,8 @@
     &:active {
         opacity: 0.6;
     }
+
+    &.active {
+        color: var(--purple);
+    }
 }

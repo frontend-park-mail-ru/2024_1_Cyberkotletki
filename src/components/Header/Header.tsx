@@ -118,7 +118,12 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                     />
                     <div className={cx('tabs', { hidden: searchOpened })}>
                         {HEADER_TABS.map((tab) => (
-                            <Link href={tab.route}>{tab.title}</Link>
+                            <Link
+                                href={tab.route}
+                                active={window.location.pathname === tab.route}
+                            >
+                                {tab.title}
+                            </Link>
                         ))}
                     </div>
                     <SearchInput

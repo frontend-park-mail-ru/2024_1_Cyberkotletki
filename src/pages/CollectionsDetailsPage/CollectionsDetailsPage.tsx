@@ -128,6 +128,7 @@ class CollectionsDetailsPageClass extends AppComponent<
                     <section>
                         <header className={cx('header')}>
                             <LazyImg
+                                loading="eager"
                                 src={getStaticUrl(
                                     filmsCompilation?.compilation?.poster,
                                 )}
