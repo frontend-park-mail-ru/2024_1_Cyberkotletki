@@ -12,7 +12,7 @@
     gap: var(--main-content-gap);
 }
 
-.content {
+.container {
     position: relative;
     display: flex;
     gap: var(--main-padding-2);
@@ -35,11 +35,12 @@
 
 .spinner-container {
     position: absolute;
+    top: 0;
     right: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc(100% - var(--month-select-width));
+    width: 100%;
     height: 100%;
 }
 
@@ -64,5 +65,21 @@
 
     @include mobile {
         display: block;
+    }
+}
+
+.content-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+.content {
+    display: flex;
+    width: 100%;
+    transition: all 200ms ease;
+
+    &.loading {
+        opacity: 0.5;
     }
 }

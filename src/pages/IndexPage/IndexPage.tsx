@@ -14,10 +14,12 @@ export interface IndexPageState {
 
 export class IndexPage extends AppComponent<object, IndexPageState> {
     loadReleases = () => {
-        void contentService.getNearestReleases().then((releases) => {
+        void contentService.getNearestReleases().then((response) => {
             this.setState((prev) => ({
                 ...prev,
-                films: releases?.map(convertReleaseToFilm),
+                films: response?.ongoing_content_list?.map(
+                    convertReleaseToFilm,
+                ),
             }));
         });
     };

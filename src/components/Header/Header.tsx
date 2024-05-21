@@ -18,6 +18,7 @@ import { Link } from '@/components/Link';
 import { contentService } from '@/api/content/service';
 import type { SearchResponse } from '@/api/content/types';
 import { icStarOutlinedUrl } from '@/assets/icons';
+import { Icon } from '@/components/Icon';
 
 const cx = concatClasses.bind(styles);
 
@@ -114,10 +115,18 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                         className={cx('header-logo', {
                             'mobile-hidden': searchOpened,
                         })}
+                        withText
                     />
                     <div className={cx('tabs', { hidden: searchOpened })}>
                         {HEADER_TABS.map((tab) => (
-                            <Link href={tab.route}>{tab.title}</Link>
+                            <Link
+                                href={tab.route}
+                                active={window.location.pathname.startsWith(
+                                    tab.route,
+                                )}
+                            >
+                                {tab.title}
+                            </Link>
                         ))}
                     </div>
                     <SearchInput
@@ -142,7 +151,10 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                                     'mobile-hidden': searchOpened,
                                 })}
                             >
-                                <img src={icStarOutlinedUrl} aria-hidden />
+                                <Icon
+                                    icon={icStarOutlinedUrl}
+                                    className={cx('star-icon')}
+                                />
                             </Button>
                             <button
                                 className={cx('avatar-button', {

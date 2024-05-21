@@ -1,0 +1,11 @@
+.badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding-block: 2px;
+    padding-inline: 4px;
+    color: var(--text-color);
+    font-weight: bolder;
+    border: 1px solid var(--text-color);
+}

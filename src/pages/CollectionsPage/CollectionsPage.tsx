@@ -1,11 +1,7 @@
 import styles from './CollectionsPage.module.scss';
 
 import { contentService } from '@/api/content/service';
-import type {
-    Compilation,
-    CompilationType,
-    CompilationsResponse,
-} from '@/api/content/types';
+import type { Compilation, CompilationType } from '@/api/content/types';
 import { Button } from '@/components/Button';
 import { CompilationItem } from '@/components/CompilationItem';
 import { Spinner } from '@/components/Spinner';
@@ -48,14 +44,14 @@ export class CollectionsPage extends AppComponent<
                             ),
                         ) ?? [],
                     )
-                ).filter(Boolean) as CompilationsResponse[];
+                ).filter(Boolean);
 
                 this.setState((prev) => ({
                     ...prev,
                     compilations: allCompilations
                         .map((compilation) => compilation.compilations)
                         .flat()
-                        .filter(Boolean) as Compilation[],
+                        .filter(Boolean),
                 }));
 
                 const searchType = Number(

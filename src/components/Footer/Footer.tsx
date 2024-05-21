@@ -1,6 +1,7 @@
 import styles from './Footer.module.scss';
 
 import { icDeleteUrl, icVkLogoUrl } from '@/assets/icons';
+import { Icon } from '@/components/Icon';
 import { AppComponent } from '@/core';
 import { concatClasses } from '@/utils';
 
@@ -18,10 +19,10 @@ export class Footer extends AppComponent<FooterProps> {
         return (
             <footer className={cx('footer', className)} {...props}>
                 <h1>Киберкотлетки</h1>
-                <img src={icDeleteUrl} aria-hidden className={cx('x-icon')} />
-                <img
-                    src={icVkLogoUrl}
-                    alt="Лого ВК"
+                <Icon icon={icDeleteUrl} className={cx('x-icon')} />
+                <Icon
+                    icon={icVkLogoUrl}
+                    aria-label="Лого ВК"
                     className={cx('logo-icon')}
                 />
             </footer>

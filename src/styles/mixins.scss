@@ -1,8 +1,15 @@
 /* Screen */
+$screen-small-mobile-max: 374px;
 $screen-mobile-max: 768px;
 $screen-tablet-max: 992px;
 $screen-notebook-max: 1200px;
 $screen-large-monitor-min: calc($screen-notebook-max + 1px);
+
+@mixin small-mobile {
+    @media screen and (max-width: #{$screen-small-mobile-max}) {
+        @content;
+    }
+}
 
 @mixin mobile {
     @media screen and (max-width: #{$screen-mobile-max}) {
@@ -63,7 +70,7 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
 @mixin text-secondary {
     color: var(--secondary-gray);
     font-weight: 400;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     font-family: var(--font-family);
 }
 
@@ -135,6 +142,8 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
     overflow: hidden;
     white-space: pre-line;
     text-overflow: ellipsis;
+    word-break: break-word;
+    line-break: normal;
     -webkit-line-clamp: $n;
     -webkit-box-orient: vertical;
 }
@@ -165,7 +174,7 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
 
     &::-webkit-scrollbar-thumb {
         /* плашка-бегунок */
-        background: #6f5aff;
+        background: rgb(var(--violet-rgb) / 50%);
         border-radius: 8px;
     }
 
@@ -174,7 +183,7 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
         background: transparent;
     }
 
-    scrollbar-color: #6f5aff transparent;
+    scrollbar-color: rgb(var(--violet-rgb) / 50%) transparent;
 }
 
 @mixin card-hover-effect {
@@ -229,5 +238,34 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
     100% {
         transform: translateY(0);
         opacity: 1;
+    }
+}
+
+@mixin fade-in-opacity($rule: 200ms ease) {
+    animation: fade-in-opacity $rule;
+}
+
+@keyframes fade-in-opacity {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@mixin centered-flexbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Enable hover only on non-touch devices */
+@mixin hover {
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            @content;
+        }
     }
 }

@@ -12,7 +12,16 @@ export const setAttributeWithCheck = (
     value: unknown,
 ) => {
     if (isPrimitive(value)) {
-        const key = keyProp === 'className' ? 'class' : keyProp;
+        const key = (() => {
+            switch (keyProp) {
+                case 'className':
+                    return 'class';
+                case 'htmlFor':
+                    return 'for';
+                default:
+                    return keyProp;
+            }
+        })();
 
         if (isDefined(value) && value !== false) {
             node?.setAttribute(key, `${value}`);

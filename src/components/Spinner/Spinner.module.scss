@@ -1,6 +1,7 @@
 .container {
     height: 20px;
     animation: fade-in 200ms ease-in-out;
+    contain: content;
 }
 
 .spinner {

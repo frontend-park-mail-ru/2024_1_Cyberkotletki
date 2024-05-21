@@ -6,9 +6,10 @@ export const positionPopover = (
     fitWidth?: boolean,
     horizonPos?: PopoverProps['horizonPos'],
     fixed?: boolean,
+    opened?: boolean,
 ) => {
     if (popover) {
-        popover.style.top = `calc(${(triggerRect?.top ?? 0) + (triggerRect?.height ?? 0) + (fixed ? 0 : window.scrollY)}px + var(--main-content-gap))`;
+        popover.style.top = `calc(${(triggerRect?.top ?? 0) + (triggerRect?.height ?? 0) + (fixed || !opened ? 0 : window.scrollY)}px + var(--main-content-gap))`;
         popover.style.width = fitWidth
             ? 'fit-context'
             : `${triggerRect?.width ?? 0}px`;

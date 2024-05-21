@@ -32,7 +32,12 @@ export class LayoutPreview extends AppComponent<LayoutPreviewProps> {
                         </h1>
                     )}
                     {moreTitle && (
-                        <Button outlined styleType="secondary" href={moreLink}>
+                        <Button
+                            outlined
+                            styleType="secondary"
+                            href={moreLink}
+                            aria-label={moreTitle}
+                        >
                             {moreTitle}
                         </Button>
                     )}

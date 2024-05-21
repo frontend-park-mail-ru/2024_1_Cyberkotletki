@@ -5,6 +5,8 @@ import type {
     FilmsCompilation,
     PersonActor,
     Release,
+    ReleaseResponse,
+    ReleaseYearsResponse,
     SearchResponse,
 } from './types';
 
@@ -121,7 +123,7 @@ class ContentService {
      * @returns Список Ближайших релизов
      */
     async getNearestReleases(limit = 6) {
-        return appFetch.get<Release[] | undefined>(
+        return appFetch.get<ReleaseResponse | undefined>(
             contentRoutes.ongoingNearest(limit),
         );
     }
@@ -131,7 +133,9 @@ class ContentService {
      * @returns Года релизов
      */
     async getReleaseYears() {
-        return appFetch.get<number[] | undefined>(contentRoutes.ongoingYears());
+        return appFetch.get<ReleaseYearsResponse | undefined>(
+            contentRoutes.ongoingYears(),
+        );
     }
 
     /**
@@ -150,7 +154,7 @@ class ContentService {
      * @returns Список релизов
      */
     async getReleasesByYearAndMonth(year: number, month: number) {
-        return appFetch.get<Release[] | undefined>(
+        return appFetch.get<ReleaseResponse | undefined>(
             contentRoutes.ongoing(year, month),
         );
     }

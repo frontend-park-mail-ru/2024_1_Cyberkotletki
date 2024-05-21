@@ -15,12 +15,17 @@
 }
 
 .write-review-block {
+    max-width: 520px;
     margin-block-start: calc(var(--main-padding-2) * 2);
 
     h1 {
         margin-block-end: var(--main-content-offset);
 
         @include text-header-4;
+    }
+
+    @include mobile {
+        max-width: 100%;
     }
 }
 

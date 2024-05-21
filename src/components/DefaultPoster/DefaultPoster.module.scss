@@ -1,0 +1,12 @@
+.poster {
+    aspect-ratio: 0.667;
+
+    @include centered-flexbox;
+
+    background-color: var(--secondary-gray);
+    filter: grayscale(1) opacity(0.6) contrast(0.6);
+
+    svg {
+        width: 50%;
+    }
+}

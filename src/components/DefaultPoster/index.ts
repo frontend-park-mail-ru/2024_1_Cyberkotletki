@@ -1,0 +1,1 @@
+export { DefaultPoster } from './DefaultPoster';

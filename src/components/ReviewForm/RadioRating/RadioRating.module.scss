@@ -4,53 +4,134 @@
     flex-direction: column;
     gap: var(--small-padding);
     width: fit-content;
+
+    @include mobile {
+        width: 100%;
+    }
+}
+
+@mixin nth-child-checked($position: 0) {
+    &:has(~ .value:nth-child(#{$position}) > input:checked) {
+        @content;
+    }
 }
 
 .container {
     display: flex;
-    gap: 4px;
     width: fit-content;
-    padding: var(--item-padding) var(--item-inline-padding);
-    border: 1px solid var(--secondary-gray);
-    border-radius: var(--item-border-radius);
+    padding: var(--small-padding);
+    background-color: var(--secondary-gray-op-20);
+    border-radius: 100px;
     transition: var(--item-transition-all);
 
+    @include mobile {
+        justify-content: space-between;
+        width: 100%;
+        padding: 4px;
+        overflow-x: auto;
+    }
+
     &.error {
-        border: 1px solid var(--error-red);
+        .value {
+            --icon-stroke-color: var(--error-red);
+        }
+    }
+
+    &:not(:hover, :has(.value:focus-visible)) {
+        .value {
+            @for $i from 1 through 3 {
+                @include nth-child-checked($i) {
+                    --icon-stroke-color: var(--error-red);
+                    --icon-fill-color: var(--error-red);
+                }
+            }
+
+            @for $i from 4 through 6 {
+                @include nth-child-checked($i) {
+                    --icon-stroke-color: var(--yellow);
+                    --icon-fill-color: var(--yellow);
+                }
+            }
+
+            @for $i from 7 through 10 {
+                @include nth-child-checked($i) {
+                    --icon-stroke-color: var(--success);
+                    --icon-fill-color: var(--success);
+                }
+            }
+        }
+    }
+}
+
+@mixin nth-child-states($position: 0) {
+    &:has(input:checked),
+    &:hover,
+    &:focus-visible {
+        &:nth-child(#{$position}) {
+            @content;
+        }
+    }
+
+    &:has(~ .value:nth-child(#{$position}):hover),
+    &:has(~ .value:nth-child(#{$position}):focus-visible) {
+        @content;
+    }
+}
+
+@mixin bad-mark {
+    @for $i from 1 through 3 {
+        @include nth-child-states($i) {
+            @content;
+        }
+    }
+}
+
+@mixin average-mark {
+    @for $i from 4 through 6 {
+        @include nth-child-states($i) {
+            @content;
+        }
+    }
+}
+
+@mixin good-mark {
+    @for $i from 7 through 10 {
+        @include nth-child-states($i) {
+            @content;
+        }
     }
 }
 
 .value {
     position: relative;
-    color: var(--radio-color);
+    padding: var(--item-padding);
+    border-radius: 50%;
     cursor: pointer;
+    transition: var(--item-transition-all);
 
     --radio-color: var(--secondary-gray);
-
-    transition: var(--item-transition-all);
+    --icon-stroke-color: var(--secondary-gray);
+    --icon-fill-color: transparent;
 
     @include text-button;
 
-    &:has(input:checked),
-    &:hover,
-    &:focus-visible {
-        &:nth-child(1),
-        &:nth-child(2),
-        &:nth-child(3) {
-            --radio-color: var(--error-red);
-        }
+    svg {
+        width: 24px;
+        height: 24px;
 
-        &:nth-child(4),
-        &:nth-child(5),
-        &:nth-child(6) {
-            --radio-color: var(--yellow);
+        path {
+            transition: var(--item-transition-all);
+            fill: var(--icon-fill-color);
+            stroke: var(--icon-stroke-color);
         }
+    }
 
-        &:nth-child(7),
-        &:nth-child(8),
-        &:nth-child(9),
-        &:nth-child(10) {
-            --radio-color: var(--success);
+    @include mobile {
+        padding: 2px;
+
+        svg {
+            width: 20px;
+            height: 20px;
         }
     }
 
@@ -61,5 +142,29 @@
         margin: 0;
         border-width: 0;
         opacity: 0;
+    }
+
+    @include bad-mark {
+        --icon-stroke-color: var(--error-red);
+        --icon-fill-color: var(--error-red);
+    }
+
+    @include average-mark {
+        --icon-stroke-color: var(--yellow);
+        --icon-fill-color: var(--yellow);
+    }
+
+    @include good-mark {
+        --icon-stroke-color: var(--success);
+        --icon-fill-color: var(--success);
+    }
+
+    @include hover {
+        background-color: var(--absolute-op-20);
+    }
+
+    &:active {
+        transform: scale(0.99);
+        opacity: 0.8;
     }
 }

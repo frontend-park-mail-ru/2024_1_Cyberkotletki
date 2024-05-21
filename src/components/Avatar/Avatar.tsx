@@ -6,6 +6,7 @@ import { AppComponent } from '@/core';
 import { Config } from '@/shared/constants';
 import { concatClasses } from '@/utils';
 import type { LazyImgProps } from '@/components/LazyImg/LazyImg';
+import { Icon } from '@/components/Icon';
 
 const cx = concatClasses.bind(styles);
 
@@ -23,7 +24,7 @@ export class Avatar extends AppComponent<AvatarPropsProps> {
             ...props
         } = this.props;
 
-        return (
+        return imageSrc ? (
             <LazyImg
                 width="144px"
                 height="144px"
@@ -31,6 +32,12 @@ export class Avatar extends AppComponent<AvatarPropsProps> {
                 className={cx('avatar', className)}
                 src={imageSrc ? `${prefix}${imageSrc}` : icUserCircleUrl}
                 alt="user avatar"
+            />
+        ) : (
+            <Icon
+                icon={icUserCircleUrl}
+                className={cx('avatar', className)}
+                {...props}
             />
         );
     }

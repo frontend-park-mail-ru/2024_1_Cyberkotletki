@@ -34,21 +34,17 @@ export class Popover extends AppComponent<PopoverProps, PopoverState> {
     };
 
     handleToggle = (e: ToggleEvent) => {
-        if (!this.state.triggerElement) {
-            this.setState((prev) => ({
-                ...prev,
-                triggerElement: document.querySelector(
-                    `[popovertarget=${this.props.id}]`,
-                ),
-            }));
-        }
+        const triggerElement = document.querySelector(
+            `[popovertarget=${this.props.id}]`,
+        );
 
         positionPopover(
             this.state.popoverRef.current,
-            this.state.triggerElement?.getBoundingClientRect(),
+            triggerElement?.getBoundingClientRect(),
             this.props.width === 'fit',
             this.props.horizonPos,
             this.props.fixed,
+            e.newState === 'open',
         );
 
         if (e.newState === 'closed') {
@@ -59,16 +55,9 @@ export class Popover extends AppComponent<PopoverProps, PopoverState> {
     };
 
     componentDidUpdate(
-        prevState: PopoverState | null,
+        _: PopoverState | null,
         prevProps: PopoverProps | null,
     ): void {
-        if (prevState?.triggerElement !== this.state.triggerElement) {
-            this.setState((prev) => ({
-                ...prev,
-                triggerRect: this.state.triggerElement?.getBoundingClientRect(),
-            }));
-        }
-
         if (prevProps?.isOpen !== this.props.isOpen) {
             if (this.props.isOpen) {
                 this.state.popoverRef.current?.showPopover();

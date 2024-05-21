@@ -8,6 +8,7 @@ import { concatClasses, getStaticUrl, objectValues } from '@/utils';
 import { RatingBadge } from '@/components/RatingBadge';
 import { Link } from '@/components/Link';
 import { routes } from '@/App/App.routes';
+import { DefaultPoster } from '@/components/DefaultPoster';
 
 const cx = concatClasses.bind(styles);
 
@@ -40,6 +41,8 @@ export class SearchItem extends AppComponent<SearchItemProps> {
                   .join(', ')
             : personRoles.map((role) => role.title).join(', ');
 
+        const posterUrl = film?.poster ?? person?.photoURL;
+
         return (
             <Link
                 href={
@@ -51,11 +54,18 @@ export class SearchItem extends AppComponent<SearchItemProps> {
                 aria-label={name}
             >
                 <article className={cx('item')} {...props}>
-                    <LazyImg
-                        className={cx('image')}
-                        src={getStaticUrl(film?.poster ?? person?.photoURL)}
-                        alt="Постер"
-                    />
+                    {posterUrl ? (
+                        <LazyImg
+                            className={cx('image')}
+                            src={getStaticUrl(film?.poster ?? person?.photoURL)}
+                            alt="Постер"
+                        />
+                    ) : (
+                        <DefaultPoster
+                            className={cx('image')}
+                            type={film ? 'film' : 'person'}
+                        />
+                    )}
                     <div className={cx('info-container')}>
                         <h1 className={cx('head')} title={name}>
                             {name}

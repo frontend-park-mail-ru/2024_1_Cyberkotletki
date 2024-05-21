@@ -2,6 +2,7 @@ import styles from './Input.module.scss';
 
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { AppComponent } from '@/core';
+import type { AppNode } from '@/core/shared/AppNode.types';
 import { concatClasses } from '@/utils';
 
 const cx = concatClasses.bind(styles as Record<string, string | undefined>);
@@ -13,6 +14,8 @@ interface InputDefaultProps {
     containerClassName?: string;
     icon?: JSX.Children;
     iconPos?: 'start' | 'end';
+    iconContainerClassName?: string;
+    children?: AppNode;
 }
 
 export type InputTypeProps = Omit<
@@ -32,7 +35,7 @@ export type TextareaTypeProps = Omit<
         App.TextareaHTMLAttributes<HTMLTextAreaElement>,
         HTMLTextAreaElement
     >,
-    'ref' | 'children'
+    'ref'
 > &
     InputDefaultProps & {
         inputType: 'textarea';
@@ -51,6 +54,8 @@ export class Input extends AppComponent<InputProps> {
             containerClassName,
             icon,
             iconPos,
+            iconContainerClassName,
+            children,
             ...props
         } = this.props;
 
@@ -61,35 +66,49 @@ export class Input extends AppComponent<InputProps> {
                         {label}
                     </label>
                 )}
-                {icon && <i className={cx('end-icon', iconPos)}>{icon}</i>}
-                {this.props.inputType === 'textarea' ? (
-                    <textarea
-                        {...this.props}
-                        ref={this.props.textareaRef}
-                        className={cx('input', className, {
-                            'with-error': hasError,
-                            textarea: true,
-                        })}
-                    >
-                        {this.props.value}
-                    </textarea>
-                ) : (
-                    <input
-                        {...this.props}
-                        ref={this.props.inputRef}
-                        className={cx(
-                            'input',
-                            className,
-                            {
+                <div className={cx('input-container')}>
+                    {icon && (
+                        <i
+                            className={cx(
+                                'end-icon',
+                                iconPos,
+                                iconContainerClassName,
+                            )}
+                        >
+                            {icon}
+                        </i>
+                    )}
+                    {this.props.inputType === 'textarea' ? (
+                        <textarea
+                            {...this.props}
+                            ref={this.props.textareaRef}
+                            className={cx('input', className, {
                                 'with-error': hasError,
-                                input: true,
-                            },
-                            iconPos,
-                        )}
-                    />
-                )}
-                {hasError && !!errorHint && (
+                                textarea: true,
+                            })}
+                        >
+                            {this.props.value}
+                        </textarea>
+                    ) : (
+                        <input
+                            {...this.props}
+                            ref={this.props.inputRef}
+                            className={cx(
+                                'input',
+                                className,
+                                {
+                                    'with-error': hasError,
+                                    input: true,
+                                },
+                                iconPos,
+                            )}
+                        />
+                    )}
+                </div>
+                {hasError && !!errorHint ? (
                     <ErrorMessage message={errorHint} hint />
+                ) : (
+                    children
                 )}
             </div>
         );

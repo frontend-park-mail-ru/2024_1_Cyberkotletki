@@ -38,28 +38,31 @@ export class ReleasesPage extends AppComponent<object, IndexPageState> {
     state: IndexPageState = { selectedMonth: new Date().getMonth() + 1 };
 
     loadYears = () =>
-        contentService.getReleaseYears().then((releaseYears) => {
+        contentService.getReleaseYears().then((response) => {
             this.setState((prev) => ({
                 ...prev,
-                releaseYears: releaseYears?.map((year) => ({
+                releaseYears: response?.years?.map((year) => ({
                     title: `${year} г.`,
                     value: year,
                 })),
             }));
 
-            return releaseYears;
+            return response;
         });
 
     loadReleases = (year: number, month: number) => {
         this.setState((prev) => ({ ...prev, isLoading: true }));
         void contentService
             .getReleasesByYearAndMonth(year, month)
-            .then((releases) => {
+            .then((response) => {
                 this.setState((prev) => ({
                     ...prev,
                     selectedYear: year,
                     selectedMonth: month,
-                    releases: releases?.map(convertReleaseToFilm),
+                    releases:
+                        response?.ongoing_content_list?.map(
+                            convertReleaseToFilm,
+                        ),
                 }));
             })
             .finally(() => {
@@ -68,8 +71,11 @@ export class ReleasesPage extends AppComponent<object, IndexPageState> {
     };
 
     componentDidMount() {
-        void this.loadYears().then(([firstYear] = []) => {
-            this.loadReleases(firstYear, this.state.selectedMonth);
+        void this.loadYears().then((response) => {
+            this.loadReleases(
+                response?.years?.[0] ?? 0,
+                this.state.selectedMonth,
+            );
         });
     }
 
@@ -85,7 +91,7 @@ export class ReleasesPage extends AppComponent<object, IndexPageState> {
     };
 
     render() {
-        const { releaseYears, releases, isLoading } = this.state;
+        const { releaseYears, isLoading, releases } = this.state;
 
         return (
             <LayoutWithHeader>
@@ -105,43 +111,45 @@ export class ReleasesPage extends AppComponent<object, IndexPageState> {
                             className={cx('dropdown', 'hide-on-desktop')}
                         />
                     </div>
-                    <div className={cx('content')}>
+                    <div className={cx('container')}>
                         <MonthSelect
                             selectedMonth={CURRENT_MONTH_ITEM}
                             onSelectMonth={this.handleMonthSelect}
                             className={cx('month-select', 'hide-on-mobile')}
                         />
-
-                        {releases?.length ? (
-                            <LayoutGrid
-                                itemsPerRow={6}
-                                itemsPerRowMobile={2}
-                                className={cx('grid-container', {
+                        <div className={cx('content-container')}>
+                            <div
+                                className={cx('content', {
                                     loading: isLoading,
                                 })}
                             >
-                                {releases?.map((films) => (
-                                    <FilmCard
-                                        film={films}
-                                        size="small"
-                                        link=""
-                                        withReleaseBadge
-                                    />
-                                ))}
-                            </LayoutGrid>
-                        ) : (
-                            <p style="margin: auto">
-                                Нет ожидаемых релизов в указанном месяце
-                            </p>
-                        )}
-
-                        {isLoading && (
-                            <div className={cx('spinner-container')}>
-                                <Spinner
-                                    className={cx('spinner', 'absolute-center')}
-                                />
+                                {releases?.length ? (
+                                    <LayoutGrid
+                                        itemsPerRow={6}
+                                        itemsPerRowMobile={2}
+                                        className={cx('grid-container')}
+                                    >
+                                        {releases?.map((films) => (
+                                            <FilmCard
+                                                film={films}
+                                                size="small"
+                                                link=""
+                                                withReleaseBadge
+                                            />
+                                        ))}
+                                    </LayoutGrid>
+                                ) : (
+                                    <p style="margin: auto">
+                                        Нет ожидаемых релизов в указанном месяце
+                                    </p>
+                                )}
                             </div>
-                        )}
+                            {isLoading && (
+                                <div className={cx('spinner-container')}>
+                                    <Spinner />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </section>
             </LayoutWithHeader>
