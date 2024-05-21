@@ -6,10 +6,12 @@ import { icStarOutlinedUrl } from '@/assets/icons';
 import { Button } from '@/components/Button';
 import { FilmPoster } from '@/components/FilmPoster';
 import { Icon } from '@/components/Icon';
+import { LazyImg } from '@/components/LazyImg';
 import { Link } from '@/components/Link';
 import { Rating } from '@/components/Rating';
 import { YouTubeIframe } from '@/components/YouTubeIframe';
 import { AppComponent } from '@/core';
+import type { AppNode } from '@/core/shared/AppNode.types';
 import { FilmInfoTable } from '@/pages/FilmPage/FilmMainContent/FilmInfoTable';
 import { REVIEW_FORM_ID } from '@/pages/FilmPage/FilmPage';
 import { concatClasses, getStaticUrl } from '@/utils';
@@ -32,6 +34,48 @@ const scrollToReviewForm = () => {
         behavior: 'smooth',
     });
 };
+
+interface BackdropProps {
+    src?: string;
+}
+
+interface BackdropState {
+    backdropRef: App.RefObject<HTMLDivElement>;
+}
+
+class Backdrop extends AppComponent<BackdropProps, BackdropState> {
+    state: BackdropState = { backdropRef: { current: null } };
+
+    loaded = false;
+
+    handleLoad = () => {
+        if (this.state.backdropRef.current && !this.loaded) {
+            this.state.backdropRef.current.classList.add(cx('loaded'));
+            this.state.backdropRef.current.style.backgroundImage = `url("${getStaticUrl(this.props.src)}")`;
+        }
+
+        this.loaded = true;
+    };
+
+    componentShouldUpdate(): boolean {
+        return false;
+    }
+
+    render(): AppNode {
+        const { src } = this.props;
+
+        return (
+            <div ref={this.state.backdropRef} className={cx('backdrop')}>
+                <LazyImg
+                    style="position:fixed; visibility:hidden; width:0; height:0;top:-1px;left-1px"
+                    src={getStaticUrl(src)}
+                    onLoad={this.handleLoad}
+                    aria-hidden
+                />
+            </div>
+        );
+    }
+}
 
 export class FilmMainContent extends AppComponent<
     FilmMainContentProps,
@@ -64,7 +108,9 @@ export class FilmMainContent extends AppComponent<
 
         return (
             <div className={cx('content')}>
-                <div ref={this.state.backdropRef} className={cx('backdrop')} />
+                {(film?.backdropURL || film?.posterURL) && (
+                    <Backdrop src={film?.backdropURL || film?.posterURL} />
+                )}
                 <div className={cx('left-container')}>
                     <FilmPoster
                         src={film?.posterURL}
@@ -98,6 +144,7 @@ export class FilmMainContent extends AppComponent<
                             <YouTubeIframe
                                 src={film.trailerLink}
                                 className={cx('player-iframe')}
+                                title={`youtube плеер дла фильма ${film?.title ?? ''}`}
                             />
                             <h2 className={cx('trailer-title')}>Трейлер</h2>
                         </section>
