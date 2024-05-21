@@ -105,10 +105,11 @@ export class Input extends AppComponent<InputProps> {
                         />
                     )}
                 </div>
-                {hasError && !!errorHint && (
+                {hasError && !!errorHint ? (
                     <ErrorMessage message={errorHint} hint />
+                ) : (
+                    children
                 )}
-                {children}
             </div>
         );
     }

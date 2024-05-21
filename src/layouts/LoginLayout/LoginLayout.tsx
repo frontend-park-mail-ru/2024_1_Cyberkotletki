@@ -22,7 +22,7 @@ export class LoginLayout extends AppComponent<LoginLayoutProps> {
                     decoding="async"
                     className={cx('img-bg')}
                     aria-hidden
-                    src="/src/assets/kinoskop_background.jpg"
+                    src="/src/assets/kinoskop_background.webp"
                 />
                 <LogoButton className={cx('logo')} />
                 {children}

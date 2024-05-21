@@ -1,6 +1,12 @@
 const MIN_PASSWORD_LENGTH = 8 as const;
 const MAX_PASSWORD_LENGTH = 32 as const;
 
+const PASSWORD_SYMBOLS_REGEXP = /[!@#$%^&*()_+\-=.,]/;
+const DIGIT_REGEXP = /\d/;
+const LOWERCASE_REGEXP = /[a-z]/;
+const UPPERCASE_REGEXP = /[A-Z]/;
+const CORRECT_PASSWORD_REGEXP = /^[!@#$%^&*()_+\-=.,\w]+$/;
+
 // регулярное выражение для проверки формата электронной почты:
 // строки, которые начинаются с одного или более символов, за
 // которыми следует символ @, за которым следует еще один
@@ -54,10 +60,10 @@ export function validateEmail(email: string) {
 export function checkPassword(password: string) {
     const hasCorrectLength = password.length >= MIN_PASSWORD_LENGTH;
 
-    const testSymbols = /[!@#$%^&*()_+\-=.,]/.test(password);
-    const testDigits = /\d/.test(password);
-    const testLowercase = /[a-z]/.test(password);
-    const testUppercase = /[A-Z]/.test(password);
+    const testSymbols = PASSWORD_SYMBOLS_REGEXP.test(password);
+    const testDigits = DIGIT_REGEXP.test(password);
+    const testLowercase = LOWERCASE_REGEXP.test(password);
+    const testUppercase = UPPERCASE_REGEXP.test(password);
 
     switch (true) {
         case !hasCorrectLength:
@@ -95,6 +101,14 @@ export function validatePassword(password: string) {
         return {
             isValid: false,
             reasonType: PasswordErrorReasonType.PASSWORD_LONG,
+            complexity,
+        } as const;
+    }
+
+    if (!CORRECT_PASSWORD_REGEXP.test(password)) {
+        return {
+            isValid: false,
+            reasonType: PasswordErrorReasonType.PASSWORD_INCORRECT,
             complexity,
         } as const;
     }

@@ -63,7 +63,7 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
 @mixin text-secondary {
     color: var(--secondary-gray);
     font-weight: 400;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     font-family: var(--font-family);
 }
 
