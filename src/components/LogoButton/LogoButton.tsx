@@ -24,7 +24,6 @@ export class LogoButton extends AppComponent<LogoButtonProps> {
                 aria-label="На главную страницу"
             >
                 <Icon icon={icLogoUrl} />
-                <span className={cx('text')}>иноскоп</span>
             </Link>
         );
     }
