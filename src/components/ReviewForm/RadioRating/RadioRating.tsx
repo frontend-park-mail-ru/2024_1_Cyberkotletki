@@ -64,7 +64,6 @@ export class RadioRating extends AppComponent<
                 >
                     {Array.from({ length: 10 }).map((_, index) => (
                         <label
-                            role="radio"
                             className={cx('value')}
                             tabIndex={0}
                             onKeyDown={clickOnEnter}
