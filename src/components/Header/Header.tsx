@@ -120,7 +120,9 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                         {HEADER_TABS.map((tab) => (
                             <Link
                                 href={tab.route}
-                                active={window.location.pathname === tab.route}
+                                active={window.location.pathname.startsWith(
+                                    tab.route,
+                                )}
                             >
                                 {tab.title}
                             </Link>
