@@ -18,6 +18,8 @@ export class LoginLayout extends AppComponent<LoginLayoutProps> {
         return (
             <div className={cx('login-layout', className)} {...props}>
                 <img
+                    loading="eager"
+                    decoding="async"
                     className={cx('img-bg')}
                     aria-hidden
                     src="/src/assets/kinoskop_background.jpg"

@@ -2,45 +2,40 @@ import { LoginLayout } from '@/layouts/LoginLayout';
 import { LoginForm } from '@/components/LoginForm/LoginForm';
 import { AppComponent } from '@/core';
 import { ProfileContext } from '@/Providers/ProfileProvider';
-import type { AppContext } from '@/types/Context.types';
+import type { AppContextComponentProps } from '@/types/Context.types';
 import { HistoryContext } from '@/Providers/HistoryProvider';
 import { routes } from '@/App/App.routes';
-import { isDefined } from '@/utils';
+import type { AppNode } from '@/core/shared/AppNode.types';
 
-export interface LoginPageProps {
+export interface LoginPageProps extends AppContextComponentProps {
     isRegister?: boolean;
-    context?: AppContext;
 }
 
-class LoginPageClass extends AppComponent<LoginPageProps> {
+class LoginPageInner extends AppComponent<LoginPageProps> {
     loadProfile = () => {
         const { context } = this.props;
 
-        if (context?.profile?.isLoggedIn === true) {
-            context.history?.changeRoute(routes.root(), undefined, true);
-
-            return;
-        }
-
-        if (!isDefined(context?.profile?.isLoggedIn)) {
-            void context?.profile?.getProfile().then((profile) => {
-                if (profile) {
-                    context.history?.changeRoute(
-                        routes.root(),
-                        undefined,
-                        true,
-                    );
-                }
-            });
-        }
+        void context?.profile?.getProfilePromise?.then((profile) => {
+            if (profile) {
+                context.history?.changeRoute(routes.root(), undefined, true);
+            }
+        });
     };
 
-    render() {
+    componentDidMount() {
         this.loadProfile();
+    }
 
+    render() {
+        return <LoginForm isLogin={!this.props?.isRegister} />;
+    }
+}
+
+export class LoginPageClass extends AppComponent<LoginPageProps> {
+    render(): AppNode {
         return (
             <LoginLayout>
-                <LoginForm isLogin={!this.props?.isRegister} />
+                <LoginPageInner {...this.props} />
             </LoginLayout>
         );
     }

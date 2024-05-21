@@ -12,3 +12,5 @@ export { default as icCloseUrl } from './ic-close.svg';
 export { default as icPlusUrl } from './ic-plus.svg';
 export { default as icStarOutlinedUrl } from './ic-star-outlined.svg';
 export { default as icArrowDownUrl } from './ic-arrow-down.svg';
+export { default as icEyeUrl } from './ic-eye.svg';
+export { default as icEyeHideUrl } from './ic-eye-hide.svg';

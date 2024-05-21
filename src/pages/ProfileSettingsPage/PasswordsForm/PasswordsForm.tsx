@@ -4,7 +4,6 @@ import { validatePasswordForm } from './PasswordsForm.utils';
 import { userService } from '@/api/user/service';
 import type { ChangePasswordBody } from '@/api/user/types';
 import { Button } from '@/components/Button';
-import { Input } from '@/components/Input';
 import { AppComponent } from '@/core';
 import { concatClasses } from '@/utils';
 import { AuthFormError } from '@/components/LoginForm/Form/Form.constants';
@@ -14,6 +13,7 @@ import {
 } from '@/components/LoginForm/Form/Form.utils';
 import { CheckMark } from '@/components/CheckMark';
 import { ErrorMessage } from '@/components/ErrorMessage';
+import { PasswordInput } from '@/components/PasswordInput';
 
 const cx = concatClasses.bind(styles);
 
@@ -42,6 +42,8 @@ export type FormValues = Record<
 
 export class PasswordsForm extends AppComponent<object, PasswordsFormState> {
     newPassValue = '';
+
+    newPassRepValue = '';
 
     handleFormSubmit = (e: App.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -109,7 +111,7 @@ export class PasswordsForm extends AppComponent<object, PasswordsFormState> {
     };
 
     handleChangeNewPass = (e: App.ChangeEvent<HTMLInputElement>) => {
-        const newPassError = getPasswordError(e.currentTarget.value);
+        const newPassError = getPasswordError(e.currentTarget.value).message;
 
         if (newPassError) {
             this.setState((prev) => ({
@@ -123,12 +125,21 @@ export class PasswordsForm extends AppComponent<object, PasswordsFormState> {
         this.newPassValue = e.currentTarget.value;
 
         if (this.state.newPassError) {
-            const newPassError = getPasswordError(e.currentTarget.value);
+            const newPassError = getPasswordError(
+                e.currentTarget.value,
+            ).message;
 
             this.setState((prev) => ({
                 ...prev,
                 newPassError,
             }));
+        }
+
+        if (
+            this.state.newPassRepError &&
+            this.newPassValue === this.newPassRepValue
+        ) {
+            this.setState((prev) => ({ ...prev, newPassRepError: '' }));
         }
     };
 
@@ -144,6 +155,8 @@ export class PasswordsForm extends AppComponent<object, PasswordsFormState> {
     };
 
     handleInputNewPassRep = (e: App.FormEvent<HTMLInputElement>) => {
+        this.newPassRepValue = e.currentTarget.value;
+
         if (this.state.newPassRepError) {
             const newPassRepError = getPasswordRepeatError(
                 e.currentTarget.value,
@@ -166,10 +179,9 @@ export class PasswordsForm extends AppComponent<object, PasswordsFormState> {
 
         return (
             <form className={cx('form')} onSubmit={this.handleFormSubmit}>
-                <Input
+                <PasswordInput
                     label="Текущий пароль"
                     id={PASSWORDS_FIELDS.OLD_PASSWORD}
-                    type="password"
                     placeholder="Введите текущий пароль..."
                     required
                     name={PASSWORDS_FIELDS.OLD_PASSWORD}
@@ -179,10 +191,9 @@ export class PasswordsForm extends AppComponent<object, PasswordsFormState> {
                     onChange={this.handleChangeOldPass}
                     onInput={this.handleInputOldPass}
                 />
-                <Input
+                <PasswordInput
                     label="Новый пароль"
                     id={PASSWORDS_FIELDS.NEW_PASSWORD}
-                    type="password"
                     autoComplete="new-password"
                     placeholder="Введите новый пароль..."
                     required
@@ -191,11 +202,11 @@ export class PasswordsForm extends AppComponent<object, PasswordsFormState> {
                     errorHint={newPassError}
                     onChange={this.handleChangeNewPass}
                     onInput={this.handleInputNewPass}
+                    withPasswordComplexity
                 />
-                <Input
+                <PasswordInput
                     label="Новый пароль еще раз"
                     id={PASSWORDS_FIELDS.NEW_PASSWORD_REPEAT}
-                    type="password"
                     autoComplete="new-password"
                     placeholder="Повторите новый пароль..."
                     required

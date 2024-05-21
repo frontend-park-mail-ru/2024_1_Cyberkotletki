@@ -234,6 +234,20 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
     }
 }
 
+@mixin fade-in-opacity($rule: 200ms ease) {
+    animation: fade-in-opacity $rule;
+}
+
+@keyframes fade-in-opacity {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 @mixin centered-flexbox {
     display: flex;
     align-items: center;
