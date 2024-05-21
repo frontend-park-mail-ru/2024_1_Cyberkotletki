@@ -1,8 +1,15 @@
 /* Screen */
+$screen-small-mobile-max: 374px;
 $screen-mobile-max: 768px;
 $screen-tablet-max: 992px;
 $screen-notebook-max: 1200px;
 $screen-large-monitor-min: calc($screen-notebook-max + 1px);
+
+@mixin small-mobile {
+    @media screen and (max-width: #{$screen-small-mobile-max}) {
+        @content;
+    }
+}
 
 @mixin mobile {
     @media screen and (max-width: #{$screen-mobile-max}) {

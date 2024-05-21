@@ -115,6 +115,7 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                         className={cx('header-logo', {
                             'mobile-hidden': searchOpened,
                         })}
+                        withText
                     />
                     <div className={cx('tabs', { hidden: searchOpened })}>
                         {HEADER_TABS.map((tab) => (

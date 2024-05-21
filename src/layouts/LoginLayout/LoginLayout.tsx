@@ -24,7 +24,7 @@ export class LoginLayout extends AppComponent<LoginLayoutProps> {
                     aria-hidden
                     src="/src/assets/kinoskop_background.webp"
                 />
-                <LogoButton className={cx('logo')} />
+                <LogoButton className={cx('logo')} withText />
                 {children}
             </div>
         );

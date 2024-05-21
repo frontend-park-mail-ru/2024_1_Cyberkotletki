@@ -58,6 +58,7 @@
     max-width: var(--max-content-width);
     height: 100%;
     padding-inline: var(--main-content-padding);
+    overflow-x: hidden;
 }
 
 .tabs {
@@ -82,7 +83,6 @@
 
 .header-logo {
     height: 100%;
-    aspect-ratio: 1;
 }
 
 .avatar-button {
@@ -109,7 +109,7 @@
 
 .mobile-hidden {
     @include mobile {
-        display: none;
+        display: none !important;
     }
 }
 

@@ -27,6 +27,7 @@
     @include mobile {
         justify-content: space-between;
         width: 100%;
+        padding: 4px;
         overflow-x: auto;
     }
 
@@ -122,6 +123,15 @@
             transition: var(--item-transition-all);
             fill: var(--icon-fill-color);
             stroke: var(--icon-stroke-color);
+        }
+    }
+
+    @include mobile {
+        padding: 2px;
+
+        svg {
+            width: 20px;
+            height: 20px;
         }
     }
 
