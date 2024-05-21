@@ -68,11 +68,14 @@ export class RadioRating extends AppComponent<
                             className={cx('value')}
                             tabIndex={0}
                             onKeyDown={clickOnEnter}
-                            aria-label={`Mark ${index + 1}`}
+                            htmlFor={`Rating ${index + 1}`}
+                            aria-label={`Rating ${index + 1}`}
+                            title={`Rating ${index + 1}`}
                         >
                             <input
                                 {...props}
                                 type="radio"
+                                id={`Rating ${index + 1}`}
                                 value={index + 1}
                                 onChange={this.handleChange}
                                 checked={this.state.activeValue === index + 1}
