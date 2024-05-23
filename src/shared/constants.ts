@@ -52,8 +52,8 @@ export interface HeaderPage {
 }
 
 export const HEADER_TABS: HeaderPage[] = [
-    { route: routes.root(), title: 'Главная' },
     { route: routes.collections(), title: 'Подборки' },
+    { route: routes.releases(), title: 'Календарь релизов' },
 ] as const;
 
 export const MONTHS = [

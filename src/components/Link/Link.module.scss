@@ -1,12 +1,16 @@
 .link {
-    color: var(--light-gray);
+    color: var(--text-color);
     transition: var(--item-transition-all);
 
     &:hover {
-        color: var(--background-gray);
+        color: var(--purple);
     }
 
     &:active {
-        color: var(--light-gray);
+        opacity: 0.6;
+    }
+
+    &.active {
+        color: var(--purple);
     }
 }

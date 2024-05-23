@@ -1,13 +1,22 @@
 const MIN_PASSWORD_LENGTH = 8 as const;
 const MAX_PASSWORD_LENGTH = 32 as const;
 
+const PASSWORD_SYMBOLS_REGEXP = /[!@#$%^&*()_+\-=.,]/;
+const DIGIT_REGEXP = /\d/;
+const LOWERCASE_REGEXP = /[a-z]/;
+const UPPERCASE_REGEXP = /[A-Z]/;
+const CORRECT_PASSWORD_REGEXP = /^[!@#$%^&*()_+\-=.,\w]+$/;
+
 // регулярное выражение для проверки формата электронной почты:
 // строки, которые начинаются с одного или более символов, за
 // которыми следует символ @, за которым следует еще один
 // или более символов, за которыми следует точка и еще один
 // или более символов до конца строки
-const EMAIL_REGEXP =
+const EMAIL_STANDARD_REGEXP =
     /^([a-z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/;
+
+const EMAIL_ANY_REGEXP =
+    /^(["].+["]@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/;
 
 export const PasswordErrorReasonType = {
     PASSWORD_SHORT: 'PASSWORD_SHORT',
@@ -26,25 +35,65 @@ export const ReviewErrorReasonType = {
     REVIEW_TITLE_LONG: 'REVIEW_TITLE_LONG',
 };
 
+export enum PasswordComplexity {
+    TOO_SHORT = 'TOO_SHORT',
+    TOO_LONG = 'TOO_LONG',
+    GOOD = 'GOOD',
+    MEDIUM = 'MEDIUM',
+    BAD = 'BAD',
+}
+
 /**
  * Валидация почты
  * @param {string} email почта для проверки
  * @returns {boolean} Валидный ли Email
  */
 export function validateEmail(email: string) {
-    return EMAIL_REGEXP.test(email);
+    return EMAIL_ANY_REGEXP.test(email) || EMAIL_STANDARD_REGEXP.test(email);
+}
+
+/**
+ * Проверка сложности пароля
+ * @param {string} password пароль для проверки
+ * @returns тип сложности { PasswordErrorReasonType }
+ */
+export function checkPassword(password: string) {
+    const hasCorrectLength = password.length >= MIN_PASSWORD_LENGTH;
+
+    const testSymbols = PASSWORD_SYMBOLS_REGEXP.test(password);
+    const testDigits = DIGIT_REGEXP.test(password);
+    const testLowercase = LOWERCASE_REGEXP.test(password);
+    const testUppercase = UPPERCASE_REGEXP.test(password);
+
+    switch (true) {
+        case !hasCorrectLength:
+            return PasswordComplexity.BAD;
+        case testSymbols && testDigits && testLowercase && testUppercase:
+            return PasswordComplexity.GOOD;
+        case testSymbols && (testDigits || testLowercase || testUppercase):
+        case testDigits && testLowercase && testUppercase:
+        case testLowercase && (testUppercase || testDigits):
+        case testUppercase && testDigits:
+            return PasswordComplexity.MEDIUM;
+        default:
+            return PasswordComplexity.BAD;
+    }
 }
 
 /**
  * Валидация пароля - проверка длины и размера в байтах
  * @param {string} password пароль для проверки
- * @returns isValid: boolean, reasonType: string
+ * @returns isValid: boolean, reasonType: string,
+ * complexity: Тип сложности пароля
  */
 export function validatePassword(password: string) {
+    const complexity = checkPassword(password);
+
     if (password.length < MIN_PASSWORD_LENGTH) {
         return {
             isValid: false,
             reasonType: PasswordErrorReasonType.PASSWORD_SHORT,
+            complexity,
         } as const;
     }
 
@@ -52,45 +101,22 @@ export function validatePassword(password: string) {
         return {
             isValid: false,
             reasonType: PasswordErrorReasonType.PASSWORD_LONG,
+            complexity,
         } as const;
     }
 
-    if (!/^[!@#$%^&*\w]+$/.test(password)) {
+    if (!CORRECT_PASSWORD_REGEXP.test(password)) {
         return {
             isValid: false,
             reasonType: PasswordErrorReasonType.PASSWORD_INCORRECT,
+            complexity,
         } as const;
     }
 
-    if (!/[A-Z]/.test(password)) {
-        return {
-            isValid: false,
-            reasonType: PasswordErrorReasonType.PASSWORD_UPPERCASE,
-        } as const;
-    }
-
-    if (!/[a-z]/.test(password)) {
-        return {
-            isValid: false,
-            reasonType: PasswordErrorReasonType.PASSWORD_LOWERCASE,
-        } as const;
-    }
-
-    if (!/\d/.test(password)) {
-        return {
-            isValid: false,
-            reasonType: PasswordErrorReasonType.PASSWORD_DIGIT,
-        } as const;
-    }
-
-    if (!/[!@#$%^&*]/.test(password)) {
-        return {
-            isValid: false,
-            reasonType: PasswordErrorReasonType.PASSWORD_SPECIAL_SYMBOLS,
-        } as const;
-    }
-
-    return { isValid: true } as const;
+    return {
+        isValid: true,
+        complexity,
+    } as const;
 }
 
 /**

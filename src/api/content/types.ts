@@ -62,6 +62,21 @@ export interface Film {
     trailerLink?: string;
 }
 
+export interface FilmPreview {
+    actors?: string[];
+    country?: string;
+    director?: string;
+    duration?: number;
+    genre?: string;
+    id?: number;
+    originalTitle?: string;
+    poster?: string;
+    rating?: number;
+    release?: number;
+    title?: string;
+    type?: Film['type'];
+}
+
 export interface ActorRole {
     genre?: string[];
     id?: number;
@@ -114,7 +129,7 @@ export interface CompilationsResponse {
 
 export interface FilmsCompilation {
     compilation?: Compilation;
-    content_ids?: number[];
+    content?: FilmPreview[];
     content_length?: number;
     page?: number;
     per_page?: number;
@@ -158,4 +173,12 @@ export interface Release {
     releaseDate?: string;
     title?: string;
     type?: Film['type'];
+}
+
+export interface ReleaseResponse {
+    ongoing_content_list?: Release[];
+}
+
+export interface ReleaseYearsResponse {
+    years?: number[];
 }

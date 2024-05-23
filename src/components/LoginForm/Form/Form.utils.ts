@@ -11,40 +11,64 @@ import {
 import { routes } from '@/App/App.routes';
 
 export const getEmailError = (email?: string) => {
-    if (!email) {
+    const trimEmail = email?.trim();
+
+    if (!trimEmail) {
         return AuthFormError.EMPTY_VALUE;
     }
 
-    if (!validateEmail(email.trim())) {
+    if (!validateEmail(trimEmail)) {
         return AuthFormError.INVALID_EMAIL;
     }
 
     return '';
 };
 
-export const getPasswordError = (password?: string) => {
-    if (!password) {
-        return AuthFormError.EMPTY_VALUE;
+export const getPasswordError = (password?: string, isStrong = true) => {
+    const trimPassword = password?.trim();
+
+    if (!trimPassword) {
+        return {
+            isValid: false,
+            message: AuthFormError.EMPTY_VALUE,
+            complexity: '',
+        };
     }
 
-    const passwordValidation = validatePassword(password);
+    if (!isStrong) {
+        return {
+            isValid: true,
+            message: '',
+            complexity: '',
+        };
+    }
+
+    const passwordValidation = validatePassword(trimPassword);
 
     if (!passwordValidation.isValid) {
-        return AuthFormError[passwordValidation.reasonType];
+        return {
+            ...passwordValidation,
+            message: AuthFormError[passwordValidation.reasonType],
+        };
     }
 
-    return '';
+    return {
+        ...passwordValidation,
+        message: '',
+    };
 };
 
 export const getPasswordRepeatError = (
     password?: string,
     passwordRepeat?: string,
 ) => {
-    if (!passwordRepeat) {
+    const trimPasswordRepeat = passwordRepeat?.trim();
+
+    if (!trimPasswordRepeat) {
         return AuthFormError.EMPTY_VALUE;
     }
 
-    if (!validatePasswordMatch(password, passwordRepeat)) {
+    if (!validatePasswordMatch(password, trimPasswordRepeat)) {
         return AuthFormError.NOT_MATCH_PASSWORDS;
     }
 
@@ -82,7 +106,7 @@ export const validateForm = (form?: HTMLFormElement, isLogin?: boolean) => {
         formValidation.isValid = false;
     }
 
-    const passwordError = getPasswordError(password);
+    const passwordError = getPasswordError(password, !isLogin).message;
 
     if (passwordError) {
         formValidation.passwordError = passwordError;
@@ -117,10 +141,10 @@ export const submitLoginForm = async (
     }
 
     if (isLogin) {
-        return authService.login(email, password);
+        return authService.login(email.trim(), password.trim());
     }
 
-    return authService.register(email, password);
+    return authService.register(email.trim(), password.trim());
 };
 
 /**
@@ -230,7 +254,10 @@ export function changePasswordInput(
 ) {
     this.state.passwordValue = e.target.value;
 
-    const passwordError = getPasswordError(e.target.value);
+    const passwordError = getPasswordError(
+        e.target.value,
+        !this.props.isLogin,
+    ).message;
 
     this.setState((prev) => ({
         ...prev,
@@ -246,20 +273,35 @@ export function inputPasswordInput(
     this: FormClass,
     e: App.FormEvent<HTMLInputElement>,
 ) {
-    if (this.state.passwordError) {
-        const error = getPasswordError(e.currentTarget.value);
+    this.state.passwordValue = e.currentTarget.value;
 
-        if (!error) {
+    if (this.state.passwordError) {
+        const { message } = getPasswordError(
+            e.currentTarget.value,
+            !this.props.isLogin,
+        );
+
+        if (!message) {
             this.setState((prev) => ({
                 ...prev,
                 passwordError: '',
             }));
-        } else if (error !== this.state.passwordError) {
+        } else if (message !== this.state.passwordError) {
             this.setState((prev) => ({
                 ...prev,
-                passwordError: error,
+                passwordError: message,
             }));
         }
+    }
+
+    if (
+        this.state.passwordRepeatError &&
+        e.currentTarget.value === this.state.passwordRepeatValue
+    ) {
+        this.setState((prev) => ({
+            ...prev,
+            passwordRepeatError: '',
+        }));
     }
 
     this.setState((prev) => ({
@@ -296,6 +338,8 @@ export function inputRepeatPasswordInput(
     this: FormClass,
     e: App.FormEvent<HTMLInputElement>,
 ) {
+    this.state.passwordRepeatValue = e.currentTarget.value;
+
     if (this.state.passwordRepeatError) {
         const error = getPasswordRepeatError(
             this.state.passwordValue,

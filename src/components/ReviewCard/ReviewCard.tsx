@@ -6,6 +6,7 @@ import type { ProfileResponse } from '@/api/user/types';
 import { icEditUrl, icTrashUrl } from '@/assets/icons';
 import { Avatar } from '@/components/Avatar';
 import { Button } from '@/components/Button';
+import { Icon } from '@/components/Icon';
 import { Link } from '@/components/Link';
 import { RemoveReviewModal } from '@/components/RemoveReviewModal';
 import { AppComponent } from '@/core';
@@ -62,7 +63,7 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
     };
 
     render() {
-        const { review, isSmall, ...props } = this.props;
+        const { review, isSmall, className, ...props } = this.props;
 
         const { profile } = this.props;
 
@@ -79,7 +80,7 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
         );
 
         return (
-            <div {...props}>
+            <div {...props} className={cx('card', className)}>
                 <div className={cx('top')}>
                     <Avatar
                         className={cx('avatar')}
@@ -88,9 +89,14 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                         imageSrc={review?.authorAvatar}
                     />
                     <div className={cx('username')}>
-                        <div>{review?.authorName}</div>
+                        <div title={review?.authorName}>
+                            {review?.authorName}
+                        </div>
                         {isSmall && (
-                            <Link href={routes.film(review?.contentID ?? 0)}>
+                            <Link
+                                href={routes.film(review?.contentID ?? 0)}
+                                title={review?.contentName}
+                            >
                                 <u>
                                     <b>{review?.contentName}</b>
                                 </u>
@@ -111,7 +117,7 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                                     title="Редактировать отзыв"
                                     aria-label="Редактировать отзыв"
                                 >
-                                    <img src={icEditUrl} aria-hidden />
+                                    <Icon icon={icEditUrl} />
                                 </Button>
                             </a>
                             <Button
@@ -122,7 +128,7 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                                 title="Удалить отзыв"
                                 aria-label="Удалить отзыв"
                             >
-                                <img src={icTrashUrl} aria-hidden />
+                                <Icon icon={icTrashUrl} />
                             </Button>
                         </div>
                     )}
@@ -139,7 +145,10 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                         </tr>
                         <tr>
                             {!isSmall && <td>Заголовок:</td>}
-                            <td className={cx('title-cell')}>
+                            <td
+                                className={cx('title-cell')}
+                                title={review?.title}
+                            >
                                 <b>{review?.title ?? ''}</b>
                             </td>
                         </tr>
@@ -166,7 +175,7 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                                         title="Нравится"
                                         onClick={this.handleLikeClick}
                                     >
-                                        <img src={icLikeUrl} />
+                                        <Icon icon={icLikeUrl} />
                                     </Button>
                                     {review?.likes}
 
@@ -179,7 +188,7 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                                         className={cx('dislike-button')}
                                         onClick={this.handleDislikeClick}
                                     >
-                                        <img src={icLikeUrl} />
+                                        <Icon icon={icLikeUrl} />
                                     </Button>
                                     {review?.dislikes}
                                 </div>

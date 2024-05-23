@@ -66,7 +66,10 @@ export class BaseDataFormInner extends AppComponent<
         this.setState((prev) => ({ ...prev, isLoading: true }));
 
         void userService
-            .updateProfile(body)
+            .updateProfile({
+                email: body.email?.trim(),
+                name: body.name?.trim(),
+            })
             .then(() => {
                 this.setState((prev) => ({
                     ...prev,
@@ -159,14 +162,12 @@ export class BaseDataFormInner extends AppComponent<
                     onInput={this.handleInputName}
                 />
                 <Button
-                    outlined
-                    styleType="secondary"
                     type="submit"
                     isLoading={isLoading}
                     disabled={isLoading}
                     className={cx('button')}
                 >
-                    Обновить
+                    Редактировать
                     <CheckMark show={isSuccess} />
                 </Button>
                 {!!formError && <ErrorMessage message={formError} />}

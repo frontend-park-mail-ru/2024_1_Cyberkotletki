@@ -20,12 +20,20 @@ export interface LinkProps
     context?: AppContext;
     href: RoutesValues;
     replace?: boolean;
+    active?: boolean;
 }
 
 class LinkClass extends AppComponent<LinkProps> {
     render(): AppNode {
-        const { context, className, href, children, replace, ...props } =
-            this.props;
+        const {
+            context,
+            className,
+            href,
+            children,
+            replace,
+            active,
+            ...props
+        } = this.props;
 
         const handleClick = (
             e: App.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -39,7 +47,7 @@ class LinkClass extends AppComponent<LinkProps> {
 
         return (
             <a
-                className={cx('link', className)}
+                className={cx('link', className, { active })}
                 onClick={handleClick}
                 href={href}
                 {...props}

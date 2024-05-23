@@ -1,11 +1,17 @@
 import styles from './FilmMainContent.module.scss';
 
+import { routes } from '@/App/App.routes';
 import type { Film } from '@/api/content/types';
-import { icStarFilledUrl, icStarOutlinedUrl } from '@/assets/icons';
+import { icStarOutlinedUrl } from '@/assets/icons';
 import { Button } from '@/components/Button';
+import { FilmPoster } from '@/components/FilmPoster';
+import { Icon } from '@/components/Icon';
 import { LazyImg } from '@/components/LazyImg';
+import { Link } from '@/components/Link';
 import { Rating } from '@/components/Rating';
+import { YouTubeIframe } from '@/components/YouTubeIframe';
 import { AppComponent } from '@/core';
+import type { AppNode } from '@/core/shared/AppNode.types';
 import { FilmInfoTable } from '@/pages/FilmPage/FilmMainContent/FilmInfoTable';
 import { REVIEW_FORM_ID } from '@/pages/FilmPage/FilmPage';
 import { concatClasses, getStaticUrl } from '@/utils';
@@ -19,21 +25,102 @@ export interface FilmMainContentProps {
     withFavButton?: boolean;
 }
 
-export class FilmMainContent extends AppComponent<FilmMainContentProps> {
+export interface FilmMainContentState {
+    backdropRef: App.RefObject<HTMLDivElement>;
+}
+
+const scrollToReviewForm = () => {
+    document.getElementById(REVIEW_FORM_ID)?.scrollIntoView({
+        behavior: 'smooth',
+    });
+};
+
+interface BackdropProps {
+    src?: string;
+}
+
+interface BackdropState {
+    backdropRef: App.RefObject<HTMLDivElement>;
+}
+
+class Backdrop extends AppComponent<BackdropProps, BackdropState> {
+    state: BackdropState = { backdropRef: { current: null } };
+
+    loaded = false;
+
+    handleLoad = () => {
+        if (this.state.backdropRef.current && !this.loaded) {
+            this.state.backdropRef.current.classList.add(cx('loaded'));
+            this.state.backdropRef.current.style.backgroundImage = `url("${getStaticUrl(this.props.src)}")`;
+        }
+
+        this.loaded = true;
+    };
+
+    componentShouldUpdate(): boolean {
+        return false;
+    }
+
+    render(): AppNode {
+        const { src } = this.props;
+
+        return (
+            <div ref={this.state.backdropRef} className={cx('backdrop')}>
+                <LazyImg
+                    style="position:fixed; visibility:hidden; width:0; height:0;top:-1px;left-1px"
+                    src={getStaticUrl(src)}
+                    onLoad={this.handleLoad}
+                    aria-hidden
+                />
+            </div>
+        );
+    }
+}
+
+export class FilmMainContent extends AppComponent<
+    FilmMainContentProps,
+    FilmMainContentState
+> {
+    state: FilmMainContentState = { backdropRef: { current: null } };
+
+    setBackdropImage = () => {
+        if (this.state.backdropRef.current) {
+            this.state.backdropRef.current.style.backgroundImage = `url("${getStaticUrl(this.props.film?.backdropURL || this.props.film?.posterURL)}")`;
+        }
+    };
+
+    componentDidMount() {
+        this.setBackdropImage();
+    }
+
+    componentDidUpdate(
+        _: object | null,
+        prevProps: FilmMainContentProps | null,
+    ) {
+        if (prevProps?.film !== this.props.film) {
+            this.setBackdropImage();
+        }
+    }
+
     render() {
         const { film, onFavouriteClick, addedToFavourite, withFavButton } =
             this.props;
 
         return (
             <div className={cx('content')}>
-                <div>
-                    <LazyImg
-                        className={cx('film-poster')}
-                        src={getStaticUrl(film?.posterURL)}
-                        width="232px"
-                        height="347px"
+                {(film?.backdropURL || film?.posterURL) && (
+                    <Backdrop src={film?.backdropURL || film?.posterURL} />
+                )}
+                <div className={cx('left-container')}>
+                    <FilmPoster
+                        src={film?.posterURL}
                         alt={film?.title}
+                        className={cx('film-poster')}
+                        loading="eager"
                     />
+                    <h1 className={cx('title', 'hide-on-desktop')}>
+                        {film?.title}
+                    </h1>
                     {withFavButton && (
                         <Button
                             outlined
@@ -43,44 +130,70 @@ export class FilmMainContent extends AppComponent<FilmMainContentProps> {
                             }}
                             className={cx('fav-button')}
                         >
-                            {addedToFavourite ? (
-                                <img src={icStarFilledUrl} aria-hidden />
-                            ) : (
-                                <img src={icStarOutlinedUrl} aria-hidden />
-                            )}
+                            <Icon
+                                icon={icStarOutlinedUrl}
+                                className={cx('icon', {
+                                    added: addedToFavourite,
+                                })}
+                            />
                             {addedToFavourite ? 'В избранном' : 'В избранное'}
                         </Button>
+                    )}
+                    {film?.trailerLink && (
+                        <section>
+                            <YouTubeIframe
+                                src={film.trailerLink}
+                                className={cx('player-iframe')}
+                                title={`youtube плеер дла фильма ${film?.title ?? ''}`}
+                            />
+                            <h2 className={cx('trailer-title')}>Трейлер</h2>
+                        </section>
                     )}
                 </div>
                 <div className={cx('section')}>
                     <div className={cx('top-info')}>
                         <section>
-                            <h1 className={cx('title')}>{film?.title}</h1>
-                            <FilmInfoTable film={film} />
-                        </section>
-                        <section className={cx('rating-section')}>
-                            <Rating
-                                rating={film?.rating}
-                                imdbRating={film?.imdbRating}
+                            <h1 className={cx('title', 'hide-on-mobile')}>
+                                {film?.title}
+                            </h1>
+                            <FilmInfoTable
+                                film={film}
+                                className={cx('info-table')}
                             />
-                            <Button
-                                outlined
-                                styleType="secondary"
-                                onClick={() => {
-                                    document
-                                        .getElementById(REVIEW_FORM_ID)
-                                        ?.scrollIntoView({
-                                            behavior: 'smooth',
-                                        });
-                                }}
-                            >
-                                Оценить
-                            </Button>
                         </section>
+                        <div className={cx('right-container')}>
+                            <div className={cx('rating-container')}>
+                                <Rating
+                                    rating={film?.rating}
+                                    imdbRating={film?.imdbRating}
+                                />
+                                <Button onClick={scrollToReviewForm}>
+                                    Оценить
+                                </Button>
+                            </div>
+                            {!!film?.actors?.length && (
+                                <section className={cx('roles-section')}>
+                                    <h1>В главных ролях:</h1>
+                                    <ul>
+                                        {film?.actors?.map(({ name, id }) => (
+                                            <li>
+                                                <Link
+                                                    href={routes.person(
+                                                        id ?? 0,
+                                                    )}
+                                                >
+                                                    {name}
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </section>
+                            )}
+                        </div>
                     </div>
                     <section className={cx('description-section')}>
                         <h1>Описание</h1>
-                        <p>{film?.description}</p>
+                        <p title={film?.description}>{film?.description}</p>
                     </section>
                 </div>
             </div>

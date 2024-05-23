@@ -3,10 +3,12 @@ import { AuthFormError } from '@/components/LoginForm/Form/Form.constants';
 import { getEmailError } from '@/components/LoginForm/Form/Form.utils';
 
 export const getNameError = (name?: string) => {
+    const trimName = name?.trim();
+
     switch (true) {
-        case !name:
+        case !trimName:
             return AuthFormError.EMPTY_VALUE;
-        case (name?.length ?? 0) > 30:
+        case (trimName?.length ?? 0) > 30:
             return 'Имя не может быть длиннее 30 символов';
         default:
             return '';

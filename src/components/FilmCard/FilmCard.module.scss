@@ -65,6 +65,15 @@
 
 .card {
     position: relative;
+
+    &.button {
+        cursor: pointer;
+
+        @include card-hover-effect;
+    }
+}
+
+.article {
     display: flex;
     gap: var(--main-content-gap);
     align-items: flex-start;
@@ -82,12 +91,6 @@
         .poster {
             max-width: 100%;
         }
-    }
-
-    &.button {
-        cursor: pointer;
-
-        @include card-hover-effect;
     }
 }
 
@@ -124,4 +127,8 @@
     top: 4px;
     right: 4px;
     z-index: 2;
+}
+
+.bright {
+    color: var(--text-color);
 }

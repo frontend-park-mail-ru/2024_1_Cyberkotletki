@@ -6,6 +6,7 @@ import { Input } from '@/components/Input';
 import { icArrowDownUrl } from '@/assets/icons';
 import { Popover } from '@/components/Popover';
 import { Button } from '@/components/Button';
+import { Icon } from '@/components/Icon';
 
 const cx = concatClasses.bind(styles);
 
@@ -78,9 +79,8 @@ export class Dropdown extends AppComponent<DropdownProps, DropdownState> {
                     value={selectedItem?.title}
                     iconPos="end"
                     icon={
-                        <img
-                            src={icArrowDownUrl}
-                            aria-hidden
+                        <Icon
+                            icon={icArrowDownUrl}
                             className={cx('icon', { rotate: isOpen })}
                         />
                     }

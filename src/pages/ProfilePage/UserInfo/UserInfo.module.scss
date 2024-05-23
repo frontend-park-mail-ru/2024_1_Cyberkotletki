@@ -14,8 +14,6 @@
 .user-name {
     @include text-header-2;
     @include cut-for-n-rows(1);
-
-    display: inline;
 }
 
 .info-table {
@@ -53,35 +51,7 @@
     grid-template-columns: repeat(3, 1fr);
     gap: var(--large-padding);
     margin-block-start: var(--main-content-offset);
-
-    @include tablet {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    @include mobile {
-        grid-template-columns: repeat(1, 1fr);
-    }
-}
-
-.main-info {
-    display: flex;
-    gap: var(--main-padding-2);
-    align-items: center;
-
-    @include mobile {
-        flex-direction: column;
-    }
-}
-
-.reviews-block {
-    margin-block-start: calc(2 * var(--main-padding-2));
-}
-
-.reviews-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--large-padding);
-    margin-block-start: var(--main-content-offset);
+    justify-content: stretch;
 
     @include tablet {
         grid-template-columns: repeat(2, 1fr);

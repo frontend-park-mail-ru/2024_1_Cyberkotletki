@@ -15,3 +15,8 @@ export { getStaticUrl } from './getStaticUrl';
 export { debounce } from './debounce';
 export { clickOnEnter } from './clickOnEnter';
 export { convertReleaseToFilm } from './convertReleaseToFilm';
+export { capitalize } from './capitalize';
+export { convertPreviewToFilm } from './convertPreviewToFilm';
+export { parseBudget } from './parseBudget';
+export { getYouTubeLink } from './getYouTubeLink';
+export { getPasswordComplexityMessage } from './getPasswordComplexityMessage';

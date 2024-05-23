@@ -2,7 +2,6 @@
     width: 100%;
     color: var(--error-red);
     text-align: center;
-    animation: fade-in-error 300ms ease-in-out;
 
     &.hint {
         @include text-secondary;
@@ -10,7 +9,6 @@
         overflow: visible;
         color: var(--error-red);
         text-align: start;
-        animation: fade-in-hint 300ms ease-in-out;
         contain: content;
     }
 }

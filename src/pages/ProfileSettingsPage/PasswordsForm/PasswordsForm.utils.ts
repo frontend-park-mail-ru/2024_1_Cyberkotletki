@@ -11,8 +11,8 @@ export const validatePasswordForm = ({
     newPassword,
     newPasswordRepeat,
 }: FormValues) => {
-    const oldPassError = oldPassword ? '' : AuthFormError.EMPTY_VALUE;
-    const newPassError = getPasswordError(newPassword);
+    const oldPassError = oldPassword.trim() ? '' : AuthFormError.EMPTY_VALUE;
+    const newPassError = getPasswordError(newPassword).message;
     const newPassRepError = getPasswordRepeatError(
         newPassword,
         newPasswordRepeat,

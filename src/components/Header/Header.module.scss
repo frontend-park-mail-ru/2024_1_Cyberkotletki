@@ -9,6 +9,7 @@
     width: 100%;
     height: var(--header-height);
     overflow: hidden;
+    overflow: visible;
     background: transparent;
     padding-block: var(--small-padding);
 
@@ -18,10 +19,10 @@
         width: 100%;
         height: 100%;
         background: inherit;
-        background-color: var(--absolute-op-30);
+        background-color: rgb(var(--violet-black-rgb) / 50%);
         border-bottom: 1px solid rgb(0 0 0 / 15%);
-        filter: drop-shadow(0 4px 4px rgb(0 0 0 / 25%));
-        backdrop-filter: blur(16px);
+        filter: drop-shadow(0 8px 24px rgb(0 0 0 / 10%));
+        backdrop-filter: blur(32px);
         content: '';
     }
 }
@@ -56,7 +57,8 @@
     width: 100%;
     max-width: var(--max-content-width);
     height: 100%;
-    padding-inline: var(--main-content-offset);
+    padding-inline: var(--main-content-padding);
+    overflow-x: hidden;
 }
 
 .tabs {
@@ -72,15 +74,15 @@
 }
 
 .avatar {
-    --avatar-size: 100% !important;
+    --avatar-size: 56px !important;
+
+    @include mobile {
+        --avatar-size: 40px !important;
+    }
 }
 
 .header-logo {
     height: 100%;
-
-    img {
-        height: 100%;
-    }
 }
 
 .avatar-button {
@@ -107,7 +109,7 @@
 
 .mobile-hidden {
     @include mobile {
-        display: none;
+        display: none !important;
     }
 }
 
@@ -119,4 +121,8 @@
     @include mobile {
         margin-inline-end: 0;
     }
+}
+
+.star-icon {
+    height: 100% !important;
 }

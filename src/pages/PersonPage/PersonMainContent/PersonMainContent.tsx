@@ -5,8 +5,14 @@ import type { ActorRole, Film, PersonActor } from '@/api/content/types';
 import { LazyImg } from '@/components/LazyImg';
 import { AppComponent } from '@/core';
 import { PersonInfoTable } from '@/pages/PersonPage/PersonMainContent/PersonInfoTable';
-import { concatClasses, getStaticUrl, objectEntries } from '@/utils';
+import {
+    capitalize,
+    concatClasses,
+    getStaticUrl,
+    objectEntries,
+} from '@/utils';
 import { LayoutGrid } from '@/layouts/LayoutGrid';
+import { DefaultPoster } from '@/components/DefaultPoster';
 
 const cx = concatClasses.bind(styles);
 
@@ -38,26 +44,36 @@ export class PersonMainContent extends AppComponent<PersonMainContentProps> {
         return (
             <div className={cx('content')}>
                 <div className={cx('top-info')}>
-                    <LazyImg
-                        className={cx('film-poster')}
-                        src={getStaticUrl(person?.photoURL)}
-                        width="232px"
-                        height="347px"
-                        alt={person?.name}
-                    />
+                    {person?.photoURL ? (
+                        <LazyImg
+                            className={cx('film-poster')}
+                            src={getStaticUrl(person?.photoURL)}
+                            width="300px"
+                            height="443px"
+                            alt={person?.name}
+                        />
+                    ) : (
+                        <DefaultPoster className={cx('film-poster')} />
+                    )}
                     <section>
                         {person?.name && (
                             <h1 className={cx('title')}>{person.name}</h1>
                         )}
-                        <PersonInfoTable person={person} />
+                        {person?.enName && (
+                            <h2 className={cx('en-title')}>{person.enName}</h2>
+                        )}
+                        <PersonInfoTable
+                            person={person}
+                            className={cx('info-table')}
+                        />
                     </section>
                 </div>
                 <section className={cx('roles-section')}>
                     <h1>Фильмография:</h1>
                     <div className={cx('role-type-section')}>
                         {roles.map(([key, films]) => (
-                            <section>
-                                <h1>{key}</h1>
+                            <section className={cx('role-section')}>
+                                <h1>{`${capitalize(key)}:`}</h1>
                                 <LayoutGrid
                                     className={cx('grid-container')}
                                     itemsPerRow={6}

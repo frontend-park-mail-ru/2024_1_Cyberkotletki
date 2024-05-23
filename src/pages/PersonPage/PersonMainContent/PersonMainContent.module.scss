@@ -1,14 +1,15 @@
 .content {
     display: flex;
     flex-direction: column;
-    margin-block-start: 88px;
     gap: var(--main-padding-2);
 }
 
 .film-poster {
-    min-width: 232px;
-    max-width: 232px;
+    min-width: 300px;
+    max-width: 300px;
     aspect-ratio: 0.667;
+    border-radius: 6px;
+    box-shadow: rgb(0 0 0 / 10%) 0 4px 12px;
 
     @include mobile {
         margin-inline: auto;
@@ -25,7 +26,20 @@
 }
 
 .title {
-    @include text-header-2;
+    @include text-header-1;
+
+    @include mobile {
+        @include text-header-2;
+    }
+
+    font-weight: bold;
+}
+
+.en-title {
+    color: var(--light-gray);
+    margin-block-start: var(--main-text-gap);
+
+    @include text-header-5;
 }
 
 .roles-section {
@@ -37,7 +51,7 @@
 }
 
 .grid-container {
-    margin-block-start: var(--main-content-offset);
+    margin-block-start: var(--large-padding);
 
     @include mobile {
         grid-template-columns: repeat(2, 1fr);
@@ -51,9 +65,17 @@
     gap: var(--main-padding-2);
 
     h1 {
-        @include text-header-5;
+        @include text-button;
+    }
+}
 
-        color: var(--light-gray);
-        font-weight: bold;
+.info-table {
+    margin-block-start: var(--main-padding-2);
+}
+
+.role-section {
+    &:not(:last-child) {
+        border-bottom: 1px solid var(--secondary-gray-op-30);
+        padding-block-end: var(--main-padding-2);
     }
 }

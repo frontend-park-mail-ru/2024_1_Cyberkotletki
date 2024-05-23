@@ -22,6 +22,7 @@ import type { AppContext } from '@/types/Context.types';
 import { HistoryContext } from '@/Providers/HistoryProvider';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { ProfileContext } from '@/Providers/ProfileProvider';
+import { PasswordInput } from '@/components/PasswordInput';
 
 const cx = concatClasses.bind(styles);
 
@@ -111,16 +112,17 @@ export class FormClass extends AppComponent<FormProps, FormState> {
                     onChange={this.state.handleChangeEmailInput}
                     onInput={this.state.handleInputEmailInput}
                 />
-                <Input
+                <PasswordInput
                     {...PASSWORD_INPUT_PROPS}
                     hasError={!!passwordError}
                     errorHint={passwordError}
                     autoComplete={isLogin ? 'password' : 'new-password'}
                     onChange={this.state.handleChangePasswordInput}
                     onInput={this.state.handleInputPasswordInput}
+                    withPasswordComplexity={!isLogin}
                 />
                 {!isLogin && (
-                    <Input
+                    <PasswordInput
                         {...PASSWORD_REPEAT_INPUT_PROPS}
                         hasError={!!passwordRepeatError}
                         errorHint={passwordRepeatError}

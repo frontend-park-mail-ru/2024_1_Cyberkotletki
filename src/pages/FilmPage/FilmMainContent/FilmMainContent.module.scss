@@ -1,17 +1,22 @@
 .content {
+    --backdrop-height: calc(270px + var(--header-height));
+
     display: flex;
-    margin-block-start: 88px;
     gap: var(--main-padding-2);
+    padding-block-start: calc(var(--backdrop-height) / 4);
 
     @include mobile {
         flex-direction: column;
+        padding-block-start: 0;
+    }
+
+    @include mobile {
+        --backdrop-height: 100%;
     }
 }
 
 .film-poster {
-    min-width: 232px;
-    max-width: 232px;
-    aspect-ratio: 0.667;
+    z-index: 2;
 
     @include mobile {
         margin-inline: auto;
@@ -19,21 +24,44 @@
 }
 
 .section {
+    z-index: 2;
     display: flex;
     flex-direction: column;
     width: 100%;
+    overflow: hidden;
+
+    @include not-mobile {
+        padding-block-start: calc(var(--backdrop-height) / 4);
+    }
 }
 
-.rating-section {
+.right-container {
     display: flex;
-    gap: var(--large-padding);
-    align-items: flex-end;
-    height: fit-content;
+    flex-direction: column;
+    gap: calc(var(--main-padding-2) * 2);
+    order: 2;
 
     @include mobile {
         flex-direction: column;
         align-items: center;
         order: 0 !important;
+    }
+}
+
+.rating-container {
+    display: flex;
+    gap: var(--large-padding);
+    align-items: flex-end;
+    width: 100%;
+    height: fit-content;
+
+    button {
+        flex-grow: 1;
+        width: auto !important;
+    }
+
+    @include tablet {
+        flex-wrap: wrap;
     }
 }
 
@@ -56,13 +84,150 @@
 
     p {
         margin-block-start: var(--main-content-gap);
+
+        @include cut-for-n-rows(8);
     }
 }
 
 .title {
-    @include text-header-2;
+    position: relative;
+    z-index: 2;
+
+    @include text-header-1;
+
+    @include not-mobile {
+        text-shadow: 3px 4px 7px rgb(0 0 0 / 80%);
+    }
+
+    @include mobile {
+        margin-block-start: var(--main-content-gap);
+
+        @include text-header-2;
+
+        text-align: center;
+    }
+
+    font-weight: bold;
 }
 
 .fav-button {
     margin-block-start: var(--main-padding);
+    z-index: 2;
+}
+
+.backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: var(--backdrop-height);
+    background-color: var(--absolute);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    filter: blur(1px) brightness(0.8);
+
+    &::after {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            180deg,
+            rgb(var(--absolute-rgb) / 0%) 0%,
+            rgb(var(--absolute-rgb)) 50%,
+            rgb(var(--absolute-rgb) / 0%) 100%
+        );
+        content: '';
+    }
+
+    &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--absolute);
+        transition: var(--item-transition-all);
+        content: '';
+    }
+
+    &.loaded {
+        &::before {
+            background-color: transparent;
+        }
+    }
+
+    @include mobile {
+        filter: blur(8px) brightness(0.6);
+    }
+}
+
+.left-container {
+    z-index: 2;
+    height: fit-content;
+
+    @include not-mobile {
+        position: sticky;
+        top: calc(var(--header-height) + var(--main-padding-2));
+    }
+}
+
+.info-table {
+    margin-block-start: var(--main-padding-2);
+}
+
+.roles-section {
+    width: 100%;
+
+    h1 {
+        color: var(--light-gray);
+
+        @include text-button;
+    }
+
+    ul {
+        padding: 0;
+    }
+
+    li {
+        padding-block: calc(var(--main-text-gap) / 2);
+
+        &::marker {
+            display: none;
+            content: '';
+        }
+    }
+}
+
+.player-iframe {
+    margin-block-start: var(--large-padding);
+
+    @include mobile {
+        width: 100%;
+    }
+}
+
+.trailer-title {
+    margin-block-start: var(--main-text-gap);
+    color: var(--light-gray);
+
+    @include text-button;
+}
+
+.icon {
+    svg path {
+        transition: var(--item-transition-all);
+        fill: transparent;
+    }
+
+    &.added {
+        svg path {
+            fill: var(--yellow);
+            stroke: var(--yellow);
+        }
+    }
 }

@@ -6,7 +6,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--large-padding);
-    align-items: flex-start;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .form {

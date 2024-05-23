@@ -25,7 +25,7 @@ class AuthService {
     async login(email: string, password: string) {
         return appFetch
             .post<LoginPayload, void>(authRoutes.login(), {
-                login: email.trim(),
+                login: email,
                 password,
             })
             .catch((error: Error) => {
@@ -55,7 +55,7 @@ class AuthService {
     async register(email: string, password: string): Promise<void> {
         return appFetch
             .post<RegisterPayload, void>(authRoutes.register(), {
-                email: email.trim(),
+                email,
                 password,
             })
             .catch((error: Error) => {

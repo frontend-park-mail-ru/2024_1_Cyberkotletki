@@ -4,6 +4,7 @@ import { favouriteService } from '@/api/favourite/favourite.service';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
+import { convertPreviewToFilm } from '@/utils';
 
 export interface FilmsByCollection {
     films?: Film[];
@@ -22,6 +23,7 @@ export interface ContentContextValues {
     loadFilmById?: (id: number) => Promise<Film | undefined>;
     loadPersonById?: (id: number) => Promise<PersonActor | undefined>;
     loadFilms: (typeId: number, page: number) => Promise<FilmsByCollection>;
+    resetFavouriteFilms: () => void;
 }
 
 export const ContentContext = new Context<AppContext>({});
@@ -39,7 +41,7 @@ export class ContentProvider extends AppComponent<
         personsMap: {},
         getAllFilms: () =>
             contentService.getAllFilms().then((response) => {
-                const films = response.filter(Boolean) as Film[];
+                const films = response.filter(Boolean);
 
                 this.setState((prev) => ({
                     ...prev,
@@ -78,13 +80,8 @@ export class ContentProvider extends AppComponent<
             const filmsCompilation =
                 await contentService.getFilmsByCompilationId(typeId, page);
 
-            const films = (
-                await Promise.all(
-                    filmsCompilation?.content_ids?.map((id) =>
-                        contentService.getFilmById(id),
-                    ) ?? [],
-                )
-            ).filter(Boolean) as Film[];
+            const films =
+                filmsCompilation?.content?.map(convertPreviewToFilm) ?? [];
 
             const filmsByCollection = this.state.filmsByCollection ?? {};
 
@@ -112,6 +109,10 @@ export class ContentProvider extends AppComponent<
 
                 return films;
             }),
+
+        resetFavouriteFilms: () => {
+            this.setState((prev) => ({ ...prev, favouriteFilms: undefined }));
+        },
     };
 
     render() {
