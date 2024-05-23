@@ -14,6 +14,7 @@ import { ContentProvider } from '@/Providers/ContentProvider';
 import { CollectionsDetailsPage } from '@/pages/CollectionsDetailsPage';
 import { FavouritesPage } from '@/pages/FavouritesPage';
 import { ReleasesPage } from '@/pages/ReleasesPage';
+import { NewsPage } from '@/pages/NewsPage';
 
 import '@/styles/global.scss';
 
@@ -71,6 +72,11 @@ export class App extends AppComponent<object> {
                             {
                                 path: routes.releases(),
                                 element: <ReleasesPage />,
+                            },
+
+                            {
+                                path: routes.news(),
+                                element: <NewsPage />,
                             },
                         ]}
                     />

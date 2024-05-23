@@ -1,8 +1,10 @@
-import {RoutesValues} from "@/App/App.routes.ts";
-import {News} from "@/api/content/types.ts";
+
+import { routes } from '@/App/App.routes';
+import {News} from "@/api/news/types.ts";
 import {AppComponent} from "@/core";
 import {concatClasses} from "@/utils";
 import styles from './NewsCard.module.scss';
+import {Link} from "@/components/Link";
 
 const cx = concatClasses.bind(styles);
 
@@ -12,41 +14,44 @@ export interface NewsCardProps
             App.HTMLAttributes<HTMLDivElement>,
             HTMLDivElement
         >,
-        'ref' | 'children'
+        'children'
     > {
-    newsId?: number;
-    news?: News;
-    link?: RoutesValues | '';
+    news?: News
 }
 
 export class NewsCard extends AppComponent<NewsCardProps> {
     render() {
         const {
             className,
+            news,
             ...props
         } = this.props;
 
-        // Заглушки для данных новости
-        const news = {
-            title: "Заголовок новости",
-            date: "2024-01-01",
-            poster: "url-изображения"
-        };
-
+        ////////// подозрительные ID
         return (
-            <article
-                {...props}
-                className={cx('card', className)}
+            <Link className={cx(className)}
+                  aria-label={this.props.news?.title}
+                  href={routes.news(this.props.news?.id)}
             >
-                <div className={cx('poster')}>
-                    <img src={news.poster} alt={news.title} />
-                </div>
-                <div className={cx('title')}>
-                    <h3 className={news.title}>
-                        {news.title}
-                    </h3>
-                </div>
-            </article>
+
+                <article {...props} className={cx('item')}>
+                    <img src={this.props.news?.pictureURL}
+                         alt="Постер новости"
+                         className={cx('poster')}
+                         width="320px"
+                         height="180px"
+                    />
+                    <div className={cx('info')}>
+                        <h1 className={cx('head')} title={this.props.news?.title}>
+                            {this.props.news?.title}
+                        </h1>
+                        <time className={cx('date')} dateTime={this.props.news?.date}>
+                            {this.props.news?.date}
+                        </time>
+                    </div>
+                </article>
+
+            </Link>
         );
     }
 }

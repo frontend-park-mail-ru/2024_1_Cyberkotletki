@@ -23,7 +23,13 @@ class Routes {
     favourites = () => `/favourites` as const;
 
     releases = () => `/releases` as const;
+
+    /*news = (id?: string | number) =>
+        `/news${isDefined(id) ? `/${id}` : ''}` as const;*/
+
+    news = () => '/news' as const;
 }
+
 
 export const routes = new Routes();
 
