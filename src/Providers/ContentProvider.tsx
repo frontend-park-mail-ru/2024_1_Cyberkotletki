@@ -22,7 +22,10 @@ export interface ContentContextValues {
     loadFavouriteFilms?: () => Promise<Film[] | undefined>;
     loadFilmById?: (id: number) => Promise<Film | undefined>;
     loadPersonById?: (id: number) => Promise<PersonActor | undefined>;
-    loadFilms: (typeId: number, page: number) => Promise<FilmsByCollection>;
+    loadCollectionFilms: (
+        typeId: number,
+        page: number,
+    ) => Promise<FilmsByCollection>;
     resetFavouriteFilms: () => void;
 }
 
@@ -76,7 +79,7 @@ export class ContentProvider extends AppComponent<
                 return person;
             }),
 
-        loadFilms: async (typeId: number, page: number) => {
+        loadCollectionFilms: async (typeId: number, page: number) => {
             const filmsCompilation =
                 await contentService.getFilmsByCompilationId(typeId, page);
 

@@ -4,8 +4,10 @@ import { Link } from '@/components/Link';
 import type { Film, Person } from '@/api/content/types';
 import { AppComponent } from '@/core';
 import { concatClasses, getHumanDate, isDefined, parseBudget } from '@/utils';
+import type { RoutesValues } from '@/App/App.routes';
 import { routes } from '@/App/App.routes';
 import { AgeLimitBadge } from '@/components/AgeLimitBadge';
+import { GENRES_MAP } from '@/shared/constants';
 
 const cx = concatClasses.bind(styles);
 
@@ -26,19 +28,34 @@ class NotFound extends AppComponent {
     }
 }
 
-export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
-    renderPersons = (persons: Person[]) =>
-        persons.map((person, index) => (
-            <span>
-                <Link
-                    href={routes.person(`${person.id ?? 0}`)}
-                >{`${person.name ?? ''}`}</Link>
-                {index < persons.length - 1 && ', '}
-            </span>
-        ));
+const renderLinks = (persons?: { title?: string; link: RoutesValues }[]) =>
+    persons?.map(({ title, link }, index) => (
+        <span>
+            <Link href={link}>{title}</Link>
+            {index < (persons?.length ?? 0) - 1 && ', '}
+        </span>
+    ));
 
+const convertPersonToLink = (person?: Person) => ({
+    link: routes.person(person?.id ?? 0),
+    title: person?.name ?? '',
+});
+
+export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
     render() {
         const { film, className, ...props } = this.props;
+
+        const producers = film?.producers?.map(convertPersonToLink);
+        const directors = film?.directors?.map(convertPersonToLink);
+        const writers = film?.writers?.map(convertPersonToLink);
+        const operators = film?.operators?.map(convertPersonToLink);
+        const composers = film?.composers?.map(convertPersonToLink);
+        const editors = film?.editors?.map(convertPersonToLink);
+
+        const genres = film?.genres?.map((genre) => ({
+            link: routes.collections(GENRES_MAP[genre]),
+            title: genre,
+        }));
 
         return (
             <table className={cx('table', className)} {...props}>
@@ -66,7 +83,7 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         <td className={cx('label')}>Жанры:</td>
                         <td>
                             {film?.genres?.length ? (
-                                film.genres.join(', ')
+                                renderLinks(genres)
                             ) : (
                                 <NotFound />
                             )}
@@ -76,7 +93,7 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         <td className={cx('label')}>Режиссёры:</td>
                         <td>
                             {film?.directors?.length ? (
-                                this.renderPersons(film?.directors)
+                                renderLinks(directors)
                             ) : (
                                 <NotFound />
                             )}
@@ -86,7 +103,7 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         <td className={cx('label')}>Сценаристы:</td>
                         <td>
                             {film?.writers?.length ? (
-                                this.renderPersons(film.writers)
+                                renderLinks(writers)
                             ) : (
                                 <NotFound />
                             )}
@@ -96,7 +113,7 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         <td className={cx('label')}>Продюсеры:</td>
                         <td>
                             {film?.producers?.length ? (
-                                this.renderPersons(film.producers)
+                                renderLinks(producers)
                             ) : (
                                 <NotFound />
                             )}
@@ -106,7 +123,7 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         <td className={cx('label')}>Операторы:</td>
                         <td>
                             {film?.operators?.length ? (
-                                this.renderPersons(film.operators)
+                                renderLinks(operators)
                             ) : (
                                 <NotFound />
                             )}
@@ -116,7 +133,7 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         <td className={cx('label')}>Композиторы:</td>
                         <td>
                             {film?.composers?.length ? (
-                                this.renderPersons(film.composers)
+                                renderLinks(composers)
                             ) : (
                                 <NotFound />
                             )}
@@ -126,7 +143,7 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                         <td className={cx('label')}>Редакторы:</td>
                         <td>
                             {film?.editors?.length ? (
-                                this.renderPersons(film.editors)
+                                renderLinks(editors)
                             ) : (
                                 <NotFound />
                             )}

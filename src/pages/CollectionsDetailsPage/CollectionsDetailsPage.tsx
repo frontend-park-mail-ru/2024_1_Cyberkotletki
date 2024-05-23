@@ -8,7 +8,10 @@ import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { concatClasses, getStaticUrl } from '@/utils';
-import type { AppContext } from '@/types/Context.types';
+import type {
+    AppContext,
+    AppContextComponentProps,
+} from '@/types/Context.types';
 import { NotFound } from '@/components/NotFound';
 import { LazyImg } from '@/components/LazyImg';
 import { Spinner } from '@/components/Spinner';
@@ -29,7 +32,7 @@ export interface CollectionsDetailsPageProps {
     context?: AppContext;
 }
 
-class CollectionsDetailsPageClass extends AppComponent<
+class CollectionsDetailsPageInner extends AppComponent<
     CollectionsDetailsPageProps,
     CollectionsDetailsPageState
 > {
@@ -43,7 +46,7 @@ class CollectionsDetailsPageClass extends AppComponent<
         this.setState((prev) => ({ ...prev, isLoading: true }));
 
         await this.props.context?.content
-            ?.loadFilms(Number(params?.uid), page)
+            ?.loadCollectionFilms(Number(params?.uid), page)
             .then((data) => {
                 this.setState((prev) => ({
                     ...prev,
@@ -166,6 +169,15 @@ class CollectionsDetailsPageClass extends AppComponent<
                 )}
             </LayoutWithHeader>
         );
+    }
+}
+
+export class CollectionsDetailsPageClass extends AppComponent<
+    AppContextComponentProps,
+    object
+> {
+    render(): AppNode {
+        return <CollectionsDetailsPageInner context={this.props.context} />;
     }
 }
 
