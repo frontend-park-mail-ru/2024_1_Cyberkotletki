@@ -82,7 +82,7 @@ export class App extends AppComponent<object> {
                             {
                                 path: routes.news(':uid'),
                                 element: <NewsDetailsPage />,
-                            }
+                            },
                         ]}
                     />
                 </ContentProvider>

@@ -5,8 +5,8 @@ import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
 import { convertPreviewToFilm } from '@/utils';
-import {News} from "@/api/news/types.ts";
-import {newsService} from "@/api/news/service.ts";
+import type { News } from '@/api/news/types.ts';
+import { newsService } from '@/api/news/service.ts';
 
 export interface FilmsByCollection {
     films?: Film[];
@@ -71,7 +71,6 @@ export class ContentProvider extends AppComponent<
 
         loadNewsById: (id) =>
             newsService.getNewsById(id).then((news) => {
-                console.log('News loaded:', news);
                 const newsMap = { ...this.state.newsMap, [id]: news };
 
                 this.setState((prev) => ({
@@ -81,9 +80,6 @@ export class ContentProvider extends AppComponent<
                 }));
 
                 return news;
-            }).catch((error) => {
-                console.log('Error loading news:', error);
-                return undefined;
             }),
 
         loadPersonById: (id) =>

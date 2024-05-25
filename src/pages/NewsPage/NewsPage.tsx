@@ -1,9 +1,8 @@
-import {concatClasses} from "@/utils";
-import styles from "@/pages/NewsPage/NewsPage.module.scss";
-import {News} from "@/api/news/types.ts";
-import {AppComponent} from "@/core";
-import {newsService} from "@/api/news/service.ts";
-
+import { concatClasses } from '@/utils';
+import styles from '@/pages/NewsPage/NewsPage.module.scss';
+import type { News } from '@/api/news/types.ts';
+import { AppComponent } from '@/core';
+import { newsService } from '@/api/news/service.ts';
 import { LayoutGrid } from '@/layouts/LayoutGrid';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { Spinner } from '@/components/Spinner';
@@ -11,60 +10,34 @@ import { NewsCard } from '@/components/NewsCard';
 
 const cx = concatClasses.bind(styles);
 
-export interface NewsPageState{
+export interface NewsPageState {
     isLoading: boolean;
     news: News[];
 }
 
-export class NewsPage extends AppComponent<
-    object,
-    NewsPageState
-> {
-     componentDidMount(): void {
+export class NewsPage extends AppComponent<object, NewsPageState> {
+    componentDidMount(): void {
         this.setState((prev) => ({
-            ...prev, isLoading: true }));
+            ...prev,
+            isLoading: true,
+        }));
 
         void newsService
             .getAllNews()
-            .then((news) => {
+            .then((newNews) => {
                 this.setState((prev) => ({
                     ...prev,
-                    news: news,
+                    news: newNews,
                     isLoading: false,
                 }));
             })
             .finally(() => {
                 this.setState((prev) => ({
-                    ...prev, isLoading: false }));
-            });
-        }
-
-/*        // получить все новости
-        const allNews = (
-            await Promise.all(
-                this.state.news?.map((news) =>
-                    newsService.getNewsById(news.id!),
-                ) ?? [],
-            )
-        ).filter(Boolean) as News[];
-
-        this.setState((prev) => ({
-            ...prev,
-            news: allNews
-                .map((news) => news)
-                .flat() // удаляет один уровень вложенности
-                .filter(Boolean) as News[], // удаляет все пустые значения
-        }));*/
-
-        /*void newsService
-            .getAllNews()
-            .then((news) => {
-                this.setState((prev) => ({
                     ...prev,
-                    news: news,
+                    isLoading: false,
                 }));
-            });*/
-
+            });
+    }
 
     render() {
         const { news, isLoading } = this.state;
@@ -79,16 +52,19 @@ export class NewsPage extends AppComponent<
                     <section>
                         <h1 className={cx('head')}>Новости</h1>
 
-                        <LayoutGrid itemsPerRow={3} itemsPerRowMobile={1} className={cx('grid-container')}>
-                            {news && news.map((newsItem) => <NewsCard news={newsItem} />)}
+                        <LayoutGrid
+                            itemsPerRow={3}
+                            itemsPerRowMobile={1}
+                            className={cx('grid-container')}
+                        >
+                            {news &&
+                                news.map((newsItem) => (
+                                    <NewsCard news={newsItem} />
+                                ))}
                         </LayoutGrid>
-
                     </section>
                 )}
             </LayoutWithHeader>
-
         );
     }
 }
-
-

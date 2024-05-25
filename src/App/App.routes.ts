@@ -28,7 +28,6 @@ class Routes {
         `/news${isDefined(id) ? `/${id}` : ''}` as const;
 }
 
-
 export const routes = new Routes();
 
 export type RoutesValues = ReturnType<Routes[keyof typeof routes]>;

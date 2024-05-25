@@ -1,22 +1,21 @@
-import {concatClasses, isDefined} from "@/utils";
-import styles from "@/pages/NewsDetailsPage/NewsDetailsPage.module.scss"
-import {News} from "@/api/news/types.ts";
-import {AppComponent} from "@/core";
-
+import { concatClasses, isDefined } from '@/utils';
+import styles from '@/pages/NewsDetailsPage/NewsDetailsPage.module.scss';
+import type { News } from '@/api/news/types.ts';
+import { AppComponent } from '@/core';
 import { LazyImg } from '@/components/LazyImg';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { Spinner } from '@/components/Spinner';
-import type {AppContextComponentProps} from "@/types/Context.types.ts";
-import {NotFound} from "@/components/NotFound";
-import { NewsColumn } from "@/pages/NewsDetailsPage/NewsColumn";
-import { Button } from "@/components/Button";
-import {newsService} from "@/api/news/service.ts";
-import {routes} from "@/App/App.routes.ts";
+import type { AppContextComponentProps } from '@/types/Context.types.ts';
+import { NotFound } from '@/components/NotFound';
+import { NewsColumn } from '@/pages/NewsDetailsPage/NewsColumn';
+import { Button } from '@/components/Button';
+import { newsService } from '@/api/news/service.ts';
+import { routes } from '@/App/App.routes.ts';
 
 const cx = concatClasses.bind(styles);
 
-export interface NewsDetailsPageState{
-    news?: News
+export interface NewsDetailsPageState {
+    news?: News;
     isNotFound?: boolean;
     isLoading: boolean;
 }
@@ -41,11 +40,13 @@ export class NewsDetailsPage extends AppComponent<
                 .finally(() => {
                     this.setState((prev) => ({ ...prev, isLoading: false }));
                 });
+        } else {
+            this.setState((prev) => ({
+                ...prev,
+                isNotFound: true,
+            }));
         }
-        else {
-            this.setState((prev) => ({...prev, isNotFound: true}));
-        }
-    }
+    };
 
     componentDidMount(): void {
         const { params } = window.history.state as { params?: Params };
@@ -59,11 +60,11 @@ export class NewsDetailsPage extends AppComponent<
         }
     }
 
-
     render() {
         const { params } = window.history.state as { params?: Params };
         const news =
-            this.props.context?.content?.newsMap?.[Number(params?.uid)] ?? this.state.news ??
+            this.props.context?.content?.newsMap?.[Number(params?.uid)] ??
+            this.state.news ??
             this.state.news;
         const { isNotFound, isLoading } = this.state;
 
@@ -85,30 +86,22 @@ export class NewsDetailsPage extends AppComponent<
             default:
                 return (
                     <LayoutWithHeader>
+                        <col className={cx('top-info')}>
+                            <h1 className={cx('title')}>{news?.title}</h1>
+                            <p className={cx('date')}>{news?.date}</p>
+                            <LazyImg src={news?.pictureURL} alt={news?.title} />
 
-                            <col className={cx('top-info')}>
-                                <h1 className={cx('title')}>{news?.title}</h1>
-                                <p className={cx('date')}>{news?.date}</p>
-                                <LazyImg
-                                    src={news?.pictureURL}
-                                    alt={news?.title}
-                                />
-
-                                <p className={cx('text')}>{news?.text}</p>
-                            </col>
-                            <col className={cx('news-list')}>
-                                <h3 className={cx('title')}>Последние новости</h3>
-                                <Button href={routes.news('')}> Все новости </Button>
-
-                                <div className={cx('news-column-container')}>
-                                    <NewsColumn />
-                                </div>
-                            </col>
-
+                            <p className={cx('text')}>{news?.text}</p>
+                        </col>
+                        <col className={cx('news-list')}>
+                            <h3 className={cx('title')}>Последние новости</h3>
+                            <Button href={routes.news('')}>Все новости </Button>
+                            <div className={cx('news-column-container')}>
+                                <NewsColumn />
+                            </div>
+                        </col>
                     </LayoutWithHeader>
-                )
+                );
         }
     }
 }
-
-
