@@ -13,7 +13,7 @@ export interface AppComponentType<
     State,
 > {
     /** Пропсы, которые передаются извне */
-    readonly props: Props;
+    props: Props;
 
     /** Внутреннее состояние компонента */
     state: State | null;

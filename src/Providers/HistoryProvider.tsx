@@ -3,7 +3,6 @@ import { isRoutesMatch } from '@/Providers/isRoutesMatch';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
-import { isEqual } from '@/utils/isEqual';
 
 export interface HistoryContextValues {
     changeRoute: (
@@ -59,7 +58,7 @@ export class HistoryProvider extends AppComponent<
 
         const { pathname } = window.location;
 
-        this.handleChangeRoute(pathname, true);
+        this.handleChangeRoute(pathname, true, undefined, false);
 
         window.addEventListener('popstate', this.listener);
     }
@@ -68,6 +67,7 @@ export class HistoryProvider extends AppComponent<
         path: string,
         safeScroll?: boolean,
         replace?: boolean,
+        changeState = true,
     ) => {
         const { pathname } = window.location;
 
@@ -80,7 +80,10 @@ export class HistoryProvider extends AppComponent<
             .split(`?`)[0]
             .split(`#`)[0];
 
-        if (pathnameWithoutEdgeSlashes !== pathWithoutEdgeSlashes) {
+        if (
+            pathnameWithoutEdgeSlashes !== pathWithoutEdgeSlashes &&
+            changeState
+        ) {
             if (replace) {
                 window.history.replaceState(window.history.state, '', path);
             } else {
@@ -108,10 +111,6 @@ export class HistoryProvider extends AppComponent<
             const match = isRoutesMatch(key, pathWithoutEdgeSlashes);
 
             if (match.match) {
-                const prevParams = window.history.state as {
-                    params: Record<string, string>;
-                };
-
                 window.history.replaceState({ params: match.params }, '', path);
 
                 const element =
@@ -125,12 +124,23 @@ export class HistoryProvider extends AppComponent<
                             <div />
                         ),
                     }));
+                } else if (this.state.element.instance) {
+                    const prevProps = this.state.element.instance?.props;
+                    const newProps = {
+                        ...this.state.element.instance?.props,
+                        params: match.params,
+                    };
 
-                    if (!safeScroll) {
-                        scrollToTop();
-                    }
-                } else if (!isEqual(prevParams.params, match.params)) {
-                    window.location.reload();
+                    this.state.element.instance.props = newProps;
+
+                    this.state.element.instance.componentDidUpdate(
+                        this.state.element.instance.state,
+                        prevProps,
+                    );
+                }
+
+                if (!safeScroll) {
+                    scrollToTop();
                 }
 
                 return;
@@ -156,7 +166,7 @@ export class HistoryProvider extends AppComponent<
 
         const { pathname } = window.location;
 
-        this.handleChangeRoute(pathname, true);
+        this.handleChangeRoute(pathname, true, undefined, false);
 
         return false;
     };

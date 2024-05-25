@@ -17,10 +17,12 @@ import type { AppContextComponentProps } from '@/types/Context.types';
 import { favouriteService } from '@/api/favourite/favourite.service';
 import { Spinner } from '@/components/Spinner';
 import { ContentContext } from '@/Providers/ContentProvider';
+import type { ParamsProps } from '@/types/ParamsProps.types';
 
 const cx = concatClasses.bind(styles);
-interface Params {
-    uid?: string;
+
+export interface FilmPageProps extends AppContextComponentProps {
+    uid: number;
 }
 
 export interface FilmPageState {
@@ -36,10 +38,7 @@ export interface FilmPageState {
 
 export const REVIEW_FORM_ID = 'review-form';
 
-class FilmPageClass extends AppComponent<
-    AppContextComponentProps,
-    FilmPageState
-> {
+class FilmPageClass extends AppComponent<FilmPageProps, FilmPageState> {
     finedOwnReview = () => {
         const { reviews } = this.state;
 
@@ -92,9 +91,7 @@ class FilmPageClass extends AppComponent<
     };
 
     handleFormSubmit = () => {
-        const { params } = window.history.state as { params?: Params };
-
-        this.getFilmReviews(Number(params?.uid));
+        this.getFilmReviews(this.props.uid);
     };
 
     handleEditReviewClick = (reviewForEdit?: ReviewDetails) => {
@@ -132,9 +129,7 @@ class FilmPageClass extends AppComponent<
     handleReviewRemove = (review?: ReviewDetails) => {
         if (isDefined(review?.id)) {
             void reviewService.deleteReview(review.id).then(() => {
-                const { params } = window.history.state as { params?: Params };
-
-                this.getFilmReviews(Number(params?.uid));
+                this.getFilmReviews(this.props.uid);
             });
         }
     };
@@ -157,10 +152,8 @@ class FilmPageClass extends AppComponent<
     };
 
     getIsAddedToFavourite = () => {
-        const { params } = window.history.state as { params?: Params };
-
         void favouriteService
-            .getContentFavouriteStatus(+(params?.uid ?? ''))
+            .getContentFavouriteStatus(this.props.uid)
             .then(() => {
                 this.setState((prev) => ({ ...prev, addedToFavourite: true }));
             })
@@ -169,28 +162,37 @@ class FilmPageClass extends AppComponent<
             });
     };
 
-    componentDidMount() {
-        const { params } = window.history.state as { params?: Params };
-
+    loadAllData = () => {
         const filmsMap = this.props.context?.content?.filmsMap;
 
         this.getProfile();
         this.getIsAddedToFavourite();
 
-        const paramsId = Number(params?.uid);
+        const paramsId = this.props.uid;
 
         if (!filmsMap?.[paramsId]) {
             this.getFilmById(paramsId);
         }
 
         this.getFilmReviews(paramsId);
+    };
+
+    componentDidMount() {
+        this.loadAllData();
+    }
+
+    componentDidUpdate(
+        _: FilmPageState | null,
+        prevProps: FilmPageProps | null,
+    ): void {
+        if (prevProps?.uid !== this.props.uid) {
+            this.loadAllData();
+        }
     }
 
     render() {
-        const { params } = window.history.state as { params?: Params };
-
         const film =
-            this.props.context?.content?.filmsMap?.[Number(params?.uid)] ??
+            this.props.context?.content?.filmsMap?.[this.props.uid] ??
             this.state.film;
 
         const {
@@ -202,6 +204,8 @@ class FilmPageClass extends AppComponent<
         } = this.state;
         const profile =
             this.state.profile || this.props.context?.profile?.profile;
+
+        // console.log('INNER', this.props.context);
 
         switch (true) {
             case isNotFound:
@@ -252,7 +256,7 @@ class FilmPageClass extends AppComponent<
                                         isEdit={isEdit}
                                         onSubmit={this.handleFormSubmit}
                                         reviewForEdit={reviewForEdit}
-                                        contentId={params?.uid}
+                                        contentId={this.props.uid}
                                     />
                                 </div>
                             </div>
@@ -263,9 +267,26 @@ class FilmPageClass extends AppComponent<
     }
 }
 
-class FilmPageInner extends AppComponent<AppContextComponentProps> {
+class FilmPageInner extends AppComponent<
+    AppContextComponentProps & ParamsProps,
+    ParamsProps
+> {
+    componentDidUpdate(
+        _: object | null,
+        prevProps: (AppContextComponentProps & ParamsProps) | null,
+    ): void {
+        if (this.props.params !== prevProps?.params) {
+            this.setState((prev) => ({ ...prev, params: this.props.params }));
+        }
+    }
+
     render() {
-        return <FilmPageClass context={this.props.context} />;
+        const uid = Number(
+            this.state.params?.uid ||
+                (window.history.state as ParamsProps).params?.uid,
+        );
+
+        return <FilmPageClass context={this.props.context} uid={uid} />;
     }
 }
 

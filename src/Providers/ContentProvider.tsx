@@ -58,11 +58,7 @@ export class ContentProvider extends AppComponent<
             contentService.getFilmById(id).then((film) => {
                 const filmsMap = { ...this.state.filmsMap, [id]: film };
 
-                this.setState((prev) => ({
-                    ...prev,
-                    film,
-                    filmsMap,
-                }));
+                this.state.filmsMap = filmsMap;
 
                 return film;
             }),
