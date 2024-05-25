@@ -1,3 +1,5 @@
+export type ContentType = 'movie' | 'series';
+
 export interface Person {
     enName?: string;
     id?: number;
@@ -31,6 +33,15 @@ export interface Series {
     yearStart?: number;
 }
 
+export interface SimilarContent {
+    genre: string[];
+    id: number;
+    poster: string;
+    rating: number;
+    title: string;
+    type: ContentType;
+}
+
 export interface Film {
     id?: number;
     actors?: Person[];
@@ -55,11 +66,12 @@ export interface Film {
     series?: Series;
     slogan?: string;
     title?: string;
-    type?: 'movie' | 'series';
+    type?: ContentType;
     writers?: Person[];
     facts?: string[];
     picturesURL?: string[];
     trailerLink?: string;
+    similarContent?: SimilarContent[];
 }
 
 export interface FilmPreview {
@@ -74,7 +86,7 @@ export interface FilmPreview {
     rating?: number;
     release?: number;
     title?: string;
-    type?: Film['type'];
+    type?: ContentType;
 }
 
 export interface ActorRole {
@@ -84,7 +96,7 @@ export interface ActorRole {
     rating?: number;
     releaseYear?: number;
     title?: string;
-    type?: Film['type'];
+    type?: ContentType;
     yearEnd?: number;
     yearStart?: number;
 }
@@ -148,7 +160,7 @@ export interface SearchContent {
     rating?: number;
     seasonsNumber?: number;
     title?: string;
-    type?: Film['type'];
+    type?: ContentType;
     yearEnd?: number;
     yearStart?: number;
 }
@@ -172,7 +184,7 @@ export interface Release {
     /** 2022-01-02T15:04:05Z */
     releaseDate?: string;
     title?: string;
-    type?: Film['type'];
+    type?: ContentType;
 }
 
 export interface ReleaseResponse {

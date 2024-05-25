@@ -186,6 +186,16 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
     scrollbar-color: rgb(var(--violet-rgb) / 50%) transparent;
 }
 
+@mixin no-scrollbar {
+    /* Chrome, Safari и Opera */
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    -ms-overflow-style: none; /* IE и Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
 @mixin card-hover-effect {
     position: relative;
 

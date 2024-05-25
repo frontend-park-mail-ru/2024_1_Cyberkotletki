@@ -1,0 +1,7 @@
+.write-review-block {
+    h1 {
+        margin-block-end: var(--main-content-offset);
+
+        @include text-header-4;
+    }
+}

@@ -1,0 +1,1 @@
+export { SimilarContentBlock } from './SimilarContentBlock';

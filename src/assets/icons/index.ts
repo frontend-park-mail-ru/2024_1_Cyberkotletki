@@ -15,3 +15,4 @@ export { default as icArrowDownUrl } from './ic-arrow-down.svg';
 export { default as icEyeUrl } from './ic-eye.svg';
 export { default as icEyeHideUrl } from './ic-eye-hide.svg';
 export { default as icLogoTextUrl } from './ic-logo-text.svg';
+export { default as icPlayUrl } from './ic-play.svg';

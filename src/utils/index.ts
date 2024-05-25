@@ -20,3 +20,5 @@ export { convertPreviewToFilm } from './convertPreviewToFilm';
 export { parseBudget } from './parseBudget';
 export { getYouTubeLink } from './getYouTubeLink';
 export { getPasswordComplexityMessage } from './getPasswordComplexityMessage';
+export { convertSimilarToFilm } from './convertSimilarToFilm';
+export * from './screenWidths';

@@ -1,15 +1,16 @@
 import { FilmMainContent } from './FilmMainContent';
 import styles from './FilmPage.module.scss';
+import { ReviewsList } from './ReviewsList';
+import { ReviewFormBlock } from './ReviewFormBlock';
+import { SimilarContentBlock } from './SimilarContentBlock';
 
 import type { Film } from '@/api/content/types';
 import { AppComponent } from '@/core';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { concatClasses, isDefined } from '@/utils';
 import { NotFound } from '@/components/NotFound';
-import { ReviewForm } from '@/components/ReviewForm';
 import { reviewService } from '@/api/review/service';
 import type { ReviewDetails } from '@/api/review/types';
-import { ReviewCard } from '@/components/ReviewCard';
 import { ProfileContext } from '@/Providers/ProfileProvider';
 import type { ProfileResponse } from '@/api/user/types';
 import type { AppContextComponentProps } from '@/types/Context.types';
@@ -220,54 +221,41 @@ class FilmPageClass extends AppComponent<
             default:
                 return (
                     <LayoutWithHeader>
-                        <div key="content">
+                        <div className={cx('container')}>
                             <FilmMainContent
                                 film={film}
                                 onFavouriteClick={this.handleAddToFavourite}
                                 addedToFavourite={addedToFavourite}
                                 withFavButton={!!profile}
                             />
-                            <section className={cx('reviews-block')}>
-                                <h1>Отзывы:</h1>
-                                <div className={cx('reviews-list')}>
-                                    {this.state.reviews?.length ? (
-                                        this.state.reviews?.map((review) => (
-                                            <ReviewCard
-                                                className={cx('review-card')}
-                                                review={review}
-                                                onEditClick={
-                                                    this.handleEditReviewClick
-                                                }
-                                                profile={profile}
-                                                onReviewRemove={
-                                                    this.handleReviewRemove
-                                                }
-                                            />
-                                        ))
-                                    ) : (
-                                        <div>Отзывов пока нет</div>
-                                    )}
-                                </div>
-                            </section>
-                            <section
-                                className={cx('write-review-block')}
-                                id={REVIEW_FORM_ID}
-                            >
-                                <h1>
-                                    {this.state.reviewForEdit
-                                        ? 'Редактировать отзыв:'
-                                        : 'Написать отзыв:'}
-                                </h1>
-                                <ReviewForm
-                                    key={isEdit ? 'isEdit' : undefined}
-                                    profile={profile}
-                                    contentId={+(params?.uid ?? 0)}
-                                    onSubmit={this.handleFormSubmit}
-                                    isEdit={isEdit}
-                                    reviewID={reviewForEdit?.id}
-                                    {...reviewForEdit}
+                            {!!film?.similarContent?.length && (
+                                <SimilarContentBlock
+                                    className={cx('similar-list')}
+                                    similarContent={film?.similarContent}
                                 />
-                            </section>
+                            )}
+                            <div className={cx('bottom-block')}>
+                                <div className={cx('reviews-block')}>
+                                    <ReviewsList
+                                        reviews={this.state.reviews}
+                                        className={cx('reviews-list-block')}
+                                        onEditReviewClick={
+                                            this.handleEditReviewClick
+                                        }
+                                        onReviewRemove={this.handleReviewRemove}
+                                        profile={profile}
+                                    />
+                                    <ReviewFormBlock
+                                        className={cx('write-review-block')}
+                                        id={REVIEW_FORM_ID}
+                                        profile={profile}
+                                        isEdit={isEdit}
+                                        onSubmit={this.handleFormSubmit}
+                                        reviewForEdit={reviewForEdit}
+                                        contentId={params?.uid}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </LayoutWithHeader>
                 );

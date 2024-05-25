@@ -106,6 +106,8 @@
     flex-direction: column;
     gap: var(--main-text-gap);
 
+    @include cut-for-n-rows(2);
+
     &.small {
         @include text-secondary;
     }
