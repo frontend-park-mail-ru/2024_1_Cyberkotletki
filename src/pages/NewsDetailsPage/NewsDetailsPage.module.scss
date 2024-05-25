@@ -10,14 +10,24 @@
 }
 
 .item {
-    @include card-hover-effect;
 
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 320px;
+    //width: 320px;
     gap: var(--main-content-gap);
     align-items: flex-start;
+}
+
+.header {
+    display: flex;
+    gap: var(--main-content-gap);
+    align-items: center;
+
+    @include mobile {
+        flex-direction: column;
+        text-align: center;
+    }
 }
 
 .info {
@@ -33,18 +43,9 @@
 }
 
 .poster {
-    width: 320px !important;
+    width: 584px !important;
     min-width: 320px !important;
     aspect-ratio: 1;
     border-radius: var(--item-border-radius);
 
 }
-
-.badge {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    z-index: 2;
-}
-
-

@@ -24,10 +24,10 @@ class Routes {
 
     releases = () => `/releases` as const;
 
-    /*news = (id?: string | number) =>
-        `/news${isDefined(id) ? `/${id}` : ''}` as const;*/
+    news = (id?: string | number) =>
+        `/news${isDefined(id) ? `/${id}` : ''}` as const;
 
-    news = () => '/news' as const;
+    // news = () => '/news' as const;
 }
 
 

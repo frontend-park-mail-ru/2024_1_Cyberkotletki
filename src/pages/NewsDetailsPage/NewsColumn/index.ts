@@ -1,0 +1,1 @@
+export { NewsColumn } from './NewsColumn';

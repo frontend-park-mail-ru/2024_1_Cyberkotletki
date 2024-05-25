@@ -5,6 +5,8 @@ import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
 import { convertPreviewToFilm } from '@/utils';
+import {News} from "@/api/news/types.ts";
+import {newsService} from "@/api/news/service.ts";
 
 export interface FilmsByCollection {
     films?: Film[];
@@ -18,9 +20,11 @@ export interface ContentContextValues {
     filmsByCollection?: Record<string | number, FilmsByCollection>;
     personsMap: Record<number, PersonActor | undefined>;
     filmsMap: Record<number, Film | undefined>;
+    newsMap: Record<number, News | undefined>;
     getAllFilms?: () => Promise<Film[] | undefined>;
     loadFavouriteFilms?: () => Promise<Film[] | undefined>;
     loadFilmById?: (id: number) => Promise<Film | undefined>;
+    loadNewsById?: (id: number) => Promise<News | undefined>;
     loadPersonById?: (id: number) => Promise<PersonActor | undefined>;
     loadFilms: (typeId: number, page: number) => Promise<FilmsByCollection>;
     resetFavouriteFilms: () => void;
@@ -39,6 +43,7 @@ export class ContentProvider extends AppComponent<
     state: ContentContextValues = {
         filmsMap: {},
         personsMap: {},
+        newsMap: {},
         getAllFilms: () =>
             contentService.getAllFilms().then((response) => {
                 const films = response.filter(Boolean);
@@ -62,6 +67,23 @@ export class ContentProvider extends AppComponent<
                 }));
 
                 return film;
+            }),
+
+        loadNewsById: (id) =>
+            newsService.getNewsById(id).then((news) => {
+                console.log('News loaded:', news);
+                const newsMap = { ...this.state.newsMap, [id]: news };
+
+                this.setState((prev) => ({
+                    ...prev,
+                    news,
+                    newsMap,
+                }));
+
+                return news;
+            }).catch((error) => {
+                console.log('Error loading news:', error);
+                return undefined; // Explicitly return undefined
             }),
 
         loadPersonById: (id) =>
