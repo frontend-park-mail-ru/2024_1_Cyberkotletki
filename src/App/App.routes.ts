@@ -26,8 +26,6 @@ class Routes {
 
     news = (id?: string | number) =>
         `/news${isDefined(id) ? `/${id}` : ''}` as const;
-
-    // news = () => '/news' as const;
 }
 
 

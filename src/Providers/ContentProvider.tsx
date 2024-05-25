@@ -83,7 +83,7 @@ export class ContentProvider extends AppComponent<
                 return news;
             }).catch((error) => {
                 console.log('Error loading news:', error);
-                return undefined; // Explicitly return undefined
+                return undefined;
             }),
 
         loadPersonById: (id) =>

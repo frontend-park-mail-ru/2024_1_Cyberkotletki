@@ -85,7 +85,6 @@ class NewsService {
      * @returns {Promise<News[]>} Список новостей
      */
     async getAllNews(): Promise<News[]> {
-        console.log('getAllNews');
         const news = newsMock.map(news => ({...news, poster: news.pictureURL}));
         return news.length > 0 ? news : [];
     }
@@ -96,7 +95,6 @@ class NewsService {
      * @returns {Promise<News>} Новость
      */
     async getNewsById(id: number): Promise<News> {
-        console.log('getNewsById serv');
         const news = newsMock.find(news => news.id === id);
         return news ? Promise.resolve({...news, poster: news.pictureURL}) : Promise.reject('News not found'); // Added 'poster' property
     }
@@ -106,7 +104,6 @@ class NewsService {
      * @returns {Promise<News[]>} Список новостей
      */
     async getNearestNews(): Promise<News[]> {
-        console.log('getNearestNews');
         const news = newsMock.map(news => ({...news, poster: news.pictureURL}));
         return news.length > 0 ? news : [];
     }

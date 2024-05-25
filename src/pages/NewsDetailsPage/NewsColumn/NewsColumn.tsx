@@ -1,5 +1,5 @@
 import {concatClasses} from "@/utils";
-import styles from "@/pages/CollectionsPage/CollectionsPage.module.scss";
+import styles from "@/pages/NewsDetailsPage/NewsColumn/NewsColumn.module.scss";
 import {News} from "@/api/news/types.ts";
 import {AppComponent} from "@/core";
 import {newsService} from "@/api/news/service.ts";
