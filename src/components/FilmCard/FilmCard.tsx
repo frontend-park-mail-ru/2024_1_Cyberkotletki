@@ -32,11 +32,21 @@ export interface FilmCardProps
     withReleaseBadge?: boolean;
 }
 
+interface FilmCardState {
+    linkRef: App.RefObject<HTMLAnchorElement>;
+    handleCardClick: () => void;
+}
+
 const getYearFromDate = (date?: string) =>
     date ? new Date(date).getFullYear() : '';
 
-export class FilmCard extends AppComponent<FilmCardProps> {
-    linkRef: App.RefObject<HTMLAnchorElement> = { current: null };
+export class FilmCard extends AppComponent<FilmCardProps, FilmCardState> {
+    state: FilmCardState = {
+        linkRef: { current: null },
+        handleCardClick: () => {
+            this.state.linkRef.current?.click();
+        },
+    };
 
     render() {
         const {
@@ -58,9 +68,7 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                 })}
                 role={link ? 'button' : undefined}
                 tabIndex={link ? 0 : -1}
-                onClick={() => {
-                    this.linkRef.current?.click();
-                }}
+                onClick={this.state.handleCardClick}
                 onKeyDown={clickOnEnter}
             >
                 <article className={cx('article', { small: size === 'small' })}>
@@ -119,7 +127,11 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                         className={cx('card-info', { small: size === 'small' })}
                     >
                         {link ? (
-                            <Link href={link} tabIndex={-1} ref={this.linkRef}>
+                            <Link
+                                href={link}
+                                tabIndex={-1}
+                                ref={this.state.linkRef}
+                            >
                                 <h1 className={cx('title')} title={film?.title}>
                                     {film?.title}
                                 </h1>

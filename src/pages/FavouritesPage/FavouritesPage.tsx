@@ -57,8 +57,8 @@ class FavouritesPageInner extends AppComponent<
         const { isFirstLoading } = this.state;
 
         const favouriteContent =
-            this.props.context?.content?.favouriteFilms ||
-            this.state.favouriteContent;
+            this.state.favouriteContent ||
+            this.props.context?.content?.favouriteFilms;
 
         return (
             <LayoutWithHeader>

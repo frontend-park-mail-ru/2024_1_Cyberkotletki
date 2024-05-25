@@ -104,7 +104,9 @@ export class ContentProvider extends AppComponent<
         },
 
         loadFavouriteFilms: () =>
-            favouriteService.getMyFavourites().then((films) => {
+            favouriteService.getMyFavourites().then((filmsPreview) => {
+                const films = filmsPreview?.map(convertPreviewToFilm);
+
                 this.setState((prev) => ({
                     ...prev,
                     favouriteFilms: films,
