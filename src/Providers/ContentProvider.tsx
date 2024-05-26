@@ -1,5 +1,11 @@
 import { contentService } from '@/api/content/service';
-import type { Film, FilmsCompilation, PersonActor } from '@/api/content/types';
+import type {
+    Compilation,
+    CompilationType,
+    Film,
+    FilmsCompilation,
+    PersonActor,
+} from '@/api/content/types';
 import { favouriteService } from '@/api/favourite/favourite.service';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
@@ -18,6 +24,8 @@ export interface ContentContextValues {
     filmsByCollection?: Record<string | number, FilmsByCollection>;
     personsMap: Record<number, PersonActor | undefined>;
     filmsMap: Record<number, Film | undefined>;
+    compilationTypes?: CompilationType[];
+    compilations?: Compilation[];
     getAllFilms?: () => Promise<Film[] | undefined>;
     loadFavouriteFilms?: () => Promise<Film[] | undefined>;
     loadFilmById?: (id: number) => Promise<Film | undefined>;
@@ -27,6 +35,10 @@ export interface ContentContextValues {
         page: number,
     ) => Promise<FilmsByCollection>;
     resetFavouriteFilms: () => void;
+    loadCompilations?: () => Promise<{
+        compilationTypes?: CompilationType[];
+        compilations?: Compilation[];
+    }>;
 }
 
 export const ContentContext = new Context<AppContext>({});
@@ -111,6 +123,35 @@ export class ContentProvider extends AppComponent<
         resetFavouriteFilms: () => {
             this.setState((prev) => ({ ...prev, favouriteFilms: undefined }));
         },
+
+        loadCompilations: () =>
+            contentService
+                .getCompilationTypes()
+                .then(async (compilationsResponse) => {
+                    const compilationTypes =
+                        compilationsResponse?.compilation_types;
+
+                    const allCompilations = (
+                        await Promise.all(
+                            compilationsResponse?.compilation_types?.map(
+                                (compilation) =>
+                                    contentService.getCompilationByTypeId(
+                                        compilation.id!,
+                                    ),
+                            ) ?? [],
+                        )
+                    ).filter(Boolean);
+
+                    const compilations = allCompilations
+                        .map((compilation) => compilation.compilations)
+                        .flat()
+                        .filter(Boolean);
+
+                    this.state.compilationTypes = compilationTypes;
+                    this.state.compilations = compilations;
+
+                    return { compilations, compilationTypes };
+                }),
     };
 
     render() {
