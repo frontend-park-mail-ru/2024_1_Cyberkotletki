@@ -205,8 +205,6 @@ class FilmPageClass extends AppComponent<FilmPageProps, FilmPageState> {
         const profile =
             this.state.profile || this.props.context?.profile?.profile;
 
-        // console.log('INNER', this.props.context);
-
         switch (true) {
             case isNotFound:
                 return (

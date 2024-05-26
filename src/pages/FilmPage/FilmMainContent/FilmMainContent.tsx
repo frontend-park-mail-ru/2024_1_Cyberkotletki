@@ -57,8 +57,8 @@ class Backdrop extends AppComponent<BackdropProps, BackdropState> {
         this.loaded = true;
     };
 
-    componentShouldUpdate(): boolean {
-        return false;
+    componentShouldUpdate(newConfig: BackdropProps | null): boolean {
+        return newConfig?.src !== this.props.src;
     }
 
     render(): AppNode {
