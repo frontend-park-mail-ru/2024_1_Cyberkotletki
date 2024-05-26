@@ -2,13 +2,14 @@ import styles from './PersonPage.module.scss';
 
 import type { PersonActor } from '@/api/content/types.ts';
 import { AppComponent } from '@/core';
-import { concatClasses, isDefined } from '@/utils';
+import { concatClasses } from '@/utils';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
 import { NotFound } from '@/components/NotFound';
 import { PersonMainContent } from '@/pages/PersonPage/PersonMainContent';
 import { Spinner } from '@/components/Spinner';
 import { ContentContext } from '@/Providers/ContentProvider';
-import type { AppContext } from '@/types/Context.types';
+import type { AppContextComponentProps } from '@/types/Context.types';
+import type { ParamsProps } from '@/types/ParamsProps.types';
 
 const cx = concatClasses.bind(styles);
 
@@ -18,23 +19,21 @@ export interface PersonPageState {
     isLoading?: boolean;
 }
 
-class PersonPageInner extends AppComponent<
-    { context?: AppContext },
-    PersonPageState
-> {
+interface PersonPageProps extends AppContextComponentProps {
+    uid: number;
+}
+
+class PersonPageInner extends AppComponent<PersonPageProps, PersonPageState> {
     state: PersonPageState = { isLoading: false };
 
-    getPersonById = async () => {
-        const { params } =
-            (window.history.state as {
-                params?: { uid?: string };
-            }) ?? {};
+    loadPerson = async () => {
+        const personsMap = this.props.context?.content?.personsMap;
 
-        if (isDefined(params?.uid)) {
+        if (!personsMap?.[this.props.uid]) {
             this.setState((prev) => ({ ...prev, isLoading: true }));
 
             await this.props.context?.content
-                ?.loadPersonById?.(+params.uid)
+                ?.loadPersonById?.(this.props.uid)
                 .then((person) => {
                     this.setState((prev) => ({ ...prev, person }));
                 })
@@ -46,39 +45,27 @@ class PersonPageInner extends AppComponent<
                 });
 
             this.setState((prev) => ({ ...prev, isLoading: false }));
-
-            return;
         }
-
-        this.setState((prev) => ({
-            ...prev,
-            isNotFound: true,
-        }));
     };
 
     componentDidMount(): void {
-        const { params } =
-            (window.history.state as {
-                params?: { uid?: string };
-            }) ?? {};
+        void this.loadPerson();
+    }
 
-        const personsMap = this.props.context?.content?.personsMap;
-
-        if (!personsMap?.[Number(params?.uid)]) {
-            void this.getPersonById();
+    componentDidUpdate(
+        _: PersonPageState | null,
+        prevProps: PersonPageProps | null,
+    ): void {
+        if (prevProps?.uid !== this.props.uid) {
+            void this.loadPerson();
         }
     }
 
     render() {
-        const { params } =
-            (window.history.state as {
-                params?: { uid?: string };
-            }) ?? {};
-
         const { isLoading, isNotFound } = this.state;
 
         const person =
-            this.props.context?.content?.personsMap[Number(params?.uid)] ??
+            this.props.context?.content?.personsMap[this.props.uid] ??
             this.state.person;
 
         switch (true) {
@@ -96,11 +83,25 @@ class PersonPageInner extends AppComponent<
     }
 }
 
-class PersonPageClass extends AppComponent<{ context?: AppContext }> {
+class PersonPageClass extends AppComponent<
+    AppContextComponentProps & ParamsProps,
+    ParamsProps
+> {
+    componentDidUpdate(
+        _: object | null,
+        prevProps: (AppContextComponentProps & ParamsProps) | null,
+    ): void {
+        if (prevProps?.params?.uid !== this.props.params?.uid) {
+            this.setState((prev) => ({ ...prev, params: this.props.params }));
+        }
+    }
+
     render() {
+        const uid = Number((window.history.state as ParamsProps).params?.uid);
+
         return (
             <LayoutWithHeader>
-                <PersonPageInner context={this.props.context} />
+                <PersonPageInner context={this.props.context} uid={uid} />
             </LayoutWithHeader>
         );
     }

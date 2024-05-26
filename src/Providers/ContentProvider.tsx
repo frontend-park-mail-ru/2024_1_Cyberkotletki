@@ -67,10 +67,7 @@ export class ContentProvider extends AppComponent<
             contentService.getPersonById(id).then((person) => {
                 const personsMap = { ...this.state.personsMap, [id]: person };
 
-                this.setState((prev) => ({
-                    ...prev,
-                    personsMap,
-                }));
+                this.state.personsMap = personsMap;
 
                 return person;
             }),

@@ -19,16 +19,10 @@ export interface SearchPopupProps
 
 export class SearchPopup extends AppComponent<SearchPopupProps> {
     render() {
-        const { isLoading, className, isOpen, films, persons, ...props } =
-            this.props;
+        const { isLoading, className, films, persons, ...props } = this.props;
 
         return (
-            <Popover
-                className={cx('popup', className)}
-                isOpen={isOpen}
-                fixed
-                {...props}
-            >
+            <Popover className={cx('popup', className)} fixed {...props}>
                 <div className={cx('content', { loading: isLoading })}>
                     {!!films?.length && (
                         <section className={cx('section')}>
@@ -38,6 +32,7 @@ export class SearchPopup extends AppComponent<SearchPopupProps> {
                                     <SearchItem
                                         film={film}
                                         className={cx('search-item')}
+                                        onClick={props.onClose}
                                     />
                                 ))}
                             </div>
@@ -51,6 +46,7 @@ export class SearchPopup extends AppComponent<SearchPopupProps> {
                                     <SearchItem
                                         person={person}
                                         className={cx('search-item')}
+                                        onClick={props.onClose}
                                     />
                                 ))}
                             </div>

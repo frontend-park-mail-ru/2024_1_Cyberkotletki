@@ -29,6 +29,7 @@ export interface SearchInputProps
 
 export interface SearchInputState {
     isFocused?: boolean;
+    isPopupOpened?: boolean;
     value?: string;
     showPopover?: boolean;
     inputRef: App.RefObject<HTMLInputElement>;
@@ -38,7 +39,10 @@ export class SearchInput extends AppComponent<
     SearchInputProps,
     SearchInputState
 > {
-    state: SearchInputState = { inputRef: { current: null } };
+    state: SearchInputState = {
+        inputRef: { current: null },
+        isPopupOpened: true,
+    };
 
     handleSearchFocus = () => {
         this.setState((prev) => ({ ...prev, isFocused: true }));
@@ -73,9 +77,17 @@ export class SearchInput extends AppComponent<
         }
     }
 
+    handleOpen = () => {
+        this.setState((prev) => ({ ...prev, isPopupOpened: true }));
+    };
+
+    handleClose = () => {
+        this.setState((prev) => ({ ...prev, isPopupOpened: false }));
+    };
+
     render() {
         const { className, persons, films, isLoading, ...props } = this.props;
-        const { isFocused } = this.state;
+        const { isFocused, isPopupOpened } = this.state;
 
         return (
             <div
@@ -108,8 +120,10 @@ export class SearchInput extends AppComponent<
                             <Icon icon={icCloseUrl} />
                         </Button>
                         <SearchPopup
+                            isOpen={isPopupOpened}
+                            onOpen={this.handleOpen}
+                            onClose={this.handleClose}
                             id="search-popover"
-                            isOpen={isFocused}
                             isLoading={isLoading}
                             persons={persons}
                             films={films}

@@ -281,10 +281,7 @@ class FilmPageInner extends AppComponent<
     }
 
     render() {
-        const uid = Number(
-            this.state.params?.uid ||
-                (window.history.state as ParamsProps).params?.uid,
-        );
+        const uid = Number((window.history.state as ParamsProps).params?.uid);
 
         return <FilmPageClass context={this.props.context} uid={uid} />;
     }
