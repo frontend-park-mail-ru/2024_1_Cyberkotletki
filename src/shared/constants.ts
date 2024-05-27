@@ -25,10 +25,17 @@ class ConfigClass {
 
     BACKEND_STATIC_URL =
         process.env.NODE_ENV === 'production'
-            ? `${this.CDN_BACKEND_URL}/static`
-            : `${this.BACKEND_URL}/static`;
+            ? (`${this.CDN_BACKEND_URL}/static` as const)
+            : (`${this.BACKEND_URL}/static` as const);
 
     BACKEND_URL_API_PREFiX = process.env.BACKEND_URL_API_PREFiX ?? '';
+
+    private backendUrlObject = new URL(
+        `${this.BACKEND_URL}${this.BACKEND_URL_API_PREFiX}`,
+    );
+
+    WS_BACKEND_URL =
+        `${process.env.WEBSOCKET_SCHEME ?? 'ws'}://${this.backendUrlObject.host}${this.backendUrlObject.pathname}` as const;
 }
 
 export const Config = new ConfigClass();
@@ -70,3 +77,32 @@ export const MONTHS = [
     'Ноябрь',
     'Декабрь',
 ] as const;
+
+export const GENRES_MAP: Record<string, number> = {
+    драма: 33,
+    комедия: 34,
+    криминал: 35,
+    биография: 36,
+    фантастика: 37,
+    боевик: 38,
+    приключения: 39,
+    фэнтези: 40,
+    семейный: 41,
+    триллер: 42,
+    детектив: 43,
+    мультфильм: 44,
+    мелодрама: 45,
+    музыка: 46,
+    вестерн: 47,
+    военный: 48,
+    аниме: 49,
+    мюзикл: 50,
+    ужасы: 51,
+    история: 52,
+    документальный: 53,
+    спорт: 54,
+    детский: 55,
+    короткометражка: 56,
+    'фильм-нуар': 57,
+    'реальное ТВ': 58,
+};

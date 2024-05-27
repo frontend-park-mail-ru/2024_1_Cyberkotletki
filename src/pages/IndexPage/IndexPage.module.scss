@@ -1,0 +1,10 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--main-padding-2) * 2);
+}
+
+.card {
+    margin-block: var(--main-padding);
+    padding-inline: var(--main-padding);
+}

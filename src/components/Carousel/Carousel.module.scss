@@ -1,0 +1,111 @@
+.carousel {
+    --items-per-view: 1;
+    --items-per-view-tablet: var(--items-per-view);
+    --items-per-view-mobile: var(--items-per-view);
+
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    overflow-y: visible;
+    background-color: var(--absolute-op-10);
+    border-radius: var(--item-border-radius);
+
+    &::after,
+    &::before {
+        position: absolute;
+        top: 0;
+        z-index: 2;
+        width: 150px;
+        height: 100%;
+        border-radius: var(--item-border-radius);
+        opacity: 0;
+        transition: var(--item-transition-all);
+        content: '';
+        pointer-events: none;
+    }
+
+    &::after {
+        right: 0;
+        background: linear-gradient(
+            90deg,
+            transparent 0%,
+            var(--absolute-op-70) 100%
+        );
+    }
+
+    &::before {
+        left: 0;
+        background: linear-gradient(
+            270deg,
+            transparent 0%,
+            var(--absolute-op-70) 100%
+        );
+    }
+
+    &.can-next-scroll::after,
+    &.can-prev-scroll::before {
+        opacity: 1;
+    }
+}
+
+.control-button {
+    position: absolute;
+    top: 50%;
+    z-index: 3;
+    height: fit-content;
+    background-color: var(--light-op-50) !important;
+    border: 0 none;
+    border-radius: 50%;
+    backdrop-filter: blur(4px);
+
+    &.prev {
+        left: var(--small-padding);
+        transform: translateY(-50%) rotate(180deg) !important;
+    }
+
+    &.next {
+        right: var(--small-padding);
+        transform: translateY(-50%) !important;
+    }
+
+    &.hidden {
+        cursor: auto;
+        opacity: 0;
+    }
+}
+
+.scroll-container {
+    display: flex;
+    width: 100%;
+    overflow: auto visible;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+
+    @include no-scrollbar;
+
+    > * {
+        flex-basis: calc(100% / var(--items-per-view));
+        flex-shrink: 0;
+        max-width: calc(100% / var(--items-per-view));
+        scroll-snap-align: start;
+    }
+
+    @include tablet {
+        > * {
+            flex-basis: calc(100% / var(--items-per-view-tablet));
+            max-width: calc(100% / var(--items-per-view-tablet));
+        }
+    }
+
+    @include mobile {
+        > * {
+            flex-basis: calc(100% / var(--items-per-view-mobile));
+            max-width: calc(100% / var(--items-per-view-mobile));
+        }
+    }
+}
+
+.play-icon {
+    margin-inline-start: 4px;
+}

@@ -1,54 +1,32 @@
-.content {
-    margin: 0;
+.container {
+    display: flex;
+    flex-direction: column;
 }
 
 .reviews-block {
-    margin-block-start: calc(var(--large-padding) * 10);
-
-    @include mobile {
-        margin-block-start: calc(var(--large-padding) * 5);
-    }
-
-    h1 {
-        @include text-header-4;
-    }
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 100%;
 }
 
 .write-review-block {
     max-width: 520px;
     margin-block-start: calc(var(--main-padding-2) * 2);
 
-    h1 {
-        margin-block-end: var(--main-content-offset);
-
-        @include text-header-4;
-    }
-
     @include mobile {
         max-width: 100%;
     }
 }
 
-.reviews-list {
-    margin-block-start: var(--main-padding-2);
+.bottom-block {
     display: flex;
-    flex-direction: column;
+    margin-block-start: calc(var(--main-padding-2) * 5);
     gap: var(--main-padding-2);
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
-.review-card {
-    position: relative;
-    padding-block-end: var(--main-padding);
-
-    &::after {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        width: calc(100% - 2 * var(--main-padding-2));
-        height: 1px;
-        background-color: var(--secondary-gray);
-        transform: translateX(-50%);
-        opacity: 0.5;
-        content: '';
-    }
+.similar-list {
+    margin-block-start: calc(var(--main-padding-2) * 2);
 }

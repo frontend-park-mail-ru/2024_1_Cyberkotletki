@@ -1,0 +1,44 @@
+.modal-content {
+    position: relative;
+    padding: var(--main-content-gap) var(--large-padding);
+    background: transparent;
+    background-color: transparent;
+    border: 1px solid var(--secondary-gray-op-30);
+    border-radius: var(--card-border-radius);
+}
+
+.modal {
+    z-index: calc(var(--header-z-index) + 1);
+    background: var(--background) !important;
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--modal-shadow) !important;
+    margin-block-start: var(--main-padding);
+    margin-inline-end: var(--main-padding);
+
+    @include mobile {
+        margin-block-start: 0;
+        margin-inline: auto;
+    }
+}
+
+.buttons-container {
+    display: flex;
+    gap: var(--main-content-offset);
+    justify-content: center;
+    margin-block-start: var(--main-content-offset);
+
+    button {
+        flex-grow: 1;
+        width: auto !important;
+    }
+}
+
+.text {
+    @include text-primary;
+}
+
+.main-info {
+    display: flex;
+    gap: var(--small-padding);
+    align-items: center;
+}

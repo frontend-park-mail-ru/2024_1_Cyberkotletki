@@ -2,7 +2,7 @@ import styles from './FilmMainContent.module.scss';
 
 import { routes } from '@/App/App.routes';
 import type { Film } from '@/api/content/types';
-import { icStarOutlinedUrl } from '@/assets/icons';
+import { icBellUrl, icStarOutlinedUrl } from '@/assets/icons';
 import { Button } from '@/components/Button';
 import { FilmPoster } from '@/components/FilmPoster';
 import { Icon } from '@/components/Icon';
@@ -23,13 +23,16 @@ export interface FilmMainContentProps {
     onFavouriteClick?: (film?: Film) => void;
     addedToFavourite?: boolean;
     withFavButton?: boolean;
+    withBellButton?: boolean;
+    onBellClick?: (film?: Film) => void;
+    subscribed?: boolean;
 }
 
 export interface FilmMainContentState {
     backdropRef: App.RefObject<HTMLDivElement>;
 }
 
-const scrollToReviewForm = () => {
+export const scrollToReviewForm = () => {
     document.getElementById(REVIEW_FORM_ID)?.scrollIntoView({
         behavior: 'smooth',
     });
@@ -57,8 +60,8 @@ class Backdrop extends AppComponent<BackdropProps, BackdropState> {
         this.loaded = true;
     };
 
-    componentShouldUpdate(): boolean {
-        return false;
+    componentShouldUpdate(newConfig: BackdropProps | null): boolean {
+        return newConfig?.src !== this.props.src;
     }
 
     render(): AppNode {
@@ -103,8 +106,19 @@ export class FilmMainContent extends AppComponent<
     }
 
     render() {
-        const { film, onFavouriteClick, addedToFavourite, withFavButton } =
-            this.props;
+        const {
+            film,
+            onFavouriteClick,
+            addedToFavourite,
+            withFavButton,
+            withBellButton,
+            onBellClick,
+            subscribed,
+        } = this.props;
+
+        const showRatingBlock = !film?.ongoing;
+
+        const subTitle = film?.type === 'movie' ? 'фильм' : 'сериал';
 
         return (
             <div className={cx('content')}>
@@ -119,26 +133,60 @@ export class FilmMainContent extends AppComponent<
                         loading="eager"
                     />
                     <h1 className={cx('title', 'hide-on-desktop')}>
-                        {film?.title}
+                        {film?.title} {subTitle}
                     </h1>
-                    {withFavButton && (
-                        <Button
-                            outlined
-                            styleType="secondary"
-                            onClick={() => {
-                                onFavouriteClick?.(film);
-                            }}
-                            className={cx('fav-button')}
-                        >
-                            <Icon
-                                icon={icStarOutlinedUrl}
-                                className={cx('icon', {
-                                    added: addedToFavourite,
-                                })}
-                            />
-                            {addedToFavourite ? 'В избранном' : 'В избранное'}
-                        </Button>
+                    <p className={cx('subtitle', 'hide-on-desktop')}>
+                        {subTitle}
+                    </p>
+                    {(withFavButton || withBellButton) && (
+                        <div className={cx('buttons-container')}>
+                            {withFavButton && (
+                                <Button
+                                    outlined
+                                    styleType="secondary"
+                                    onClick={() => {
+                                        onFavouriteClick?.(film);
+                                    }}
+                                    className={cx('fav-button', {
+                                        added: addedToFavourite,
+                                    })}
+                                >
+                                    <Icon
+                                        icon={icStarOutlinedUrl}
+                                        className={cx('icon', {
+                                            added: addedToFavourite,
+                                        })}
+                                    />
+                                    {addedToFavourite
+                                        ? 'в избранном'
+                                        : 'добавить в избранное'}
+                                </Button>
+                            )}
+                            {withBellButton && (
+                                <Button
+                                    isIconOnly
+                                    styleType="secondary"
+                                    outlined
+                                    className={cx('bell-button', {
+                                        subscribed,
+                                    })}
+                                    title="Уведомить о выходе релиза"
+                                    onClick={() => {
+                                        onBellClick?.(film);
+                                    }}
+                                >
+                                    <Icon
+                                        icon={icBellUrl}
+                                        className={cx('bell-icon')}
+                                    />
+                                    <div className="hide-on-desktop">
+                                        Уведомить о выходе релиза
+                                    </div>
+                                </Button>
+                            )}
+                        </div>
                     )}
+
                     {film?.trailerLink && (
                         <section>
                             <YouTubeIframe
@@ -156,21 +204,26 @@ export class FilmMainContent extends AppComponent<
                             <h1 className={cx('title', 'hide-on-mobile')}>
                                 {film?.title}
                             </h1>
+                            <p className={cx('subtitle', 'hide-on-mobile')}>
+                                {subTitle}
+                            </p>
                             <FilmInfoTable
                                 film={film}
                                 className={cx('info-table')}
                             />
                         </section>
                         <div className={cx('right-container')}>
-                            <div className={cx('rating-container')}>
-                                <Rating
-                                    rating={film?.rating}
-                                    imdbRating={film?.imdbRating}
-                                />
-                                <Button onClick={scrollToReviewForm}>
-                                    Оценить
-                                </Button>
-                            </div>
+                            {showRatingBlock && (
+                                <div className={cx('rating-container')}>
+                                    <Rating
+                                        rating={film?.rating}
+                                        imdbRating={film?.imdbRating}
+                                    />
+                                    <Button onClick={scrollToReviewForm}>
+                                        Оценить
+                                    </Button>
+                                </div>
+                            )}
                             {!!film?.actors?.length && (
                                 <section className={cx('roles-section')}>
                                     <h1>В главных ролях:</h1>

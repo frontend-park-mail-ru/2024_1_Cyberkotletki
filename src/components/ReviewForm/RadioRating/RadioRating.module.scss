@@ -65,16 +65,26 @@
 
 @mixin nth-child-states($position: 0) {
     &:has(input:checked),
-    &:hover,
     &:focus-visible {
         &:nth-child(#{$position}) {
             @content;
         }
     }
 
-    &:has(~ .value:nth-child(#{$position}):hover),
     &:has(~ .value:nth-child(#{$position}):focus-visible) {
         @content;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            &:nth-child(#{$position}) {
+                @content;
+            }
+        }
+
+        &:has(~ .value:nth-child(#{$position}):hover) {
+            @content;
+        }
     }
 }
 

@@ -1,0 +1,15 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: var(--main-padding-2);
+
+    h1 {
+        @include text-header-4;
+    }
+}
+
+.card {
+    margin-block: var(--main-padding);
+    padding-inline: var(--main-padding);
+}

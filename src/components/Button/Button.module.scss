@@ -118,7 +118,7 @@
         }
     }
 
-    &:hover {
+    @include hover {
         background-color: var(--button-hover-color);
         background-size: 150%;
         transform: scale(1.01);

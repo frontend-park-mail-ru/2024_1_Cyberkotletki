@@ -110,11 +110,6 @@
     font-weight: bold;
 }
 
-.fav-button {
-    margin-block-start: var(--main-padding);
-    z-index: 2;
-}
-
 .backdrop {
     position: absolute;
     top: 0;
@@ -229,5 +224,61 @@
             fill: var(--yellow);
             stroke: var(--yellow);
         }
+    }
+}
+
+.bell-button {
+    display: flex;
+
+    svg {
+        /* stylelint-disable-next-line no-descending-specificity */
+        path {
+            transition: var(--item-transition-all);
+            fill: transparent;
+            stroke: var(--text-color);
+        }
+    }
+
+    &.subscribed {
+        svg path {
+            fill: var(--yellow);
+            stroke: var(--yellow);
+        }
+    }
+
+    @include mobile {
+        --button-size: 100% !important;
+    }
+}
+
+.bell-icon {
+    height: 100%;
+}
+
+.subtitle {
+    color: var(--light-gray);
+    margin-block-start: var(--small-padding);
+
+    @include mobile {
+        text-align: center;
+    }
+
+    @include text-header-5;
+}
+
+.buttons-container {
+    display: flex;
+    gap: var(--small-padding);
+    align-items: center;
+    margin-block-start: var(--main-padding);
+    justify-content: space-between;
+
+    > * {
+        z-index: 2;
+    }
+
+    @include mobile {
+        flex-direction: column;
+        gap: var(--main-padding-2);
     }
 }

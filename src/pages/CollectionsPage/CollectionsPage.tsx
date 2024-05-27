@@ -1,6 +1,6 @@
 import styles from './CollectionsPage.module.scss';
 
-import { contentService } from '@/api/content/service';
+import { ContentContext } from '@/Providers/ContentProvider';
 import type { Compilation, CompilationType } from '@/api/content/types';
 import { Button } from '@/components/Button';
 import { CompilationItem } from '@/components/CompilationItem';
@@ -9,6 +9,7 @@ import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
 import { LayoutGrid } from '@/layouts/LayoutGrid';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
+import type { AppContextComponentProps } from '@/types/Context.types';
 import { concatClasses, createQueryParams, isDefined } from '@/utils';
 
 const cx = concatClasses.bind(styles);
@@ -22,78 +23,81 @@ export interface CollectionsPageState {
 
 const SEARCH_PARAM_TYPE = 'type';
 
-export class CollectionsPage extends AppComponent<
-    object,
+export class CollectionsPageInner extends AppComponent<
+    AppContextComponentProps,
     CollectionsPageState
 > {
-    componentDidMount(): void {
-        this.setState((prev) => ({ ...prev, isLoading: true }));
-        void contentService
-            .getCompilationTypes()
-            .then(async (compilations) => {
-                this.setState((prev) => ({
-                    ...prev,
-                    compilationTypes: compilations?.compilation_types,
-                }));
+    loadAllData = async () => {
+        const { compilationTypes, compilations, loadCompilations } =
+            this.props.context?.content ?? {};
 
-                const allCompilations = (
-                    await Promise.all(
-                        compilations?.compilation_types?.map((compilation) =>
-                            contentService.getCompilationByTypeId(
-                                compilation.id!,
-                            ),
-                        ) ?? [],
-                    )
-                ).filter(Boolean);
+        if (!compilationTypes || !compilations) {
+            this.setState((prev) => ({ ...prev, isLoading: true }));
 
-                this.setState((prev) => ({
-                    ...prev,
-                    compilations: allCompilations
-                        .map((compilation) => compilation.compilations)
-                        .flat()
-                        .filter(Boolean),
-                }));
+            await loadCompilations?.()
+                .then(({ compilationTypes, compilations }) => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        compilationTypes,
+                        compilations,
+                    }));
+                })
+                .finally(() => {
+                    this.setState((prev) => ({ ...prev, isLoading: false }));
+                });
+        }
+    };
 
-                const searchType = Number(
-                    new URLSearchParams(window.location.search).get(
-                        SEARCH_PARAM_TYPE,
-                    ),
-                );
+    componentDidMount() {
+        void this.loadAllData().then(() => {
+            const searchType = Number(
+                new URLSearchParams(window.location.search).get(
+                    SEARCH_PARAM_TYPE,
+                ),
+            );
 
-                this.handleTypeChange(searchType || undefined);
-            })
-            .finally(() => {
-                this.setState((prev) => ({ ...prev, isLoading: false }));
-            });
+            this.handleTypeChange(searchType || undefined);
+        });
     }
 
     handleTypeChange = (typeId?: number) => {
+        const compilations =
+            this.state.compilations ??
+            this.props.context?.content?.compilations;
+
         if (isDefined(typeId)) {
             window.history.replaceState(
-                {},
+                window.history.state,
                 '',
                 createQueryParams({ [SEARCH_PARAM_TYPE]: typeId }),
             );
 
             this.setState((prev) => ({
                 ...prev,
-                filteredCompilations: this.state.compilations?.filter(
+                filteredCompilations: compilations?.filter(
                     (compilation) => compilation.compilation_type_id === typeId,
                 ),
             }));
         } else {
-            window.history.replaceState({}, '', window.location.pathname);
+            window.history.replaceState(
+                window.history.state,
+                '',
+                window.location.pathname,
+            );
 
             this.setState((prev) => ({
                 ...prev,
-                filteredCompilations: this.state.compilations,
+                filteredCompilations: compilations,
             }));
         }
     };
 
     render(): AppNode {
-        const { compilationTypes, filteredCompilations, isLoading } =
-            this.state;
+        const { filteredCompilations, isLoading } = this.state;
+
+        const compilationTypes =
+            this.state.compilationTypes ??
+            this.props.context?.content?.compilationTypes;
 
         const searchType = Number(
             new URLSearchParams(window.location.search).get(SEARCH_PARAM_TYPE),
@@ -145,3 +149,11 @@ export class CollectionsPage extends AppComponent<
         );
     }
 }
+
+class CollectionsPageClass extends AppComponent<AppContextComponentProps> {
+    render() {
+        return <CollectionsPageInner context={this.props.context} />;
+    }
+}
+
+export const CollectionsPage = ContentContext.Connect(CollectionsPageClass);

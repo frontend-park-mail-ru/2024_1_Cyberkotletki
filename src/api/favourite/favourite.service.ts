@@ -5,7 +5,6 @@ import type {
     FavouriteStatus,
 } from './favourite.types';
 
-import { contentService } from '@/api/content/service';
 import { appFetch } from '@/api/appFetch.ts';
 
 class FavouriteService {
@@ -31,13 +30,9 @@ class FavouriteService {
             favoriteRoutes.favouriteMy(),
         );
 
-        return (
-            await Promise.all(
-                favourites.favourites?.map(({ contentID }) =>
-                    contentService.getFilmById(contentID ?? 0),
-                ) ?? [],
-            )
-        ).filter(Boolean);
+        return favourites.favourites
+            ?.map(({ content }) => content)
+            .filter(Boolean);
     }
 
     /**

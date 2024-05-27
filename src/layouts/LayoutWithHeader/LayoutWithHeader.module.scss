@@ -22,15 +22,16 @@
     width: 100%;
     max-width: var(--max-content-width);
     height: 100%;
-    padding-block: calc(2 * var(--main-content-offset))
-        calc(4 * var(--main-content-offset));
-    padding-inline: var(--main-content-padding);
     background-color: var(--absolute-op-10);
     box-shadow:
         rgb(0 0 0 / 5%) 0 6px 24px 0,
         rgb(0 0 0 / 8%) 0 0 0 1px;
+    padding-block: calc(2 * var(--main-content-offset))
+        calc(4 * var(--main-content-offset));
+    padding-inline: var(--main-content-padding);
 
     > * {
+        max-width: 100%;
         animation: fade-in-opacity 300ms ease-in-out;
     }
 

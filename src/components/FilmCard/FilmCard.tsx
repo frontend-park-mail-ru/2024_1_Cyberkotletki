@@ -32,11 +32,21 @@ export interface FilmCardProps
     withReleaseBadge?: boolean;
 }
 
+interface FilmCardState {
+    linkRef: App.RefObject<HTMLAnchorElement>;
+    handleCardClick: () => void;
+}
+
 const getYearFromDate = (date?: string) =>
     date ? new Date(date).getFullYear() : '';
 
-export class FilmCard extends AppComponent<FilmCardProps> {
-    linkRef: App.RefObject<HTMLAnchorElement> = { current: null };
+export class FilmCard extends AppComponent<FilmCardProps, FilmCardState> {
+    state: FilmCardState = {
+        linkRef: { current: null },
+        handleCardClick: () => {
+            this.state.linkRef.current?.click();
+        },
+    };
 
     render() {
         const {
@@ -47,8 +57,20 @@ export class FilmCard extends AppComponent<FilmCardProps> {
             onDeleteClick,
             link = routes.film(film?.id ?? 0),
             withReleaseBadge,
+
             ...props
         } = this.props;
+
+        const showRatingBadge =
+            !withReleaseBadge &&
+            isDefined(film?.rating) &&
+            (!film?.ongoing || !!film.rating);
+
+        const releaseMoveDate = film?.movie?.release;
+        const releaseSerialYear = `${film?.series?.yearStart ?? ''}`;
+
+        const releaseDate =
+            film?.type === 'movie' ? releaseMoveDate : releaseSerialYear;
 
         return (
             <div
@@ -58,9 +80,7 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                 })}
                 role={link ? 'button' : undefined}
                 tabIndex={link ? 0 : -1}
-                onClick={() => {
-                    this.linkRef.current?.click();
-                }}
+                onClick={this.state.handleCardClick}
                 onKeyDown={clickOnEnter}
             >
                 <article className={cx('article', { small: size === 'small' })}>
@@ -86,11 +106,11 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                         )}
                         {withReleaseBadge && (
                             <ReleaseBadge
-                                date={film?.movie?.release}
+                                date={film?.ongoingDate}
                                 className={cx('badge')}
                             />
                         )}
-                        {!withReleaseBadge && isDefined(film?.rating) && (
+                        {showRatingBadge && (
                             <RatingBadge
                                 rating={film?.rating}
                                 className={cx('badge')}
@@ -119,7 +139,11 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                         className={cx('card-info', { small: size === 'small' })}
                     >
                         {link ? (
-                            <Link href={link} tabIndex={-1} ref={this.linkRef}>
+                            <Link
+                                href={link}
+                                tabIndex={-1}
+                                ref={this.state.linkRef}
+                            >
                                 <h1 className={cx('title')} title={film?.title}>
                                     {film?.title}
                                 </h1>
@@ -134,10 +158,7 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                                 <span className={cx('bright')}>
                                     {[
                                         film?.originalTitle || '',
-                                        getYearFromDate(
-                                            film?.movie?.release ||
-                                                film?.movie?.premiere,
-                                        ),
+                                        getYearFromDate(releaseDate),
                                         film?.movie?.duration
                                             ? `${film?.movie?.duration} мин.`
                                             : '',
@@ -172,13 +193,8 @@ export class FilmCard extends AppComponent<FilmCardProps> {
                         ) : (
                             <div className={cx('info', 'small')}>
                                 {[
-                                    film?.movie?.release ||
-                                    film?.movie?.premiere
-                                        ? new Date(
-                                              (film?.movie?.release ||
-                                                  film?.movie?.premiere) ??
-                                                  '',
-                                          ).getFullYear()
+                                    releaseDate
+                                        ? new Date(releaseDate).getFullYear()
                                         : '',
                                     ...(film?.genres ?? []),
                                 ]

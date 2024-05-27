@@ -12,6 +12,9 @@
 
     /* Font */
     --font-size: 14px;
+
+    line-height: 125%;
+
     --font-family: 'Wix Madefor Display', arial, helvetica, sans-serif;
 
     /* Variables  */
@@ -54,12 +57,21 @@
     --violet-black-rgb: 15 17 21; // #0f1115
     --violet-rgb: 111 90 255; // #6f5aff
     --error-red-rgb: 237 10 52; // #ed0a34
+    --light-rgb: 240 241 243; // #f0f1f3;
 
     /* Colors */
     --absolute: rgb(var(--absolute-rgb));
     --absolute-op-10: rgb(var(--absolute-rgb) / 10%);
     --absolute-op-20: rgb(var(--absolute-rgb) / 20%);
     --absolute-op-30: rgb(var(--absolute-rgb) / 30%);
+    --absolute-op-40: rgb(var(--absolute-rgb) / 40%);
+    --absolute-op-50: rgb(var(--absolute-rgb) / 50%);
+    --absolute-op-60: rgb(var(--absolute-rgb) / 60%);
+    --absolute-op-70: rgb(var(--absolute-rgb) / 70%);
+    --absolute-op-80: rgb(var(--absolute-rgb) / 80%);
+    --absolute-op-90: rgb(var(--absolute-rgb) / 90%);
+    --light: rgb(var(--light-rgb));
+    --light-op-50: rgb(var(--light-rgb) / 50%);
     --black: #0f1014;
     --logo-black: rgb(var(--logo-black-rgb));
     --white: #ffffff;

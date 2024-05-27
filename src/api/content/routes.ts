@@ -28,13 +28,21 @@ class ContentRoutes {
     search = (searchString: string) =>
         `${this.SEARCH_PREFIX}${createQueryParams({ query: searchString })}` as const;
 
-    ongoingNearest = (limit?: number) =>
-        `${this.ONGOING_PREFIX}/nearest${createQueryParams({ limit })}` as const;
+    ongoingNearest = () => `${this.ONGOING_PREFIX}/nearest` as const;
 
     ongoingYears = () => `${this.ONGOING_PREFIX}/years` as const;
 
     ongoing = (id?: number | string, month?: number | string) =>
         `${this.ONGOING_PREFIX}${isDefined(id) ? `/${id}` : ''}${isDefined(month) ? `/${month}` : ''}` as const;
+
+    ongoingSubscribe = (id: number | string) =>
+        `${this.ONGOING_PREFIX}/${id}/subscribe` as const;
+
+    ongoingSubscriptions = () =>
+        `${this.ONGOING_PREFIX}/subscriptions` as const;
+
+    ongoingIsReleased = (id: number | string) =>
+        `${this.ONGOING_PREFIX}/${id}/is_released` as const;
 }
 
 export const contentRoutes = new ContentRoutes();

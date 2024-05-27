@@ -1,10 +1,18 @@
 import { contentService } from '@/api/content/service';
-import type { Film, FilmsCompilation, PersonActor } from '@/api/content/types';
+import type {
+    Compilation,
+    CompilationType,
+    Film,
+    FilmsCompilation,
+    PersonActor,
+} from '@/api/content/types';
 import { favouriteService } from '@/api/favourite/favourite.service';
+import { reviewService } from '@/api/review/service';
+import type { ReviewDetails } from '@/api/review/types';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
-import { convertPreviewToFilm } from '@/utils';
+import { convertPreviewToFilm, convertReleaseToFilm } from '@/utils';
 
 export interface FilmsByCollection {
     films?: Film[];
@@ -18,12 +26,25 @@ export interface ContentContextValues {
     filmsByCollection?: Record<string | number, FilmsByCollection>;
     personsMap: Record<number, PersonActor | undefined>;
     filmsMap: Record<number, Film | undefined>;
+    compilationTypes?: CompilationType[];
+    compilations?: Compilation[];
+    nearestReleases?: Film[];
+    recentReviews?: ReviewDetails[];
     getAllFilms?: () => Promise<Film[] | undefined>;
     loadFavouriteFilms?: () => Promise<Film[] | undefined>;
     loadFilmById?: (id: number) => Promise<Film | undefined>;
     loadPersonById?: (id: number) => Promise<PersonActor | undefined>;
-    loadFilms: (typeId: number, page: number) => Promise<FilmsByCollection>;
+    loadCollectionFilms: (
+        typeId: number,
+        page: number,
+    ) => Promise<FilmsByCollection>;
     resetFavouriteFilms: () => void;
+    loadCompilations?: () => Promise<{
+        compilationTypes?: CompilationType[];
+        compilations?: Compilation[];
+    }>;
+    loadNearestReleases: () => Promise<Film[] | undefined>;
+    loadRecentReviews: () => Promise<ReviewDetails[] | undefined>;
 }
 
 export const ContentContext = new Context<AppContext>({});
@@ -55,11 +76,7 @@ export class ContentProvider extends AppComponent<
             contentService.getFilmById(id).then((film) => {
                 const filmsMap = { ...this.state.filmsMap, [id]: film };
 
-                this.setState((prev) => ({
-                    ...prev,
-                    film,
-                    filmsMap,
-                }));
+                this.state.filmsMap = filmsMap;
 
                 return film;
             }),
@@ -68,15 +85,12 @@ export class ContentProvider extends AppComponent<
             contentService.getPersonById(id).then((person) => {
                 const personsMap = { ...this.state.personsMap, [id]: person };
 
-                this.setState((prev) => ({
-                    ...prev,
-                    personsMap,
-                }));
+                this.state.personsMap = personsMap;
 
                 return person;
             }),
 
-        loadFilms: async (typeId: number, page: number) => {
+        loadCollectionFilms: async (typeId: number, page: number) => {
             const filmsCompilation =
                 await contentService.getFilmsByCompilationId(typeId, page);
 
@@ -101,7 +115,9 @@ export class ContentProvider extends AppComponent<
         },
 
         loadFavouriteFilms: () =>
-            favouriteService.getMyFavourites().then((films) => {
+            favouriteService.getMyFavourites().then((filmsPreview) => {
+                const films = filmsPreview?.map(convertPreviewToFilm);
+
                 this.setState((prev) => ({
                     ...prev,
                     favouriteFilms: films,
@@ -113,6 +129,51 @@ export class ContentProvider extends AppComponent<
         resetFavouriteFilms: () => {
             this.setState((prev) => ({ ...prev, favouriteFilms: undefined }));
         },
+
+        loadCompilations: () =>
+            contentService
+                .getCompilationTypes()
+                .then(async (compilationsResponse) => {
+                    const compilationTypes =
+                        compilationsResponse?.compilation_types;
+
+                    const allCompilations = (
+                        await Promise.all(
+                            compilationsResponse?.compilation_types?.map(
+                                (compilation) =>
+                                    contentService.getCompilationByTypeId(
+                                        compilation.id!,
+                                    ),
+                            ) ?? [],
+                        )
+                    ).filter(Boolean);
+
+                    const compilations = allCompilations
+                        .map((compilation) => compilation.compilations)
+                        .flat()
+                        .filter(Boolean);
+
+                    this.state.compilationTypes = compilationTypes;
+                    this.state.compilations = compilations;
+
+                    return { compilations, compilationTypes };
+                }),
+        loadNearestReleases: () =>
+            contentService.getNearestReleases().then((response) => {
+                const films =
+                    response?.ongoing_content_list?.map(convertReleaseToFilm);
+
+                this.state.nearestReleases = films;
+
+                return films;
+            }),
+
+        loadRecentReviews: () =>
+            reviewService.getRecentReviews().then((response) => {
+                this.state.recentReviews = response?.reviews;
+
+                return response?.reviews;
+            }),
     };
 
     render() {

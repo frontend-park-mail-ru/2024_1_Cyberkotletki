@@ -1,3 +1,5 @@
+export type ContentType = 'movie' | 'series';
+
 export interface Person {
     enName?: string;
     id?: number;
@@ -31,6 +33,15 @@ export interface Series {
     yearStart?: number;
 }
 
+export interface SimilarContent {
+    genre: string[];
+    id: number;
+    poster: string;
+    rating: number;
+    title: string;
+    type: ContentType;
+}
+
 export interface Film {
     id?: number;
     actors?: Person[];
@@ -55,11 +66,14 @@ export interface Film {
     series?: Series;
     slogan?: string;
     title?: string;
-    type?: 'movie' | 'series';
+    type?: ContentType;
     writers?: Person[];
     facts?: string[];
     picturesURL?: string[];
     trailerLink?: string;
+    similarContent?: SimilarContent[];
+    ongoing?: boolean;
+    ongoingDate?: string;
 }
 
 export interface FilmPreview {
@@ -72,9 +86,13 @@ export interface FilmPreview {
     originalTitle?: string;
     poster?: string;
     rating?: number;
-    release?: number;
     title?: string;
-    type?: Film['type'];
+    type?: ContentType;
+    ongoing?: boolean;
+    ongoingDate?: string;
+    release?: number;
+    yearEnd: number;
+    yearStart: number;
 }
 
 export interface ActorRole {
@@ -84,7 +102,7 @@ export interface ActorRole {
     rating?: number;
     releaseYear?: number;
     title?: string;
-    type?: Film['type'];
+    type?: ContentType;
     yearEnd?: number;
     yearStart?: number;
 }
@@ -148,7 +166,7 @@ export interface SearchContent {
     rating?: number;
     seasonsNumber?: number;
     title?: string;
-    type?: Film['type'];
+    type?: ContentType;
     yearEnd?: number;
     yearStart?: number;
 }
@@ -166,13 +184,19 @@ export interface SearchResponse {
 }
 
 export interface Release {
-    genre?: string[];
+    actors?: string[];
+    country?: string;
+    director?: string;
+    genre?: string;
     id?: number;
-    poster?: string;
+    ongoing?: boolean;
     /** 2022-01-02T15:04:05Z */
-    releaseDate?: string;
+    ongoingDate?: string;
+    originalTitle?: string;
+    poster?: string;
+    rating?: number;
     title?: string;
-    type?: Film['type'];
+    type?: ContentType;
 }
 
 export interface ReleaseResponse {
@@ -181,4 +205,8 @@ export interface ReleaseResponse {
 
 export interface ReleaseYearsResponse {
     years?: number[];
+}
+
+export interface SubscriptionsResponse {
+    subscriptions?: number[];
 }

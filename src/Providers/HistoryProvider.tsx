@@ -3,13 +3,13 @@ import { isRoutesMatch } from '@/Providers/isRoutesMatch';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
-import { isEqual } from '@/utils/isEqual';
+import type { ParamsProps } from '@/types/ParamsProps.types';
 
 export interface HistoryContextValues {
     changeRoute: (
         path: string,
-        safeScroll?: boolean,
         replace?: boolean,
+        changeState?: boolean,
     ) => void;
 }
 
@@ -41,6 +41,8 @@ const scrollToTop = () => {
     });
 };
 
+const removeEdgeSlashes = (str: string) => str.replace(EDGE_SLASHES_REGEXP, '');
+
 export class HistoryProvider extends AppComponent<
     HistoryProviderProps,
     HistoryProviderState
@@ -56,50 +58,65 @@ export class HistoryProvider extends AppComponent<
                 route,
             );
         });
-
-        const { pathname } = window.location;
-
-        this.handleChangeRoute(pathname, true);
-
-        window.addEventListener('popstate', this.listener);
     }
 
     handleChangeRoute = (
         path: string,
-        safeScroll?: boolean,
         replace?: boolean,
+        changeState = true,
     ) => {
         const { pathname } = window.location;
 
-        const pathnameWithoutEdgeSlashes = pathname.replace(
-            EDGE_SLASHES_REGEXP,
-            '',
-        );
-        const pathWithoutEdgeSlashes = path
-            .replace(EDGE_SLASHES_REGEXP, '')
+        const pathnameWithoutEdgeSlashes = removeEdgeSlashes(pathname);
+        const pathWithoutEdgeSlashes = removeEdgeSlashes(path)
             .split(`?`)[0]
             .split(`#`)[0];
 
         if (pathnameWithoutEdgeSlashes !== pathWithoutEdgeSlashes) {
-            if (replace) {
-                window.history.replaceState(window.history.state, '', path);
-            } else {
-                window.history.pushState(window.history.state, '', path);
+            if (changeState) {
+                const state: ParamsProps = {
+                    ...(window.history.state as object),
+                    scrollY: window.scrollY,
+                };
+
+                if (replace) {
+                    window.history.replaceState(state, '', path);
+                } else {
+                    window.history.replaceState(state, '');
+
+                    window.history.pushState(
+                        {
+                            ...window.history.state,
+                            scrollY: 0,
+                        },
+                        '',
+                        path,
+                    );
+                    scrollToTop();
+                }
             }
+        }
+
+        if (!changeState) {
+            const state = window.history.state as ParamsProps | null;
+
+            setTimeout(() => {
+                requestAnimationFrame(() => {
+                    window.scrollTo({
+                        top: state?.scrollY ?? 0,
+                        left: 0,
+                        behavior: 'instant',
+                    });
+                });
+            });
         }
 
         const element = this.state.routesMap.get(
             pathWithoutEdgeSlashes,
         )?.element;
 
-        if (element) {
-            if (element !== this.state.element) {
-                this.setState((prev) => ({ ...prev, element }));
-
-                if (!safeScroll) {
-                    scrollToTop();
-                }
-            }
+        if (element && element !== this.state.element) {
+            this.setState((prev) => ({ ...prev, element }));
 
             return;
         }
@@ -108,29 +125,36 @@ export class HistoryProvider extends AppComponent<
             const match = isRoutesMatch(key, pathWithoutEdgeSlashes);
 
             if (match.match) {
-                const prevParams = window.history.state as {
-                    params: Record<string, string>;
-                };
-
-                window.history.replaceState({ params: match.params }, '', path);
+                if (changeState) {
+                    window.history.replaceState(
+                        {
+                            ...window.history.state,
+                            params: match.params,
+                        } as ParamsProps,
+                        '',
+                    );
+                }
 
                 const element =
                     this.state.routesMap.get(key)?.element ||
                     this.state.routesMap.get(routes.notFound())?.element;
 
-                if (element !== this.state.element) {
+                if (element && element !== this.state.element) {
                     this.setState((prev) => ({
                         ...prev,
-                        element: this.state.routesMap.get(key)?.element || (
-                            <div />
-                        ),
+                        element,
                     }));
-
-                    if (!safeScroll) {
-                        scrollToTop();
-                    }
-                } else if (!isEqual(prevParams.params, match.params)) {
-                    window.location.reload();
+                } else if (this.state.element.instance) {
+                    const prevProps = this.state.element.instance?.props;
+                    const newProps = {
+                        ...this.state.element.instance?.props,
+                        params: match.params,
+                    };
+                    this.state.element.instance.props = newProps;
+                    this.state.element.instance.componentDidUpdate(
+                        this.state.element.instance.state,
+                        prevProps,
+                    );
                 }
 
                 return;
@@ -141,12 +165,10 @@ export class HistoryProvider extends AppComponent<
             routes.notFound().replace(EDGE_SLASHES_REGEXP, ''),
         )?.element;
 
-        if (notFound !== this.state.element) {
+        if (notFound && notFound !== this.state.element) {
             this.setState((prev) => ({
                 ...prev,
-                element: this.state.routesMap.get(
-                    routes.notFound().replace(EDGE_SLASHES_REGEXP, ''),
-                )?.element ?? <div />,
+                element: notFound,
             }));
         }
     };
@@ -156,13 +178,23 @@ export class HistoryProvider extends AppComponent<
 
         const { pathname } = window.location;
 
-        this.handleChangeRoute(pathname, true);
+        this.handleChangeRoute(pathname, false, false);
 
         return false;
     };
 
     componentWillUnmount() {
         window.removeEventListener('popstate', this.listener);
+    }
+
+    componentDidMount(): void {
+        const { pathname } = window.location;
+
+        window.history.scrollRestoration = 'manual';
+
+        this.handleChangeRoute(pathname, false, true);
+
+        window.addEventListener('popstate', this.listener);
     }
 
     contextValue: AppContext = {

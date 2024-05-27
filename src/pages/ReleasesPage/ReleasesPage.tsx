@@ -2,7 +2,7 @@ import styles from './ReleasesPage.module.scss';
 
 import { AppComponent } from '@/core';
 import { LayoutWithHeader } from '@/layouts/LayoutWithHeader';
-import type { Film, Release } from '@/api/content/types';
+import type { Film } from '@/api/content/types';
 import { concatClasses, convertReleaseToFilm } from '@/utils';
 import { Dropdown } from '@/components/Dropdown';
 import { contentService } from '@/api/content/service';
@@ -12,13 +12,14 @@ import { FilmCard } from '@/components/FilmCard';
 import { MonthSelect } from '@/components/MonthSelect';
 import { MONTHS } from '@/shared/constants';
 import { Spinner } from '@/components/Spinner';
+import { routes } from '@/App/App.routes';
 
 const cx = concatClasses.bind(styles);
 
 export interface IndexPageState {
     films?: Film[];
     releaseYears?: SelectItem[];
-    releases?: Release[];
+    releases?: Film[];
     selectedYear?: number;
     selectedMonth: number;
     isLoading?: boolean;
@@ -129,11 +130,11 @@ export class ReleasesPage extends AppComponent<object, IndexPageState> {
                                         itemsPerRowMobile={2}
                                         className={cx('grid-container')}
                                     >
-                                        {releases?.map((films) => (
+                                        {releases?.map((film) => (
                                             <FilmCard
-                                                film={films}
+                                                film={film}
                                                 size="small"
-                                                link=""
+                                                link={routes.film(film.id ?? 0)}
                                                 withReleaseBadge
                                             />
                                         ))}

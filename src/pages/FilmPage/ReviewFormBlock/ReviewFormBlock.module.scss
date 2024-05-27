@@ -1,0 +1,13 @@
+.write-review-block {
+    h1 {
+        margin-block-end: var(--main-content-offset);
+
+        @include text-header-4;
+    }
+}
+
+.login-button {
+    display: block;
+    width: fit-content;
+    margin-block-start: var(--small-padding);
+}
