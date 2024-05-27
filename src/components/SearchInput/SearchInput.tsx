@@ -56,8 +56,8 @@ export class SearchInput extends AppComponent<
         this.props.onClose?.();
     };
 
-    handleSearch = debounce((event: App.FormEvent<HTMLInputElement>) => {
-        const value = hasField(event.target, 'value', 'string')
+    handleSearch = debounce((event?: App.FormEvent<HTMLInputElement>) => {
+        const value = hasField(event?.target, 'value', 'string')
             ? event.target.value
             : '';
 

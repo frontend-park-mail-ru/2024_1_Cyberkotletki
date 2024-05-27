@@ -19,7 +19,6 @@ export interface CarouselProps
         App.HTMLAttributes<HTMLDivElement>,
         HTMLDivElement
     > {
-    className?: string;
     itemsPerView?: number;
     itemsPerViewTablet?: number;
     itemsPerViewMobile?: number;
@@ -34,6 +33,7 @@ interface CarouselState {
     maxScrollLeft: number;
     canNextScroll?: boolean;
     canPrevScroll?: boolean;
+    itemsPerViewCount: number;
 }
 
 export class Carousel extends AppComponent<CarouselProps, CarouselState> {
@@ -44,6 +44,7 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
         maxScrollLeft: 0,
         canNextScroll: true,
         canPrevScroll: false,
+        itemsPerViewCount: 1,
     };
 
     setWidth = () => {
@@ -67,6 +68,8 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
             }
         })();
 
+        this.state.itemsPerViewCount = itemsCount;
+
         if (!isDefined(this.state.carouselWidth)) {
             this.state.carouselWidth =
                 this.state.carouselRef.current?.clientWidth;
@@ -85,9 +88,12 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
         this.setWidth();
 
         const { current } = this.state.carouselRef;
+        const { itemsPerViewCount } = this.state;
 
         if (current) {
-            current.scrollLeft = this.state.scrollLeft + this.state.itemWidth;
+            current.scrollLeft =
+                this.state.scrollLeft +
+                this.state.itemWidth * (itemsPerViewCount - 1 || 1);
         }
     };
 
@@ -95,9 +101,12 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
         this.setWidth();
 
         const { current } = this.state.carouselRef;
+        const { itemsPerViewCount } = this.state;
 
         if (current) {
-            current.scrollLeft = this.state.scrollLeft - this.state.itemWidth;
+            current.scrollLeft =
+                this.state.scrollLeft -
+                this.state.itemWidth * (itemsPerViewCount - 1 || 1);
         }
     };
 
@@ -124,6 +133,10 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
             }));
         }
     }, 40);
+
+    componentDidMount(): void {
+        this.handleScroll();
+    }
 
     render() {
         const {

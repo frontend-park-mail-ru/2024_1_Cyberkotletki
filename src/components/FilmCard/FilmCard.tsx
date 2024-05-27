@@ -57,8 +57,20 @@ export class FilmCard extends AppComponent<FilmCardProps, FilmCardState> {
             onDeleteClick,
             link = routes.film(film?.id ?? 0),
             withReleaseBadge,
+
             ...props
         } = this.props;
+
+        const showRatingBadge =
+            !withReleaseBadge &&
+            isDefined(film?.rating) &&
+            (!film?.ongoing || !!film.rating);
+
+        const releaseMoveDate = film?.movie?.release;
+        const releaseSerialYear = `${film?.series?.yearStart ?? ''}`;
+
+        const releaseDate =
+            film?.type === 'movie' ? releaseMoveDate : releaseSerialYear;
 
         return (
             <div
@@ -94,11 +106,11 @@ export class FilmCard extends AppComponent<FilmCardProps, FilmCardState> {
                         )}
                         {withReleaseBadge && (
                             <ReleaseBadge
-                                date={film?.movie?.release}
+                                date={film?.ongoingDate}
                                 className={cx('badge')}
                             />
                         )}
-                        {!withReleaseBadge && isDefined(film?.rating) && (
+                        {showRatingBadge && (
                             <RatingBadge
                                 rating={film?.rating}
                                 className={cx('badge')}
@@ -146,10 +158,7 @@ export class FilmCard extends AppComponent<FilmCardProps, FilmCardState> {
                                 <span className={cx('bright')}>
                                     {[
                                         film?.originalTitle || '',
-                                        getYearFromDate(
-                                            film?.movie?.release ||
-                                                film?.movie?.premiere,
-                                        ),
+                                        getYearFromDate(releaseDate),
                                         film?.movie?.duration
                                             ? `${film?.movie?.duration} мин.`
                                             : '',
@@ -184,13 +193,8 @@ export class FilmCard extends AppComponent<FilmCardProps, FilmCardState> {
                         ) : (
                             <div className={cx('info', 'small')}>
                                 {[
-                                    film?.movie?.release ||
-                                    film?.movie?.premiere
-                                        ? new Date(
-                                              (film?.movie?.release ||
-                                                  film?.movie?.premiere) ??
-                                                  '',
-                                          ).getFullYear()
+                                    releaseDate
+                                        ? new Date(releaseDate).getFullYear()
                                         : '',
                                     ...(film?.genres ?? []),
                                 ]

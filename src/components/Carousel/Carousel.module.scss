@@ -87,18 +87,21 @@
     > * {
         flex-basis: calc(100% / var(--items-per-view));
         flex-shrink: 0;
+        max-width: calc(100% / var(--items-per-view));
         scroll-snap-align: start;
     }
 
     @include tablet {
         > * {
             flex-basis: calc(100% / var(--items-per-view-tablet));
+            max-width: calc(100% / var(--items-per-view-tablet));
         }
     }
 
     @include mobile {
         > * {
             flex-basis: calc(100% / var(--items-per-view-mobile));
+            max-width: calc(100% / var(--items-per-view-mobile));
         }
     }
 }

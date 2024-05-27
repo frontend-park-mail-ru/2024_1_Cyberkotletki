@@ -205,6 +205,8 @@ class FilmPageClass extends AppComponent<FilmPageProps, FilmPageState> {
         const profile =
             this.state.profile || this.props.context?.profile?.profile;
 
+        const canWriteReview = !film?.ongoing;
+
         switch (true) {
             case isNotFound:
                 return (
@@ -236,28 +238,32 @@ class FilmPageClass extends AppComponent<FilmPageProps, FilmPageState> {
                                     similarContent={film?.similarContent}
                                 />
                             )}
-                            <div className={cx('bottom-block')}>
-                                <div className={cx('reviews-block')}>
-                                    <ReviewsList
-                                        reviews={this.state.reviews}
-                                        className={cx('reviews-list-block')}
-                                        onEditReviewClick={
-                                            this.handleEditReviewClick
-                                        }
-                                        onReviewRemove={this.handleReviewRemove}
-                                        profile={profile}
-                                    />
-                                    <ReviewFormBlock
-                                        className={cx('write-review-block')}
-                                        id={REVIEW_FORM_ID}
-                                        profile={profile}
-                                        isEdit={isEdit}
-                                        onSubmit={this.handleFormSubmit}
-                                        reviewForEdit={reviewForEdit}
-                                        contentId={this.props.uid}
-                                    />
+                            {canWriteReview && (
+                                <div className={cx('bottom-block')}>
+                                    <div className={cx('reviews-block')}>
+                                        <ReviewsList
+                                            reviews={this.state.reviews}
+                                            className={cx('reviews-list-block')}
+                                            onEditReviewClick={
+                                                this.handleEditReviewClick
+                                            }
+                                            onReviewRemove={
+                                                this.handleReviewRemove
+                                            }
+                                            profile={profile}
+                                        />
+                                        <ReviewFormBlock
+                                            className={cx('write-review-block')}
+                                            id={REVIEW_FORM_ID}
+                                            profile={profile}
+                                            isEdit={isEdit}
+                                            onSubmit={this.handleFormSubmit}
+                                            reviewForEdit={reviewForEdit}
+                                            contentId={this.props.uid}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </LayoutWithHeader>
                 );

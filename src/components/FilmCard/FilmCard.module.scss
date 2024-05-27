@@ -69,7 +69,24 @@
     &.button {
         cursor: pointer;
 
+        img {
+            filter: brightness(1);
+            transition: var(--item-transition-all);
+        }
+
         @include card-hover-effect;
+
+        @include hover {
+            img {
+                filter: brightness(0.7);
+            }
+        }
+
+        &:active {
+            img {
+                filter: brightness(0.9);
+            }
+        }
     }
 }
 

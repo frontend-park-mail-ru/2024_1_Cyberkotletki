@@ -1,0 +1,14 @@
+.container {
+    --fade-in-delay: 200ms;
+    --fade-in-duration: 400ms;
+
+    transform: translateY(40px);
+    opacity: 0;
+    transition: var(--fade-in-duration) ease-out;
+
+    &.visible {
+        transform: translateY(0);
+        opacity: 1;
+        transition-delay: var(--fade-in-delay);
+    }
+}

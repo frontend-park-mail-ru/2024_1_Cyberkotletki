@@ -214,8 +214,16 @@ $screen-large-monitor-min: calc($screen-notebook-max + 1px);
         content: '';
     }
 
-    &:focus-visible,
-    &:hover {
+    @include hover {
+        outline: none;
+
+        &::before {
+            background-color: var(--absolute-op-10);
+            border: 1px solid var(--secondary-gray-op-20);
+        }
+    }
+
+    &:focus-visible {
         outline: none;
 
         &::before {

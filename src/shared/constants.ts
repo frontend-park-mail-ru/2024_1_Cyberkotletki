@@ -72,7 +72,7 @@ export const MONTHS = [
 ] as const;
 
 export const GENRES_MAP: Record<string, number> = {
-    драма: 33,
+    драма: 45, // TODO: Change to 33
     комедия: 34,
     криминал: 35,
     биография: 36,

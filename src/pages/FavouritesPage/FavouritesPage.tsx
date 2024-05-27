@@ -81,6 +81,7 @@ class FavouritesPageInner extends AppComponent<
                                         size="small"
                                         withDeleteButton
                                         onDeleteClick={this.handleDelete}
+                                        withReleaseBadge={film.ongoing}
                                     />
                                 ))
                             ) : (

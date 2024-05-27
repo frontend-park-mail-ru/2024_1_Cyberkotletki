@@ -7,10 +7,12 @@ import type {
     PersonActor,
 } from '@/api/content/types';
 import { favouriteService } from '@/api/favourite/favourite.service';
+import { reviewService } from '@/api/review/service';
+import type { ReviewDetails } from '@/api/review/types';
 import { AppComponent } from '@/core';
 import { Context } from '@/core/src/Context';
 import type { AppContext } from '@/types/Context.types';
-import { convertPreviewToFilm } from '@/utils';
+import { convertPreviewToFilm, convertReleaseToFilm } from '@/utils';
 
 export interface FilmsByCollection {
     films?: Film[];
@@ -26,6 +28,8 @@ export interface ContentContextValues {
     filmsMap: Record<number, Film | undefined>;
     compilationTypes?: CompilationType[];
     compilations?: Compilation[];
+    nearestReleases?: Film[];
+    recentReviews?: ReviewDetails[];
     getAllFilms?: () => Promise<Film[] | undefined>;
     loadFavouriteFilms?: () => Promise<Film[] | undefined>;
     loadFilmById?: (id: number) => Promise<Film | undefined>;
@@ -39,6 +43,8 @@ export interface ContentContextValues {
         compilationTypes?: CompilationType[];
         compilations?: Compilation[];
     }>;
+    loadNearestReleases: () => Promise<Film[] | undefined>;
+    loadRecentReviews: () => Promise<ReviewDetails[] | undefined>;
 }
 
 export const ContentContext = new Context<AppContext>({});
@@ -152,6 +158,22 @@ export class ContentProvider extends AppComponent<
 
                     return { compilations, compilationTypes };
                 }),
+        loadNearestReleases: () =>
+            contentService.getNearestReleases().then((response) => {
+                const films =
+                    response?.ongoing_content_list?.map(convertReleaseToFilm);
+
+                this.state.nearestReleases = films;
+
+                return films;
+            }),
+
+        loadRecentReviews: () =>
+            reviewService.getRecentReviews().then((response) => {
+                this.state.recentReviews = response?.reviews;
+
+                return response?.reviews;
+            }),
     };
 
     render() {

@@ -8,10 +8,11 @@ import type { RoutesValues } from '@/App/App.routes';
 const cx = concatClasses.bind(styles);
 
 export interface LayoutPreviewProps
-    extends App.DetailedHTMLProps<
-        App.HTMLAttributes<HTMLElement>,
-        HTMLElement
+    extends Omit<
+        App.DetailedHTMLProps<App.HTMLAttributes<HTMLElement>, HTMLElement>,
+        'ref'
     > {
+    forwardRef?: App.Ref<HTMLElement>;
     className?: string;
     title?: string;
     moreTitle?: string;
@@ -20,11 +21,22 @@ export interface LayoutPreviewProps
 
 export class LayoutPreview extends AppComponent<LayoutPreviewProps> {
     render() {
-        const { className, children, title, moreTitle, moreLink, ...props } =
-            this.props;
+        const {
+            className,
+            children,
+            title,
+            moreTitle,
+            moreLink,
+            forwardRef,
+            ...props
+        } = this.props;
 
         return (
-            <section className={cx('container', className)} {...props}>
+            <section
+                className={cx('container', className)}
+                {...props}
+                ref={forwardRef}
+            >
                 <div className={cx('head-container')}>
                     {title && (
                         <h1 title={title} className={cx('head')}>

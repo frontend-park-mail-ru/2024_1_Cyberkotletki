@@ -111,11 +111,21 @@ class ReviewService {
     /**
      * Получить последние отзывы пользователя
      * @param {number} id id профиля
-     * @returns unknown
+     * @returns ReviewDetails[]
      */
     async getMyRecentReviews(id: number) {
         return appFetch.get<{ reviews?: ReviewDetails[] } | undefined>(
             reviewRoutes.userReviewRecent(id),
+        );
+    }
+
+    /**
+     * Получить последние отзывы
+     * @returns unknown
+     */
+    async getRecentReviews() {
+        return appFetch.get<{ reviews?: ReviewDetails[] } | undefined>(
+            reviewRoutes.reviewRecent(),
         );
     }
 }

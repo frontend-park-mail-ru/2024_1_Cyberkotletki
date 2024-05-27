@@ -9,6 +9,8 @@ export const convertPreviewToFilm = ({
     release,
     genre,
     country,
+    yearEnd,
+    yearStart,
     ...film
 }: FilmPreview): Film => ({
     ...film,
@@ -23,4 +25,5 @@ export const convertPreviewToFilm = ({
             : undefined,
         duration,
     },
+    series: { yearEnd, yearStart },
 });

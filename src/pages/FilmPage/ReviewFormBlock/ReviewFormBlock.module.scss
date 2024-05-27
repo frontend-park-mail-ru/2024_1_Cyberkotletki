@@ -5,3 +5,9 @@
         @include text-header-4;
     }
 }
+
+.login-button {
+    display: block;
+    width: fit-content;
+    margin-block-start: var(--small-padding);
+}

@@ -28,8 +28,7 @@ class ContentRoutes {
     search = (searchString: string) =>
         `${this.SEARCH_PREFIX}${createQueryParams({ query: searchString })}` as const;
 
-    ongoingNearest = (limit?: number) =>
-        `${this.ONGOING_PREFIX}/nearest${createQueryParams({ limit })}` as const;
+    ongoingNearest = () => `${this.ONGOING_PREFIX}/nearest` as const;
 
     ongoingYears = () => `${this.ONGOING_PREFIX}/years` as const;
 

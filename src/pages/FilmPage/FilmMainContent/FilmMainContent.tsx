@@ -29,7 +29,7 @@ export interface FilmMainContentState {
     backdropRef: App.RefObject<HTMLDivElement>;
 }
 
-const scrollToReviewForm = () => {
+export const scrollToReviewForm = () => {
     document.getElementById(REVIEW_FORM_ID)?.scrollIntoView({
         behavior: 'smooth',
     });
@@ -106,6 +106,10 @@ export class FilmMainContent extends AppComponent<
         const { film, onFavouriteClick, addedToFavourite, withFavButton } =
             this.props;
 
+        const showRatingBlock = !film?.ongoing;
+
+        const subTitle = film?.type === 'movie' ? 'фильм' : 'сериал';
+
         return (
             <div className={cx('content')}>
                 {(film?.backdropURL || film?.posterURL) && (
@@ -119,8 +123,11 @@ export class FilmMainContent extends AppComponent<
                         loading="eager"
                     />
                     <h1 className={cx('title', 'hide-on-desktop')}>
-                        {film?.title}
+                        {film?.title} {subTitle}
                     </h1>
+                    <p className={cx('subtitle', 'hide-on-desktop')}>
+                        {subTitle}
+                    </p>
                     {withFavButton && (
                         <Button
                             outlined
@@ -128,7 +135,9 @@ export class FilmMainContent extends AppComponent<
                             onClick={() => {
                                 onFavouriteClick?.(film);
                             }}
-                            className={cx('fav-button')}
+                            className={cx('fav-button', {
+                                added: addedToFavourite,
+                            })}
                         >
                             <Icon
                                 icon={icStarOutlinedUrl}
@@ -136,7 +145,9 @@ export class FilmMainContent extends AppComponent<
                                     added: addedToFavourite,
                                 })}
                             />
-                            {addedToFavourite ? 'В избранном' : 'В избранное'}
+                            {addedToFavourite
+                                ? 'в избранном'
+                                : 'добавить в избранное'}
                         </Button>
                     )}
                     {film?.trailerLink && (
@@ -156,21 +167,26 @@ export class FilmMainContent extends AppComponent<
                             <h1 className={cx('title', 'hide-on-mobile')}>
                                 {film?.title}
                             </h1>
+                            <p className={cx('subtitle', 'hide-on-mobile')}>
+                                {subTitle}
+                            </p>
                             <FilmInfoTable
                                 film={film}
                                 className={cx('info-table')}
                             />
                         </section>
                         <div className={cx('right-container')}>
-                            <div className={cx('rating-container')}>
-                                <Rating
-                                    rating={film?.rating}
-                                    imdbRating={film?.imdbRating}
-                                />
-                                <Button onClick={scrollToReviewForm}>
-                                    Оценить
-                                </Button>
-                            </div>
+                            {showRatingBlock && (
+                                <div className={cx('rating-container')}>
+                                    <Rating
+                                        rating={film?.rating}
+                                        imdbRating={film?.imdbRating}
+                                    />
+                                    <Button onClick={scrollToReviewForm}>
+                                        Оценить
+                                    </Button>
+                                </div>
+                            )}
                             {!!film?.actors?.length && (
                                 <section className={cx('roles-section')}>
                                     <h1>В главных ролях:</h1>

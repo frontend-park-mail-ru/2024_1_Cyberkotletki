@@ -6,10 +6,10 @@
  * @param delay The number of milliseconds to delay.
  * @returns Returns the new debounced function.
  */
-export const debounce = <T>(callback: (args: T) => void, delay: number) => {
+export const debounce = <T>(callback: (args?: T) => void, delay: number) => {
     let timeoutId: ReturnType<typeof setTimeout> | number = Number.NaN;
 
-    return (args: T) => {
+    return (args?: T) => {
         clearTimeout(timeoutId);
 
         timeoutId = setTimeout(() => {

@@ -10,7 +10,7 @@ import { Icon } from '@/components/Icon';
 import { Link } from '@/components/Link';
 import { RemoveReviewModal } from '@/components/RemoveReviewModal';
 import { AppComponent } from '@/core';
-import { REVIEW_FORM_ID } from '@/pages/FilmPage/FilmPage';
+import { scrollToReviewForm } from '@/pages/FilmPage/FilmMainContent/FilmMainContent';
 import { concatClasses, getDateString } from '@/utils';
 
 const cx = concatClasses.bind(styles);
@@ -37,6 +37,7 @@ export interface ReviewCardState {
 }
 export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
     handleEditClick = () => {
+        scrollToReviewForm();
         this.props.onEditClick?.(this.props.review);
     };
 
@@ -108,18 +109,16 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                     </div>
                     {isOwnReview && (
                         <div className={cx('action-buttons')}>
-                            <a href={`#${REVIEW_FORM_ID}`}>
-                                <Button
-                                    onClick={this.handleEditClick}
-                                    outlined
-                                    styleType="secondary"
-                                    isIconOnly
-                                    title="Редактировать отзыв"
-                                    aria-label="Редактировать отзыв"
-                                >
-                                    <Icon icon={icEditUrl} />
-                                </Button>
-                            </a>
+                            <Button
+                                onClick={this.handleEditClick}
+                                outlined
+                                styleType="secondary"
+                                isIconOnly
+                                title="Редактировать отзыв"
+                                aria-label="Редактировать отзыв"
+                            >
+                                <Icon icon={icEditUrl} />
+                            </Button>
                             <Button
                                 outlined
                                 styleType="error"

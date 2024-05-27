@@ -119,12 +119,11 @@ class ContentService {
 
     /**
      * Получить ближайшие релизы
-     * @param limit Лимит
      * @returns Список Ближайших релизов
      */
-    async getNearestReleases(limit = 6) {
+    async getNearestReleases() {
         return appFetch.get<ReleaseResponse | undefined>(
-            contentRoutes.ongoingNearest(limit),
+            contentRoutes.ongoingNearest(),
         );
     }
 

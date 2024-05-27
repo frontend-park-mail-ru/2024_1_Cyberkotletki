@@ -231,3 +231,14 @@
         }
     }
 }
+
+.subtitle {
+    color: var(--light-gray);
+    margin-block-start: var(--small-padding);
+
+    @include mobile {
+        text-align: center;
+    }
+
+    @include text-header-5;
+}

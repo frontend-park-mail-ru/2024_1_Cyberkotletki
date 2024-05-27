@@ -6,6 +6,8 @@ import { AppComponent } from '@/core';
 import { concatClasses } from '@/utils';
 import type { OmitChildren } from '@/types/OmitChildren.types';
 import { ReviewForm } from '@/components/ReviewForm';
+import { Button } from '@/components/Button';
+import { routes } from '@/App/App.routes';
 
 const cx = concatClasses.bind(styles);
 
@@ -37,15 +39,30 @@ export class ReviewFormBlock extends AppComponent<ReviewFormBlockProps> {
                 <h1>
                     {reviewForEdit ? 'Редактировать отзыв:' : 'Написать отзыв:'}
                 </h1>
-                <ReviewForm
-                    key={isEdit ? 'isEdit' : undefined}
-                    profile={profile}
-                    contentId={+(contentId ?? 0)}
-                    onSubmit={onSubmit}
-                    isEdit={isEdit}
-                    reviewID={reviewForEdit?.id}
-                    {...reviewForEdit}
-                />
+                {profile ? (
+                    <ReviewForm
+                        key={isEdit ? 'isEdit' : undefined}
+                        profile={profile}
+                        contentId={+(contentId ?? 0)}
+                        onSubmit={onSubmit}
+                        isEdit={isEdit}
+                        reviewID={reviewForEdit?.id}
+                        {...reviewForEdit}
+                    />
+                ) : (
+                    <div>
+                        <p>
+                            Чтобы оставить отзыв, необходимо{' '}
+                            <b>авторизоваться</b>
+                        </p>
+                        <Button
+                            href={routes.login()}
+                            className={cx('login-button')}
+                        >
+                            Войти
+                        </Button>
+                    </div>
+                )}
             </section>
         );
     }

@@ -10,7 +10,11 @@
  * ```
  */
 export const getDateString = (dateStr?: string, withTime = true) => {
-    const date = new Date(dateStr ?? new Date().toISOString());
+    if (!dateStr) {
+        return '';
+    }
+
+    const date = new Date(dateStr);
 
     const day = `0${date.getDate()}`.slice(-2);
     const month = `0${date.getMonth() + 1}`.slice(-2);

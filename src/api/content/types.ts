@@ -72,6 +72,8 @@ export interface Film {
     picturesURL?: string[];
     trailerLink?: string;
     similarContent?: SimilarContent[];
+    ongoing?: boolean;
+    ongoingDate?: string;
 }
 
 export interface FilmPreview {
@@ -84,9 +86,13 @@ export interface FilmPreview {
     originalTitle?: string;
     poster?: string;
     rating?: number;
-    release?: number;
     title?: string;
     type?: ContentType;
+    ongoing?: boolean;
+    ongoingDate?: string;
+    release?: number;
+    yearEnd: number;
+    yearStart: number;
 }
 
 export interface ActorRole {
@@ -178,11 +184,17 @@ export interface SearchResponse {
 }
 
 export interface Release {
-    genre?: string[];
+    actors?: string[];
+    country?: string;
+    director?: string;
+    genre?: string;
     id?: number;
-    poster?: string;
+    ongoing?: boolean;
     /** 2022-01-02T15:04:05Z */
-    releaseDate?: string;
+    ongoingDate?: string;
+    originalTitle?: string;
+    poster?: string;
+    rating?: number;
     title?: string;
     type?: ContentType;
 }

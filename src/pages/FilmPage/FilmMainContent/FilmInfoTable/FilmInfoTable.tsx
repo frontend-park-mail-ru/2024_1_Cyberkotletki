@@ -8,6 +8,7 @@ import type { RoutesValues } from '@/App/App.routes';
 import { routes } from '@/App/App.routes';
 import { AgeLimitBadge } from '@/components/AgeLimitBadge';
 import { GENRES_MAP } from '@/shared/constants';
+import { ReleaseBadge } from '@/components/ReleaseBadge';
 
 const cx = concatClasses.bind(styles);
 
@@ -195,16 +196,44 @@ export class FilmInfoTable extends AppComponent<FilmInfoTableProps> {
                             )}
                         </td>
                     </tr>
-                    <tr>
-                        <td className={cx('label')}>Длительность:</td>
-                        <td>
-                            {film?.movie?.duration ? (
-                                `${film?.movie?.duration ?? ''} мин.`
-                            ) : (
-                                <NotFound />
-                            )}
-                        </td>
-                    </tr>
+                    {film?.type === 'movie' && (
+                        <tr>
+                            <td className={cx('label')}>Длительность:</td>
+                            <td>
+                                {film?.movie?.duration ? (
+                                    `${film?.movie?.duration ?? ''} мин.`
+                                ) : (
+                                    <NotFound />
+                                )}
+                            </td>
+                        </tr>
+                    )}
+                    {film?.ongoing && (
+                        <tr>
+                            <td className={cx('label')}>Дата выхода:</td>
+                            <td>
+                                <ReleaseBadge date={film?.ongoingDate} />
+                            </td>
+                        </tr>
+                    )}
+                    {film?.type === 'series' && (
+                        <tr>
+                            <td className={cx('label')}>Начало съемок:</td>
+                            <td>
+                                {film.series?.yearStart ? (
+                                    `${film.series?.yearStart ?? ''} год`
+                                ) : (
+                                    <NotFound />
+                                )}
+                            </td>
+                        </tr>
+                    )}
+                    {film?.type === 'series' && !!film.series?.yearEnd && (
+                        <tr>
+                            <td className={cx('label')}>Конец съемок:</td>
+                            <td>{`${film?.series?.yearEnd ?? 0} год`}</td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
         );
