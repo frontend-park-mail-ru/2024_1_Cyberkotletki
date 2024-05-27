@@ -18,6 +18,7 @@ import { favouriteService } from '@/api/favourite/favourite.service';
 import { Spinner } from '@/components/Spinner';
 import { ContentContext } from '@/Providers/ContentProvider';
 import type { ParamsProps } from '@/types/ParamsProps.types';
+import { contentService } from '@/api/content/service';
 
 const cx = concatClasses.bind(styles);
 
@@ -34,6 +35,7 @@ export interface FilmPageState {
     profile?: ProfileResponse;
     isEdit?: boolean;
     addedToFavourite?: boolean;
+    ongoingSubscriptions?: number[];
 }
 
 export const REVIEW_FORM_ID = 'review-form';
@@ -74,6 +76,16 @@ class FilmPageClass extends AppComponent<FilmPageProps, FilmPageState> {
                 if (this.state.reviews?.length) {
                     this.finedOwnReview();
                 }
+
+                // eslint-disable-next-line max-len
+                void this.props.context?.profile?.loadOngoingSubscriptionsPromise?.then(
+                    (ids) => {
+                        this.setState((prev) => ({
+                            ...prev,
+                            ongoingSubscriptions: ids,
+                        }));
+                    },
+                );
             });
         } else if (profile?.isLoggedIn) {
             this.finedOwnReview();
@@ -151,6 +163,35 @@ class FilmPageClass extends AppComponent<FilmPageProps, FilmPageState> {
         }
     };
 
+    handleSubscribe = (film?: Film) => {
+        if (isDefined(film?.id)) {
+            const ongoingSubscriptions =
+                this.state.ongoingSubscriptions ??
+                this.props.context?.profile?.ongoingSubscriptions;
+
+            const subscribed = ongoingSubscriptions?.includes(this.props.uid);
+
+            const promise = subscribed
+                ? contentService.unSubscribeRelease(film.id)
+                : contentService.subscribeRelease(film.id);
+
+            if (!subscribed) {
+                void Notification.requestPermission();
+            }
+
+            void promise.then(() => {
+                void this.props.context?.profile
+                    ?.loadOngoingSubscriptions?.()
+                    .then((ids) => {
+                        this.setState((prev) => ({
+                            ...prev,
+                            ongoingSubscriptions: ids,
+                        }));
+                    });
+            });
+        }
+    };
+
     getIsAddedToFavourite = () => {
         void favouriteService
             .getContentFavouriteStatus(this.props.uid)
@@ -207,6 +248,12 @@ class FilmPageClass extends AppComponent<FilmPageProps, FilmPageState> {
 
         const canWriteReview = !film?.ongoing;
 
+        const ongoingSubscriptions =
+            this.state.ongoingSubscriptions ??
+            this.props.context?.profile?.ongoingSubscriptions;
+
+        const subscribed = ongoingSubscriptions?.includes(this.props.uid);
+
         switch (true) {
             case isNotFound:
                 return (
@@ -231,6 +278,9 @@ class FilmPageClass extends AppComponent<FilmPageProps, FilmPageState> {
                                 onFavouriteClick={this.handleAddToFavourite}
                                 addedToFavourite={addedToFavourite}
                                 withFavButton={!!profile}
+                                withBellButton={!!profile && film?.ongoing}
+                                subscribed={subscribed}
+                                onBellClick={this.handleSubscribe}
                             />
                             {!!film?.similarContent?.length && (
                                 <SimilarContentBlock

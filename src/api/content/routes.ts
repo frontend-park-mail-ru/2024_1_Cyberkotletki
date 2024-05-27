@@ -34,6 +34,15 @@ class ContentRoutes {
 
     ongoing = (id?: number | string, month?: number | string) =>
         `${this.ONGOING_PREFIX}${isDefined(id) ? `/${id}` : ''}${isDefined(month) ? `/${month}` : ''}` as const;
+
+    ongoingSubscribe = (id: number | string) =>
+        `${this.ONGOING_PREFIX}/${id}/subscribe` as const;
+
+    ongoingSubscriptions = () =>
+        `${this.ONGOING_PREFIX}/subscriptions` as const;
+
+    ongoingIsReleased = (id: number | string) =>
+        `${this.ONGOING_PREFIX}/${id}/is_released` as const;
 }
 
 export const contentRoutes = new ContentRoutes();

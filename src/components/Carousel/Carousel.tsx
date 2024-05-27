@@ -138,6 +138,15 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
         this.handleScroll();
     }
 
+    componentDidUpdate(
+        _: CarouselState | null,
+        prevProps: CarouselProps | null,
+    ): void {
+        if (prevProps?.children !== this.props.children) {
+            this.handleScroll();
+        }
+    }
+
     render() {
         const {
             className,

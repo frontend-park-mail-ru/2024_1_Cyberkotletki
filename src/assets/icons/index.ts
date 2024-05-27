@@ -16,3 +16,4 @@ export { default as icEyeUrl } from './ic-eye.svg';
 export { default as icEyeHideUrl } from './ic-eye-hide.svg';
 export { default as icLogoTextUrl } from './ic-logo-text.svg';
 export { default as icPlayUrl } from './ic-play.svg';
+export { default as icBellUrl } from './ic-bell.svg';

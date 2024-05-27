@@ -2,7 +2,7 @@ import styles from './FilmMainContent.module.scss';
 
 import { routes } from '@/App/App.routes';
 import type { Film } from '@/api/content/types';
-import { icStarOutlinedUrl } from '@/assets/icons';
+import { icBellUrl, icStarOutlinedUrl } from '@/assets/icons';
 import { Button } from '@/components/Button';
 import { FilmPoster } from '@/components/FilmPoster';
 import { Icon } from '@/components/Icon';
@@ -23,6 +23,9 @@ export interface FilmMainContentProps {
     onFavouriteClick?: (film?: Film) => void;
     addedToFavourite?: boolean;
     withFavButton?: boolean;
+    withBellButton?: boolean;
+    onBellClick?: (film?: Film) => void;
+    subscribed?: boolean;
 }
 
 export interface FilmMainContentState {
@@ -103,8 +106,15 @@ export class FilmMainContent extends AppComponent<
     }
 
     render() {
-        const { film, onFavouriteClick, addedToFavourite, withFavButton } =
-            this.props;
+        const {
+            film,
+            onFavouriteClick,
+            addedToFavourite,
+            withFavButton,
+            withBellButton,
+            onBellClick,
+            subscribed,
+        } = this.props;
 
         const showRatingBlock = !film?.ongoing;
 
@@ -128,28 +138,55 @@ export class FilmMainContent extends AppComponent<
                     <p className={cx('subtitle', 'hide-on-desktop')}>
                         {subTitle}
                     </p>
-                    {withFavButton && (
-                        <Button
-                            outlined
-                            styleType="secondary"
-                            onClick={() => {
-                                onFavouriteClick?.(film);
-                            }}
-                            className={cx('fav-button', {
-                                added: addedToFavourite,
-                            })}
-                        >
-                            <Icon
-                                icon={icStarOutlinedUrl}
-                                className={cx('icon', {
-                                    added: addedToFavourite,
-                                })}
-                            />
-                            {addedToFavourite
-                                ? 'в избранном'
-                                : 'добавить в избранное'}
-                        </Button>
+                    {(withFavButton || withBellButton) && (
+                        <div className={cx('buttons-container')}>
+                            {withFavButton && (
+                                <Button
+                                    outlined
+                                    styleType="secondary"
+                                    onClick={() => {
+                                        onFavouriteClick?.(film);
+                                    }}
+                                    className={cx('fav-button', {
+                                        added: addedToFavourite,
+                                    })}
+                                >
+                                    <Icon
+                                        icon={icStarOutlinedUrl}
+                                        className={cx('icon', {
+                                            added: addedToFavourite,
+                                        })}
+                                    />
+                                    {addedToFavourite
+                                        ? 'в избранном'
+                                        : 'добавить в избранное'}
+                                </Button>
+                            )}
+                            {withBellButton && (
+                                <Button
+                                    isIconOnly
+                                    styleType="secondary"
+                                    outlined
+                                    className={cx('bell-button', {
+                                        subscribed,
+                                    })}
+                                    title="Уведомить о выходе релиза"
+                                    onClick={() => {
+                                        onBellClick?.(film);
+                                    }}
+                                >
+                                    <Icon
+                                        icon={icBellUrl}
+                                        className={cx('bell-icon')}
+                                    />
+                                    <div className="hide-on-desktop">
+                                        Уведомить о выходе релиза
+                                    </div>
+                                </Button>
+                            )}
+                        </div>
                     )}
+
                     {film?.trailerLink && (
                         <section>
                             <YouTubeIframe

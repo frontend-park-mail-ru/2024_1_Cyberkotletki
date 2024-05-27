@@ -8,6 +8,7 @@ import type {
     ReleaseResponse,
     ReleaseYearsResponse,
     SearchResponse,
+    SubscriptionsResponse,
 } from './types';
 
 import { appFetch } from '@/api/appFetch.ts';
@@ -156,6 +157,34 @@ class ContentService {
         return appFetch.get<ReleaseResponse | undefined>(
             contentRoutes.ongoing(year, month),
         );
+    }
+
+    /**
+     * Получить ID контентов, на которые подписан пользователь
+     * @returns Список релизов
+     */
+    async getOngoingSubscriptions() {
+        return appFetch.get<SubscriptionsResponse | undefined>(
+            contentRoutes.ongoingSubscriptions(),
+        );
+    }
+
+    /**
+     * Подписаться на выход контента
+     * @param id Id контента
+     * @returns Список релизов
+     */
+    async subscribeRelease(id: number | string) {
+        return appFetch.post(contentRoutes.ongoingSubscribe(id));
+    }
+
+    /**
+     * Подписаться на выход контента
+     * @param id Id контента
+     * @returns Список релизов
+     */
+    async unSubscribeRelease(id: number | string) {
+        return appFetch.delete(contentRoutes.ongoingSubscribe(id));
     }
 }
 

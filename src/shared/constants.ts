@@ -25,10 +25,17 @@ class ConfigClass {
 
     BACKEND_STATIC_URL =
         process.env.NODE_ENV === 'production'
-            ? `${this.CDN_BACKEND_URL}/static`
-            : `${this.BACKEND_URL}/static`;
+            ? (`${this.CDN_BACKEND_URL}/static` as const)
+            : (`${this.BACKEND_URL}/static` as const);
 
     BACKEND_URL_API_PREFiX = process.env.BACKEND_URL_API_PREFiX ?? '';
+
+    private backendUrlObject = new URL(
+        `${this.BACKEND_URL}${this.BACKEND_URL_API_PREFiX}`,
+    );
+
+    WS_BACKEND_URL =
+        `ws://${this.backendUrlObject.host}${this.backendUrlObject.pathname}` as const;
 }
 
 export const Config = new ConfigClass();
@@ -72,7 +79,7 @@ export const MONTHS = [
 ] as const;
 
 export const GENRES_MAP: Record<string, number> = {
-    драма: 45, // TODO: Change to 33
+    драма: 33,
     комедия: 34,
     криминал: 35,
     биография: 36,

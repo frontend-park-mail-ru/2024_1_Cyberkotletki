@@ -157,7 +157,7 @@ export class IndexPageInner extends AppComponent<
                             )}
                         />
                     )}
-                    {!!recentReviews && (
+                    {!!recentReviews?.length && (
                         <VisibleObserver>
                             <LayoutPreview title="Последние отзывы">
                                 <Carousel

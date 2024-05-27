@@ -206,3 +206,7 @@ export interface ReleaseResponse {
 export interface ReleaseYearsResponse {
     years?: number[];
 }
+
+export interface SubscriptionsResponse {
+    subscriptions?: number[];
+}
