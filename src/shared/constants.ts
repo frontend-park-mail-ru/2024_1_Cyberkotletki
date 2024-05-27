@@ -35,7 +35,7 @@ class ConfigClass {
     );
 
     WS_BACKEND_URL =
-        `ws://${this.backendUrlObject.host}${this.backendUrlObject.pathname}` as const;
+        `${process.env.WEBSOCKET_SCHEME ?? 'ws'}://${this.backendUrlObject.host}${this.backendUrlObject.pathname}` as const;
 }
 
 export const Config = new ConfigClass();
