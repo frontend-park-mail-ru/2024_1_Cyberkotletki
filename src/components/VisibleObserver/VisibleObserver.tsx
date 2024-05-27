@@ -2,7 +2,7 @@ import styles from './VisibleObserver.module.scss';
 
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
-import { concatClasses } from '@/utils';
+import { concatClasses, isDefined } from '@/utils';
 
 const cx = concatClasses.bind(styles);
 
@@ -13,6 +13,8 @@ export interface VisibleObserverProps
     > {
     fadeInDelay?: number;
     fadeInDuration?: number;
+    forceVisibleDelay?: number;
+    onVisible?: () => void;
 }
 
 interface VisibleObserverState {
@@ -35,6 +37,7 @@ export class VisibleObserver extends AppComponent<
             observer: IntersectionObserver,
         ) => {
             if (entries[entries.length - 1].intersectionRatio > 0) {
+                this.props.onVisible?.();
                 this.state.ref.current?.classList.add(cx('visible'));
 
                 observer.disconnect();
@@ -46,19 +49,23 @@ export class VisibleObserver extends AppComponent<
         const element = this.state.ref.current;
 
         if (!this.state.observer) {
+            const observer = new IntersectionObserver(
+                this.state.observerListener,
+            );
+
+            this.state.observer = observer;
+
+            if (element) {
+                observer.observe(element);
+            }
+        }
+
+        if (isDefined(this.props.forceVisibleDelay)) {
             setTimeout(() => {
-                requestIdleCallback(() => {
-                    const observer = new IntersectionObserver(
-                        this.state.observerListener,
-                    );
-
-                    this.state.observer = observer;
-
-                    if (element) {
-                        observer.observe(element);
-                    }
-                });
-            });
+                this.props.onVisible?.();
+                this.state.ref.current?.classList.add(cx('visible'));
+                this.state.observer?.disconnect();
+            }, this.props.forceVisibleDelay);
         }
     }
 

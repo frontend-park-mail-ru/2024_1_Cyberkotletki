@@ -1,4 +1,42 @@
 .card {
     margin-block: var(--main-padding);
     padding-inline: var(--main-padding);
+
+    &.skeleton {
+        padding-block-end: calc(
+            var(--main-content-gap) + var(--main-text-gap) + 1.875rem * 1.25
+        );
+    }
+}
+
+.skeleton-poster {
+    width: 100%;
+    aspect-ratio: 136 / 200;
+    background-color: var(--secondary-gray-op-30);
+}
+
+.observer {
+    --fade-in-delay: 200ms;
+    --fade-in-duration: 400ms;
+
+    transform: translateY(40px);
+    opacity: 0;
+    transition: var(--fade-in-duration) ease-out;
+
+    &.visible {
+        transform: translateY(0);
+        opacity: 1;
+        transition-delay: var(--fade-in-delay);
+    }
+}
+
+.container {
+    transform: translateY(0);
+    opacity: 1;
+    transition: all 400ms ease;
+
+    &.loading {
+        transform: translateY(24px);
+        opacity: 0.5;
+    }
 }

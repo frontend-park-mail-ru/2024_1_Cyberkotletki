@@ -24,6 +24,9 @@ export interface IndexPageState {
     topFilms?: Film[];
     topSerials?: Film[];
     recentReviews?: ReviewDetails[];
+    isReleaseLoading?: boolean;
+    isTopFilmsLoading?: boolean;
+    isTopSerialsLoading?: boolean;
 }
 
 export class IndexPageInner extends AppComponent<
@@ -35,9 +38,21 @@ export class IndexPageInner extends AppComponent<
             this.props.context?.content ?? {};
 
         if (!nearestReleases) {
-            void loadNearestReleases?.().then((nearestReleases) => {
-                this.setState((prev) => ({ ...prev, nearestReleases }));
-            });
+            this.setState((prev) => ({ ...prev, isReleaseLoading: true }));
+            void loadNearestReleases?.()
+                .then((nearestReleases) => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        nearestReleases,
+                        isReleaseLoading: false,
+                    }));
+                })
+                .catch(() => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        isReleaseLoading: false,
+                    }));
+                });
         }
     };
 
@@ -46,14 +61,22 @@ export class IndexPageInner extends AppComponent<
             this.props.context?.content ?? {};
 
         if (!filmsByCollection?.[BEST_FILMS_COMPILATION_ID]) {
-            void loadCollectionFilms?.(BEST_FILMS_COMPILATION_ID, 1).then(
-                (topFilms) => {
+            this.setState((prev) => ({ ...prev, isTopFilmsLoading: true }));
+
+            void loadCollectionFilms?.(BEST_FILMS_COMPILATION_ID, 1)
+                .then((topFilms) => {
                     this.setState((prev) => ({
                         ...prev,
                         topFilms: topFilms.films?.slice(0, 10),
+                        isTopFilmsLoading: false,
                     }));
-                },
-            );
+                })
+                .catch(() => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        isTopFilmsLoading: false,
+                    }));
+                });
         }
     };
 
@@ -62,14 +85,22 @@ export class IndexPageInner extends AppComponent<
             this.props.context?.content ?? {};
 
         if (!filmsByCollection?.[BEST_SERIALS_COMPILATION_ID]) {
-            void loadCollectionFilms?.(BEST_SERIALS_COMPILATION_ID, 1).then(
-                (topFilms) => {
+            this.setState((prev) => ({ ...prev, isTopSerialsLoading: true }));
+
+            void loadCollectionFilms?.(BEST_SERIALS_COMPILATION_ID, 1)
+                .then((topFilms) => {
                     this.setState((prev) => ({
                         ...prev,
                         topSerials: topFilms.films?.slice(0, 10),
+                        isTopSerialsLoading: false,
                     }));
-                },
-            );
+                })
+                .catch(() => {
+                    this.setState((prev) => ({
+                        ...prev,
+                        isTopSerialsLoading: false,
+                    }));
+                });
         }
     };
 
@@ -115,48 +146,47 @@ export class IndexPageInner extends AppComponent<
             this.state.recentReviews ??
             this.props.context?.content?.recentReviews;
 
+        const { isReleaseLoading, isTopFilmsLoading, isTopSerialsLoading } =
+            this.state;
+
         return (
             <LayoutWithHeader>
                 <div className={cx('content')}>
-                    {!!nearestReleases?.length && (
-                        <FilmsCarouselPreview
-                            films={nearestReleases}
-                            withReleaseBadge
-                            itemsPerView={4}
-                            itemsPerViewMobile={1}
-                            itemsPerViewTablet={2}
-                            title="Ожидаемые релизы"
-                            moreTitle="Календарь релизов"
-                            moreLink={routes.releases()}
-                            fadeInDelay={0}
-                        />
-                    )}
-                    {!!topFilms?.length && (
-                        <FilmsCarouselPreview
-                            films={topFilms}
-                            itemsPerView={6}
-                            itemsPerViewMobile={2}
-                            itemsPerViewTablet={4}
-                            title="Лучшие фильмы"
-                            moreTitle="Показать все"
-                            moreLink={routes.collections(
-                                BEST_FILMS_COMPILATION_ID,
-                            )}
-                        />
-                    )}
-                    {!!topSerials?.length && (
-                        <FilmsCarouselPreview
-                            films={topSerials}
-                            itemsPerView={5}
-                            itemsPerViewMobile={2}
-                            itemsPerViewTablet={4}
-                            title="Лучшие сериалы"
-                            moreTitle="Показать все"
-                            moreLink={routes.collections(
-                                BEST_SERIALS_COMPILATION_ID,
-                            )}
-                        />
-                    )}
+                    <FilmsCarouselPreview
+                        films={nearestReleases}
+                        withReleaseBadge
+                        itemsPerView={4}
+                        itemsPerViewMobile={1}
+                        itemsPerViewTablet={2}
+                        title="Ожидаемые релизы"
+                        moreTitle="Календарь релизов"
+                        moreLink={routes.releases()}
+                        isLoading={!!isReleaseLoading}
+                    />
+                    <FilmsCarouselPreview
+                        films={topFilms}
+                        itemsPerView={6}
+                        itemsPerViewMobile={2}
+                        itemsPerViewTablet={4}
+                        title="Лучшие фильмы"
+                        moreTitle="Показать все"
+                        moreLink={routes.collections(BEST_FILMS_COMPILATION_ID)}
+                        key="Лучшие фильмы"
+                        isLoading={!!isTopFilmsLoading}
+                    />
+                    <FilmsCarouselPreview
+                        films={topSerials}
+                        itemsPerView={5}
+                        itemsPerViewMobile={2}
+                        itemsPerViewTablet={4}
+                        title="Лучшие сериалы"
+                        moreTitle="Показать все"
+                        moreLink={routes.collections(
+                            BEST_SERIALS_COMPILATION_ID,
+                        )}
+                        key="Лучшие сериалы"
+                        isLoading={!!isTopSerialsLoading}
+                    />
                     {!!recentReviews?.length && (
                         <VisibleObserver>
                             <LayoutPreview title="Последние отзывы">

@@ -18,26 +18,24 @@ function handleMessage(this: WebSocket, ev: MessageEvent<unknown>) {
     const country = data.country ? `\n${data.country}` : '';
     const director = data.director ? `\nРежиссёр: ${data.director}` : '';
 
-    void Notification.requestPermission().then((result) => {
-        if (result === 'granted') {
-            void navigator.serviceWorker.ready.then((registration) => {
-                void registration
-                    .showNotification(
-                        `Вышел новый ${data.type === 'movie' ? 'фильм' : 'сериал'}!`,
-                        {
-                            body: `${mainInfo}${country}${director}`,
-                            icon: getStaticUrl(data.poster),
-                            lang: 'ru-RU',
-                        },
-                    )
-                    .then(() => {
-                        if (isDefined(data.id)) {
-                            void contentService.unSubscribeRelease(data.id);
-                        }
-                    });
-            });
-        }
-    });
+    if (Notification.permission === 'granted') {
+        void navigator.serviceWorker.ready.then((registration) => {
+            void registration
+                .showNotification(
+                    `Вышел новый ${data.type === 'movie' ? 'фильм' : 'сериал'}!`,
+                    {
+                        body: `${mainInfo}${country}${director}`,
+                        icon: getStaticUrl(data.poster),
+                        lang: 'ru-RU',
+                    },
+                )
+                .then(() => {
+                    if (isDefined(data.id)) {
+                        void contentService.unSubscribeRelease(data.id);
+                    }
+                });
+        });
+    }
 }
 
 const subscriptions: Record<number, WebSocket> = {};
