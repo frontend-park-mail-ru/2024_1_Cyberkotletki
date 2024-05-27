@@ -8,6 +8,7 @@
 }
 
 .modal {
+    z-index: calc(var(--header-z-index) + 1);
     background: var(--background) !important;
     border-radius: var(--card-border-radius);
     box-shadow: var(--modal-shadow) !important;
