@@ -6,6 +6,8 @@ import { Carousel } from '@/components/Carousel';
 import type { CarouselProps } from '@/components/Carousel/Carousel';
 import { FilmCard } from '@/components/FilmCard';
 import type { FilmCardProps } from '@/components/FilmCard/FilmCard';
+import { Spinner } from '@/components/Spinner';
+import { VisibleObserver } from '@/components/VisibleObserver';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
 import { LayoutPreview } from '@/layouts/LayoutPreview';
@@ -41,36 +43,48 @@ export class FilmsCarouselPreview extends AppComponent<
             ...props
         } = this.props;
 
+        const defaultLength = (this.props.itemsPerView ?? 0) + 1;
+
         return (
-            <LayoutPreview
-                className={cx('container', className, { loading: isLoading })}
-                title={title}
-                moreTitle={moreTitle}
-                moreLink={moreLink}
-            >
-                <Carousel {...props}>
-                    {isLoading
-                        ? Array.from(
-                              { length: (this.props.itemsPerView ?? 0) + 1 },
-                              () => (
-                                  <div className={cx('card', 'skeleton')}>
-                                      <div className={cx('skeleton-poster')} />
+            <VisibleObserver className={cx(className)}>
+                <LayoutPreview
+                    className={cx('container', className, {
+                        loading: isLoading,
+                    })}
+                    title={title}
+                    moreTitle={moreTitle}
+                    moreLink={moreLink}
+                >
+                    <Carousel {...props}>
+                        {isLoading
+                            ? Array.from(
+                                  {
+                                      length: defaultLength,
+                                  },
+                                  () => (
+                                      <div className={cx('card', 'skeleton')}>
+                                          <div
+                                              className={cx('skeleton-poster')}
+                                          >
+                                              <Spinner />
+                                          </div>
+                                      </div>
+                                  ),
+                              )
+                            : films?.map((film) => (
+                                  <div className={cx('card')}>
+                                      <FilmCard
+                                          film={film}
+                                          size={size}
+                                          link={routes.film(film.id ?? 0)}
+                                          withDeleteButton={withDeleteButton}
+                                          withReleaseBadge={withReleaseBadge}
+                                      />
                                   </div>
-                              ),
-                          )
-                        : films?.map((film) => (
-                              <div className={cx('card')}>
-                                  <FilmCard
-                                      film={film}
-                                      size={size}
-                                      link={routes.film(film.id ?? 0)}
-                                      withDeleteButton={withDeleteButton}
-                                      withReleaseBadge={withReleaseBadge}
-                                  />
-                              </div>
-                          ))}
-                </Carousel>
-            </LayoutPreview>
+                              ))}
+                    </Carousel>
+                </LayoutPreview>
+            </VisibleObserver>
         );
     }
 }

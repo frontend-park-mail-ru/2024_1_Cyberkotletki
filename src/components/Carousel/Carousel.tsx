@@ -47,7 +47,7 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
         itemsPerViewCount: 1,
     };
 
-    setWidth = () => {
+    setWidth = (isForce?: boolean) => {
         const {
             itemsPerView = 1,
             itemsPerViewTablet = itemsPerView,
@@ -70,7 +70,7 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
 
         this.state.itemsPerViewCount = itemsCount;
 
-        if (!isDefined(this.state.carouselWidth)) {
+        if (!isDefined(this.state.carouselWidth) || isForce) {
             this.state.carouselWidth =
                 this.state.carouselRef.current?.clientWidth;
 
@@ -110,29 +110,32 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
         }
     };
 
-    handleScroll = debounce(() => {
-        this.setWidth();
+    handleScroll = debounce(
+        (_?: App.UIEvent<HTMLDivElement, UIEvent>, isForce?: boolean) => {
+            this.setWidth(isForce);
 
-        const scrollLeft = this.state.carouselRef.current?.scrollLeft ?? 0;
+            const scrollLeft = this.state.carouselRef.current?.scrollLeft ?? 0;
 
-        this.state.scrollLeft = scrollLeft;
+            this.state.scrollLeft = scrollLeft;
 
-        const { maxScrollLeft } = this.state;
+            const { maxScrollLeft } = this.state;
 
-        const canPrevScroll = scrollLeft > 0;
-        const canNextScroll = scrollLeft < maxScrollLeft;
+            const canPrevScroll = scrollLeft > 0;
+            const canNextScroll = scrollLeft < maxScrollLeft;
 
-        if (
-            this.state.canPrevScroll !== canPrevScroll ||
-            this.state.canNextScroll !== canNextScroll
-        ) {
-            this.setState((prev) => ({
-                ...prev,
-                canPrevScroll,
-                canNextScroll,
-            }));
-        }
-    }, 40);
+            if (
+                this.state.canPrevScroll !== canPrevScroll ||
+                this.state.canNextScroll !== canNextScroll
+            ) {
+                this.setState((prev) => ({
+                    ...prev,
+                    canPrevScroll,
+                    canNextScroll,
+                }));
+            }
+        },
+        40,
+    );
 
     componentDidMount(): void {
         this.handleScroll();
@@ -143,7 +146,7 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
         prevProps: CarouselProps | null,
     ): void {
         if (prevProps?.children !== this.props.children) {
-            this.handleScroll();
+            this.handleScroll(undefined, true);
         }
     }
 
@@ -173,6 +176,7 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
                     })}
                     onClick={this.handlePrevClick}
                     styleType="secondary"
+                    aria-label="scroll to prev slides"
                     isIconOnly
                 >
                     <Icon icon={icPlayUrl} className={cx('play-icon')} />
@@ -183,6 +187,7 @@ export class Carousel extends AppComponent<CarouselProps, CarouselState> {
                     })}
                     onClick={this.handleNextClick}
                     styleType="secondary"
+                    aria-label="scroll to next slides"
                     isIconOnly
                 >
                     <Icon icon={icPlayUrl} className={cx('play-icon')} />

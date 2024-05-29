@@ -24,6 +24,7 @@ interface VisibleObserverState {
         observer: IntersectionObserver,
     ) => void;
     observer?: IntersectionObserver;
+    visible?: boolean;
 }
 
 export class VisibleObserver extends AppComponent<
@@ -38,6 +39,9 @@ export class VisibleObserver extends AppComponent<
         ) => {
             if (entries[entries.length - 1].intersectionRatio > 0) {
                 this.props.onVisible?.();
+
+                this.state.visible = true;
+
                 this.state.ref.current?.classList.add(cx('visible'));
 
                 observer.disconnect();
@@ -77,7 +81,9 @@ export class VisibleObserver extends AppComponent<
             <div
                 {...props}
                 ref={this.state.ref}
-                className={cx('container', className)}
+                className={cx('container', className, {
+                    visible: this.state.visible,
+                })}
                 style={`--fade-in-delay:${fadeInDelay ?? 200}ms; --fade-in-duration:${fadeInDuration ?? 400}ms`}
             >
                 {children}

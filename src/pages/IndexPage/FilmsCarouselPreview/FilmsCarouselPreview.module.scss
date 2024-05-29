@@ -13,10 +13,12 @@
     width: 100%;
     aspect-ratio: 136 / 200;
     background-color: var(--secondary-gray-op-30);
+
+    @include centered-flexbox;
 }
 
 .observer {
-    --fade-in-delay: 200ms;
+    --fade-in-delay: 400ms;
     --fade-in-duration: 400ms;
 
     transform: translateY(40px);
