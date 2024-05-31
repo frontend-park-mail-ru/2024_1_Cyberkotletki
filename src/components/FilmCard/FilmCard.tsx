@@ -12,17 +12,19 @@ import { icTrashUrl } from '@/assets/icons';
 import { ReleaseBadge } from '@/components/ReleaseBadge';
 import { DefaultPoster } from '@/components/DefaultPoster';
 import { Icon } from '@/components/Icon';
+import type { LazyImgProps } from '@/components/LazyImg/LazyImg';
 
 const cx = concatClasses.bind(styles);
 
 export interface FilmCardProps
     extends Omit<
-        App.DetailedHTMLProps<
-            App.HTMLAttributes<HTMLDivElement>,
-            HTMLDivElement
+            App.DetailedHTMLProps<
+                App.HTMLAttributes<HTMLDivElement>,
+                HTMLDivElement
+            >,
+            'ref' | 'children'
         >,
-        'ref' | 'children'
-    > {
+        Pick<LazyImgProps, 'loading'> {
     filmId?: number;
     film?: Film;
     size?: 'small' | 'large';
@@ -57,7 +59,7 @@ export class FilmCard extends AppComponent<FilmCardProps, FilmCardState> {
             onDeleteClick,
             link = routes.film(film?.id ?? 0),
             withReleaseBadge,
-
+            loading = 'lazy',
             ...props
         } = this.props;
 
@@ -92,6 +94,7 @@ export class FilmCard extends AppComponent<FilmCardProps, FilmCardState> {
                     >
                         {film?.posterURL ? (
                             <LazyImg
+                                loading={loading}
                                 src={getStaticUrl(film?.posterURL)}
                                 className={cx('poster-img')}
                                 alt="Постер"

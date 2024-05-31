@@ -58,6 +58,7 @@ export class ReviewFormBlock extends AppComponent<ReviewFormBlockProps> {
                         <Button
                             href={routes.login()}
                             className={cx('login-button')}
+                            aria-label="Войти"
                         >
                             Войти
                         </Button>

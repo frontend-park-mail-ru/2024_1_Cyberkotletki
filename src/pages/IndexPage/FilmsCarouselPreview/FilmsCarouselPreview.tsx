@@ -6,6 +6,7 @@ import { Carousel } from '@/components/Carousel';
 import type { CarouselProps } from '@/components/Carousel/Carousel';
 import { FilmCard } from '@/components/FilmCard';
 import type { FilmCardProps } from '@/components/FilmCard/FilmCard';
+import type { LazyImgProps } from '@/components/LazyImg/LazyImg';
 import { Spinner } from '@/components/Spinner';
 import { VisibleObserver } from '@/components/VisibleObserver';
 import { AppComponent } from '@/core';
@@ -20,7 +21,8 @@ const cx = concatClasses.bind(styles);
 export interface FilmsCarouselPreviewProps
     extends Omit<OmitChildren<CarouselProps>, 'ref'>,
         Pick<LayoutPreviewProps, 'title' | 'moreLink' | 'moreTitle'>,
-        Pick<FilmCardProps, 'size' | 'withDeleteButton' | 'withReleaseBadge'> {
+        Pick<FilmCardProps, 'size' | 'withDeleteButton' | 'withReleaseBadge'>,
+        Pick<LazyImgProps, 'loading'> {
     films?: Film[];
     isLoading?: boolean;
 }
@@ -40,6 +42,7 @@ export class FilmsCarouselPreview extends AppComponent<
             withDeleteButton,
             withReleaseBadge,
             isLoading,
+            loading,
             ...props
         } = this.props;
 
@@ -71,7 +74,7 @@ export class FilmsCarouselPreview extends AppComponent<
                                       </div>
                                   ),
                               )
-                            : films?.map((film) => (
+                            : films?.map((film, index) => (
                                   <div className={cx('card')}>
                                       <FilmCard
                                           film={film}
@@ -79,6 +82,13 @@ export class FilmsCarouselPreview extends AppComponent<
                                           link={routes.film(film.id ?? 0)}
                                           withDeleteButton={withDeleteButton}
                                           withReleaseBadge={withReleaseBadge}
+                                          loading={
+                                              index <
+                                                  (props.itemsPerView ?? 0) &&
+                                              loading === 'eager'
+                                                  ? 'eager'
+                                                  : 'lazy'
+                                          }
                                       />
                                   </div>
                               ))}

@@ -162,6 +162,7 @@ export class IndexPageInner extends AppComponent<
                         moreTitle="Календарь релизов"
                         moreLink={routes.releases()}
                         isLoading={!!isReleaseLoading}
+                        loading="eager"
                     />
                     <FilmsCarouselPreview
                         films={topFilms}

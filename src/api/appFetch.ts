@@ -67,9 +67,11 @@ const getContentType = <T>(body: T) => {
     }
 };
 
-const createInstance = (baseURL: string) => {
-    let CSRFToken: string = localStorage.getItem('_csrf') as string;
+const csrf = { value: '' };
 
+const CSRF_COOKIE_KEY = '_csrf';
+
+const createInstance = (baseURL: string) => {
     const getCookie = (name: string) => {
         const matches = document.cookie.match(
             new RegExp(
@@ -105,7 +107,7 @@ const createInstance = (baseURL: string) => {
             headers: {
                 ...(options?.headers ?? {}),
                 ...contentType,
-                'X-Csrf': CSRFToken,
+                'X-Csrf': csrf.value,
             },
             body: bodyInit,
             credentials:
@@ -130,8 +132,8 @@ const createInstance = (baseURL: string) => {
             })
             .then(async (response) => {
                 if (!response.ok) {
-                    CSRFToken = getCookie('_csrf');
-                    localStorage.setItem('_csrf', CSRFToken);
+                    csrf.value = getCookie(CSRF_COOKIE_KEY);
+
                     await response.json().then((body) => {
                         if (hasField(body, 'message', 'string')) {
                             throw new ResponseError(
