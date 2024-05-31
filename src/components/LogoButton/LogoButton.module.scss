@@ -12,12 +12,16 @@
 }
 
 .logo {
+    width: auto !important;
     height: 100% !important;
     transition: var(--item-transition-all);
+    aspect-ratio: 1;
 }
 
 .text {
+    width: auto !important;
     height: 70% !important;
+    aspect-ratio: 5;
 
     svg {
         path {
@@ -25,7 +29,7 @@
         }
     }
 
-    @include small-mobile {
+    @include mobile {
         display: none !important;
     }
 }

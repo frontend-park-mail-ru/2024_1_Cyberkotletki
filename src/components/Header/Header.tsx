@@ -11,7 +11,7 @@ import { authService } from '@/api/auth/service';
 import { ProfileContext } from '@/Providers/ProfileProvider';
 import { Avatar } from '@/components/Avatar';
 import type { ProfileResponse } from '@/api/user/types';
-import { HEADER_TABS, LocalStorageKey } from '@/shared/constants';
+import { LocalStorageKey } from '@/shared/constants';
 import { SearchInput } from '@/components/SearchInput';
 import { Popover } from '@/components/Popover';
 import { Link } from '@/components/Link';
@@ -19,6 +19,8 @@ import { contentService } from '@/api/content/service';
 import type { SearchResponse } from '@/api/content/types';
 import { icStarOutlinedUrl } from '@/assets/icons';
 import { Icon } from '@/components/Icon';
+import { Navbar } from '@/components/Navbar';
+import { NavbarPopover } from '@/components/NavbarPopover';
 
 const cx = concatClasses.bind(styles);
 
@@ -111,24 +113,14 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
         return (
             <header className={cx('header', className)} {...props}>
                 <div className={cx('header-container')}>
+                    <NavbarPopover className="hide-on-desktop" />
                     <LogoButton
                         className={cx('header-logo', {
                             'mobile-hidden': searchOpened,
                         })}
                         withText
                     />
-                    <div className={cx('tabs', { hidden: searchOpened })}>
-                        {HEADER_TABS.map((tab) => (
-                            <Link
-                                href={tab.route}
-                                active={window.location.pathname.startsWith(
-                                    tab.route,
-                                )}
-                            >
-                                {tab.title}
-                            </Link>
-                        ))}
-                    </div>
+                    <Navbar className={cx('tabs', { hidden: searchOpened })} />
                     <SearchInput
                         onOpen={this.handleSearchOpen}
                         onClose={this.handleSearchClose}
