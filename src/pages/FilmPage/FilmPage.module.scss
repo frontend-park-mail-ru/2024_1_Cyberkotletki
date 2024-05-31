@@ -30,3 +30,17 @@
 .similar-list {
     margin-block-start: calc(var(--main-padding-2) * 2);
 }
+
+.posters-carousel {
+    margin-block-start: calc(var(--main-padding-2) * 2);
+}
+
+.facts-section {
+    margin-block-start: calc(var(--main-padding-2) * 2);
+
+    h1 {
+        @include text-header-4;
+
+        font-weight: bold;
+    }
+}

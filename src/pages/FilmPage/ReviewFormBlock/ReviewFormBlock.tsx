@@ -37,7 +37,7 @@ export class ReviewFormBlock extends AppComponent<ReviewFormBlockProps> {
         return (
             <section className={cx('write-review-block', className)} {...props}>
                 <h1>
-                    {reviewForEdit ? 'Редактировать отзыв:' : 'Написать отзыв:'}
+                    {reviewForEdit ? 'Редактировать отзыв' : 'Написать отзыв'}
                 </h1>
                 {profile ? (
                     <ReviewForm

@@ -47,7 +47,7 @@ export class SimilarContentBlock extends AppComponent<
 
         return (
             <section className={cx('list', className)} {...props}>
-                <h1>Похожее:</h1>
+                <h1>Похожее</h1>
                 <Carousel
                     itemsPerView={6}
                     itemsPerViewMobile={2}

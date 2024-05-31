@@ -1,0 +1,1 @@
+export { PostersCarousel } from './PostersCarousel';

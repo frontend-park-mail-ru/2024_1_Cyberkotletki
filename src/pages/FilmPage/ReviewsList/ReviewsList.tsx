@@ -32,7 +32,7 @@ export class ReviewsList extends AppComponent<ReviewsListProps> {
 
         return (
             <section className={cx('reviews-block', className)} {...props}>
-                <h1>Отзывы:</h1>
+                <h1>Отзывы</h1>
                 <div className={cx('reviews-list')}>
                     {reviews?.length ? (
                         reviews?.map((review) => (

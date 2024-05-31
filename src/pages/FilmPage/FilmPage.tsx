@@ -19,6 +19,8 @@ import { Spinner } from '@/components/Spinner';
 import { ContentContext } from '@/Providers/ContentProvider';
 import type { ParamsProps } from '@/types/ParamsProps.types';
 import { contentService } from '@/api/content/service';
+import { PostersCarousel } from '@/pages/FilmPage/PostersCarousel';
+import { FactsAccordion } from '@/components/FactsAccordion';
 
 const cx = concatClasses.bind(styles);
 
@@ -282,11 +284,23 @@ class FilmPageClass extends AppComponent<FilmPageProps, FilmPageState> {
                                 subscribed={subscribed}
                                 onBellClick={this.handleSubscribe}
                             />
+                            {!!film?.picturesURL?.length && (
+                                <PostersCarousel
+                                    pictures={film?.picturesURL}
+                                    className={cx('posters-carousel')}
+                                />
+                            )}
                             {!!film?.similarContent?.length && (
                                 <SimilarContentBlock
                                     className={cx('similar-list')}
                                     similarContent={film?.similarContent}
                                 />
+                            )}
+                            {!!film?.facts?.length && (
+                                <section className={cx('facts-section')}>
+                                    <h1>Интересные факты</h1>
+                                    <FactsAccordion facts={film?.facts} />
+                                </section>
                             )}
                             {canWriteReview && (
                                 <div className={cx('bottom-block')}>
