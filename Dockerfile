@@ -10,4 +10,8 @@ COPY . .
 
 RUN npm run build
 
+COPY robots.txt ./dist/
+COPY sitemap.xml ./dist/
+COPY manifest.json ./dist/
+
 EXPOSE 8000

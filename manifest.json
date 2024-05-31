@@ -1,0 +1,90 @@
+{
+    "id": "/",
+    "lang": "ru-RU",
+    "short_name": "Киноскоп",
+    "name": "Киноскоп — сервис по подбору фильмов и сериалов",
+    "description": "Киноскоп — это инновационный сервис для исследования и поиска фильмов, сериалов, а также информации об актерах и режиссерах, предлагающий богатый ассортимент контента для любителей кино.",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "/src/assets/logo/logo-57.png",
+            "type": "image/png",
+            "sizes": "57x57",
+            "purpose": "badge"
+        },
+        {
+            "src": "/src/assets/logo/logo-72.png",
+            "type": "image/png",
+            "sizes": "72x72",
+            "purpose": "badge"
+        },
+        {
+            "src": "/src/assets/logo/logo-96.png",
+            "type": "image/png",
+            "sizes": "96x96",
+            "purpose": "badge"
+        },
+        {
+            "src": "/src/assets/logo/logo-144.png",
+            "type": "image/png",
+            "sizes": "144x144",
+            "purpose": "badge"
+        },
+        {
+            "src": "/src/assets/logo/logo-180.png",
+            "type": "image/png",
+            "sizes": "180x180",
+            "purpose": "badge"
+        },
+        {
+            "src": "/src/assets/logo/logo-192.png",
+            "type": "image/png",
+            "sizes": "192x192",
+            "purpose": "badge"
+        },
+        {
+            "src": "/src/assets/logo/logo-256.png",
+            "type": "image/png",
+            "sizes": "256x256",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/src/assets/logo/logo-384.png",
+            "type": "image/png",
+            "sizes": "384x384",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/src/assets/logo/logo-512.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/src/assets/logo/logo-1024.png",
+            "type": "image/png",
+            "sizes": "1024x1024",
+            "purpose": "maskable"
+        }
+    ],
+    "background_color": "#262039",
+    "display": "standalone",
+    "start_url": "/",
+    "theme_color": "#262039",
+    "shortcuts": [],
+    "screenshots": [
+        {
+            "src": "/src/assets/screenshots/screenshot-narrow.png",
+            "type": "image/png",
+            "sizes": "1125x2436",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "/src/assets/screenshots/screenshot-wide.png",
+            "type": "image/png",
+            "sizes": "3840x2160",
+            "form_factor": "wide"
+        }
+    ],
+    "display_override": ["window-controls-overlay"]
+}

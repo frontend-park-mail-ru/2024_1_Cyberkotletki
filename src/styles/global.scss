@@ -3,6 +3,7 @@
     color: var(--text-color);
     font-size: var(--font-size);
     font-family: var(--font-family);
+    line-height: 1.25;
     font-variation-settings: normal;
     text-size-adjust: 100%;
     -moz-osx-font-smoothing: grayscale;
@@ -12,9 +13,6 @@
 
     /* Font */
     --font-size: 14px;
-
-    line-height: 1.25;
-
     --font-family: 'Wix Madefor Display', arial, helvetica, sans-serif;
 
     /* Variables  */

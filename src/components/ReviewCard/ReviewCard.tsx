@@ -103,9 +103,7 @@ export class ReviewCard extends AppComponent<ReviewCardProps, ReviewCardState> {
                                 </u>
                             </Link>
                         )}
-                        <div>
-                            {getDateString(review?.createdAt.slice(0, 16))}
-                        </div>
+                        <div>{getDateString(review?.createdAt)}</div>
                     </div>
                     {isOwnReview && (
                         <div className={cx('action-buttons')}>

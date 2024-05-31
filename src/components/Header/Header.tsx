@@ -154,6 +154,8 @@ class HeaderClass extends AppComponent<HeaderProps, HeaderState> {
                                 })}
                                 popoverTarget="profile-popover"
                                 popoverTargetAction="toggle"
+                                aria-label="Отрыть меню профиля"
+                                title="Отрыть меню профиля"
                             >
                                 <Avatar
                                     className={cx('avatar')}

@@ -1,6 +1,6 @@
 import styles from './PostersCarousel.module.scss';
 
-import type { Film } from '@/api/content/types';
+import type { ContentType } from '@/api/content/types';
 import { AppComponent } from '@/core';
 import type { HTMLElementProps } from '@/types/HTMLElementProps.types';
 import type { OmitChildren } from '@/types/OmitChildren.types';
@@ -12,19 +12,13 @@ const cx = concatClasses.bind(styles);
 
 export interface PostersCarouselProps extends OmitChildren<HTMLElementProps> {
     pictures?: string[];
+    filmTitle?: string;
+    type?: ContentType;
 }
 
-interface PostersCarouselState {
-    expanded?: boolean;
-    films?: Film[];
-}
-
-export class PostersCarousel extends AppComponent<
-    PostersCarouselProps,
-    PostersCarouselState
-> {
+export class PostersCarousel extends AppComponent<PostersCarouselProps> {
     render() {
-        const { className, pictures, ...props } = this.props;
+        const { className, pictures, filmTitle, type, ...props } = this.props;
 
         return (
             <section className={cx('list', className)} {...props}>
@@ -40,6 +34,7 @@ export class PostersCarousel extends AppComponent<
                             <LazyImg
                                 src={getStaticUrl(picture)}
                                 className={cx('image')}
+                                alt={`Кадр из ${type === 'movie' ? 'фильма' : 'сериала'} ${filmTitle ?? ''}`}
                             />
                         </div>
                     ))}

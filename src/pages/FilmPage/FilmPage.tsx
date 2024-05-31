@@ -287,6 +287,8 @@ class FilmPageClass extends AppComponent<FilmPageProps, FilmPageState> {
                             {!!film?.picturesURL?.length && (
                                 <PostersCarousel
                                     pictures={film?.picturesURL}
+                                    filmTitle={film.title}
+                                    type={film.type}
                                     className={cx('posters-carousel')}
                                 />
                             )}
