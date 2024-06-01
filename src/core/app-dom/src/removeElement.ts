@@ -44,11 +44,11 @@ export const removeElement = (
         // Производится удаление дочерних элементов для того,
         // чтобы вызвать функции жизненного цикла компонентов,
         // если они имеются
-        // requestAnimationFrame(() => {
-        children?.forEach((child, index) => {
-            removeElement(child, element, index);
+        requestAnimationFrame(() => {
+            children?.forEach((child, index) => {
+                removeElement(child, element, index);
+            });
         });
-        // });
 
         const { ref } = element;
 
