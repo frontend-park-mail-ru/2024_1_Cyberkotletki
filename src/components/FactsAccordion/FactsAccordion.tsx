@@ -55,18 +55,20 @@ export class FactsAccordion extends AppComponent<
                         </ul>
                     </div>
                 )}
-                <Button
-                    onClick={this.toggleExpand}
-                    styleType="secondary"
-                    outlined
-                    className={cx('expand-button')}
-                >
-                    <Icon
-                        icon={icArrowDownUrl}
-                        className={cx('arrow-icon', { rotate: expanded })}
-                    />
-                    {expanded ? 'Скрыть' : 'Показать еще'}
-                </Button>
+                {!!nestedFacts?.length && (
+                    <Button
+                        onClick={this.toggleExpand}
+                        styleType="secondary"
+                        outlined
+                        className={cx('expand-button')}
+                    >
+                        <Icon
+                            icon={icArrowDownUrl}
+                            className={cx('arrow-icon', { rotate: expanded })}
+                        />
+                        {expanded ? 'Скрыть' : 'Показать еще'}
+                    </Button>
+                )}
             </div>
         );
     }

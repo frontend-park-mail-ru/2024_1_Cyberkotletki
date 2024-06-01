@@ -30,13 +30,15 @@ export class Modal extends AppComponent<ModalProps, ModalState> {
         if (this.state.modalRef.current && this.props.isOpen)
             setTimeout(() => {
                 this.state.modalRef.current?.showModal();
-            });
+            }, 10);
     }
 
     componentDidUpdate(_: ModalState | null, prevProps: ModalProps | null) {
         if (prevProps?.isOpen !== this.props.isOpen) {
             if (this.props.isOpen) {
-                this.state.modalRef.current?.showModal();
+                setTimeout(() => {
+                    this.state.modalRef.current?.showModal();
+                }, 10);
             } else {
                 this.state.modalRef.current?.close();
             }

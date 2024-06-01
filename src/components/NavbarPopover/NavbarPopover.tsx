@@ -48,6 +48,7 @@ export class NavbarPopover extends AppComponent<
                     className={cx('button')}
                     popoverTarget={NAVBAR_POPOVER_ID}
                     popoverTargetAction="toggle"
+                    aria-label="Toggle navbar"
                 >
                     {isOpen ? (
                         <Icon

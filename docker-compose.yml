@@ -6,6 +6,4 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-    environment:
-      NODE_ENV: production
     command: sh -c "cd /app; npm run start:prod"

@@ -71,6 +71,7 @@ export interface Film {
     facts?: string[];
     picturesURL?: string[];
     trailerLink?: string;
+    streamURL?: string;
     similarContent?: SimilarContent[];
     ongoing?: boolean;
     ongoingDate?: string;

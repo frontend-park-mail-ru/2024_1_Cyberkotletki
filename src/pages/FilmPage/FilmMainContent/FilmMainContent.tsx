@@ -8,6 +8,7 @@ import { FilmPoster } from '@/components/FilmPoster';
 import { Icon } from '@/components/Icon';
 import { LazyImg } from '@/components/LazyImg';
 import { Link } from '@/components/Link';
+import { PlayerButton } from '@/components/PlayerButton';
 import { Rating } from '@/components/Rating';
 import { YouTubeIframe } from '@/components/YouTubeIframe';
 import { AppComponent } from '@/core';
@@ -186,7 +187,9 @@ export class FilmMainContent extends AppComponent<
                             )}
                         </div>
                     )}
-
+                    {film?.streamURL && (
+                        <PlayerButton streamingSrc={film?.streamURL} />
+                    )}
                     {film?.trailerLink && (
                         <section>
                             <YouTubeIframe
