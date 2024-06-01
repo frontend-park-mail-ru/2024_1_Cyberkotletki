@@ -40,9 +40,9 @@ export const updateElement = (
          */
         const $element = createElement(newNode, owner ?? null);
 
-        requestAnimationFrame(() => {
-            appendChildWithCheck(owner, $element);
-        });
+        // requestAnimationFrame(() => {
+        appendChildWithCheck(owner, $element);
+        // });
 
         return $element;
     }

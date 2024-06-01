@@ -101,13 +101,13 @@ export class HistoryProvider extends AppComponent<
             const state = window.history.state as ParamsProps | null;
 
             setTimeout(() => {
-                requestAnimationFrame(() => {
-                    window.scrollTo({
-                        top: state?.scrollY ?? 0,
-                        left: 0,
-                        behavior: 'instant',
-                    });
+                // requestAnimationFrame(() => {
+                window.scrollTo({
+                    top: state?.scrollY ?? 0,
+                    left: 0,
+                    behavior: 'instant',
                 });
+                // });
             });
         }
 

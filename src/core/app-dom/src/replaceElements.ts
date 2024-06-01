@@ -38,9 +38,9 @@ export const replaceElements = (
 
         const $element = createElement(newNode, owner ?? null);
 
-        requestAnimationFrame(() => {
-            replaceChildWithCheck(textChild, $element);
-        });
+        // requestAnimationFrame(() => {
+        replaceChildWithCheck(textChild, $element);
+        // });
 
         return $element;
     }
@@ -56,15 +56,15 @@ export const replaceElements = (
 
         const $element = createElement(newNode, oldNode.owner);
 
-        requestAnimationFrame(() => {
-            children?.forEach((child) => {
-                removeElement(child, oldNode);
-            });
+        // requestAnimationFrame(() => {
+        children?.forEach((child) => {
+            removeElement(child, oldNode);
         });
+        // });
 
-        requestAnimationFrame(() => {
-            replaceChildWithCheck(ref, $element);
-        });
+        // requestAnimationFrame(() => {
+        replaceChildWithCheck(ref, $element);
+        // });
 
         return $element;
     }
@@ -74,12 +74,12 @@ export const replaceElements = (
 
         const $element = createElement(newNode, oldNode.owner);
 
-        requestAnimationFrame(() => {
-            replaceChildWithCheck(oldNode.instance?.ref, $element);
+        // requestAnimationFrame(() => {
+        replaceChildWithCheck(oldNode.instance?.ref, $element);
 
-            removeElement(oldNode.instance?.instance);
-            oldNode.instance?.unmount();
-        });
+        removeElement(oldNode.instance?.instance);
+        oldNode.instance?.unmount();
+        // });
 
         return $element;
     }

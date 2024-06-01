@@ -9,6 +9,7 @@ import type { FilmCardProps } from '@/components/FilmCard/FilmCard';
 import type { LazyImgProps } from '@/components/LazyImg/LazyImg';
 import { Spinner } from '@/components/Spinner';
 import { VisibleObserver } from '@/components/VisibleObserver';
+import type { VisibleObserverProps } from '@/components/VisibleObserver/VisibleObserver';
 import { AppComponent } from '@/core';
 import type { AppNode } from '@/core/shared/AppNode.types';
 import { LayoutPreview } from '@/layouts/LayoutPreview';
@@ -25,8 +26,25 @@ export interface FilmsCarouselPreviewProps
         Pick<LazyImgProps, 'loading'> {
     films?: Film[];
     isLoading?: boolean;
+    withVisibleObserver?: boolean;
 }
 
+interface VisibleObserverWrapperProps
+    extends Omit<VisibleObserverProps, 'ref'> {
+    withVisibleObserver?: boolean;
+}
+
+class VisibleObserverWrapper extends AppComponent<VisibleObserverWrapperProps> {
+    render(): AppNode {
+        const { withVisibleObserver, children, ...props } = this.props;
+
+        return withVisibleObserver ? (
+            <VisibleObserver {...props}>{children}</VisibleObserver>
+        ) : (
+            <div {...props}>{children}</div>
+        );
+    }
+}
 export class FilmsCarouselPreview extends AppComponent<
     FilmsCarouselPreviewProps,
     object
@@ -43,13 +61,17 @@ export class FilmsCarouselPreview extends AppComponent<
             withReleaseBadge,
             isLoading,
             loading,
+            withVisibleObserver,
             ...props
         } = this.props;
 
         const defaultLength = (this.props.itemsPerView ?? 0) + 1;
 
         return (
-            <VisibleObserver className={cx(className)}>
+            <VisibleObserverWrapper
+                className={cx(className)}
+                withVisibleObserver={withVisibleObserver}
+            >
                 <LayoutPreview
                     className={cx('container', className, {
                         loading: isLoading,
@@ -94,7 +116,7 @@ export class FilmsCarouselPreview extends AppComponent<
                               ))}
                     </Carousel>
                 </LayoutPreview>
-            </VisibleObserver>
+            </VisibleObserverWrapper>
         );
     }
 }

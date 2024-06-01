@@ -38,13 +38,13 @@ export class Icon extends AppComponent<IconProps, IconState> {
                 divElement.removeChild(divElement.lastChild);
             }
 
-            requestAnimationFrame(() => {
-                const svg = getSvgString(icon);
+            // requestAnimationFrame(() => {
+            const svg = getSvgString(icon);
 
-                if (svg) {
-                    divElement.insertAdjacentHTML('afterbegin', svg);
-                }
-            });
+            if (svg) {
+                divElement.insertAdjacentHTML('afterbegin', svg);
+            }
+            // });
         }
     };
 

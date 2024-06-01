@@ -187,6 +187,7 @@ export class IndexPageInner extends AppComponent<
                         )}
                         key="Лучшие сериалы"
                         isLoading={!!isTopSerialsLoading}
+                        withVisibleObserver
                     />
                     {!!recentReviews?.length && (
                         <VisibleObserver>
