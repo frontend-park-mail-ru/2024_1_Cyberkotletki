@@ -253,6 +253,7 @@
 }
 
 .bell-icon {
+    flex-shrink: 0;
     height: 100%;
 }
 
@@ -285,5 +286,5 @@
 }
 
 .fav-button {
-    width: 100%;
+    flex-grow: 1;
 }
